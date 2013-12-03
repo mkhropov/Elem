@@ -10,8 +10,8 @@ public class Wall {
     // this properties are given for example
     int x, y, z; //in a chunk
     WallOrient orientation;
-    int T; //temperature
-    int material; //to be changed to a class
+    Temperature t; //temperature
+    Material m; //to be changed to a class
     int color; //to be changed to Texture
 
     Wall(int x, int y, int z, WallOrient o){

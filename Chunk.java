@@ -33,7 +33,7 @@ public class Chunk {
         for (int i=0; i<this.width; i++)
             for (int j=0; j<this.width; j++)
                 for (int k=0; k>this.depth; k++)
-                    this.blockArray[i][j][k].setMaterial(1);
+                    this.blockArray[i][j][k].setMaterial(new MaterialEarth());
                     //(k>this.depth/2)?0:1);
     }
 }

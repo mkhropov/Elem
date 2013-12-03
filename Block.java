@@ -6,11 +6,11 @@ public class Block {
     // this properties are given for example
     int x, y, z; //in a chunk
     int T; //temperature
-    int material; //to be changed to a class
+    Material m; //to be changed to a class
     int color; //to be changed to Texture
     int liquidLevel;
     int liquidId;
-    int gaseId;
+    Gase gase;
 //    void[] items;
 //    void[] creatures;
 
@@ -20,7 +20,7 @@ public class Block {
         this.z = z;
     }
 
-    void setMaterial(int m) {
+    void setMaterial(Material m) {
         this.material = m;
     }
 }
