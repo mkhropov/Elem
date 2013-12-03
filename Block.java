@@ -21,6 +21,6 @@ public class Block {
     }
 
     void setMaterial(Material m) {
-        this.material = m;
+        this.m = m;
     }
 }
