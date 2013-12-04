@@ -1,31 +1,15 @@
-import java.util.Random;
-
 public class BiomePlains extends Biome {
-
-    Random gen;
 
     BiomePlains(){
         this.name = "Plains biome";
-        this.gen = new Random();
     }
 
-    Gase getAtmosphere(){
-        return new GaseAir();
+    public final void fillChunk(Chunk c){
+        c.dropStratum(getStratum(c.width, c.depth/2), new MaterialStone());
+        c.dropStratum(getStratum(c.width, 4), new MaterialEarth());
     }
 
     Temperature getTemperature(){
         return new Temperature(300);
-    }
-
-    Material getShallowMaterial(){
-        return new MaterialEarth();
-    }
-
-    int getShallowDepth(){
-        return 2+2*this.gen.nextInt(3);
-    }
-
-    Material getDeepMaterial(){
-        return new MaterialStone();
     }
 }
