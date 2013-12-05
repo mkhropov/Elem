@@ -5,8 +5,10 @@ public class BiomePlains extends Biome {
     }
 
     public final void fillChunk(Chunk c){
-        dropStratum(getStratum(c.width, c.depth/2), new MaterialStone(), c, 0, 0);
-        dropStratum(getStratum(c.width, 4), new MaterialEarth(), c, 0, 0);
+        Stratum stone = new Stratum(c.width, c.width, c.depth/2);
+        stone.drop(new MaterialStone(), c, 0, 0);
+        Stratum earth = new Stratum(c.width, c.width, 4);
+        earth.drop(new MaterialEarth(), c, 0, 0);
     }
 
     Temperature getTemperature(){
