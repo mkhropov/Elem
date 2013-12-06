@@ -4,38 +4,42 @@
  */
 
 public class Slipfault extends Morph {
-	double a; // fault plane angle
 	Front f; // fault front line. Fault will be cw of front vector
 	double l; // morph length of extending plate
 	double h; // morph height of extening plate
 	double d; // depth the plate has dropped down
+
 	SlipFault(Front f, double l, double h, double d){
-		this.a = a;
 		this.f = f;
 		this.l = l;
 		this.h = h;
 		this.d = d;
 	}
 
-	public final boolean morphed(P p){
-		if ((P.z > f.p1.z) ||
-			(!f.isUp(p)) ||
-			(P.z < f.p1.z-d) ||
-			(f.distProj(p) > l))
+
+// for now Image == Preimage
+	public final boolean inImage(Point p){
+		if ((p.z > f.p1.z)      ||
+			(!f.isUp(p))        ||
+			(p.z < f.p1.z-d)    ||
+			(f.distProj(p) > l) ||
+            (!f.isInside(p)       )
 			return false;
 		else
 			return true;
 	}
 
-	public final WP[] preimage(P p){
-		WP[] wp = new WP[8];
-		if (!morphed(p)){
-			wp[0].p = p;
-			wp[0].w = 1.d;
-			return wp;
+	public final Point preimage(Point p){
+		if (!inImage(p)){
+			return p;
 		}
-		return wp;
 	}
+
+    public final Point image(Point p){
+        if (!inImage(p)){
+            return p;
+        }
+    }
 
 	public final void apply(Chunk c){
 	}

@@ -10,13 +10,23 @@ public class Front extends Vector {
 		this.a = a;
 	}
 
-	public boolean inside(Point p){
-		Vector hv = new Vector(this.p1, new Point(this.p1.y, this.p1.x, this.p1.z));
-		Vector vv = new Vector(this.p1, new Point(this.p1.x, this.p1.y, this.p1.x-1.d));
-		hv.normalize(); vv.normalize();
-		double sa = Math.sin(a); double ca = Math.cos(a);
-		Vector av = new Vector(this.p1, sa*hv.x+ca*vv.x, sa*hv.y+ca*vv.y, sa*hb.z+ca*vv.z);
-		return (new Plane(this, av)).isUp(p);
+    public Plane plane(){
+        Vector hv = new Vector(this.p1, new Point(this.p1.y, this.p1.x, this.p1.z));
+        Vector vv = new Vector(this.p1, new Point(this.p1.x, this.p1.y, this.p1.x-1.d));
+        hv.normalize(); vv.normalize();
+        double sa = Math.sin(a); double ca = Math.cos(a);
+        Vector av = new Vector(this.p1, sa*hv.x+ca*vv.x, sa*hv.y+ca*vv.y, sa*hb.z+ca*vv.z);
+        return new Plane(this, av);
+    }
+     
+	public boolean isUp(Point p){
+		return this.plane().isUp(p);
 	}
+
+    public boolean isInside(point P){
+    //is >= a bad style when using double?
+        return ((this.dot(new Vector(this.p1, P) >= 0.d) &&
+                (this.dot(new Vector(this.p2, P) <= 0.d));
+    }
 }
 
