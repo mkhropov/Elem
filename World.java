@@ -8,12 +8,14 @@ public class World {
         this.depth = 1;
 
         chunkArray = new Chunk[this.length][this.width][this.depth];
+		BiomePlains b = new BiomePlains();
 
         for (int i=0; i<this.length; i++)
             for (int j=0; j<this.width; j++)
                 for (int k=0; k<this.depth; k++){
                     chunkArray[i][j][k] = new Chunk(i, j, k, 10, 10);
-                    chunkArray[i][j][k].generate();
+					b.fillChunk(chunkArray[i][j][k]);
+//                    chunkArray[i][j][k].generate();
                 }
     }
 }
