@@ -1,3 +1,5 @@
+package geomorph;
+
 public class Plane {
 	double a;
 	double b;

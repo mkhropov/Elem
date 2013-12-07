@@ -1,3 +1,5 @@
+package geomorph;
+
 /* Slipfault is a fault-type extension geomorphing, when the fault angle
  * is less more then 45' and the stratums are slipping down the fault
  * It's commonly called 'dipslip'
@@ -9,7 +11,7 @@ public class Slipfault extends Morph {
 	double h; // morph height of extening plate
 	double d; // depth the plate has dropped down
 
-	SlipFault(Front f, double l, double h, double d){
+	Slipfault(Front f, double l, double h, double d){
 		this.f = f;
 		this.l = l;
 		this.h = h;
@@ -17,13 +19,13 @@ public class Slipfault extends Morph {
 	}
 
 
-// for now Image == Preimage
+// for now Image == Preimage. Mostly - not counting bottom (d)
 	public final boolean inImage(Point p){
 		if ((p.z > f.p1.z)      ||
 			(!f.isUp(p))        ||
 			(p.z < f.p1.z-d)    ||
 			(f.distProj(p) > l) ||
-            (!f.isInside(p)       )
+            (!f.isInside(p))      )
 			return false;
 		else
 			return true;
@@ -33,15 +35,17 @@ public class Slipfault extends Morph {
 		if (!inImage(p)){
 			return p;
 		}
+        return p;
 	}
 
     public final Point image(Point p){
         if (!inImage(p)){
             return p;
         }
+        Point ip = new Point(p);
+        double r = f.distProj(ip);
+        ip.z -= d*.5d*(cos(ip.x*ip.x*ip.x/(Math.PI*Math.PI))+1);
+        return ip;
     }
-
-	public final void apply(Chunk c){
-	}
 }
 

@@ -1,4 +1,6 @@
-class Point {
+package geomorph;
+
+public class Point {
 	double x;
 	double y;
 	double z;

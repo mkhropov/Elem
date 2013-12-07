@@ -1,3 +1,5 @@
+import java.util.Random;
+
 public class Stratum {
     public int x;
     public int y;
@@ -7,6 +9,8 @@ public class Stratum {
         this.x = x;
         this.y = y;
         this.width = new int[x][y];
+        
+        Random gen = new Random(x);
 
         double scx = x*x/4.d;
         double scy = y*y/4.d;
@@ -20,7 +24,7 @@ public class Stratum {
             for (int j=-y/2; j<y/2; ++j)
                 if (((sa*i+ca*j)*(sa*i+ca*j)/scx + 
                      (sa*j+ca*i)*(sa*j+ca*i)/scy ) < 1.d)
-                    this.width[i+size/2][j+size/2] = width;
+                    this.width[i+x/2][j+y/2] = width;
     }
 
     public void drop(Material m, Chunk c, int x, int y){
