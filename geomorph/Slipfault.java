@@ -35,7 +35,10 @@ public class Slipfault extends Morph {
 		if (!inImage(p)){
 			return p;
 		}
-        return p;
+        Point pi = new Point(p);
+        double r = f.distProj(pi);
+        pi.z += d*.5d*(cos(r*r*r/(Math.PI*Math.PI))+1);
+        return pi;
 	}
 
     public final Point image(Point p){
@@ -44,7 +47,7 @@ public class Slipfault extends Morph {
         }
         Point ip = new Point(p);
         double r = f.distProj(ip);
-        ip.z -= d*.5d*(cos(ip.x*ip.x*ip.x/(Math.PI*Math.PI))+1);
+        ip.z -= d*.5d*(cos(r*r*r/(Math.PI*Math.PI))+1);
         return ip;
     }
 }
