@@ -1,5 +1,7 @@
 package geomorph;
 
+import stereometry.*;
+
 public class Front extends Vector {
 
     double a; //angle of front plane, right-side screw from horizontal

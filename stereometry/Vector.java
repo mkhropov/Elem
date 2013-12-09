@@ -1,4 +1,4 @@
-package geomorph;
+package stereometry;
 
 //import Math.*;
 
@@ -10,7 +10,7 @@ public class Vector {
     double y;
     double z;
 
-    Vector(Point p1, Point p2){
+    public Vector(Point p1, Point p2){
         this.p1 = p1;
         this.p2 = p2;
         this.x = p2.x-p1.x;
@@ -18,7 +18,7 @@ public class Vector {
         this.z = p2.z-p1.z;
     }
 
-    Vector(double x, double y, double z){
+    public Vector(double x, double y, double z){
         this.p1 = new Point(0.d, 0.d, 0.d);
         this.p2 = new Point(x, y, z);
         this.x = x;
@@ -26,7 +26,7 @@ public class Vector {
         this.z = z;
     }
 
-    Vector(Point p, double x, double y, double z){
+    public Vector(Point p, double x, double y, double z){
       this.p1 = new Point(p);
       this.p2 = new Point(p.x+x, p.y+y, p.x+z);
       this.x = x;
@@ -34,9 +34,19 @@ public class Vector {
       this.z = z;
     }
 
+    public Vector(Point p, Vector v){
+        this(P, v.x, v.y, v.z);
+    }
 
     public double len(){
         return Math.sqrt(x*x + y*y + z*z);
+    }
+
+    public Vector scale(double a){
+        x *= a;
+        y *= a;
+        z *= a;
+        p2 = new Point(p1, this);
     }
 
     public double dot(Vector v){

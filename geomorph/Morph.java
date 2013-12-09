@@ -1,5 +1,7 @@
 package geomorph;
 
+import stereometry.*;
+
 abstract public class Morph {
 
     abstract boolean inImage(Point p);

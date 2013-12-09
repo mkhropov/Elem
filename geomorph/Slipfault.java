@@ -1,5 +1,6 @@
 package geomorph;
 
+import stereometry.*;
 /* Slipfault is a fault-type extension geomorphing, when the fault angle
  * is less more then 45' and the stratums are slipping down the fault
  * It's commonly called 'dipslip'
