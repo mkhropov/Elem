@@ -27,8 +27,6 @@ public class Block {
 		// Don't draw anything if block is empty
 		if (this.m == null) return;
 
-		System.out.println("Block at "+x+" "+y+" "+z);
-
 		float d=1.0f;
 		// draw quads
 		GL11.glBegin(GL11.GL_QUADS);
