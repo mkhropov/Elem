@@ -1,17 +1,19 @@
-CC=javac
+CC = javac
+CFLAGS = -cp .:lwjgl_jar/lwjgl.jar
+RFLAGS = -Djava.library.path=lwjgl_native
 
-OBJ =  Temperature.class
-OBJ += Material.class MaterialStone.class MaterialEarth.class
-OBJ += Gase.class GaseAir.class
-OBJ += Biome.class BiomePlains.class
-OBJ += Wall.class Block.class Chunk.class World.class
+.PHONY: all clean run test
 
-all: $(OBJ)
+all: World.class
 
 %.class: %.java
-	$(CC) $<
+	$(CC) $(CFLAGS) $<
 
-.PHONY: all clean
+test: test.class
+	$(CC) $(CFLAGS) test.java
+
+run: test_world.class
+	java $(CFLAGS) $(RFLAGS) test_world
 
 clean:
-	rm -f *.class
+	rm -f *.class geomorph/*.class
