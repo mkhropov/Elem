@@ -9,7 +9,7 @@ public class Stratum {
         this.x = x;
         this.y = y;
         this.width = new int[x][y];
-        
+
         Random gen = new Random(x);
 
         double scx = x*x/4.d;
@@ -22,15 +22,15 @@ public class Stratum {
         // whatever
         for (int i=-x/2; i<x/2; ++i)
             for (int j=-y/2; j<y/2; ++j)
-                if (((sa*i+ca*j)*(sa*i+ca*j)/scx + 
+                if (((sa*i+ca*j)*(sa*i+ca*j)/scx +
                      (sa*j+ca*i)*(sa*j+ca*i)/scy ) < 1.d)
                     this.width[i+x/2][j+y/2] = width;
     }
 
     public void drop(Material m, Chunk c, int x, int y){
-		int i0 = (x<0)?(0):(x);
+        int i0 = (x<0)?(0):(x);
         int i1 = (x+this.x<c.width)?(x+this.x):(c.width);
-		int j0 = (y<0)?(0):(y);
+        int j0 = (y<0)?(0):(y);
         int j1 = (y+this.y<c.width)?(y+this.y):(c.width);
         for (int i=i0; i<i1; ++i)
             for (int j=j0; j<j1; ++j){
