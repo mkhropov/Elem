@@ -1,10 +1,10 @@
 CC = javac
-CFLAGS = -cp .:lwjgl_jar/lwjgl.jar
-RFLAGS = -Djava.library.path=lwjgl_native
+CFLAGS = -cp .:libs/lwjgl.jar
+RFLAGS = -Djava.library.path=native/linux
 
 .PHONY: all clean run test
 
-all: World.class
+all: Game.class
 
 %.class: %.java
 	$(CC) $(CFLAGS) $<
@@ -12,8 +12,8 @@ all: World.class
 test: test.class
 	$(CC) $(CFLAGS) test.java
 
-run: test_world.class
-	java $(CFLAGS) $(RFLAGS) test_world
+run: Game.class
+	java $(CFLAGS) $(RFLAGS) Game
 
 clean:
 	rm -f *.class geomorph/*.class
