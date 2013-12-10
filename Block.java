@@ -7,7 +7,6 @@ public class Block {
     int x, y, z; //in a chunk
     int T; //temperature
     Material m; //to be changed to a class
-    int color; //to be changed to Texture
     int liquidLevel;
     int liquidId;
     Gase gase;
