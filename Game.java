@@ -3,9 +3,11 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
 public class Game {
+    World world;
 
 	public static void main(String[] args) {
 			Game game = new Game();
+            game.world = new World(10,10,10);
 		    game.start();
 	}
 
