@@ -1,21 +1,23 @@
 The class structure of the project is described here
 
 World: the whole world
-    Block: a single block in the chunk. 3D cube.
-        Material: a physical|graphical model of material in a block
-            MaterialEarth
-            MaterialStone
-        Gase: what fills the insides of block.
-            GaseAir
-        Temperature: self-described. Maybe obsolette
-    Wall: a single wall between blocks in the chunk. 2D square.
-        WallOrient: a wall can be LEFT, RIGHT or TOP.
-    Biome: a class describing the methods, matherials and such to generate world.
-        BiomePlains
-        Stratum: a geological structure of a single material family. Used to generate world
-(geomorph package)
-        Morph: abstract geological movement which mixes stratums and generally makes world pretty
-            SlipFault: fault-type morph with vertical movement
-                Front: class describing fault itself
-
-    and some stereometry classes. Which better may be moved in a separate package, but I really don't see them being used anywhere else.
+Block: a single block in the chunk. 3D cube.
+Material: a physical|graphical model of material in a block
+MaterialEarth
+MaterialStone
+Gase: what fills the insides of block.
+GaseAir
+Temperature: self-described. Maybe obsolette
+Wall: a single wall between blocks in the chunk. 2D square.
+WallOrient: a wall can be LEFT, RIGHT or TOP.
+Biome: a class describing the methods, matherials and such to generate world.
+BiomePlains
+Stratum: a geological structure of a single material family. Used to generate world
+geomorph: a package describing geological transformations
+    Morph: abstract geological movement which mixes stratums and generally makes world pretty
+    SlipFault: fault-type morph with vertical movement
+    Front: class describing fault itself
+stereometry: a package containg stereometry routines
+    Point
+    Vector
+    Plane
