@@ -8,7 +8,7 @@ public class Game {
 
 	public static void main(String[] args) {
 			Game game = new Game();
-//            game.world = new World(10,10,10);
+            game.world = new World(10,10,10);
 		    game.start();
 	}
 
@@ -26,7 +26,7 @@ public class Game {
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
-		GL11.glOrtho(1, -1, 0.75f, -0.75f, 1, -1);
+		GL11.glOrtho(10, -10, 7.5f, -7.5f, 10, -10);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glRotatef(50.0f, 1.0f, 1.0f, 1.0f);
 
@@ -35,53 +35,11 @@ public class Game {
 			// Clear the screen and depth buffer
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
-			// draw quad
-			GL11.glBegin(GL11.GL_QUADS);
-			GL11.glColor3f(0.6f,0.45f,0.25f); GL11.glVertex3f(0.0f,0.0f,0.0f);
-			GL11.glColor3f(0.6f,0.45f,0.25f); GL11.glVertex3f(0.1f,0.0f,0.0f);
-			GL11.glColor3f(0.6f,0.45f,0.25f); GL11.glVertex3f(0.1f,0.1f,0.0f);
-			GL11.glColor3f(0.6f,0.45f,0.25f); GL11.glVertex3f(0.0f,0.1f,0.0f);
-			GL11.glEnd();
-
-			// draw quad
-			GL11.glBegin(GL11.GL_QUADS);
-			GL11.glColor3f(0.7f,0.45f,0.25f); GL11.glVertex3f(0.0f,0.0f,0.0f);
-			GL11.glColor3f(0.7f,0.45f,0.25f); GL11.glVertex3f(0.0f,0.1f,0.0f);
-			GL11.glColor3f(0.7f,0.45f,0.25f); GL11.glVertex3f(0.0f,0.1f,0.1f);
-			GL11.glColor3f(0.7f,0.45f,0.25f); GL11.glVertex3f(0.0f,0.0f,0.1f);
-			GL11.glEnd();
-
-			// draw quad
-			GL11.glBegin(GL11.GL_QUADS);
-			GL11.glColor3f(0.6f,0.55f,0.25f); GL11.glVertex3f(0.0f,0.0f,0.0f);
-			GL11.glColor3f(0.6f,0.55f,0.25f); GL11.glVertex3f(0.1f,0.0f,0.0f);
-			GL11.glColor3f(0.6f,0.55f,0.25f); GL11.glVertex3f(0.1f,0.0f,0.1f);
-			GL11.glColor3f(0.6f,0.55f,0.25f); GL11.glVertex3f(0.0f,0.0f,0.1f);
-			GL11.glEnd();
-
-			// draw quad
-			GL11.glBegin(GL11.GL_QUADS);
-			GL11.glColor3f(0.6f,0.35f,0.25f); GL11.glVertex3f(0.1f,0.0f,0.0f);
-			GL11.glColor3f(0.6f,0.35f,0.25f); GL11.glVertex3f(0.1f,0.1f,0.0f);
-			GL11.glColor3f(0.6f,0.35f,0.25f); GL11.glVertex3f(0.1f,0.1f,0.1f);
-			GL11.glColor3f(0.6f,0.35f,0.25f); GL11.glVertex3f(0.1f,0.0f,0.1f);
-			GL11.glEnd();
-
-			// draw quad
-			GL11.glBegin(GL11.GL_QUADS);
-			GL11.glColor3f(0.0f,1.0f,0.0f); GL11.glVertex3f(0.0f,0.0f,0.1f);
-			GL11.glColor3f(0.0f,1.0f,0.0f); GL11.glVertex3f(0.1f,0.0f,0.1f);
-			GL11.glColor3f(0.0f,1.0f,0.0f); GL11.glVertex3f(0.1f,0.1f,0.1f);
-			GL11.glColor3f(0.0f,1.0f,0.0f); GL11.glVertex3f(0.0f,0.1f,0.1f);
-			GL11.glEnd();
-
-			// draw quad
-			GL11.glBegin(GL11.GL_QUADS);
-			GL11.glColor3f(0.6f,0.45f,0.15f); GL11.glVertex3f(0.0f,0.1f,0.0f);
-			GL11.glColor3f(0.6f,0.45f,0.15f); GL11.glVertex3f(0.1f,0.1f,0.0f);
-			GL11.glColor3f(0.6f,0.45f,0.15f); GL11.glVertex3f(0.1f,0.1f,0.1f);
-			GL11.glColor3f(0.6f,0.45f,0.15f); GL11.glVertex3f(0.0f,0.1f,0.1f);
-			GL11.glEnd();
+			for (int i=0; i<world.xsize; i++)
+				for (int j=0; j<world.ysize; j++)
+					for (int k=0; k<world.zsize; k++) {
+						world.blockArray[i][j][k].Draw();
+			}
 
 			Display.update();
 		}

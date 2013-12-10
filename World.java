@@ -19,7 +19,7 @@ public class World {
         this.wallArray = new Wall[this.xsize][this.ysize][this.zsize][3];
         for (int i=0; i<this.xsize; i++)
             for (int j=0; j<this.ysize; j++)
-                for (int k=0; k>this.zsize; k++) {
+                for (int k=0; k<this.zsize; k++) {
                     this.wallArray[i][j][k][0] = new Wall(i, j, k, WallOrient.TOP);
                     this.wallArray[i][j][k][1] = new Wall(i, j, k, WallOrient.LEFT);
                     this.wallArray[i][j][k][2] = new Wall(i, j, k, WallOrient.RIGHT);
