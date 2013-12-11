@@ -11,7 +11,7 @@ public class Slipfault extends Morph {
     double h; // morph height of extening plate
     double d; // depth the plate has dropped down
 
-    Slipfault(Front f, double l, double h, double d){
+    public Slipfault(Front f, double l, double h, double d){
         this.f = f;
         this.l = l;
         this.h = h;
@@ -37,7 +37,7 @@ public class Slipfault extends Morph {
         }
         Point pi = new Point(p);
         double r = f.distProj(pi);
-        pi.z += d*.5d*(cos(r*r*r/(Math.PI*Math.PI))+1);
+        pi.z += d*.5d*(Math.cos(r*r*r/(Math.PI*Math.PI))+1);
         return pi;
     }
 
@@ -47,7 +47,7 @@ public class Slipfault extends Morph {
         }
         Point ip = new Point(p);
         double r = f.distProj(ip);
-        ip.z -= d*.5d*(cos(r*r*r/(Math.PI*Math.PI))+1);
+        ip.z -= d*.5d*(Math.cos(r*r*r/(Math.PI*Math.PI))+1);
         return ip;
     }
 }

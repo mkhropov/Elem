@@ -4,7 +4,7 @@ public class Front extends Vector {
 
     double a; //angle of front plane, right-side screw from horizontal
 
-    Front(Point p1, Point p2, double a){
+    public Front(Point p1, Point p2, double a){
         super(p1, new Point(p2.x, p2.y, p1.z));
         // because it should be in a horizontal plane!
         this.a = a;
