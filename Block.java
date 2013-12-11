@@ -14,10 +14,11 @@ public class Block {
 //    void[] items;
 //    void[] creatures;
 
-    Block(int x, int y, int z) {
+    public Block(int x, int y, int z) {
         this.x = x;
         this.y = y;
         this.z = z;
+        this.m = null;
     }
 
     void setMaterial(Material m) {

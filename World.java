@@ -12,7 +12,7 @@ public class World {
         this.blockArray = new Block[this.xsize][this.ysize][this.zsize];
         for (int i=0; i<this.xsize; i++)
             for (int j=0; j<this.ysize; j++)
-                for (int k=0; k>this.zsize; k++)
+                for (int k=0; k<this.zsize; k++)
                     this.blockArray[i][j][k] = new Block(i, j, k);
 
 //FIXME how to make C-like enums, that are compatible with int?

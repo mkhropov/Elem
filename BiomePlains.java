@@ -1,4 +1,5 @@
 import geomorph.*;
+import stereometry.*;
 
 public class BiomePlains extends Biome {
 
