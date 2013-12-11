@@ -1,38 +1,38 @@
 package stereometry;
 
 public class Plane {
-    double a;
-    double b;
-    double c;
+    public double a;
+    public double b;
+    public double c;
 
-    Point p; //any point belonging to the plane
+    public Point p; //any point belonging to the plane
 
-    Plane(Point p, double a, double b, double c){
+    public Plane(Point p, double a, double b, double c){
         this.p = new Point(p);
         this.a = a;
         this.b = b;
         this.c = c;
     }
 
-    Plane(Plane pl){
+    public Plane(Plane pl){
         this.p = new Point(pl.p);
         this.a = pl.a;
         this.b = pl.b;
         this.c = pl.c;
     }
 
-    Plane(Point p, Vector v){
+    public Plane(Point p, Vector v){
         this.p = new Point(p);
         this.a = v.x;
         this.b = v.y;
         this.c = v.z;
     }
 
-    Plane(Vector v1, Vector v2){ //v1 is considered primary
+    public Plane(Vector v1, Vector v2){ //v1 is considered primary
         this(v1.p1, v1.cross(v2));
     }
 
-    double calcP(Point p){
+    public double calcP(Point p){
         return (a * (p.x - this.p.x) +
                 b * (p.y - this.p.y) +
                 c * (p.z - this.p.z));

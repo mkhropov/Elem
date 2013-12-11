@@ -1,10 +1,10 @@
 package stereometry;
 
 public class Point {
-    double x;
-    double y;
-    double z;
-    double w;
+    public double x;
+    public double y;
+    public double z;
+    public double w;
 
     public Point(int x, int y, int z){
         this.x = (double)x;
@@ -27,7 +27,7 @@ public class Point {
         this.w = p.w;
     }
 
-    Point(Point p, Vector v){
+    public Point(Point p, Vector v){
         this(p.x+v.x, p.y+v.y, p.z+v.z);
     }
 }

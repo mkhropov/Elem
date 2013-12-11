@@ -4,11 +4,11 @@ package stereometry;
 
 public class Vector {
 // NOTE: it's an oriented vector in 3D space
-    Point p1;
-    Point p2;
-    double x;
-    double y;
-    double z;
+    public Point p1;
+    public Point p2;
+    public double x;
+    public double y;
+    public double z;
 
     public Vector(Point p1, Point p2){
         this.p1 = p1;
@@ -35,14 +35,14 @@ public class Vector {
     }
 
     public Vector(Point p, Vector v){
-        this(P, v.x, v.y, v.z);
+        this(p, v.x, v.y, v.z);
     }
 
     public double len(){
         return Math.sqrt(x*x + y*y + z*z);
     }
 
-    public Vector scale(double a){
+    public void scale(double a){
         x *= a;
         y *= a;
         z *= a;
