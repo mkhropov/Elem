@@ -8,14 +8,16 @@ public class BiomePlains extends Biome {
     }
 
     public final void fillWorld(World w){
-        Stratum stone = new Stratum(w.xsize, w.ysize, w.zsize/2);
-        stone.drop(new MaterialStone(), w, 0, 0);
-        Stratum earth = new Stratum(w.xsize, w.ysize, 4);
-        earth.drop(new MaterialEarth(), w, 0, 0);
-        Front f = new Front(new Point(w.xsize/4, w.ysize/4, w.zsize),
+        Stratum stone = new Stratum(4*w.xsize, 4*w.ysize, w.zsize/2);
+        stone.drop(new MaterialStone(), w, -w.xsize, -w.ysize);
+        Stratum stone2 = new Stratum(w.xsize, w.ysize, 1);
+        stone2.drop(new MaterialStone(), w, 0, 0);
+        Stratum earth = new Stratum(4*w.xsize, 4*w.ysize, 3);
+        earth.drop(new MaterialEarth(), w, -w.xsize, -w.ysize);
+/*        Front f = new Front(new Point(w.xsize/4, w.ysize/4, w.zsize),
                             new Point(3*w.xsize/4, 3*w.ysize/4, w.zsize),
                             0.d);
-        Slipfault morph = new Slipfault(f, 10, 20, 3);
+        Slipfault morph = new Slipfault(f, 10, 20, 3);*/
     }
 
     Temperature getTemperature(){
