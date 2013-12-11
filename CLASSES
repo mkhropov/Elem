@@ -1,16 +1,15 @@
 The class structure of the project is described here
 
 World: the whole world
-    Chunk: a big 3d cube on which world is divided. May be obsolette
-        Block: a single block in the chunk. 3D cube.
-            Material: a physical|graphical model of material in a block
-                MaterialEarth
-                MaterialStone
-            Gase: what fills the insides of block.
-                GaseAir
-            Temperature: self-described. Maybe obsolette
-        Wall: a single wall between blocks in the chunk. 2D square.
-            WallOrient: a wall can be LEFT, RIGHT or TOP.
+    Block: a single block in the chunk. 3D cube.
+        Material: a physical|graphical model of material in a block
+            MaterialEarth
+            MaterialStone
+        Gase: what fills the insides of block.
+            GaseAir
+        Temperature: self-described. Maybe obsolette
+    Wall: a single wall between blocks in the chunk. 2D square.
+        WallOrient: a wall can be LEFT, RIGHT or TOP.
     Biome: a class describing the methods, matherials and such to generate world.
         BiomePlains
         Stratum: a geological structure of a single material family. Used to generate world

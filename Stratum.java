@@ -27,18 +27,18 @@ public class Stratum {
                     this.width[i+x/2][j+y/2] = width;
     }
 
-    public void drop(Material m, Chunk c, int x, int y){
+    public void drop(Material m, World w, int x, int y){
         int i0 = (x<0)?(0):(x);
-        int i1 = (x+this.x<c.width)?(x+this.x):(c.width);
+        int i1 = (x+this.x<w.xsize)?(x+this.x):(w.xsize);
         int j0 = (y<0)?(0):(y);
-        int j1 = (y+this.y<c.width)?(y+this.y):(c.width);
+        int j1 = (y+this.y<w.ysize)?(y+this.y):(w.ysize);
         for (int i=i0; i<i1; ++i)
             for (int j=j0; j<j1; ++j){
                 int k = 0;
-                while (c.blockArray[i][j][k].m != null)
+                while (w.blockArray[i][j][k].m != null)
                     ++k;
-                int w = k+this.width[i-x][j-y];
-                for (; k<w; c.blockArray[x][y][k++].m = m){};
+                int d = k+this.width[i-x][j-y];
+                for (; k<d; w.blockArray[x][y][k++].m = m){};
             }
     }
 }

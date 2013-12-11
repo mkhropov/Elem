@@ -10,7 +10,7 @@ public abstract class Biome {
         gen = new Random();
     }
 
-    public abstract void fillChunk(Chunk c);
+    public abstract void fillWorld(World w);
 
     Temperature getTemperature(){
         return new Temperature(0);
