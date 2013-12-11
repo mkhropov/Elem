@@ -1,4 +1,4 @@
-package geomorph;
+package stereometry;
 
 public class Plane {
     double a;

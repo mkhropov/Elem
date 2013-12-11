@@ -1,4 +1,4 @@
-package geomorph;
+package stereometry;
 
 public class Point {
     double x;
@@ -25,5 +25,9 @@ public class Point {
         this.y = p.y;
         this.z = p.z;
         this.w = p.w;
+    }
+
+    Point(Point p, Vector v){
+        this(p.x+v.x, p.y+v.y, p.z+v.z);
     }
 }
