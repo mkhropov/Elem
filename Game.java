@@ -41,26 +41,26 @@ public class Game {
 		}
 
 		while (Keyboard.next()) {
-			if (Keyboard.getEventKeyState()) { 
+			if (Keyboard.getEventKeyState()) {
 				// Key pressed
-				if (Keyboard.getEventKey() == Keyboard.KEY_Z) {
+				if (Keyboard.getEventCharacter() == 'z') {
 					if (this.current_layer>0) this.current_layer--;
 				}
-				if (Keyboard.getEventKey() == Keyboard.KEY_X) {
+				if (Keyboard.getEventCharacter() == 'x') {
 					if (this.current_layer<(MAX_Z-1)) this.current_layer++;
 				}
-				if (Keyboard.getEventKey() == Keyboard.KEY_Q) {
+				if (Keyboard.getEventCharacter() == 'q') {
 					camera.rotateLeft();
 				}
-				if (Keyboard.getEventKey() == Keyboard.KEY_E) {
+				if (Keyboard.getEventCharacter() == 'e') {
 					camera.rotateRight();
 				}
 			} else {
 				// Key released
-				if (Keyboard.getEventKey() == Keyboard.KEY_Z) {
+				if (Keyboard.getEventCharacter() == Keyboard.KEY_Z) {
 					//Whatever
 				}
-				if (Keyboard.getEventKey() == Keyboard.KEY_X) {
+				if (Keyboard.getEventCharacter() == Keyboard.KEY_X) {
 				}
 			}
 		}

@@ -1,5 +1,7 @@
 import java.util.Random;
 
+import physics.material.*;
+
 public class Stratum {
     public int x;
     public int y;
@@ -49,7 +51,8 @@ public class Stratum {
                 while ((k<w.zsize) && (w.blockArray[i][j][k].m != null))
                     ++k;
                 int d = k+this.width[i-x][j-y];
-                for (; (k<d && k<w.zsize); w.blockArray[i][j][k++].m = m){};
+                for (; (k<d && k<w.zsize); k++)
+                    w.blockArray[i][j][k].m = new Substance(m, 1.d);
             }
     }
 }

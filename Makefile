@@ -16,4 +16,4 @@ run: Game.class
 	java $(CFLAGS) $(RFLAGS) Game
 
 clean:
-	rm -f *.class geomorph/*.class graphics/*.class
+	rm -f *.class geomorph/*.class graphics/*.class physics/*.class physics/material/*.class

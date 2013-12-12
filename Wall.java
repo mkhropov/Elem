@@ -2,6 +2,8 @@
  * Wall is a class describing an interblock volume of indistinguable width
 */
 
+import physics.material.*;
+
 enum WallOrient {
     TOP, LEFT, RIGHT //isometric view
 }

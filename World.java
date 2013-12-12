@@ -1,8 +1,11 @@
+import physics.material.*;
+
 public class World {
     int xsize, ysize, zsize; //position in world
     Block[][][] blockArray;
     Wall[][][][] wallArray;
     Biome biome;
+    Material[] material;
 
     World(int x, int y, int z) {
         this.xsize = x;
@@ -24,6 +27,10 @@ public class World {
                     this.wallArray[i][j][k][1] = new Wall(i, j, k, WallOrient.LEFT);
                     this.wallArray[i][j][k][2] = new Wall(i, j, k, WallOrient.RIGHT);
                 }
+
+        this.material = new Material[2];
+        this.material[0] = new Stone();
+        this.material[1] = new Earth();
 
         this.biome = new BiomeRough();
         this.biome.fillWorld(this);
