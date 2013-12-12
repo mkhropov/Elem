@@ -90,18 +90,20 @@ public class Game {
 		//Set up lighting
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_LIGHT0);
-		GL11.glEnable(GL11.GL_COLOR_MATERIAL);
 
 		sun = new Sun();
 		sun.update();
 
-		float light_ambient[] = { 0.3f, 0.3f, 0.3f, 1.0f };
+		float light_ambient[] = { 0.8f, 0.8f, 0.8f, 1.0f };
 
-        ByteBuffer temp = ByteBuffer.allocateDirect(4*4);
-        temp.order(ByteOrder.nativeOrder());
-        FloatBuffer buffer = temp.asFloatBuffer();
+		ByteBuffer temp = ByteBuffer.allocateDirect(4*4);
+		temp.order(ByteOrder.nativeOrder());
+		FloatBuffer buffer = temp.asFloatBuffer();
 		buffer.put(light_ambient); buffer.flip();
 		GL11.glLight(GL11.GL_LIGHT1, GL11.GL_AMBIENT, buffer);
+		
+		GL11.glMaterial(GL11.GL_FRONT, GL11.GL_SPECULAR, buffer);
+		GL11.glMaterialf(GL11.GL_FRONT, GL11.GL_SHININESS, 50.0f);
 
 		while (!Display.isCloseRequested()) {
 			this.pollInput();
