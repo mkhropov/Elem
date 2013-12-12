@@ -1,5 +1,5 @@
 CC = javac
-CFLAGS = -cp .:libs/lwjgl.jar
+CFLAGS = -cp .:libs/*
 RFLAGS = -Djava.library.path=native/linux
 
 .PHONY: all clean run test

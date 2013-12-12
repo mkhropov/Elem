@@ -1,28 +1,29 @@
 package physics.material;
+import physics.*;
 
-import graphics.Color;
-import physics.Temperature;
+import java.io.IOException;
+
+import org.newdawn.slick.Color;
+import org.newdawn.slick.opengl.Texture;
+import org.newdawn.slick.opengl.TextureLoader;
+import org.newdawn.slick.util.ResourceLoader;
 
 public class Material {
-
-    public int state;
-
     public Temperature tFreeze;
-    public double fhCapacity;
-    Material fm;
-
-    public double hCapacity;
-
     public Temperature tBoil;
-    public double bhCapacity;
-    Material bm;
 
-    public Color c;
+	public Texture texture;
+	public String textureName;
 
-//    boolean fluor;
-//    Color cf;
+	public Material() {
+        tFreeze = new Temperature(9000000);
+        tBoil =  new Temperature(9000000);
 
-//    boolean opaque;
-//    double opacity;
-    public double density;
+		textureName = "void";
+		try {
+			texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/"+textureName+".png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
 }

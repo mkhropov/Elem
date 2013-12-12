@@ -1,17 +1,24 @@
 package physics.material;
+import physics.*;
 
-import graphics.Color;
+import java.io.IOException;
+
+import org.newdawn.slick.Color;
+import org.newdawn.slick.opengl.Texture;
+import org.newdawn.slick.opengl.TextureLoader;
+import org.newdawn.slick.util.ResourceLoader;
 
 public class Stone extends Material {
+	public Stone() {
+        tFreeze = new Temperature(4000);
+        tBoil =  new Temperature(5000);
 
-    public Stone() {
-        state = 0;
-//        tFreeze = new Temperature(0);
-//        tBoil = new Temperature(300000);
-        c = new Color(0.4f, 0.4f, 0.4f);
-//        fluor = false;
-//        cf = new Color(0.f, 0.f, 0.f);
-//        opaque = false;
-//        opacity = 0.d;
-    }
+        textureName = "stone";
+		System.out.println("STOOONE");
+        try {
+			texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/"+textureName+".png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

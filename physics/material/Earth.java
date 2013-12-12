@@ -1,16 +1,23 @@
 package physics.material;
+import physics.*;
 
-import graphics.Color;
+import java.io.IOException;
+
+import org.newdawn.slick.Color;
+import org.newdawn.slick.opengl.Texture;
+import org.newdawn.slick.opengl.TextureLoader;
+import org.newdawn.slick.util.ResourceLoader;
 
 public class Earth extends Material {
     public Earth() {
-        state = 0;
-//      freezePoint = new Temperature(0);
-//      boilPoint =  new Temperature(300000);
-        c = new Color(0.6f, 0.45f, 0.25f);
-//      fluor = false;
-//      cf = new Color(0.f, 0.f, 0.f);
-//      opaque = false;
-//      opacity = 0.d;
-    }
+        tFreeze = new Temperature(3000);
+        tBoil =  new Temperature(4000);
+
+		textureName = "earth";
+        try {
+			texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/"+textureName+".png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

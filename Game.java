@@ -9,6 +9,11 @@ import java.nio.FloatBuffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import org.newdawn.slick.Color;
+import org.newdawn.slick.opengl.Texture;
+import org.newdawn.slick.opengl.TextureLoader;
+import org.newdawn.slick.util.ResourceLoader;
+
 import graphics.Camera;
 import graphics.Sun;
 
@@ -24,7 +29,6 @@ public class Game {
 
 	public static void main(String[] args) {
 		Game game = new Game();
-		game.world = new World(MAX_X,MAX_Y,MAX_Z);
 		game.start();
 	}
 
@@ -75,9 +79,11 @@ public class Game {
 			System.exit(0);
 		}
 		System.out.println("Display created. OpenGL version: " + GL11.glGetString(GL11.GL_VERSION));
+		world = new World(MAX_X,MAX_Y,MAX_Z);
 
 		// init OpenGL
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		//Set up camera
 		camera = new Camera(MAX_X/2, MAX_Y/2, MAX_Z/2);
 
