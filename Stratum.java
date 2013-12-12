@@ -46,10 +46,10 @@ public class Stratum {
         for (int i=i0; i<i1; ++i)
             for (int j=j0; j<j1; ++j){
                 int k = 0;
-                while (w.blockArray[i][j][k].m != null)
+                while ((k<w.zsize) && (w.blockArray[i][j][k].m != null))
                     ++k;
                 int d = k+this.width[i-x][j-y];
-                for (; k<d; w.blockArray[i][j][k++].m = m){};
+                for (; (k<d && k<w.zsize); w.blockArray[i][j][k++].m = m){};
             }
     }
 }

@@ -25,7 +25,7 @@ public class World {
                     this.wallArray[i][j][k][2] = new Wall(i, j, k, WallOrient.RIGHT);
                 }
 
-        this.biome = new BiomePlains();
+        this.biome = new BiomeRough();
         this.biome.fillWorld(this);
     }
 }
