@@ -26,10 +26,25 @@ public class Game {
 	int current_layer=MAX_Z-1;
 	Camera camera;
 	Sun sun;
+	int fps = 0;
+	long lastFPS;
 
 	public static void main(String[] args) {
 		Game game = new Game();
 		game.start();
+	}
+
+	public long getTime() {
+		return System.nanoTime() / 1000000;
+	}
+
+	public void updateFPS() {
+		if (getTime() - lastFPS > 1000) {
+			Display.setTitle("Elem (" + fps + "fps)"); 
+			fps = 0; //reset the FPS counter
+			lastFPS += 1000; //add one second
+		}
+		fps++;
 	}
 
 	public void pollInput() {
@@ -80,6 +95,7 @@ public class Game {
 		}
 		System.out.println("Display created. OpenGL version: " + GL11.glGetString(GL11.GL_VERSION));
 		world = new World(MAX_X,MAX_Y,MAX_Z);
+		lastFPS = getTime();
 
 		// init OpenGL
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -127,6 +143,7 @@ public class Game {
 			}
 
 			Display.update();
+			updateFPS();
 		}
 
 		Display.destroy();
