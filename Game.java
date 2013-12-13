@@ -94,14 +94,17 @@ public class Game {
 		sun = new Sun();
 		sun.update();
 
-		float light_ambient[] = { 0.8f, 0.8f, 0.8f, 1.0f };
+		float light_ambient[] = { 0.7f, 0.7f, 0.7f, 1.0f };
 
 		ByteBuffer temp = ByteBuffer.allocateDirect(4*4);
 		temp.order(ByteOrder.nativeOrder());
 		FloatBuffer buffer = temp.asFloatBuffer();
 		buffer.put(light_ambient); buffer.flip();
 		GL11.glLight(GL11.GL_LIGHT1, GL11.GL_AMBIENT, buffer);
-		
+
+		float mat_ambient[] = { 0.5f, 0.5f, 0.5f, 0.0f };
+		buffer.put(mat_ambient); buffer.flip();
+		GL11.glMaterial(GL11.GL_FRONT, GL11.GL_AMBIENT, buffer);
 		GL11.glMaterial(GL11.GL_FRONT, GL11.GL_SPECULAR, buffer);
 		GL11.glMaterialf(GL11.GL_FRONT, GL11.GL_SHININESS, 50.0f);
 
