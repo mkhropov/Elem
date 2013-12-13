@@ -33,5 +33,8 @@ public class Creature {
 
     public void iterate(){
     }
+
+	public void draw(){
+	}
 }
 

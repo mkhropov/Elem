@@ -147,6 +147,7 @@ public class Game {
 				GL11.glDisable(GL11.GL_LIGHT1);
 			}
 
+			for (int i=0; i<world.creature.size(); ++i) world.creature.get(i).draw();
 			Display.update();
 			updateFPS();
 		}
