@@ -2,7 +2,9 @@ package world;
 
 import geomorph.*;
 import physics.material.*;
+import creature.*;
 
+import java.util.ArrayList;
 
 public class World {
     public int xsize, ysize, zsize;
@@ -10,6 +12,7 @@ public class World {
     public Wall[][][][] wallArray;
     Biome biome;
     public Material[] material;
+    public ArrayList<Creature> creature;
 
     public World(int x, int y, int z) {
         this.xsize = x;
@@ -38,5 +41,14 @@ public class World {
 
         this.biome = new BiomeRough();
         this.biome.fillWorld(this);
+
+        this.creature = new ArrayList<Creature>(2);
+        this.creature.add(new Elem(this, this.blockArray[0][0][zsize-1]));
+        this.creature.add(new Elem(this, this.blockArray[xsize-1][0][zsize-1]));
+    }
+
+    public void iterate(){
+        for (int i=0; i<creature.size(); ++i)
+            creature.get(i).iterate();
     }
 }

@@ -76,6 +76,9 @@ public class Game {
 				if (Keyboard.getEventCharacter() == 'e') {
 					camera.rotateRight();
 				}
+                if (Keyboard.getEventCharacter() == 'i') {
+                    world.iterate();
+                }
 			} else {
 				// Key released
 				if (Keyboard.getEventCharacter() == Keyboard.KEY_Z) {

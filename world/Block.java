@@ -4,13 +4,15 @@ package world;
 */
 import org.lwjgl.opengl.GL11;
 import java.util.Random;
+import java.util.ArrayList;
 
 import physics.material.*;
+import creature.*;
 
 
 public class Block {
     // this properties are given for example
-    int x, y, z; //in a chunk
+    public int x, y, z; //in a chunk
     int T; //temperature
     public Substance m; //to be changed to a class
 //    int liquidLevel;
@@ -18,7 +20,7 @@ public class Block {
 //    Gase gase;
 	double texU, texV;
 //    void[] items;
-//    void[] creatures;
+    public ArrayList<Creature> creature;
 
     public Block(int x, int y, int z) {
 		this.x = x;
@@ -28,6 +30,7 @@ public class Block {
 		Random r = new Random();
 		this.texU = r.nextDouble()/2;
 		this.texV = r.nextDouble()/2;
+        this.creature = new ArrayList<Creature>();
     }
 
 	public void Draw() {
