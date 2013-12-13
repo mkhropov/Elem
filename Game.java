@@ -26,10 +26,25 @@ public class Game {
 	int current_layer=MAX_Z-1;
 	Camera camera;
 	Sun sun;
+	int fps = 0;
+	long lastFPS;
 
 	public static void main(String[] args) {
 		Game game = new Game();
 		game.start();
+	}
+
+	public long getTime() {
+		return System.nanoTime() / 1000000;
+	}
+
+	public void updateFPS() {
+		if (getTime() - lastFPS > 1000) {
+			Display.setTitle("Elem (" + fps + "fps)"); 
+			fps = 0; //reset the FPS counter
+			lastFPS += 1000; //add one second
+		}
+		fps++;
 	}
 
 	public void pollInput() {
@@ -80,6 +95,7 @@ public class Game {
 		}
 		System.out.println("Display created. OpenGL version: " + GL11.glGetString(GL11.GL_VERSION));
 		world = new World(MAX_X,MAX_Y,MAX_Z);
+		lastFPS = getTime();
 
 		// init OpenGL
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -90,18 +106,23 @@ public class Game {
 		//Set up lighting
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_LIGHT0);
-		GL11.glEnable(GL11.GL_COLOR_MATERIAL);
 
 		sun = new Sun();
 		sun.update();
 
-		float light_ambient[] = { 0.3f, 0.3f, 0.3f, 1.0f };
+		float light_ambient[] = { 0.7f, 0.7f, 0.7f, 1.0f };
 
-        ByteBuffer temp = ByteBuffer.allocateDirect(4*4);
-        temp.order(ByteOrder.nativeOrder());
-        FloatBuffer buffer = temp.asFloatBuffer();
+		ByteBuffer temp = ByteBuffer.allocateDirect(4*4);
+		temp.order(ByteOrder.nativeOrder());
+		FloatBuffer buffer = temp.asFloatBuffer();
 		buffer.put(light_ambient); buffer.flip();
 		GL11.glLight(GL11.GL_LIGHT1, GL11.GL_AMBIENT, buffer);
+
+		float mat_ambient[] = { 0.5f, 0.5f, 0.5f, 0.0f };
+		buffer.put(mat_ambient); buffer.flip();
+		GL11.glMaterial(GL11.GL_FRONT, GL11.GL_AMBIENT, buffer);
+		GL11.glMaterial(GL11.GL_FRONT, GL11.GL_SPECULAR, buffer);
+		GL11.glMaterialf(GL11.GL_FRONT, GL11.GL_SHININESS, 50.0f);
 
 		while (!Display.isCloseRequested()) {
 			this.pollInput();
@@ -122,6 +143,7 @@ public class Game {
 			}
 
 			Display.update();
+			updateFPS();
 		}
 
 		Display.destroy();
