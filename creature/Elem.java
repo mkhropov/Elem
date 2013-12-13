@@ -19,7 +19,7 @@ public class Elem extends Creature implements Worker{
     }
 
     public final boolean canWalk(Block b){
-        if ((b.m == null) || (b.m.w < (1. - this.size)))
+        if ((b.m == null) || (b.m.w < (1. - Elem.size)))
             return true;
         else
             return false;

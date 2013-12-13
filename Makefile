@@ -1,19 +1,21 @@
+OUT = output
 CC = javac
-CFLAGS = -cp .:libs/*
-RFLAGS = -Djava.library.path=native/linux
+CFLAGS = -cp .:libs/* -Xlint:all -d $(OUT)
+RFLAGS = -cp $(OUT):libs/* -Djava.library.path=native/linux
+OBJ = $(OUT)/game.class
 
 .PHONY: all clean run test
 
-all: Game.class
+all: $(OUT)/Game.class
 
-%.class: %.java
+$(OUT)/%.class: %.java
 	$(CC) $(CFLAGS) $<
 
 test: test.class
 	$(CC) $(CFLAGS) test.java
 
-run: Game.class
-	java $(CFLAGS) $(RFLAGS) Game
+run: $(OUT)/Game.class
+	java $(RFLAGS) Game
 
 clean:
-	rm -f *.class geomorph/*.class graphics/*.class physics/*.class physics/material/*.class creature/*.class world/*.class
+	rm -rf output/*
