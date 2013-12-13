@@ -7,7 +7,7 @@ import world.*;
 import physics.material.*;
 
 
-public class Elem extends Creature {
+public class Elem extends Creature implements Worker{
     public static double size = 0.5;
     public Random gen;
 	Material m; //Dirty hacks here
@@ -33,6 +33,14 @@ public class Elem extends Creature {
         return true;
     }
 
+    boolean canReach(Block b){
+        if (b == this.b) return false;
+        if (Math.abs(this.b.x-b.x)>1) return false;
+        if (Math.abs(this.b.y-b.y)>1) return false;
+        if (Math.abs(this.b.z-b.z)>1) return false;
+        return true;
+    }
+
     public void iterate() {
         int dx = 2*gen.nextInt(2)-1;
         int dy = 2*gen.nextInt(2)-1;
@@ -41,8 +49,13 @@ public class Elem extends Creature {
         if (!((b.y+dy>=0)&&(b.y+dy<w.ysize))) return;
         if (!((b.z+dz>=0)&&(b.z+dz<w.zsize))) return;
         Block t = w.blockArray[b.x+dx][b.y+dy][b.z+dz];
-        if (canMove(b, t))
+        int p = gen.nextInt(100);
+        if ((p < 60) && (canMove(b, t)))
             move(t);
+        else if (p < 70)
+            placeBlock(t, w.material[0]);
+        else
+            destroyBlock(t);
     }
 
 	public void draw() {
@@ -139,4 +152,22 @@ public class Elem extends Creature {
 		GL11.glEnd();
 
 	}
+
+    public final boolean destroyBlock(Block b){
+        if (!canReach(b))
+            return false;
+        else {
+            b.m = null;
+            return true;
+        }
+    }
+
+    public final boolean placeBlock(Block b, Material m){
+        if ((!canReach(b)) || (b.m != null))
+            return false;
+        else {
+            b.m = new Substance(m, 1.d);
+            return true;
+        }
+    }
 }
