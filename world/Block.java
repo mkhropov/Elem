@@ -21,6 +21,25 @@ public class Block {
 	double texU, texV;
 //    void[] items;
     public ArrayList<Creature> creature;
+  /*  public static int[][] nearInd = new int[][]
+        {{1, 1, 1}, {1, 1, 0}, {1, 1, -1}
+        ,{1, 0, 1}, {1, 0, 0}, {1, 0, -1}
+        ,{1, -1, 1}, {1, -1, 0}, {1, -1, -1}
+        ,{0, 1, 1}, {0, 1, 0}, {0, 1, -1}
+        ,{0, 0, 1},  {0, 0, -1}
+        ,{0, -1, 1}, {0, -1, 0}, {0, -1, -1}
+        ,{-1, 1, 1}, {-1, 1, 0}, {-1, 1, -1}
+        ,{-1, 0, 1}, {-1, 0, 0}, {-1, 0, -1}
+        ,{-1, -1, 1}, {-1, -1, 0}, {-1, -1, -1}};*/
+   /* public static int[][] nearInd = new int[][]
+        {{1, 1, 0}, {1, 0, 1}, {1, 0, 0}, {1, 0, -1}
+        ,{1, -1, 0}, {0, 1, 1}, {0, 1, 0}, {0, 1, -1}
+        ,{0, 0, 1}, {0, 0, -1}, {0, -1, 1}, {0, -1, 0}
+        ,{0, -1, -1}, {-1, 1, 0}, {-1, 0, 1}, {-1, 0, 0}
+        ,{-1, 0, -1}, {-1, -1, 0}};*/
+    public static int[][] nearInd = new int[][]
+        {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}, {0, 0, -1},
+         {0, -1, 0}, {-1, 0, 0}};
 
     public Block(int x, int y, int z) {
 		this.x = x;
@@ -133,5 +152,20 @@ public class Block {
 
     void setMaterial(Material m) {
 		this.m = new Substance(m, 1.d);
+    }
+    
+    boolean nearFits(int[] ind, World w){
+        if ((x+ind[0]<0) || (x+ind[0]>=w.xsize)) return false;
+        if ((y+ind[1]<0) || (y+ind[1]>=w.ysize)) return false;
+        if ((z+ind[2]<0) || (z+ind[2]>=w.zsize)) return false;
+        return true;
+    }
+    
+    public ArrayList<Block> nearest(World w){
+        ArrayList<Block> l = new ArrayList<>(6);
+        for (int i=0; i<6; ++i)
+            if (nearFits(nearInd[i], w))
+                l.add(w.blockArray[x+nearInd[i][0]][y+nearInd[i][1]][z+nearInd[i][2]]);
+        return l;
     }
 }

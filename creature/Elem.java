@@ -18,14 +18,13 @@ public class Elem extends Creature implements Worker{
         gen = new Random(b.x+b.y+b.z);
     }
 
-    public final boolean canWalk(Block b){
-        if ((b.m == null) || (b.m.w < (1. - Elem.size)))
-            return true;
-        else
-            return false;
+    @Override
+    public boolean canWalk(Block b){
+        return (b.m == null) || (b.m.w < (1. - Elem.size));
     }
 
-    public final boolean canMove(Block b1, Block b2){
+    @Override
+    public boolean canMove(Block b1, Block b2){
         if (!canWalk(b2)) return false;
         if (Math.abs(b1.x-b2.x)>1) return false;
         if (Math.abs(b1.y-b2.y)>1) return false;
@@ -41,6 +40,7 @@ public class Elem extends Creature implements Worker{
         return true;
     }
 
+    @Override
     public void iterate() {
         int dx = 2*gen.nextInt(2)-1;
         int dy = 2*gen.nextInt(2)-1;
@@ -58,6 +58,7 @@ public class Elem extends Creature implements Worker{
             destroyBlock(t);
     }
 
+    @Override
 	public void draw() {
 		m.texture.bind();
 
@@ -153,6 +154,7 @@ public class Elem extends Creature implements Worker{
 
 	}
 
+    @Override
     public final boolean destroyBlock(Block b){
         if (!canReach(b))
             return false;
@@ -162,6 +164,7 @@ public class Elem extends Creature implements Worker{
         }
     }
 
+    @Override
     public final boolean placeBlock(Block b, Material m){
         if ((!canReach(b)) || (b.m != null))
             return false;

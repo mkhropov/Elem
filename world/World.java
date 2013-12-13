@@ -3,6 +3,7 @@ package world;
 import geomorph.*;
 import physics.material.*;
 import creature.*;
+import pathfind.Pathfinder;
 
 import java.util.ArrayList;
 
@@ -13,6 +14,7 @@ public class World {
     Biome biome;
     public Material[] material;
     public ArrayList<Creature> creature;
+    public Pathfinder pf;
 
     public World(int x, int y, int z) {
         this.xsize = x;
@@ -43,9 +45,13 @@ public class World {
         this.biome = new BiomeRough();
         this.biome.fillWorld(this);
 
-        this.creature = new ArrayList<Creature>(2);
-        this.creature.add(new Elem(this, this.blockArray[0][0][zsize-1]));
-        this.creature.add(new Elem(this, this.blockArray[xsize-1][0][zsize-1]));
+        this.pf = new Pathfinder(this);
+        
+        this.creature = new ArrayList<Creature>(1);
+        this.creature.add(new SmartElem(this, this.blockArray[0][0][zsize-1]));
+        this.creature.get(0).path = pf.getPath(this.creature.get(0), 
+                                           this.blockArray[0][0][zsize-1],
+                                           this.blockArray[xsize-1][0][zsize-1]);
     }
 
     public void iterate(){

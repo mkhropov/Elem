@@ -2,9 +2,12 @@ package creature;
 
 import world.*;
 
+import java.util.Stack;
+
 public class Creature {
     World w;
     Block b;
+    public Stack<Block> path;
 
     public Creature(World w, Block b){
         w.creature.add(this);
