@@ -1,3 +1,6 @@
+package world;
+
+import physics.Temperature;
 /**
  * Wall is a class describing an interblock volume of indistinguable width
 */

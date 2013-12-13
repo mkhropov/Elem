@@ -1,11 +1,14 @@
-import geomorph.*;
+package geomorph;
+
+import world.*;
 import stereometry.*;
+import physics.Temperature;
 import java.util.Random;
 import java.util.Date;
 
 public class BiomeRough extends Biome {
 
-    BiomeRough(){
+    public BiomeRough(){
         this.name = "Rough terrain biome";
     }
 

@@ -1,3 +1,6 @@
+package geomorph;
+
+import world.*;
 import java.util.Random;
 
 import physics.material.*;

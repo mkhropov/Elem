@@ -1,13 +1,17 @@
+package world;
+
+import geomorph.*;
 import physics.material.*;
 
-public class World {
-    int xsize, ysize, zsize; //position in world
-    Block[][][] blockArray;
-    Wall[][][][] wallArray;
-    Biome biome;
-    Material[] material;
 
-    World(int x, int y, int z) {
+public class World {
+    public int xsize, ysize, zsize;
+    public Block[][][] blockArray;
+    public Wall[][][][] wallArray;
+    Biome biome;
+    public Material[] material;
+
+    public World(int x, int y, int z) {
         this.xsize = x;
         this.ysize = y;
         this.zsize = z;

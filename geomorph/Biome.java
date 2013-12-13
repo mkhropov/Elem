@@ -1,8 +1,11 @@
+package geomorph;
+
 import java.util.Random;
+import physics.Temperature;
 import physics.material.*;
 import java.util.ArrayList;
 import stereometry.*;
-import geomorph.Morph;
+import world.*;
 
 public abstract class Biome {
 

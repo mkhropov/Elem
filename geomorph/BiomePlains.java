@@ -1,5 +1,8 @@
-import geomorph.*;
+package geomorph;
+
+import world.*;
 import stereometry.*;
+import physics.Temperature;
 
 public class BiomePlains extends Biome {
 

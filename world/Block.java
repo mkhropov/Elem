@@ -1,3 +1,4 @@
+package world;
 /**
  * Block is a class describing a minimal single 3D voxel
 */
@@ -11,10 +12,10 @@ public class Block {
     // this properties are given for example
     int x, y, z; //in a chunk
     int T; //temperature
-    Substance m; //to be changed to a class
-    int liquidLevel;
-    int liquidId;
-    Gase gase;
+    public Substance m; //to be changed to a class
+//    int liquidLevel;
+//    int liquidId;
+//    Gase gase;
 	double texU, texV;
 //    void[] items;
 //    void[] creatures;
