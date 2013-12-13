@@ -19,7 +19,7 @@ public class Elem extends Creature {
     }
 
     public final boolean canWalk(Block b){
-        if (b.m.w < (1. - this.size))
+        if ((b.m == null) || (b.m.w < (1. - this.size)))
             return true;
         else
             return false;
@@ -34,9 +34,9 @@ public class Elem extends Creature {
     }
 
     public void iterate() {
-        int dx = 2*gen.nextInt(1)-1;
-        int dy = 2*gen.nextInt(1)-1;
-        int dz = 2*gen.nextInt(1)-1;
+        int dx = 2*gen.nextInt(2)-1;
+        int dy = 2*gen.nextInt(2)-1;
+        int dz = 2*gen.nextInt(2)-1;
         if (!((b.x+dx>=0)&&(b.x+dx<w.xsize))) return;
         if (!((b.y+dy>=0)&&(b.y+dy<w.ysize))) return;
         if (!((b.z+dz>=0)&&(b.z+dz<w.zsize))) return;

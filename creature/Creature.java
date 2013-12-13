@@ -27,6 +27,7 @@ public class Creature {
         else {
             this.b.creature.remove(this);
             b.creature.add(this);
+            this.b = b;
             return true;
         }
     }
