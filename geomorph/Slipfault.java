@@ -33,12 +33,13 @@ public class Slipfault extends Morph {
     }
 
     public final Point preimage(Point p){
-        if (!inImage(p)){
-            return p;
-        }
+//        if (!inImage(p)){
+//            return p;
+//        }
         Point pi = new Point(p);
         double r = f.distProj(pi);
-        pi.z += d*.5d*(Math.cos(r*r*r/(Math.PI*Math.PI))+1);
+        if(r<l)
+            pi.z += d*.5d*(Math.cos(r*r*r/(Math.PI*Math.PI))+1);
         return pi;
     }
 

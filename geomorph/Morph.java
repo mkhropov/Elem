@@ -4,8 +4,8 @@ import stereometry.*;
 
 abstract public class Morph {
 
-    abstract boolean inImage(Point p);
+    public abstract boolean inImage(Point p);
 
-    abstract Point preimage(Point p);
-    abstract Point image(Point P);
+    public abstract Point preimage(Point p);
+    public abstract Point image(Point P);
 }

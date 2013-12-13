@@ -9,5 +9,10 @@ public class Substance {
         this.m = m;
         this.w = w;
     }
+
+    public Substance(Substance s){
+        this.m = s.m;
+        this.w = s.w;
+    }
 }
 
