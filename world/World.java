@@ -51,7 +51,7 @@ public class World {
         this.creature.add(new SmartElem(this, this.blockArray[0][0][zsize-1]));
         this.creature.get(0).path = pf.getPath(this.creature.get(0), 
                                            this.blockArray[0][0][zsize-1],
-                                           this.blockArray[xsize-1][0][zsize-1]);
+                                           this.blockArray[xsize-1][ysize-1][zsize-1]);
     }
 
     public void iterate(){

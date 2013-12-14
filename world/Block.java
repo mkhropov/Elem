@@ -21,35 +21,34 @@ public class Block {
 	double texU, texV;
 //    void[] items;
     public ArrayList<Creature> creature;
-  /*  public static int[][] nearInd = new int[][]
-        {{1, 1, 1}, {1, 1, 0}, {1, 1, -1}
-        ,{1, 0, 1}, {1, 0, 0}, {1, 0, -1}
-        ,{1, -1, 1}, {1, -1, 0}, {1, -1, -1}
-        ,{0, 1, 1}, {0, 1, 0}, {0, 1, -1}
-        ,{0, 0, 1},  {0, 0, -1}
-        ,{0, -1, 1}, {0, -1, 0}, {0, -1, -1}
-        ,{-1, 1, 1}, {-1, 1, 0}, {-1, 1, -1}
-        ,{-1, 0, 1}, {-1, 0, 0}, {-1, 0, -1}
-        ,{-1, -1, 1}, {-1, -1, 0}, {-1, -1, -1}};*/
-   /* public static int[][] nearInd = new int[][]
+    public static int[][] nearInd = new int[][]
+        {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}
+        ,{0, 0, -1}, {-1, 0, 0}, {0, -1, 0}
+        ,{0, -1, -1}, {0, 1, -1}, {1, 0, -1}
+        ,{1, -1, 0}, {0, 1, 1}, {0, -1, 1}
+        ,{-1, -1, 0}, {-1, 1, 0}, {-1, 0, 1}
+        ,{-1, 0, -1}, {1, 1, 0}, {1, 0, 1}
+        ,{-1, -1, 1}, {-1, 1, -1}, {-1, 1, 1}, {1, -1, -1}
+        ,{1, -1, 1}, {1, 1, -1}, {1, 1, 1}, {-1, -1, -1}};
+     /* public static int[][] nearInd = new int[][]
         {{1, 1, 0}, {1, 0, 1}, {1, 0, 0}, {1, 0, -1}
         ,{1, -1, 0}, {0, 1, 1}, {0, 1, 0}, {0, 1, -1}
         ,{0, 0, 1}, {0, 0, -1}, {0, -1, 1}, {0, -1, 0}
         ,{0, -1, -1}, {-1, 1, 0}, {-1, 0, 1}, {-1, 0, 0}
         ,{-1, 0, -1}, {-1, -1, 0}};*/
-    public static int[][] nearInd = new int[][]
+    /*public static int[][] nearInd = new int[][]
         {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}, {0, 0, -1},
-         {0, -1, 0}, {-1, 0, 0}};
+         {0, -1, 0}, {-1, 0, 0}};*/
 
     public Block(int x, int y, int z) {
-		this.x = x;
+                this.x = x;
 		this.y = y;
 		this.z = z;
 		this.m = null;
 		Random r = new Random();
 		this.texU = r.nextDouble()/2;
 		this.texV = r.nextDouble()/2;
-        this.creature = new ArrayList<Creature>();
+                this.creature = new ArrayList<>();
     }
 
 	public void Draw() {
@@ -162,8 +161,8 @@ public class Block {
     }
     
     public ArrayList<Block> nearest(World w){
-        ArrayList<Block> l = new ArrayList<>(6);
-        for (int i=0; i<6; ++i)
+        ArrayList<Block> l = new ArrayList<>(nearInd.length);
+        for (int i=0; i<nearInd.length; ++i)
             if (nearFits(nearInd[i], w))
                 l.add(w.blockArray[x+nearInd[i][0]][y+nearInd[i][1]][z+nearInd[i][2]]);
         return l;
