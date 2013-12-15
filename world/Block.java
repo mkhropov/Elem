@@ -165,6 +165,8 @@ public class Block {
         for (int i=0; i<nearInd.length; ++i)
             if (nearFits(nearInd[i], w))
                 l.add(w.blockArray[x+nearInd[i][0]][y+nearInd[i][1]][z+nearInd[i][2]]);
+            else
+                l.add(null);
         return l;
     }
 }
