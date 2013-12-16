@@ -163,6 +163,7 @@ public class Game {
 			for (int i=0; i<world.creature.size(); ++i) world.creature.get(i).draw();
 			Display.update();
 			updateFPS();
+			Display.sync(60);
 		}
 
 		Display.destroy();
