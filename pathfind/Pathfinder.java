@@ -73,7 +73,10 @@ public class Pathfinder {
             }
             t++;
         }
-        if (t==1000) return null;
+        if (t==1000) {
+            System.out.printf("Path timed out\n");
+            return null;
+        }
         m = b2;
         Stack<Block> q = new Stack<>();
         q.push(m);
@@ -85,7 +88,7 @@ public class Pathfinder {
                 n = near.get(j);
                 if(n==null) continue;
                 Dn = d[n.x][n.y][n.z];
-                if ((Dn>-0.5) && (Dn < D)){
+                if ((Dn>-0.5) && (Dn < D) && c.canMove(n, m)){
                     k = n;
                     D = Dn;
                 }

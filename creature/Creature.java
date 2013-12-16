@@ -6,11 +6,11 @@ import java.util.Stack;
 
 public class Creature {
     World w;
-    Block b;
+    public Block b;
     public Stack<Block> path;
 
     public Creature(World w, Block b){
-        w.creature.add(this);
+//        w.creature.add(this);
         b.creature.add(this);
         this.b = b;
         this.w = w;

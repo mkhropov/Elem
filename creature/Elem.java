@@ -26,17 +26,22 @@ public class Elem extends Creature implements Worker{
     @Override
     public boolean canMove(Block b1, Block b2){
         if (!canWalk(b2)) return false;
-        if (Math.abs(b1.x-b2.x)>1) return false;
-        if (Math.abs(b1.y-b2.y)>1) return false;
-        if (Math.abs(b1.z-b2.z)>1) return false;
-        return true;
+        return canReach(b1, b2);
     }
 
-    boolean canReach(Block b){
-        if (b == this.b) return false;
-        if (Math.abs(this.b.x-b.x)>1) return false;
-        if (Math.abs(this.b.y-b.y)>1) return false;
-        if (Math.abs(this.b.z-b.z)>1) return false;
+    boolean canReach(Block b1, Block b2){
+        int dx = b2.x-b1.x;
+        int dy = b2.y-b1.y;
+        int dz = b2.z-b1.z;
+        if ((Math.abs(dx)>1) || (Math.abs(dy)>1) || (Math.abs(dz)>1)) return false;
+        if ((Math.abs(dx)+Math.abs(dy)+Math.abs(dz)) > 2) return false;
+        if (dz == 0)
+            return ((w.blockArray[b1.x+dx][b1.y][b1.z].m==null) ||
+                    (w.blockArray[b1.x][b1.y+dy][b1.z].m==null));
+        if (dz > 0)
+            return (w.blockArray[b1.x][b1.y][b1.z+1].m==null);
+        if (dz < 0)
+            return (w.blockArray[b1.x+dx][b1.y+dy][b1.z].m == null);
         return true;
     }
 
@@ -156,7 +161,7 @@ public class Elem extends Creature implements Worker{
 
     @Override
     public final boolean destroyBlock(Block b){
-        if (!canReach(b))
+        if (!canReach(this.b, b))
             return false;
         else {
             b.m = null;
@@ -166,7 +171,7 @@ public class Elem extends Creature implements Worker{
 
     @Override
     public final boolean placeBlock(Block b, Material m){
-        if ((!canReach(b)) || (b.m != null))
+        if ((!canReach(this.b, b)) || (b.m != null))
             return false;
         else {
             b.m = new Substance(m, 1.d);

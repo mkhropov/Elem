@@ -32,12 +32,11 @@ public class SmartElem extends Elem implements Worker {
             if (canMove(b, t)){
                 move(t);
                 if (path.size()==0)
-                    System.out.printf("Path walked succesfully");
+                    System.out.printf("Path walked succesfully\n");
             } else {
                 System.out.printf("Incorrect path!\n");
                 path.clear();
             }
         }
-            
     }
 }
