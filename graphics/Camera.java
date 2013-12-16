@@ -32,9 +32,26 @@ public class Camera {
 		targetAngleZ += 90;
 	}
 
+	public void repositionDelta(double dx, double dy, double dz) {
+		x += dx;
+		y += dy;
+		z += dz;
+		forceUpdate();
+	}
+
+	public void repositionAbsolute(double new_x, double new_y, double new_z) {
+		x += new_x;
+		y += new_y;
+		z += new_z;
+	}
+
 	public void update() {
 		if (currentAngleZ == targetAngleZ)
 			return;
+		forceUpdate();
+	}
+
+	public void forceUpdate() {
 		if (Math.abs(currentAngleZ - targetAngleZ) < cameraAngleSpeed) {
 			currentAngleZ = targetAngleZ;
 		} else if (currentAngleZ < targetAngleZ) {
