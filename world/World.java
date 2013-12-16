@@ -61,10 +61,10 @@ public class World {
                                            this.creature.get(1).b);
     }
 
-    public void iterate(){
+    public void iterate(long dT){
         for (int i=0; i<creature.size(); ++i){
 //            System.out.printf("Iterate #%d\n", i);
-            creature.get(i).iterate();
+            creature.get(i).iterate(dT);
         }
     }
 

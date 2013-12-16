@@ -17,8 +17,8 @@ import graphics.GraphicalChunk;
 
 public class Game {
 	World world;
-	public static final int MAX_X=50;
-	public static final int MAX_Y=50;
+	public static final int MAX_X=25;
+	public static final int MAX_Y=25;
 	public static final int MAX_Z=20;
 	public static final double SCALE=0.7;
 	int current_layer=MAX_Z-1;
@@ -84,7 +84,7 @@ public class Game {
 					camera.rotateRight();
 				}
                 if (Keyboard.getEventCharacter() == 'i') {
-                    world.iterate();
+                    world.iterate(deltaT);
                 }
 			} else {
 				// Key released
@@ -161,7 +161,7 @@ public class Game {
 					gChunks[k].draw();
 				}
 			}
-
+                        world.iterate(deltaT);
 			for (int i=0; i<world.creature.size(); ++i) world.creature.get(i).draw();
 			Display.update();
 			updateFPS(deltaT);

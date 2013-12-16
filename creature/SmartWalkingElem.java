@@ -27,9 +27,8 @@ public class SmartWalkingElem extends SmartElem implements Worker {
         while (i > 0)
             if (w.blockArray[b.x][b.y][--i].m != null)
                 break;
-        b.creature.remove(this);
-        b = w.blockArray[b.x][b.y][i+1];
-        b.creature.add(this);
+        setBlock(w.blockArray[b.x][b.y][i+1], true);
+        p = np;
     }
 
     @Override

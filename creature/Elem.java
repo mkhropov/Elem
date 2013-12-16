@@ -5,15 +5,23 @@ import org.lwjgl.opengl.GL11;
 
 import world.*;
 import physics.material.*;
+import stereometry.Point;
+import stereometry.Vector;
 
 
 public class Elem extends Creature implements Worker{
     public static double size = 0.5;
     public Random gen;
 	Material m; //Dirty hacks here
+    Block pb;
+    Vector mv;
 
     public Elem(World w, Block b){
         super(w, b);
+        pb = b;
+        np = p;
+        mv = new Vector(0., 0., 0.);
+        speed = 0.001d;
 		m = w.material[2]; //because fuck you. That's why
         gen = new Random(b.x+b.y+b.z);
     }
@@ -29,6 +37,22 @@ public class Elem extends Creature implements Worker{
         return canReach(b1, b2);
     }
 
+    @Override
+    public boolean move(Block b){
+        if (!canMove(this.b, b))
+            return false;
+        else { //delayed movement - we are in process
+            pb = this.b;
+            setBlock(b, true);
+            mv = new Vector(p, np);
+            if (!mv.zero()){
+                mv.normalize();
+                mv.scale(speed);
+            }
+            return true;
+        }
+    }
+    
     boolean canReach(Block b1, Block b2){
         int dx = b2.x-b1.x;
         int dy = b2.y-b1.y;
@@ -46,21 +70,34 @@ public class Elem extends Creature implements Worker{
     }
 
     @Override
-    public void iterate() {
-        int dx = 2*gen.nextInt(2)-1;
-        int dy = 2*gen.nextInt(2)-1;
-        int dz = 2*gen.nextInt(2)-1;
-        if (!((b.x+dx>=0)&&(b.x+dx<w.xsize))) return;
-        if (!((b.y+dy>=0)&&(b.y+dy<w.ysize))) return;
-        if (!((b.z+dz>=0)&&(b.z+dz<w.zsize))) return;
-        Block t = w.blockArray[b.x+dx][b.y+dy][b.z+dz];
-        int p = gen.nextInt(100);
-        if ((p < 60) && (canMove(b, t)))
-            move(t);
-        else if (p < 70)
-            placeBlock(t, w.material[0]);
-        else
-            destroyBlock(t);
+    public void iterate(long dT) {
+        p.add(mv, (double)dT);
+        if (p.dist(np) < speed*dT){
+            System.out.print("Point reached\n");
+            pb = b;
+            mv.toZero();
+            int dx, dy, dz;
+            Block t;
+            while (true) {
+                dx = gen.nextInt(3)-1;
+                dy = gen.nextInt(3)-1;
+                dz = gen.nextInt(3)-1;
+                if (!((b.x+dx>=0)&&(b.x+dx<w.xsize))) continue;
+                if (!((b.y+dy>=0)&&(b.y+dy<w.ysize))) continue;
+                if (!((b.z+dz>=0)&&(b.z+dz<w.zsize))) continue;
+                t = w.blockArray[b.x+dx][b.y+dy][b.z+dz];
+                if (!canMove(b, t)) continue;
+                break;
+            }
+            
+ //           int p = gen.nextInt(100);
+ //           if (p < 70)
+                move(t);
+//            else if (p < 85)
+ //               placeBlock(t, w.material[0]);
+    //        else
+    //            destroyBlock(t);
+        }
     }
 
     @Override
@@ -70,91 +107,91 @@ public class Elem extends Creature implements Worker{
 		GL11.glBegin(GL11.GL_QUADS);
 		GL11.glNormal3d(0.0, 0.0, -1.0);
 		GL11.glTexCoord2d(0.0,0.0);
-		GL11.glVertex3d(b.x+0.2, b.y+0.2, b.z+0.2);
+		GL11.glVertex3d(p.x+0.2, p.y+0.2, p.z+0.2);
 		GL11.glNormal3d(0.0, 0.0, -1.0);
 		GL11.glTexCoord2d(1.0,0.0);
-		GL11.glVertex3d(b.x+0.8, b.y+0.2, b.z+0.2);
+		GL11.glVertex3d(p.x+0.8, p.y+0.2, p.z+0.2);
 		GL11.glNormal3d(0.0, 0.0, -1.0);
 		GL11.glTexCoord2d(1.0,1.0);
-		GL11.glVertex3d(b.x+0.8, b.y+0.8, b.z+0.2);
+		GL11.glVertex3d(p.x+0.8, p.y+0.8, p.z+0.2);
 		GL11.glNormal3d(0.0, 0.0, -1.0);
 		GL11.glTexCoord2d(0.0,1.0);
-		GL11.glVertex3d(b.x+0.2, b.y+0.8, b.z+0.2);
+		GL11.glVertex3d(p.x+0.2, p.y+0.8, p.z+0.2);
 		GL11.glEnd();
 
 		GL11.glBegin(GL11.GL_QUADS);
 		GL11.glNormal3d(-1.0, 0.0, 0.0);
 		GL11.glTexCoord2d(0.0,0.0);
-		GL11.glVertex3d(b.x+0.2, b.y+0.2, b.z+0.2);
+		GL11.glVertex3d(p.x+0.2, p.y+0.2, p.z+0.2);
 		GL11.glNormal3d(-1.0, 0.0, 0.0);
 		GL11.glTexCoord2d(1.0,0.0);
-		GL11.glVertex3d(b.x+0.2, b.y+0.8, b.z+0.2);
+		GL11.glVertex3d(p.x+0.2, p.y+0.8, p.z+0.2);
 		GL11.glNormal3d(-1.0, 0.0, 0.0);
 		GL11.glTexCoord2d(1.0,1.0);
-		GL11.glVertex3d(b.x+0.2, b.y+0.8, b.z+0.8);
+		GL11.glVertex3d(p.x+0.2, p.y+0.8, p.z+0.8);
 		GL11.glNormal3d(-1.0, 0.0, 0.0);
 		GL11.glTexCoord2d(0.0,1.0);
-		GL11.glVertex3d(b.x+0.2, b.y+0.2, b.z+0.8);
+		GL11.glVertex3d(p.x+0.2, p.y+0.2, p.z+0.8);
 		GL11.glEnd();
 
 		GL11.glBegin(GL11.GL_QUADS);
 		GL11.glNormal3d(0.0, -1.0, 0.0);
 		GL11.glTexCoord2d(0.0,0.0);
-		GL11.glVertex3d(b.x+0.2, b.y+0.2, b.z+0.2);
+		GL11.glVertex3d(p.x+0.2, p.y+0.2, p.z+0.2);
 		GL11.glNormal3d(0.0, -1.0, 0.0);
 		GL11.glTexCoord2d(1.0,0.0);
-		GL11.glVertex3d(b.x+0.8, b.y+0.2, b.z+0.2);
+		GL11.glVertex3d(p.x+0.8, p.y+0.2, p.z+0.2);
 		GL11.glNormal3d(0.0, -1.0, 0.0);
 		GL11.glTexCoord2d(1.0,1.0);
-		GL11.glVertex3d(b.x+0.8, b.y+0.2, b.z+0.8);
+		GL11.glVertex3d(p.x+0.8, p.y+0.2, p.z+0.8);
 		GL11.glNormal3d(0.0, -1.0, 0.0);
 		GL11.glTexCoord2d(0.0,1.0);
-		GL11.glVertex3d(b.x+0.2, b.y+0.2, b.z+0.8);
+		GL11.glVertex3d(p.x+0.2, p.y+0.2, p.z+0.8);
 		GL11.glEnd();
 
 		GL11.glBegin(GL11.GL_QUADS);
 		GL11.glNormal3d(1.0, 0.0, 0.0);
 		GL11.glTexCoord2d(0.0,0.0);
-		GL11.glVertex3d(b.x+0.8, b.y+0.2, b.z+0.2);
+		GL11.glVertex3d(p.x+0.8, p.y+0.2, p.z+0.2);
 		GL11.glNormal3d(1.0, 0.0, 0.0);
 		GL11.glTexCoord2d(1.0,0.0);
-		GL11.glVertex3d(b.x+0.8, b.y+0.8, b.z+0.2);
+		GL11.glVertex3d(p.x+0.8, p.y+0.8, p.z+0.2);
 		GL11.glNormal3d(1.0, 0.0, 0.0);
 		GL11.glTexCoord2d(1.0,1.0);
-		GL11.glVertex3d(b.x+0.8, b.y+0.8, b.z+0.8);
+		GL11.glVertex3d(p.x+0.8, p.y+0.8, p.z+0.8);
 		GL11.glNormal3d(1.0, 0.0, 0.0);
 		GL11.glTexCoord2d(0.0,1.0);
-		GL11.glVertex3d(b.x+0.8, b.y+0.2, b.z+0.8);
+		GL11.glVertex3d(p.x+0.8, p.y+0.2, p.z+0.8);
 		GL11.glEnd();
 
 		GL11.glBegin(GL11.GL_QUADS);
 		GL11.glNormal3d(0.0, 0.0, 1.0);
 		GL11.glTexCoord2d(0.0,0.0);
-		GL11.glVertex3d(b.x+0.2, b.y+0.2, b.z+0.8);
+		GL11.glVertex3d(p.x+0.2, p.y+0.2, p.z+0.8);
 		GL11.glNormal3d(0.0, 0.0, 1.0);
 		GL11.glTexCoord2d(1.0,0.0);
-		GL11.glVertex3d(b.x+0.8, b.y+0.2, b.z+0.8);
+		GL11.glVertex3d(p.x+0.8, p.y+0.2, p.z+0.8);
 		GL11.glNormal3d(0.0, 0.0, 1.0);
 		GL11.glTexCoord2d(1.0,1.0);
-		GL11.glVertex3d(b.x+0.8, b.y+0.8, b.z+0.8);
+		GL11.glVertex3d(p.x+0.8, p.y+0.8, p.z+0.8);
 		GL11.glNormal3d(0.0, 0.0, 1.0);
 		GL11.glTexCoord2d(0.0,1.0);
-		GL11.glVertex3d(b.x+0.2, b.y+0.8, b.z+0.8);
+		GL11.glVertex3d(p.x+0.2, p.y+0.8, p.z+0.8);
 		GL11.glEnd();
 
 		GL11.glBegin(GL11.GL_QUADS);
 		GL11.glNormal3d(0.0, 1.0, 0.0);
 		GL11.glTexCoord2d(0.0,0.0);
-		GL11.glVertex3d(b.x+0.2, b.y+0.8, b.z+0.2);
+		GL11.glVertex3d(p.x+0.2, p.y+0.8, p.z+0.2);
 		GL11.glNormal3d(0.0, 1.0, 0.0);
 		GL11.glTexCoord2d(1.0,0.0);
-		GL11.glVertex3d(b.x+0.8, b.y+0.8, b.z+0.2);
+		GL11.glVertex3d(p.x+0.8, p.y+0.8, p.z+0.2);
 		GL11.glNormal3d(0.0, 1.0, 0.0);
 		GL11.glTexCoord2d(1.0,1.0);
-		GL11.glVertex3d(b.x+0.8, b.y+0.8, b.z+0.8);
+		GL11.glVertex3d(p.x+0.8, p.y+0.8, p.z+0.8);
 		GL11.glNormal3d(0.0, 1.0, 0.0);
 		GL11.glTexCoord2d(0.0,1.0);
-		GL11.glVertex3d(b.x+0.2, b.y+0.8, b.z+0.8);
+		GL11.glVertex3d(p.x+0.2, p.y+0.8, p.z+0.8);
 		GL11.glEnd();
 
 	}

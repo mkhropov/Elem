@@ -77,5 +77,15 @@ public class Vector {
         z /= a;
         p2 = new Point(p1.x+x, p1.y+y, p1.z+z);
     }
+    
+    public boolean zero(){
+        return (x==0.) && (y==0.) && (z==0.);
+    }
+    
+    public void toZero(){
+        x = 0.;
+        y = 0.;
+        z = 0.;
+    }
 }
 

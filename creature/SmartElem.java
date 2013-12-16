@@ -13,6 +13,7 @@ package creature;
 
 import world.*;
 import java.util.Stack;
+import stereometry.Vector;
 
 
 public class SmartElem extends Elem implements Worker {
@@ -22,9 +23,12 @@ public class SmartElem extends Elem implements Worker {
     }
     
     @Override
-    public void iterate(){
+    public void iterate(long dT){
+        p.add(mv, (double)dT);
+        if (p.dist(np) < speed*dT){
+            mv.toZero();
         Block t;
-        System.out.printf("iterating\n");
+ //       System.out.printf("iterating\n");
         if (path == null)
             return;
         if (path.size() > 0){
@@ -37,6 +41,7 @@ public class SmartElem extends Elem implements Worker {
                 System.out.printf("Incorrect path!\n");
                 path.clear();
             }
+        }
         }
     }
 }
