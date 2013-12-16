@@ -1,45 +1,45 @@
 package graphics;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.glu.GLU;
+import java.lang.Math;
 
 public class Camera {
-	double x, y, z;
-	double targetAngleZ;
-	double currentAngleZ;
-	final double cameraAngleSpeed = 5.0;
+	float x, y, z;
+	float targetAngleZ;
+	float currentAngleZ;
+	final float cameraAngleSpeed = (float)Math.toRadians(5.0f);
 
-	public Camera (double x, double y, double z) {
+	public Camera (float x, float y, float z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
-		this.targetAngleZ = 45;
-		this.currentAngleZ = 45;
+		this.targetAngleZ = (float)Math.toRadians(45.0f);
+		this.currentAngleZ = (float)Math.toRadians(45.0f);
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
-		GL11.glOrtho(20, -20, 15f, -15f, 20, -20);
+		GLU.gluPerspective(10.0f, 4.0f/3.0f, 1.0f, 1000.0f);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glLoadIdentity();
-		GL11.glRotated(135, 1.0, 0.0, 0.0);
-		GL11.glRotated(45, 0.0, 0.0, 1.0);
-		GL11.glTranslated(-x, -y, -z);
+		GLU.gluLookAt(x+142f*(float)Math.cos(currentAngleZ), y+142f*(float)Math.sin(currentAngleZ), z+100.4f, x, y, z, 0.0f, 0.0f, 1.0f);
 	}
 
 	public void rotateLeft() {
-		targetAngleZ -= 90;
+		targetAngleZ -= (float)Math.toRadians(90.0f);
 	}
 
 	public void rotateRight() {
-		targetAngleZ += 90;
+		targetAngleZ += (float)Math.toRadians(90.0f);
 	}
 
-	public void repositionDelta(double dx, double dy, double dz) {
+	public void repositionDelta(float dx, float dy, float dz) {
 		x += dx;
 		y += dy;
 		z += dz;
 		forceUpdate();
 	}
 
-	public void repositionAbsolute(double new_x, double new_y, double new_z) {
+	public void repositionAbsolute(float new_x, float new_y, float new_z) {
 		x += new_x;
 		y += new_y;
 		z += new_z;
@@ -61,8 +61,6 @@ public class Camera {
 		}
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glLoadIdentity();
-		GL11.glRotated(135, 1.0, 0.0, 0.0);
-		GL11.glRotated(currentAngleZ, 0.0, 0.0, 1.0);
-		GL11.glTranslated(-x, -y, -z);
+		GLU.gluLookAt(x+142f*(float)Math.cos(currentAngleZ), y+142f*(float)Math.sin(currentAngleZ), z+100.4f, x, y, z, 0.0f, 0.0f, 1.0f);
 	}
 }

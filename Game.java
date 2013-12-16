@@ -22,8 +22,8 @@ import graphics.GraphicalChunk;
 
 public class Game {
 	World world;
-	public static final int MAX_X=30;
-	public static final int MAX_Y=30;
+	public static final int MAX_X=50;
+	public static final int MAX_Y=50;
 	public static final int MAX_Z=20;
 	public static final double SCALE=0.7;
 	int current_layer=MAX_Z-1;
@@ -70,13 +70,13 @@ public class Game {
 				if (Keyboard.getEventCharacter() == 'z') {
 					if (this.current_layer>0) {
 						 this.current_layer--;
-						 camera.repositionDelta(0.0, 0.0, -1.0);
+						 camera.repositionDelta(0.0f, 0.0f, -1.0f);
 					}
 				}
 				if (Keyboard.getEventCharacter() == 'x') {
 					if (this.current_layer<(MAX_Z-1)) {
 						this.current_layer++;
-						camera.repositionDelta(0.0, 0.0, 1.0);
+						camera.repositionDelta(0.0f, 0.0f, 1.0f);
 					}
 				}
 				if (Keyboard.getEventCharacter() == 'q') {
