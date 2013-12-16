@@ -67,4 +67,11 @@ public class World {
             creature.get(i).iterate();
         }
     }
+
+	public boolean empty(int x, int y, int z){
+		if ((x<0) || (x>=xsize)) return true;
+		if ((y<0) || (y>=ysize)) return true;
+		if ((z<0) || (z>=zsize)) return true;
+		return (blockArray[x][y][z].m == null);
+	}
 }
