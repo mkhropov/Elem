@@ -11,11 +11,6 @@ import java.nio.FloatBuffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-import org.newdawn.slick.Color;
-import org.newdawn.slick.opengl.Texture;
-import org.newdawn.slick.opengl.TextureLoader;
-import org.newdawn.slick.util.ResourceLoader;
-
 import graphics.Camera;
 import graphics.Sun;
 import graphics.GraphicalChunk;
@@ -31,6 +26,8 @@ public class Game {
 	Sun sun;
 	int fps = 0;
 	long lastFPS;
+	long deltaT;
+	long lastTime, newTime;
 	GraphicalChunk[] gChunks;
 	GraphicalChunk[] gChunksFull;
 
@@ -43,12 +40,13 @@ public class Game {
 		return System.nanoTime() / 1000000;
 	}
 
-	public void updateFPS() {
-		if (getTime() - lastFPS > 1000) {
-			Display.setTitle("Elem (" + fps + "fps)"); 
+	public void updateFPS(long dT) {
+		if (lastFPS > 1000) {
+			Display.setTitle("Elem (" + fps + "fps)");
 			fps = 0; //reset the FPS counter
-			lastFPS += 1000; //add one second
+			lastFPS = 0; //add one second
 		}
+		lastFPS += dT;
 		fps++;
 	}
 
@@ -110,6 +108,7 @@ public class Game {
 		System.out.println("Display created. OpenGL version: " + GL11.glGetString(GL11.GL_VERSION));
 		world = new World(MAX_X,MAX_Y,MAX_Z);
 		lastFPS = getTime();
+		lastTime = getTime();
 
 		// init OpenGL
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -144,8 +143,11 @@ public class Game {
 		for (int i=0; i<MAX_Z; i++) gChunksFull[i] = new GraphicalChunk(world, i, GraphicalChunk.MODE_SHOW_ALL);
 
 		while (!Display.isCloseRequested()) {
+			newTime = getTime();
+			deltaT = newTime - lastTime;
+			lastTime = newTime;
 			this.pollInput();
-			camera.update();
+			camera.update(deltaT);
 			sun.update();
 			// Clear the screen and depth buffer
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
@@ -162,7 +164,7 @@ public class Game {
 
 			for (int i=0; i<world.creature.size(); ++i) world.creature.get(i).draw();
 			Display.update();
-			updateFPS();
+			updateFPS(deltaT);
 			Display.sync(60);
 		}
 

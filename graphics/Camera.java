@@ -8,7 +8,7 @@ public class Camera {
 	float x, y, z;
 	float targetAngleZ;
 	float currentAngleZ;
-	final float cameraAngleSpeed = (float)Math.toRadians(5.0f);
+	final float cameraAngleSpeed = (float)Math.toRadians(90.0f);
 
 	public Camera (float x, float y, float z) {
 		this.x = x;
@@ -36,7 +36,7 @@ public class Camera {
 		x += dx;
 		y += dy;
 		z += dz;
-		forceUpdate();
+		forceUpdate(0);
 	}
 
 	public void repositionAbsolute(float new_x, float new_y, float new_z) {
@@ -45,19 +45,20 @@ public class Camera {
 		z += new_z;
 	}
 
-	public void update() {
+	public void update(long deltaT) {
 		if (currentAngleZ == targetAngleZ)
 			return;
-		forceUpdate();
+		forceUpdate(deltaT);
 	}
 
-	public void forceUpdate() {
-		if (Math.abs(currentAngleZ - targetAngleZ) < cameraAngleSpeed) {
+	public void forceUpdate(long deltaT) {
+		if (Math.abs(currentAngleZ - targetAngleZ) < ((cameraAngleSpeed*deltaT)/1000)) {
 			currentAngleZ = targetAngleZ;
 		} else if (currentAngleZ < targetAngleZ) {
-			currentAngleZ += cameraAngleSpeed;
+			currentAngleZ += ((cameraAngleSpeed*deltaT)/1000);
+			System.out.println((cameraAngleSpeed*deltaT)/1000);
 		} else {
-			currentAngleZ -= cameraAngleSpeed;
+			currentAngleZ -= ((cameraAngleSpeed*deltaT)/1000);
 		}
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glLoadIdentity();
