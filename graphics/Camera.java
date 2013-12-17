@@ -56,7 +56,6 @@ public class Camera {
 			currentAngleZ = targetAngleZ;
 		} else if (currentAngleZ < targetAngleZ) {
 			currentAngleZ += ((cameraAngleSpeed*deltaT)/1000);
-			System.out.println((cameraAngleSpeed*deltaT)/1000);
 		} else {
 			currentAngleZ -= ((cameraAngleSpeed*deltaT)/1000);
 		}
