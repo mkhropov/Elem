@@ -49,16 +49,16 @@ public class World {
 
         this.creature = new ArrayList<Creature>();
 //        System.out.printf("total %d creatures\n", creature.size());
-        this.creature.add(new SmartWalkingElem(this, this.blockArray[0][0][zsize-1]));
+//        this.creature.add(new SmartWalkingElem(this, this.blockArray[0][0][zsize-1]));
 //        Creature cr = this.creature.get(0);
 //        System.out.printf("0: %d %d %d\n", cr.b.x, cr.b.y, cr.b.z);
 //        cr = this.creature.get(1);
 //        System.out.printf("0: %d %d %d\n", cr.b.x, cr.b.y, cr.b.z);
-        this.creature.add(new SmartWalkingElem(this, this.blockArray[xsize-1][ysize-1][zsize-1]));
+//        this.creature.add(new SmartWalkingElem(this, this.blockArray[xsize-1][ysize-1][zsize-1]));
  //       System.out.printf("total %d creatures\n", creature.size());
-        this.creature.get(0).path = pf.getPath(this.creature.get(0),
-                                           this.creature.get(0).b,
-                                           this.creature.get(1).b);
+//        this.creature.get(0).path = pf.getPath(this.creature.get(0),
+//                                           this.creature.get(0).b,
+//                                           this.creature.get(1).b);
     }
 
     public void iterate(long dT){

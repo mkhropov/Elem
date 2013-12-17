@@ -14,16 +14,27 @@ package creature;
 import world.*;
 import java.util.Stack;
 import stereometry.Vector;
+import pathfind.*;
 
 
 public class SmartElem extends Elem implements Worker {
-    
+
     public SmartElem(World w, Block b){
         super(w, b);
     }
     
     @Override
     public void iterate(long dT){
+        if (order == null) {
+            int i;
+            for (i=0; i<owner.order.size(); ++i)
+                if (!owner.order.get(i).taken)
+                    break;
+            if (i == owner.order.size())
+                return; //procrastinate
+            owner.setOrderTaken(i, this);
+            path = w.pf.getPath(this, b, order.b);
+        }
         p.add(mv, (double)dT);
         if (p.dist(np) < speed*dT){
             mv.toZero();
@@ -35,11 +46,14 @@ public class SmartElem extends Elem implements Worker {
             t = path.pop();
             if (canMove(b, t)){
                 move(t);
-                if (path.size()==0)
+                if (path.size()==0){
                     System.out.printf("Path walked succesfully\n");
+                    owner.setOrderDone(this.order, this);
+                }
             } else {
                 System.out.printf("Incorrect path!\n");
                 path.clear();
+                owner.setOrderCancelled(this.order, this);
             }
         }
         }
