@@ -60,6 +60,8 @@ public class Game {
 				if (Mouse.getEventButton() == 0) {
 					Block where = camera.resolveClick(Mouse.getEventX(), Mouse.getEventY(), current_layer, world);
 					if (where != null) {
+						p1.order.clear();
+						p1.placeMoveOrder(where);
 						System.out.println("Click at "+where.x+" "+where.y+" "+where.z);
 					} else {
 						System.out.println("Click at void");

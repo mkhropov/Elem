@@ -22,7 +22,7 @@ public class SmartElem extends Elem implements Worker {
     public SmartElem(World w, Block b){
         super(w, b);
     }
-    
+
     @Override
     public void iterate(long dT){
         if (order == null) {
@@ -40,8 +40,10 @@ public class SmartElem extends Elem implements Worker {
             mv.toZero();
         Block t;
  //       System.out.printf("iterating\n");
-        if (path == null)
+        if (path == null) {
+			owner.setOrderCancelled(order, this);
             return;
+		}
         if (path.size() > 0){
             t = path.pop();
             if (canMove(b, t)){

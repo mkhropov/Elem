@@ -25,7 +25,7 @@ public class Pathfinder {
         this.ysize = w.ysize;
         this.zsize = w.zsize;
         this.w = w;
-        
+
         d = new double[w.xsize][w.ysize][w.zsize];
     }
 
