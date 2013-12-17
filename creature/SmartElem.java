@@ -27,21 +27,23 @@ public class SmartElem extends Elem implements Worker {
         capable = new boolean[]{true, true, true};
     }
 
+    boolean getNewOrder(){
+        int i;
+        Order o;
+        for (i=0; i<owner.order.size(); ++i){
+            o = owner.order.get(i);
+            if ((!o.taken) && o.capable(this))
+                break;
+        }
+        if (i == owner.order.size())
+            return false; //procrastinate
+        owner.setOrderTaken(i, this);
+        return true;
+    }
+
+
     @Override
     public void iterate(long dT){
-        if (order == null) {
-            int i;
-            Order o;
-            for (i=0; i<owner.order.size(); ++i){
-                o = owner.order.get(i);
-                if ((!o.taken) && o.capable(this))
-                    break;
-            }
-            if (i == owner.order.size())
-                return; //procrastinate
-            owner.setOrderTaken(i, this);
-            path = w.pf.getPath(this, b, order.b);
-        }
         if (moving){
             p.add(mv, (double)dT);
             if (p.dist(np) < speed*dT)
@@ -49,26 +51,33 @@ public class SmartElem extends Elem implements Worker {
             else
                 return;
         }
-        Block t;
- //       System.out.printf("iterating\n");
-        if (path == null) {
-			owner.setOrderDone(order, this);
-            return;
-		}
-        if (path.size() > 0){
-            t = path.pop();
-            if (canMove(b, t)){
-                move(t);
-                moving = true;
-                if (path.size()==0){
-                    System.out.printf("Path walked succesfully\n");
-                    owner.setOrderDone(this.order, this);
-                }
+        if (order != null) {
+            if (path.size() == 0) {
+                boolean res = true;
+                if (order.type == 1)
+                    res = destroyBlock(order.b);
+                else if (order.type==2)
+                    res = placeBlock(order.b, order.m);
+			    if (res)
+                    owner.setOrderDone(order, this);
+                else
+                    owner.setOrderCancelled(this.order, this);
             } else {
-                System.out.printf("Incorrect path!\n");
-                path.clear();
-                owner.setOrderCancelled(this.order, this);
+                Block t = path.pop();
+                if (canMove(b, t)){
+                    move(t);
+                    moving = true;
+                } else {
+                    path.clear();
+                    owner.setOrderCancelled(this.order, this);
+                }
             }
+        } else {
+            if (getNewOrder()){
+                path = w.pf.getPath(this, b, order.b, (order.type==0));
+                if (path == null)
+                    owner.setOrderCancelled(this.order, this);
+            } //else feel free to roam or make self-orders
         }
     }
 }

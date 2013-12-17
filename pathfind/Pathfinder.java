@@ -42,7 +42,7 @@ public class Pathfinder {
                          (b1.z-b2.z)*(b1.z-b2.z));
     }*/
 
-    public Stack<Block> getPath(Creature c, Block b1, Block b2) {
+    public Stack<Block> getPath(Creature c, Block b1, Block b2, boolean inclusive) {
         int i, j, l, t;
         double D, Dn, Dt;
         Block m, n, k;
@@ -65,7 +65,8 @@ public class Pathfinder {
                     if (n==null) continue;
                     Dn = D+dist[j];
                     Dt = d[n.x][n.y][n.z];
-                    if (c.canMove(m, n) && ((Dt<0.d)||(Dt > Dn))){
+                    if ((c.canMove(m, n) && ((Dt<0.d)||(Dt > Dn))) ||
+                        ((!inclusive) && (n.equals(b2)))){
                         d[n.x][n.y][n.z] = Dn;
                         nextLayer.add(n);
                     }
@@ -79,7 +80,8 @@ public class Pathfinder {
         }
         m = b2;
         Stack<Block> q = new Stack<>();
-        q.push(m);
+        if (inclusive)
+            q.push(m);
         D = d[m.x][m.y][m.z];
         while(D>0.5d){
             near = m.nearest(w);

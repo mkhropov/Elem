@@ -3,6 +3,7 @@ package player;
 import java.util.ArrayList;
 import world.*;
 import creature.*;
+import physics.material.*;
 
 public class Player {
     World w;
@@ -23,6 +24,16 @@ public class Player {
 
     public void placeMoveOrder(Block b){
         order.add(new Order(b, 0));
+    }
+
+    public void placeDigOrder(Block b){
+        order.add(new Order(b, 1));
+    }
+
+    public void placeBuildOrder(Block b, Material m){
+        Order o = new Order(b, 2);
+        o.m = m;
+        order.add(o);
     }
 
     public void setOrderTaken(int i, Creature c){

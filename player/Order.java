@@ -10,7 +10,8 @@ public class Order {
     public Material m;
 //0 - move to b, 1 - dig at b, 2 - place m at b
     public int type;
-    static public int TYPE_MAX = 2;
+    static public int TYPE_MAX = 3;
+
     public Order(Block b, int type){
         this.b = b;
         this.taken = false;
