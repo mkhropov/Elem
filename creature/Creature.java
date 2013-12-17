@@ -14,6 +14,7 @@ public class Creature {
     double speed;
     public Player owner;
     public Order order;
+    public boolean capable[];
 
     final public void setBlock(Block b, boolean adjustPoint){
         if (this.b != null)
@@ -31,6 +32,7 @@ public class Creature {
         setBlock(b, true);
         this.p = this.np;
         this.w = w;
+        this.capable = new boolean[]{false, false, false};
     }
 
     public boolean canWalk(Block b){
