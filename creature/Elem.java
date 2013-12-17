@@ -88,8 +88,7 @@ public class Elem extends Creature implements Worker{
                 t = w.blockArray[b.x+dx][b.y+dy][b.z+dz];
                 if (!canMove(b, t)) continue;
                 break;
-            }
-            
+            } 
  //           int p = gen.nextInt(100);
  //           if (p < 70)
                 move(t);

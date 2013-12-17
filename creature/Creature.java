@@ -1,6 +1,7 @@
 package creature;
 
 import world.*;
+import player.*;
 
 import java.util.Stack;
 import stereometry.Point;
@@ -11,6 +12,8 @@ public class Creature {
     public Stack<Block> path;
     Point p, np;
     double speed;
+    public Player owner;
+    public Order order;
 
     final public void setBlock(Block b, boolean adjustPoint){
         if (this.b != null)
@@ -22,7 +25,7 @@ public class Creature {
             this.np = new Point(b);
         }
     }
-    
+
     public Creature(World w, Block b){
 //        w.creature.add(this);
         setBlock(b, true);

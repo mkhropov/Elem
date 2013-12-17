@@ -15,8 +15,12 @@ import graphics.Camera;
 import graphics.Sun;
 import graphics.GraphicalChunk;
 
+import player.*;
+import creature.*;
+
 public class Game {
 	World world;
+    Player p1;
 	public static final int MAX_X=25;
 	public static final int MAX_Y=25;
 	public static final int MAX_Z=20;
@@ -84,6 +88,7 @@ public class Game {
 					camera.rotateRight();
 				}
                 if (Keyboard.getEventCharacter() == 'i') {
+//                    wner.order.get(i)
                     world.iterate(deltaT);
                 }
 			} else {
@@ -107,6 +112,9 @@ public class Game {
 		}
 		System.out.println("Display created. OpenGL version: " + GL11.glGetString(GL11.GL_VERSION));
 		world = new World(MAX_X,MAX_Y,MAX_Z);
+        p1 = new Player(world);
+        p1.spawnCreature(new SmartWalkingElem(world,
+                world.blockArray[world.xsize/2][world.ysize/2][world.zsize-1]));
 		lastFPS = getTime();
 		lastTime = getTime();
 
