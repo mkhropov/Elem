@@ -46,7 +46,7 @@ public class World {
         this.biome.fillWorld(this);
 
         this.pf = new Pathfinder(this);
-        
+
         this.creature = new ArrayList<Creature>();
 //        System.out.printf("total %d creatures\n", creature.size());
         this.creature.add(new SmartWalkingElem(this, this.blockArray[0][0][zsize-1]));
@@ -73,5 +73,12 @@ public class World {
 		if ((y<0) || (y>=ysize)) return true;
 		if ((z<0) || (z>=zsize)) return true;
 		return (blockArray[x][y][z].m == null);
+	}
+
+	public Block getBlock(int x, int y, int z){
+		if ((x<0) || (x>=xsize)) return null;
+		if ((y<0) || (y>=ysize)) return null;
+		if ((z<0) || (z>=zsize)) return null;
+		return (blockArray[x][y][z]);
 	}
 }

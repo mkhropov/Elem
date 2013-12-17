@@ -51,11 +51,17 @@ public class Game {
 	}
 
 	public void pollInput() {
-		if (Mouse.isButtonDown(0)) {
-			int x = Mouse.getX();
-			int y = Mouse.getY();
-
-			System.out.println("MOUSE DOWN @ X: " + x + " Y: " + y);
+		while (Mouse.next()){
+			if (Mouse.getEventButtonState()) {
+				if (Mouse.getEventButton() == 0) {
+					Block where = camera.resolveClick(Mouse.getEventX(), Mouse.getEventY(), current_layer, world);
+					if (where != null) {
+						System.out.println("Click at "+where.x+" "+where.y+" "+where.z);
+					} else {
+						System.out.println("Click at void");
+					}
+				}
+			}
 		}
 
 		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
