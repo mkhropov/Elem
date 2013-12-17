@@ -52,7 +52,7 @@ public class Elem extends Creature implements Worker{
             return true;
         }
     }
-    
+
     boolean canReach(Block b1, Block b2){
         int dx = b2.x-b1.x;
         int dy = b2.y-b1.y;
@@ -88,7 +88,7 @@ public class Elem extends Creature implements Worker{
                 t = w.blockArray[b.x+dx][b.y+dy][b.z+dz];
                 if (!canMove(b, t)) continue;
                 break;
-            } 
+            }
  //           int p = gen.nextInt(100);
  //           if (p < 70)
                 move(t);
@@ -101,7 +101,7 @@ public class Elem extends Creature implements Worker{
 
     @Override
 	public void draw() {
-		m.texture.bind();
+		m.gs.bind();
 
 		GL11.glBegin(GL11.GL_QUADS);
 		GL11.glNormal3d(0.0, 0.0, -1.0);
