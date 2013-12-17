@@ -12,6 +12,8 @@ class GraphicalCube {
 	double texU, texV; //Maybe different for each quad?
 	boolean[] visible = {false, false, false, false, false, false};
 
+	static Random r = new Random();
+
 	static final int BOTTOM = 0;
 	static final int WEST = 1;
 	static final int NORTH = 2;
@@ -24,13 +26,12 @@ class GraphicalCube {
 		y = b.y;
 		z = b.z;
 		m = b.m;
-		Random r = new Random();
-		this.texU = r.nextDouble()/2;
-		this.texV = r.nextDouble()/2;
+		this.texU = (r.nextDouble())*m.m.gs.rand;
+		this.texV = (r.nextDouble())*m.m.gs.rand;
 	}
 
 	void draw() {
-		m.m.texture.bind();
+		m.m.gs.bind();
 
 		// draw quads
 		if (visible[BOTTOM]){
@@ -39,13 +40,13 @@ class GraphicalCube {
 			GL11.glTexCoord2d(texU,texV);
 			GL11.glVertex3d(this.x+0.0, this.y+0.0, this.z+0.0);
 			GL11.glNormal3d(0.0, 0.0, -1.0);
-			GL11.glTexCoord2d(texU+0.5,texV);
+			GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV);
 			GL11.glVertex3d(this.x+1.0, this.y+0.0, this.z+0.0);
 			GL11.glNormal3d(0.0, 0.0, -1.0);
-			GL11.glTexCoord2d(texU+0.5,texV+0.5);
+			GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV+1.0-m.m.gs.rand);
 			GL11.glVertex3d(this.x+1.0, this.y+1.0, this.z+0.0);
 			GL11.glNormal3d(0.0, 0.0, -1.0);
-			GL11.glTexCoord2d(texU,texV+0.5);
+			GL11.glTexCoord2d(texU,texV+1.0-m.m.gs.rand);
 			GL11.glVertex3d(this.x+0.0, this.y+1.0, this.z+0.0);
 			GL11.glEnd();
 		}
@@ -56,13 +57,13 @@ class GraphicalCube {
 			GL11.glTexCoord2d(texU,texV);
 			GL11.glVertex3d(this.x+0.0, this.y+0.0, this.z+0.0);
 			GL11.glNormal3d(-1.0, 0.0, 0.0);
-			GL11.glTexCoord2d(texU+0.5,texV);
+			GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV);
 			GL11.glVertex3d(this.x+0.0, this.y+1.0, this.z+0.0);
 			GL11.glNormal3d(-1.0, 0.0, 0.0);
-			GL11.glTexCoord2d(texU+0.5,texV+0.5);
+			GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV+1.0-m.m.gs.rand);
 			GL11.glVertex3d(this.x+0.0, this.y+1.0, this.z+1.0);
 			GL11.glNormal3d(-1.0, 0.0, 0.0);
-			GL11.glTexCoord2d(texU,texV+0.5);
+			GL11.glTexCoord2d(texU,texV+1.0-m.m.gs.rand);
 			GL11.glVertex3d(this.x+0.0, this.y+0.0, this.z+1.0);
 			GL11.glEnd();
 		}
@@ -73,13 +74,13 @@ class GraphicalCube {
 			GL11.glTexCoord2d(texU,texV);
 			GL11.glVertex3d(this.x+0.0, this.y+0.0, this.z+0.0);
 			GL11.glNormal3d(0.0, -1.0, 0.0);
-			GL11.glTexCoord2d(texU+0.5,texV);
+			GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV);
 			GL11.glVertex3d(this.x+1.0, this.y+0.0, this.z+0.0);
 			GL11.glNormal3d(0.0, -1.0, 0.0);
-			GL11.glTexCoord2d(texU+0.5,texV+0.5);
+			GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV+1.0-m.m.gs.rand);
 			GL11.glVertex3d(this.x+1.0, this.y+0.0, this.z+1.0);
 			GL11.glNormal3d(0.0, -1.0, 0.0);
-			GL11.glTexCoord2d(texU,texV+0.5);
+			GL11.glTexCoord2d(texU,texV+1.0-m.m.gs.rand);
 			GL11.glVertex3d(this.x+0.0, this.y+0.0, this.z+1.0);
 			GL11.glEnd();
 		}
@@ -90,13 +91,13 @@ class GraphicalCube {
 			GL11.glTexCoord2d(texU,texV);
 			GL11.glVertex3d(this.x+1.0, this.y+0.0, this.z+0.0);
 			GL11.glNormal3d(1.0, 0.0, 0.0);
-			GL11.glTexCoord2d(texU+0.5,texV);
+			GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV);
 			GL11.glVertex3d(this.x+1.0, this.y+1.0, this.z+0.0);
 			GL11.glNormal3d(1.0, 0.0, 0.0);
-			GL11.glTexCoord2d(texU+0.5,texV+0.5);
+			GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV+1.0-m.m.gs.rand);
 			GL11.glVertex3d(this.x+1.0, this.y+1.0, this.z+1.0);
 			GL11.glNormal3d(1.0, 0.0, 0.0);
-			GL11.glTexCoord2d(texU,texV+0.5);
+			GL11.glTexCoord2d(texU,texV+1.0-m.m.gs.rand);
 			GL11.glVertex3d(this.x+1.0, this.y+0.0, this.z+1.0);
 			GL11.glEnd();
 		}
@@ -107,13 +108,13 @@ class GraphicalCube {
 			GL11.glTexCoord2d(texU,texV);
 			GL11.glVertex3d(this.x+0.0, this.y+0.0, this.z+1.0);
 			GL11.glNormal3d(0.0, 0.0, 1.0);
-			GL11.glTexCoord2d(texU+0.5,texV);
+			GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV);
 			GL11.glVertex3d(this.x+1.0, this.y+0.0, this.z+1.0);
 			GL11.glNormal3d(0.0, 0.0, 1.0);
-			GL11.glTexCoord2d(texU+0.5,texV+0.5);
+			GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV+1.0-m.m.gs.rand);
 			GL11.glVertex3d(this.x+1.0, this.y+1.0, this.z+1.0);
 			GL11.glNormal3d(0.0, 0.0, 1.0);
-			GL11.glTexCoord2d(texU,texV+0.5);
+			GL11.glTexCoord2d(texU,texV+1.0-m.m.gs.rand);
 			GL11.glVertex3d(this.x+0.0, this.y+1.0, this.z+1.0);
 			GL11.glEnd();
 		}
@@ -124,13 +125,13 @@ class GraphicalCube {
 			GL11.glTexCoord2d(texU,texV);
 			GL11.glVertex3d(this.x+0.0, this.y+1.0, this.z+0.0);
 			GL11.glNormal3d(0.0, 1.0, 0.0);
-			GL11.glTexCoord2d(texU+0.5,texV);
+			GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV);
 			GL11.glVertex3d(this.x+1.0, this.y+1.0, this.z+0.0);
 			GL11.glNormal3d(0.0, 1.0, 0.0);
-			GL11.glTexCoord2d(texU+0.5,texV+0.5);
+			GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV+1.0-m.m.gs.rand);
 			GL11.glVertex3d(this.x+1.0, this.y+1.0, this.z+1.0);
 			GL11.glNormal3d(0.0, 1.0, 0.0);
-			GL11.glTexCoord2d(texU,texV+0.5);
+			GL11.glTexCoord2d(texU,texV+1.0-m.m.gs.rand);
 			GL11.glVertex3d(this.x+0.0, this.y+1.0, this.z+1.0);
 			GL11.glEnd();
 		}
