@@ -14,6 +14,7 @@ public class Earth extends Material {
         tBoil =  new Temperature(4000);
 
 		textureName = "earth";
+		textureRandomization = 0.5;
         try {
 			texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/"+textureName+".png"));
 		} catch (IOException e) {

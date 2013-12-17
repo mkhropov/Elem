@@ -14,6 +14,7 @@ public class Stone extends Material {
         tBoil =  new Temperature(5000);
 
         textureName = "stone";
+		textureRandomization = 0.5;
 		System.out.println("STOOONE");
         try {
 			texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/"+textureName+".png"));
