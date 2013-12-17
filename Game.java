@@ -11,7 +11,7 @@ import java.nio.FloatBuffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-import graphics.Camera;
+import iface.Interface;
 import graphics.Sun;
 import graphics.GraphicalChunk;
 
@@ -21,12 +21,11 @@ import creature.*;
 public class Game {
 	World world;
     Player p1;
+	Interface iface;
 	public static final int MAX_X=25;
 	public static final int MAX_Y=25;
 	public static final int MAX_Z=20;
 	public static final double SCALE=0.7;
-	int current_layer=MAX_Z-1;
-	Camera camera;
 	Sun sun;
 	int fps = 0;
 	long lastFPS;
@@ -54,62 +53,6 @@ public class Game {
 		fps++;
 	}
 
-	public void pollInput() {
-		while (Mouse.next()){
-			if (Mouse.getEventButtonState()) {
-				if (Mouse.getEventButton() == 0) {
-					Block where = camera.resolveClick(Mouse.getEventX(), Mouse.getEventY(), current_layer, world);
-					if (where != null) {
-						p1.order.clear();
-						p1.placeMoveOrder(where);
-						System.out.println("Click at "+where.x+" "+where.y+" "+where.z);
-					} else {
-						System.out.println("Click at void");
-					}
-				}
-			}
-		}
-
-		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-			System.out.println("SPACE KEY IS DOWN");
-		}
-
-		while (Keyboard.next()) {
-			if (Keyboard.getEventKeyState()) {
-				// Key pressed
-				if (Keyboard.getEventCharacter() == 'z') {
-					if (this.current_layer>0) {
-						 this.current_layer--;
-						 camera.repositionDelta(0.0f, 0.0f, -1.0f);
-					}
-				}
-				if (Keyboard.getEventCharacter() == 'x') {
-					if (this.current_layer<(MAX_Z-1)) {
-						this.current_layer++;
-						camera.repositionDelta(0.0f, 0.0f, 1.0f);
-					}
-				}
-				if (Keyboard.getEventCharacter() == 'q') {
-					camera.rotateLeft();
-				}
-				if (Keyboard.getEventCharacter() == 'e') {
-					camera.rotateRight();
-				}
-                if (Keyboard.getEventCharacter() == 'i') {
-//                    wner.order.get(i)
-                    world.iterate(deltaT);
-                }
-			} else {
-				// Key released
-				if (Keyboard.getEventCharacter() == Keyboard.KEY_Z) {
-					//Whatever
-				}
-				if (Keyboard.getEventCharacter() == Keyboard.KEY_X) {
-				}
-			}
-		}
-	}
-
 	public void start() {
 		try {
 		Display.setDisplayMode(new DisplayMode(800,600));
@@ -126,11 +69,11 @@ public class Game {
 		lastFPS = getTime();
 		lastTime = getTime();
 
+		iface = new Interface(world, p1);
+
 		// init OpenGL
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		//Set up camera
-		camera = new Camera(MAX_X/2, MAX_Y/2, current_layer);
 
 		//Set up lighting
 		GL11.glEnable(GL11.GL_LIGHTING);
@@ -162,14 +105,13 @@ public class Game {
 			newTime = getTime();
 			deltaT = newTime - lastTime;
 			lastTime = newTime;
-			this.pollInput();
-			camera.update(deltaT);
+			iface.update(deltaT);
 			sun.update();
 			// Clear the screen and depth buffer
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
-			for (int k=this.current_layer; k>=0; k--) {
-				if (k==this.current_layer) {
+			for (int k=iface.current_layer; k>=0; k--) {
+				if (k==iface.current_layer) {
 					GL11.glEnable(GL11.GL_LIGHT1);
 					gChunksFull[k].draw();
 					GL11.glDisable(GL11.GL_LIGHT1);
