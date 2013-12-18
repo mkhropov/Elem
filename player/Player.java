@@ -23,15 +23,15 @@ public class Player {
     }
 
     public void placeMoveOrder(Block b){
-        order.add(new Order(b, 0));
+        order.add(new Order(b, Order.ORDER_MOVE));
     }
 
     public void placeDigOrder(Block b){
-        order.add(new Order(b, 1));
+        order.add(new Order(b, Order.ORDER_DIG));
     }
 
     public void placeBuildOrder(Block b, Material m){
-        Order o = new Order(b, 2);
+        Order o = new Order(b, Order.ORDER_PLACE);
         o.m = m;
         order.add(o);
     }
