@@ -43,10 +43,27 @@ public class Pathfinder {
     }*/
 
     public Stack<Block> getPath(Creature c, Block b1, Block b2, boolean inclusive) {
-        int i, j, l, t;
-        double D, Dn, Dt;
-        Block m, n, k;
         ArrayList<Block> near;
+        int i, j, l, t;
+        Block m, n, k;
+        Stack<Block> q = new Stack<>();
+        double D, Dn, Dt;
+		if (b1.equals(b2)){
+			if (inclusive){
+				q.add(b1);
+				return q;
+			} else {
+				near = b1.nearest(w);
+				for (j=0; j<near.size(); ++j){
+                    n = near.get(j);
+                    if (c.canReach(n, b1)){
+						q.add(n);
+                        return q;
+                    }
+                }
+				return null;
+			}
+		}
         clear();
         nextLayer = new ArrayList<>(1);
         nextLayer.add(b1);
@@ -79,7 +96,6 @@ public class Pathfinder {
             return null;
         }
         m = b2;
-        Stack<Block> q = new Stack<>();
         if (inclusive)
             q.push(m);
         else {
