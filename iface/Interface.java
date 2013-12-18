@@ -9,6 +9,7 @@ public class Interface {
 	World world;
 	Input input;
 	public int current_layer;
+	public Cursor cursor;
 
 	public void update(long deltaT){
 		input.poll(deltaT);
@@ -19,6 +20,7 @@ public class Interface {
 		current_layer = w.zsize-1;
 		camera = new Camera(w.xsize/2.0f, w.ysize/2.0f, (float) current_layer);
 		input = new Input(this);
+		cursor = new Cursor();
 		player = p;
 		world = w;
 	}

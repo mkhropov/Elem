@@ -13,10 +13,16 @@ public class Input {
 	}
 
 	public void poll(long deltaT) {
+		Block where = iface.camera.resolveClick(Mouse.getEventX(), Mouse.getEventY(), iface.current_layer, iface.world);
+		if (where != null) {
+			iface.cursor.reposition(where.x, where.y, where.z);
+		} else {
+			iface.cursor.hide();
+		}
+
 		while (Mouse.next()){
 			if (Mouse.getEventButtonState()) {
 				if (Mouse.getEventButton() == 0) {
-					Block where = iface.camera.resolveClick(Mouse.getEventX(), Mouse.getEventY(), iface.current_layer, iface.world);
 					if (where != null) {
 						iface.player.order.clear();
 						iface.player.placeMoveOrder(where);

@@ -67,7 +67,7 @@ public class Game {
 		lastTime = getTime();
 
 		iface = new Interface(world, p1);
-		renderer = new Renderer(world);
+		renderer = new Renderer(world, iface);
 
 		// init OpenGL
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -84,12 +84,6 @@ public class Game {
 		FloatBuffer buffer = temp.asFloatBuffer();
 		buffer.put(light_ambient); buffer.flip();
 		GL11.glLight(GL11.GL_LIGHT1, GL11.GL_AMBIENT, buffer);
-
-		float mat_ambient[] = { 0.5f, 0.5f, 0.5f, 0.0f };
-		buffer.put(mat_ambient); buffer.flip();
-		GL11.glMaterial(GL11.GL_FRONT, GL11.GL_AMBIENT, buffer);
-		GL11.glMaterial(GL11.GL_FRONT, GL11.GL_SPECULAR, buffer);
-		GL11.glMaterialf(GL11.GL_FRONT, GL11.GL_SHININESS, 50.0f);
 
 		while (!Display.isCloseRequested()) {
 			newTime = getTime();
