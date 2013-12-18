@@ -19,7 +19,7 @@ public class Input {
 					Block where = iface.camera.resolveClick(Mouse.getEventX(), Mouse.getEventY(), iface.current_layer, iface.world);
 					if (where != null) {
 						iface.player.order.clear();
-						iface.player.placeMoveOrder(where);
+						iface.player.placeDigOrder(where);
 						System.out.println("Click at "+where.x+" "+where.y+" "+where.z);
 					} else {
 						System.out.println("Click at void");

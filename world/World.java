@@ -4,6 +4,7 @@ import geomorph.*;
 import physics.material.*;
 import creature.*;
 import pathfind.Pathfinder;
+import graphics.Renderer;
 
 import java.util.ArrayList;
 
@@ -15,6 +16,7 @@ public class World {
     public Material[] material;
     public ArrayList<Creature> creature;
     public Pathfinder pf;
+    public Renderer rend;
 
     public World(int x, int y, int z) {
         this.xsize = x;

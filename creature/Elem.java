@@ -217,6 +217,7 @@ public class Elem extends Creature implements Worker{
             return false;
         else {
             b.m = null;
+            w.rend.update(b.x, b.y, b.z);
             return true;
         }
     }
@@ -227,6 +228,7 @@ public class Elem extends Creature implements Worker{
             return false;
         else {
             b.m = new Substance(m, 1.d);
+            w.rend.update(b.x, b.y, b.z);
             return true;
         }
     }

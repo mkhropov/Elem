@@ -68,6 +68,7 @@ public class Game {
 
 		iface = new Interface(world, p1);
 		renderer = new Renderer(world);
+        world.rend = renderer;
 
 		// init OpenGL
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
