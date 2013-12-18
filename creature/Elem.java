@@ -15,6 +15,7 @@ public class Elem extends Creature implements Worker{
 	Material m; //Dirty hacks here
     Block pb;
     Vector mv;
+    int action;
 
     public Elem(World w, Block b){
         super(w, b);
@@ -24,6 +25,7 @@ public class Elem extends Creature implements Worker{
         speed = 0.001d;
 		m = w.material[2]; //because fuck you. That's why
         gen = new Random(b.x+b.y+b.z);
+        action = 0;
     }
 
     @Override
@@ -34,7 +36,19 @@ public class Elem extends Creature implements Worker{
     @Override
     public boolean canMove(Block b1, Block b2){
         if (!canWalk(b2)) return false;
-        return canReach(b1, b2);
+        int dx = b2.x-b1.x;
+        int dy = b2.y-b1.y;
+        int dz = b2.z-b1.z;
+        if ((Math.abs(dx)>1) || (Math.abs(dy)>1) || (Math.abs(dz)>1)) return false;
+        if ((Math.abs(dx)+Math.abs(dy)+Math.abs(dz)) > 2) return false;
+        if (dz == 0)
+            return (canWalk(w.blockArray[b1.x+dx][b1.y][b1.z]) ||
+                    canWalk(w.blockArray[b1.x][b1.y+dy][b1.z]));
+        if (dz > 0)
+            return (w.blockArray[b1.x][b1.y][b1.z+1].m==null);
+        if (dz < 0)
+            return (w.blockArray[b1.x+dx][b1.y+dy][b1.z].m == null);
+        return true;
     }
 
     @Override
@@ -49,21 +63,21 @@ public class Elem extends Creature implements Worker{
                 mv.normalize();
                 mv.scale(speed);
             }
+            action = 1;
             return true;
         }
     }
 
-    boolean canReach(Block b1, Block b2){
+    public boolean canReach(Block b1, Block b2){
         int dx = b2.x-b1.x;
         int dy = b2.y-b1.y;
         int dz = b2.z-b1.z;
         if ((Math.abs(dx)>1) || (Math.abs(dy)>1) || (Math.abs(dz)>1)) return false;
         if ((Math.abs(dx)+Math.abs(dy)+Math.abs(dz)) > 2) return false;
         if (dz == 0)
-            return ((w.blockArray[b1.x+dx][b1.y][b1.z].m==null) ||
-                    (w.blockArray[b1.x][b1.y+dy][b1.z].m==null));
+            return ((dx==0) || (dy==0));
         if (dz > 0)
-            return (w.blockArray[b1.x][b1.y][b1.z+1].m==null);
+            return ((dx==0) && (dy==0));
         if (dz < 0)
             return (w.blockArray[b1.x+dx][b1.y+dy][b1.z].m == null);
         return true;
@@ -71,11 +85,13 @@ public class Elem extends Creature implements Worker{
 
     @Override
     public void iterate(long dT) {
-        p.add(mv, (double)dT);
-        if (p.dist(np) < speed*dT){
-            System.out.print("Point reached\n");
+        switch (action){
+            case 1: //moving
+                p.add(mv, (double)dT); break;
+        }
+        if (p.dist(np) < speed*dT){ //end of movement
+            action = 0;
             pb = b;
-            mv.toZero();
             int dx, dy, dz;
             Block t;
             while (true) {
@@ -91,7 +107,7 @@ public class Elem extends Creature implements Worker{
             }
  //           int p = gen.nextInt(100);
  //           if (p < 70)
-                move(t);
+            move(t);
 //            else if (p < 85)
  //               placeBlock(t, w.material[0]);
     //        else

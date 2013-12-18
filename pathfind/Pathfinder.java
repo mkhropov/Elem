@@ -82,6 +82,22 @@ public class Pathfinder {
         Stack<Block> q = new Stack<>();
         if (inclusive)
             q.push(m);
+        else {
+            D = d[m.x][m.y][m.z];
+            near = m.nearest(w);
+            k = m;
+            for (j=0; j<near.size(); ++j){
+                n = near.get(j);
+                if(n==null) continue;
+                Dn = d[n.x][n.y][n.z];
+                if ((Dn>-0.5) && (Dn < D) && c.canReach(n, m)){
+                    k = n;
+                    D = Dn;
+                }
+            }
+            m = k;
+            q.push(m);
+        }
         D = d[m.x][m.y][m.z];
         while(D>0.5d){
             near = m.nearest(w);

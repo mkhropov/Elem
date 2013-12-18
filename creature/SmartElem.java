@@ -19,11 +19,8 @@ import player.*;
 
 public class SmartElem extends Elem implements Worker {
 
-    boolean moving;
-
     public SmartElem(World w, Block b){
         super(w, b);
-        moving = false;
         capable = new boolean[]{true, true, true};
     }
 
@@ -44,12 +41,14 @@ public class SmartElem extends Elem implements Worker {
 
     @Override
     public void iterate(long dT){
-        if (moving){
-            p.add(mv, (double)dT);
-            if (p.dist(np) < speed*dT)
-                moving = false;
-            else
-                return;
+        switch (action){
+            case 1: //moving
+                p.add(mv, (double)dT);
+                if (p.dist(np) < speed*dT)
+                    action = 0;
+                else
+                    return;
+                break;
         }
         if (order != null) {
             if (path.size() == 0) {
@@ -66,7 +65,6 @@ public class SmartElem extends Elem implements Worker {
                 Block t = path.pop();
                 if (canMove(b, t)){
                     move(t);
-                    moving = true;
                 } else {
                     path.clear();
                     owner.setOrderCancelled(this.order, this);
