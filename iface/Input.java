@@ -7,9 +7,11 @@ import world.Block;
 
 public class Input {
 	Interface iface;
+    int orderMode;
 
 	public Input (Interface I){
 		iface = I;
+        orderMode = 0;
 	}
 
 	public void poll(long deltaT) {
@@ -27,7 +29,11 @@ public class Input {
 				if (Mouse.getEventButton() == 0) {
 					if (where != null) {
 						iface.player.order.clear();
-						iface.player.placeDigOrder(where);
+                        switch (orderMode){
+                            case 0: iface.player.placeMoveOrder(where); break;
+                            case 1: iface.player.placeDigOrder(where); break;
+						    case 2: iface.player.placeBuildOrder(where, iface.world.material[0]); break;
+                        }
 						System.out.println("Click at "+where.x+" "+where.y+" "+where.z);
 					} else {
 						System.out.println("Click at void");
@@ -57,7 +63,19 @@ public class Input {
 				if (Keyboard.getEventCharacter() == 'e') {
 					iface.camera.rotateRight();
 				}
-			}
+                if (Keyboard.getEventCharacter() == '1') {
+                    System.out.println("MOVE order mode engaged");
+                    orderMode = 0;
+                }
+                if (Keyboard.getEventCharacter() == '2') {
+                    System.out.println("DIG order mode engaged");
+                    orderMode = 1;
+                }
+	            if (Keyboard.getEventCharacter() == '3') {
+                    System.out.println("BUILD order mode engaged");
+                    orderMode = 2;
+                }
+            }
 		}
 	}
 }
