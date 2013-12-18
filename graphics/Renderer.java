@@ -7,6 +7,9 @@ import iface.Interface;
 import java.nio.FloatBuffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.ArrayList;
+
+import world.Entity;
 
 
 public class Renderer {
@@ -15,6 +18,7 @@ public class Renderer {
 	private GraphicalChunk[] gChunks;
 	private GraphicalChunk[] gChunksFull;
 	private Sun sun;
+	private ArrayList<GraphicalEntity> gEntities;
 
 	public Renderer (World world, Interface iface) {
 		this.world = world;
@@ -29,15 +33,24 @@ public class Renderer {
 		}
 		this.sun = new Sun();
 		sun.update();
+		gEntities = new ArrayList<GraphicalEntity>();
 	}
 
-	public void update (int x, int y, int z) {
+	public void updateBlock (int x, int y, int z) {
 		gChunks[z].rebuild();
 		gChunksFull[z].rebuild();
 		if (z>0) {
 			gChunks[z-1].rebuild();
 			gChunksFull[z-1].rebuild();
 		}
+	}
+
+	public void addEntity (Entity e) {
+		gEntities.add(new GraphicalEntity(e, world));
+	}
+
+	public void removeEntity (Entity e) {
+		System.out.println("Renderer: Entity removal NYI!");
 	}
 
 	void resetMaterial() {
@@ -66,6 +79,7 @@ public class Renderer {
 				gChunks[k].draw();
 			}
 		}
+		for (int i=0; i<gEntities.size(); i++) gEntities.get(i).draw();
 		iface.cursor.draw();
 	}
 }

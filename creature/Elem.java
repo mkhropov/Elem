@@ -23,7 +23,6 @@ public class Elem extends Creature implements Worker{
         np = p;
         mv = new Vector(0., 0., 0.);
         speed = 0.001d;
-		m = w.material[2]; //because fuck you. That's why
         gen = new Random(b.x+b.y+b.z);
         action = 0;
     }
@@ -116,108 +115,12 @@ public class Elem extends Creature implements Worker{
     }
 
     @Override
-	public void draw() {
-		m.gs.bind();
-
-		GL11.glBegin(GL11.GL_QUADS);
-		GL11.glNormal3d(0.0, 0.0, -1.0);
-		GL11.glTexCoord2d(0.0,0.0);
-		GL11.glVertex3d(p.x+0.2, p.y+0.2, p.z+0.2);
-		GL11.glNormal3d(0.0, 0.0, -1.0);
-		GL11.glTexCoord2d(1.0,0.0);
-		GL11.glVertex3d(p.x+0.8, p.y+0.2, p.z+0.2);
-		GL11.glNormal3d(0.0, 0.0, -1.0);
-		GL11.glTexCoord2d(1.0,1.0);
-		GL11.glVertex3d(p.x+0.8, p.y+0.8, p.z+0.2);
-		GL11.glNormal3d(0.0, 0.0, -1.0);
-		GL11.glTexCoord2d(0.0,1.0);
-		GL11.glVertex3d(p.x+0.2, p.y+0.8, p.z+0.2);
-		GL11.glEnd();
-
-		GL11.glBegin(GL11.GL_QUADS);
-		GL11.glNormal3d(-1.0, 0.0, 0.0);
-		GL11.glTexCoord2d(0.0,0.0);
-		GL11.glVertex3d(p.x+0.2, p.y+0.2, p.z+0.2);
-		GL11.glNormal3d(-1.0, 0.0, 0.0);
-		GL11.glTexCoord2d(1.0,0.0);
-		GL11.glVertex3d(p.x+0.2, p.y+0.8, p.z+0.2);
-		GL11.glNormal3d(-1.0, 0.0, 0.0);
-		GL11.glTexCoord2d(1.0,1.0);
-		GL11.glVertex3d(p.x+0.2, p.y+0.8, p.z+0.8);
-		GL11.glNormal3d(-1.0, 0.0, 0.0);
-		GL11.glTexCoord2d(0.0,1.0);
-		GL11.glVertex3d(p.x+0.2, p.y+0.2, p.z+0.8);
-		GL11.glEnd();
-
-		GL11.glBegin(GL11.GL_QUADS);
-		GL11.glNormal3d(0.0, -1.0, 0.0);
-		GL11.glTexCoord2d(0.0,0.0);
-		GL11.glVertex3d(p.x+0.2, p.y+0.2, p.z+0.2);
-		GL11.glNormal3d(0.0, -1.0, 0.0);
-		GL11.glTexCoord2d(1.0,0.0);
-		GL11.glVertex3d(p.x+0.8, p.y+0.2, p.z+0.2);
-		GL11.glNormal3d(0.0, -1.0, 0.0);
-		GL11.glTexCoord2d(1.0,1.0);
-		GL11.glVertex3d(p.x+0.8, p.y+0.2, p.z+0.8);
-		GL11.glNormal3d(0.0, -1.0, 0.0);
-		GL11.glTexCoord2d(0.0,1.0);
-		GL11.glVertex3d(p.x+0.2, p.y+0.2, p.z+0.8);
-		GL11.glEnd();
-
-		GL11.glBegin(GL11.GL_QUADS);
-		GL11.glNormal3d(1.0, 0.0, 0.0);
-		GL11.glTexCoord2d(0.0,0.0);
-		GL11.glVertex3d(p.x+0.8, p.y+0.2, p.z+0.2);
-		GL11.glNormal3d(1.0, 0.0, 0.0);
-		GL11.glTexCoord2d(1.0,0.0);
-		GL11.glVertex3d(p.x+0.8, p.y+0.8, p.z+0.2);
-		GL11.glNormal3d(1.0, 0.0, 0.0);
-		GL11.glTexCoord2d(1.0,1.0);
-		GL11.glVertex3d(p.x+0.8, p.y+0.8, p.z+0.8);
-		GL11.glNormal3d(1.0, 0.0, 0.0);
-		GL11.glTexCoord2d(0.0,1.0);
-		GL11.glVertex3d(p.x+0.8, p.y+0.2, p.z+0.8);
-		GL11.glEnd();
-
-		GL11.glBegin(GL11.GL_QUADS);
-		GL11.glNormal3d(0.0, 0.0, 1.0);
-		GL11.glTexCoord2d(0.0,0.0);
-		GL11.glVertex3d(p.x+0.2, p.y+0.2, p.z+0.8);
-		GL11.glNormal3d(0.0, 0.0, 1.0);
-		GL11.glTexCoord2d(1.0,0.0);
-		GL11.glVertex3d(p.x+0.8, p.y+0.2, p.z+0.8);
-		GL11.glNormal3d(0.0, 0.0, 1.0);
-		GL11.glTexCoord2d(1.0,1.0);
-		GL11.glVertex3d(p.x+0.8, p.y+0.8, p.z+0.8);
-		GL11.glNormal3d(0.0, 0.0, 1.0);
-		GL11.glTexCoord2d(0.0,1.0);
-		GL11.glVertex3d(p.x+0.2, p.y+0.8, p.z+0.8);
-		GL11.glEnd();
-
-		GL11.glBegin(GL11.GL_QUADS);
-		GL11.glNormal3d(0.0, 1.0, 0.0);
-		GL11.glTexCoord2d(0.0,0.0);
-		GL11.glVertex3d(p.x+0.2, p.y+0.8, p.z+0.2);
-		GL11.glNormal3d(0.0, 1.0, 0.0);
-		GL11.glTexCoord2d(1.0,0.0);
-		GL11.glVertex3d(p.x+0.8, p.y+0.8, p.z+0.2);
-		GL11.glNormal3d(0.0, 1.0, 0.0);
-		GL11.glTexCoord2d(1.0,1.0);
-		GL11.glVertex3d(p.x+0.8, p.y+0.8, p.z+0.8);
-		GL11.glNormal3d(0.0, 1.0, 0.0);
-		GL11.glTexCoord2d(0.0,1.0);
-		GL11.glVertex3d(p.x+0.2, p.y+0.8, p.z+0.8);
-		GL11.glEnd();
-
-	}
-
-    @Override
     public final boolean destroyBlock(Block b){
         if (!canReach(this.b, b))
             return false;
         else {
             b.m = null;
-            w.rend.update(b.x, b.y, b.z);
+            w.rend.updateBlock(b.x, b.y, b.z);
             return true;
         }
     }
@@ -228,7 +131,7 @@ public class Elem extends Creature implements Worker{
             return false;
         else {
             b.m = new Substance(m, 1.d);
-            w.rend.update(b.x, b.y, b.z);
+            w.rend.updateBlock(b.x, b.y, b.z);
             return true;
         }
     }
