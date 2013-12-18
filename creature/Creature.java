@@ -7,11 +7,11 @@ import java.util.Stack;
 import stereometry.Point;
 
 public class Creature {
-    World w;
+    public World w;
     public Block b;
     public Stack<Block> path;
-    Point p, np;
-    double speed;
+    public Point p, np;
+    public double speed;
     public Player owner;
     public Order order;
     public boolean capable[];

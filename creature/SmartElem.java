@@ -24,6 +24,9 @@ public class SmartElem extends Elem implements Worker {
         capable = new boolean[]{true, true, true};
     }
 
+	void update(){
+	}
+
     boolean getNewOrder(){
         int i;
         Order o;
@@ -53,9 +56,10 @@ public class SmartElem extends Elem implements Worker {
         if (order != null) {
             if (path.size() == 0) {
                 boolean res = true;
-                if (order.type == 1)
+                if (order.type == 1){
                     res = destroyBlock(order.b);
-                else if (order.type==2)
+					update();
+                } else if (order.type==2)
                     res = placeBlock(order.b, order.m);
 			    if (res)
                     owner.setOrderDone(order, this);
@@ -72,7 +76,17 @@ public class SmartElem extends Elem implements Worker {
             }
         } else {
             if (getNewOrder()){
-                path = w.pf.getPath(this, b, order.b, (order.type==0));
+				Condition cond;
+				switch (order.type) {
+					case Order.ORDER_MOVE:
+						cond = new ConditionPlace(order.b); break;
+					case Order.ORDER_DIG:
+					case Order.ORDER_PLACE:
+						cond = new ConditionReach(order.b, this); break;
+					default:
+						cond = new ConditionNone();
+				}
+                path = w.pf.getPath(this, b, cond);
                 if (path == null)
                     owner.setOrderCancelled(this.order, this);
             } //else feel free to roam or make self-orders

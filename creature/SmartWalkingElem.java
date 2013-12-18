@@ -31,6 +31,10 @@ public class SmartWalkingElem extends SmartElem implements Worker {
         p = np;
     }
 
+	void update(){
+		fall();
+	}
+
     @Override
     public boolean canWalk(Block b){
         return (b.z!=0) &&
