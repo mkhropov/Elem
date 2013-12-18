@@ -49,27 +49,28 @@ public class Camera {
 		z += new_z;
 	}
 
-	public Block resolveClick(int x, int y, int current_layer, World w){
-			IntBuffer viewport = BufferUtils.createIntBuffer(16);
-			FloatBuffer modelview = BufferUtils.createFloatBuffer(16);
-			FloatBuffer projection = BufferUtils.createFloatBuffer(16);
-			FloatBuffer p0 = BufferUtils.createFloatBuffer(3);
-			FloatBuffer p1 = BufferUtils.createFloatBuffer(3);
-			float winX, winY, winZ;
-			double X0, Y0, Z0;
-			double X1, Y1, Z1;
+	public int[] resolveMousePosition (int x, int y, int current_layer) {
+		IntBuffer viewport = BufferUtils.createIntBuffer(16);
+		FloatBuffer modelview = BufferUtils.createFloatBuffer(16);
+		FloatBuffer projection = BufferUtils.createFloatBuffer(16);
+		FloatBuffer p0 = BufferUtils.createFloatBuffer(3);
+		FloatBuffer p1 = BufferUtils.createFloatBuffer(3);
+		float winX, winY, winZ;
+		double X0, Y0, Z0;
+		double X1, Y1, Z1;
 
-			GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, modelview);
-			GL11.glGetFloat(GL11.GL_PROJECTION_MATRIX, projection);
-			GL11.glGetInteger(GL11.GL_VIEWPORT, viewport);
+		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, modelview);
+		GL11.glGetFloat(GL11.GL_PROJECTION_MATRIX, projection);
+		GL11.glGetInteger(GL11.GL_VIEWPORT, viewport);
 
-			GLU.gluUnProject( (float)x, (float)y, 0.0f, modelview, projection, viewport, p0);
-			GLU.gluUnProject( (float)x, (float)y, 1.0f, modelview, projection, viewport, p1);
+		GLU.gluUnProject( (float)x, (float)y, 0.0f, modelview, projection, viewport, p0);
+		GLU.gluUnProject( (float)x, (float)y, 1.0f, modelview, projection, viewport, p1);
 
-			int X = (int)Math.floor(p0.get(0) - (p0.get(2)-current_layer-1)*(p1.get(0)-p0.get(0))/(p1.get(2)-p0.get(2)));
-			int Y = (int)Math.floor(p0.get(1) - (p0.get(2)-current_layer-1)*(p1.get(1)-p0.get(1))/(p1.get(2)-p0.get(2)));
+		int[] res = new int[2];
+		res[0] = (int)Math.floor(p0.get(0) - (p0.get(2)-current_layer-1)*(p1.get(0)-p0.get(0))/(p1.get(2)-p0.get(2)));
+		res[1] = (int)Math.floor(p0.get(1) - (p0.get(2)-current_layer-1)*(p1.get(1)-p0.get(1))/(p1.get(2)-p0.get(2)));
 
-			return w.getBlock(X, Y, current_layer);
+		return res;
 	}
 
 	public void update(long deltaT) {
