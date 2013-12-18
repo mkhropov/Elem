@@ -25,7 +25,7 @@ public class Input {
 				if (Mouse.getEventButton() == 0) {
 					if (where != null) {
 						iface.player.order.clear();
-						iface.player.placeMoveOrder(where);
+						iface.player.placeDigOrder(where);
 						System.out.println("Click at "+where.x+" "+where.y+" "+where.z);
 					} else {
 						System.out.println("Click at void");

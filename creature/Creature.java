@@ -43,6 +43,10 @@ public class Creature {
         return true;
     }
 
+    public boolean canReach(Block v1, Block b2){
+        return true;
+    }
+
     public boolean move(Block b) {
         if (!canMove(this.b, b))
             return false;
