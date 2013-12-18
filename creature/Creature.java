@@ -6,12 +6,12 @@ import player.*;
 import java.util.Stack;
 import stereometry.Point;
 
-public class Creature {
-    public World w;
+public class Creature extends Entity {
+    World w;
     public Block b;
     public Stack<Block> path;
-    public Point p, np;
-    public double speed;
+    Point np;
+    double speed;
     public Player owner;
     public Order order;
     public boolean capable[];
@@ -33,6 +33,7 @@ public class Creature {
         this.p = this.np;
         this.w = w;
         this.capable = new boolean[]{false, false, false};
+		w.rend.addEntity(this);
     }
 
     public boolean canWalk(Block b){

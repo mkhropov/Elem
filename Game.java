@@ -60,15 +60,15 @@ public class Game {
 		}
 		System.out.println("Display created. OpenGL version: " + GL11.glGetString(GL11.GL_VERSION));
 		world = new World(MAX_X,MAX_Y,MAX_Z);
-        p1 = new Player(world);
+		p1 = new Player(world);
+		iface = new Interface(world, p1);
+		renderer = new Renderer(world, iface);
+        world.rend = renderer;
+
         p1.spawnCreature(new SmartWalkingElem(world,
                 world.blockArray[world.xsize/2][world.ysize/2][world.zsize-1]));
 		lastFPS = getTime();
 		lastTime = getTime();
-
-		iface = new Interface(world, p1);
-		renderer = new Renderer(world, iface);
-        world.rend = renderer;
 
 		// init OpenGL
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -93,7 +93,6 @@ public class Game {
 			iface.update(deltaT);
 			renderer.draw(iface.current_layer);
             world.iterate(deltaT);
-			for (int i=0; i<world.creature.size(); ++i) world.creature.get(i).draw();
 			Display.update();
 			updateFPS(deltaT);
 			Display.sync(60);
