@@ -4,6 +4,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import world.Block;
+import player.Order;
 
 public class Input {
 	Interface iface;
@@ -11,7 +12,7 @@ public class Input {
 
 	public Input (Interface I){
 		iface = I;
-        orderMode = 0;
+        orderMode = Order.ORDER_MOVE;
 	}
 
 	public void poll(long deltaT) {
@@ -30,9 +31,9 @@ public class Input {
 					if (where != null) {
 						iface.player.order.clear();
                         switch (orderMode){
-                            case 0: iface.player.placeMoveOrder(where); break;
-                            case 1: iface.player.placeDigOrder(where); break;
-						    case 2: iface.player.placeBuildOrder(where, iface.world.material[0]); break;
+                            case Order.ORDER_MOVE: iface.player.placeMoveOrder(where); break;
+                            case Order.ORDER_DIG: iface.player.placeDigOrder(where); break;
+						    case Order.ORDER_PLACE: iface.player.placeBuildOrder(where, iface.world.material[0]); break;
                         }
 						System.out.println("Click at "+where.x+" "+where.y+" "+where.z);
 					} else {
@@ -65,15 +66,15 @@ public class Input {
 				}
                 if (Keyboard.getEventCharacter() == '1') {
                     System.out.println("MOVE order mode engaged");
-                    orderMode = 0;
+                    orderMode = Order.ORDER_MOVE;
                 }
                 if (Keyboard.getEventCharacter() == '2') {
                     System.out.println("DIG order mode engaged");
-                    orderMode = 1;
+                    orderMode = Order.ORDER_DIG;
                 }
 	            if (Keyboard.getEventCharacter() == '3') {
                     System.out.println("BUILD order mode engaged");
-                    orderMode = 2;
+                    orderMode = Order.ORDER_PLACE;
                 }
             }
 		}

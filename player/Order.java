@@ -8,7 +8,9 @@ public class Order {
     public boolean taken;
     public Block b;
     public Material m;
-//0 - move to b, 1 - dig at b, 2 - place m at b
+	public static final ORDER_MOVE;
+	public static final ORDER_DIG;
+	public static final ORDER_PLACE;
     public int type;
     static public int TYPE_MAX = 3;
 
