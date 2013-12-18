@@ -51,6 +51,7 @@ public class SmartElem extends Elem implements Worker {
 							break;
 						default:
 							cond = new ConditionNone();
+							break;
 					}
 					path = w.pf.getPath(this, b, cond);
 				}
@@ -67,13 +68,24 @@ public class SmartElem extends Elem implements Worker {
     @Override
     public void iterate(long dT){
         switch (action){
-            case 1: //moving
+			case ACTION_NONE: break;
+            case ACTION_MOVE:
                 p.add(mv, (double)dT);
-                if (p.dist(np) < speed*dT)
-                    action = 0;
-                else
+                if (p.dist(np) < speed*dT) {
+					p = np;
+                    action = ACTION_NONE;
+				} else
                     return;
                 break;
+			case ACTION_FALL:
+				mv.add(w.gravity, dT/1000.);
+				p.add(mv, 1.);
+				if (p.dist(np) < mv.len()){
+					p = np;
+					action = ACTION_NONE;
+				} else {
+					return;
+				}
         }
         if (order != null) {
             if (path.size() == 0) {

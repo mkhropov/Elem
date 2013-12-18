@@ -12,7 +12,7 @@ package creature;
  */
 
 import world.*;
-import java.util.Stack;
+import stereometry.Vector;
 
 
 public class SmartWalkingElem extends SmartElem implements Worker {
@@ -22,15 +22,19 @@ public class SmartWalkingElem extends SmartElem implements Worker {
         fall();
     }
 
-    void fall(){
+    final void fall(){
         int i = b.z;
         while (i > 0)
             if (w.blockArray[b.x][b.y][--i].m != null)
                 break;
-        setBlock(w.blockArray[b.x][b.y][i+1], true);
-        p = np;
+		if (i!=(b.z-1)){
+			setBlock(w.blockArray[b.x][b.y][i+1], true);
+			mv = new Vector(0., 0., 0.);
+			action = ACTION_FALL;
+		}
     }
 
+	@Override
 	void update(){
 		fall();
 	}

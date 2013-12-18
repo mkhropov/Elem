@@ -87,5 +87,11 @@ public class Vector {
         y = 0.;
         z = 0.;
     }
+	
+	public void add(Vector v, double a){
+		this.x += v.x*a;
+		this.y += v.y*a;
+		this.z += v.z*a;
+	}
 }
 

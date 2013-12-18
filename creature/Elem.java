@@ -15,7 +15,6 @@ public class Elem extends Creature implements Worker{
 	Material m; //Dirty hacks here
     Block pb;
     Vector mv;
-    int action;
 
     public Elem(World w, Block b){
         super(w, b);

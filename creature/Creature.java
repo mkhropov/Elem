@@ -17,6 +17,10 @@ public class Creature extends Entity {
     public Order order;
     public boolean capable[];
 	public ArrayList<Order> declinedOrders;
+	int action;
+	static final int ACTION_NONE = 0;
+	static final int ACTION_MOVE = 1;
+	static final int ACTION_FALL = 2;
 
     final public void setBlock(Block b, boolean adjustPoint){
         if (this.b != null)

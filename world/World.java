@@ -7,6 +7,7 @@ import pathfind.Pathfinder;
 import graphics.Renderer;
 
 import java.util.ArrayList;
+import stereometry.Vector;
 
 public class World {
     public int xsize, ysize, zsize;
@@ -17,11 +18,14 @@ public class World {
     public ArrayList<Creature> creature;
     public Pathfinder pf;
     public Renderer rend;
+	public Vector gravity;
 
     public World(int x, int y, int z) {
         this.xsize = x;
         this.ysize = y;
         this.zsize = z;
+		
+		this.gravity = new Vector(0., 0., -4.9);
 
         this.blockArray = new Block[this.xsize][this.ysize][this.zsize];
         for (int i=0; i<this.xsize; i++)
