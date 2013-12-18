@@ -12,16 +12,16 @@ package creature;
  */
 
 import world.*;
-import java.util.Stack;
-import stereometry.Vector;
 import pathfind.*;
 import player.*;
+import java.util.ArrayList;
 
 public class SmartElem extends Elem implements Worker {
-
+    
     public SmartElem(World w, Block b){
         super(w, b);
         capable = new boolean[]{true, true, true};
+        declinedOrders = new ArrayList<>();
     }
 
 	void update(){
@@ -30,15 +30,37 @@ public class SmartElem extends Elem implements Worker {
     boolean getNewOrder(){
         int i;
         Order o;
-        for (i=0; i<owner.order.size(); ++i){
+		order = null;
+        for (i=0; (i<owner.order.size()) && (order ==null); ++i){
             o = owner.order.get(i);
-            if ((!o.taken) && o.capable(this))
-                break;
+            if (o.declined == 0)
+                this.declinedOrders.remove(o);
+            if (o.taken)
+                continue;
+			if (!declinedOrders.contains(o)){
+				path = null;
+				if (o.capable(this)) {
+					Condition cond;
+					switch (o.type) {
+						case Order.ORDER_MOVE:
+							cond = new ConditionPlace(o.b);
+							break;
+						case Order.ORDER_DIG:
+						case Order.ORDER_PLACE:
+							cond = new ConditionReach(o.b, this);
+							break;
+						default:
+							cond = new ConditionNone();
+					}
+					path = w.pf.getPath(this, b, cond);
+				}
+				if (path != null) 
+					owner.setOrderTaken(i, this);
+				else
+					owner.setOrderDeclined(i, this);
+			}
         }
-        if (i == owner.order.size())
-            return false; //procrastinate
-        owner.setOrderTaken(i, this);
-        return true;
+        return (i != owner.order.size());
     }
 
 
@@ -75,21 +97,9 @@ public class SmartElem extends Elem implements Worker {
                 }
             }
         } else {
-            if (getNewOrder()){
-				Condition cond;
-				switch (order.type) {
-					case Order.ORDER_MOVE:
-						cond = new ConditionPlace(order.b); break;
-					case Order.ORDER_DIG:
-					case Order.ORDER_PLACE:
-						cond = new ConditionReach(order.b, this); break;
-					default:
-						cond = new ConditionNone();
-				}
-                path = w.pf.getPath(this, b, cond);
-                if (path == null)
-                    owner.setOrderCancelled(this.order, this);
-            } //else feel free to roam or make self-orders
+            if (!getNewOrder()){
+				//feel free to roam or make self-orders
+            } 
         }
     }
 }

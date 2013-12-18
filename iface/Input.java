@@ -29,7 +29,7 @@ public class Input {
 			if (Mouse.getEventButtonState()) {
 				if (Mouse.getEventButton() == 0) {
 					if (where != null) {
-						iface.player.order.clear();
+		//				iface.player.order.clear();
                         switch (orderMode){
                             case Order.ORDER_MOVE: iface.player.placeMoveOrder(where); break;
                             case Order.ORDER_DIG: iface.player.placeDigOrder(where); break;

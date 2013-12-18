@@ -2,9 +2,11 @@ package pathfind;
 
 import world.Block;
 import creature.Creature;
+import java.util.ArrayList;
 
 public class ConditionCreature implements Condition {
 
+        @Override
 	public boolean suits(Block b){
 		ArrayList<Block> near = b.nearest(c.w);
 		Block t;

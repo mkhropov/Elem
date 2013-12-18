@@ -46,9 +46,17 @@ public class Player {
     public void setOrderDone(Order o, Creature c){
         order.remove(o);
         c.order = null;
+		for (int i=0; i<order.size(); ++i)
+			order.get(i).declined = 0;
         System.out.println(c+" succesfuly did order "+o);
     }
 
+	public void setOrderDeclined(int i, Creature c){
+        Order o = order.get(i);
+		c.declinedOrders.add(o);
+		o.declined++;
+	}
+	
     public void setOrderCancelled(Order o, Creature c){
         o.taken = false;
         c.order = null;

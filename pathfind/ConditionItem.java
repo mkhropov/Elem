@@ -1,7 +1,10 @@
-//package pathfind;
+package pathfind;
 
 import world.Block;
 
-public interface Condition {
-	public boolean suits(Block b);
+public class ConditionItem implements Condition {
+        @Override
+	public boolean suits(Block b){
+            return false;
+        }
 }

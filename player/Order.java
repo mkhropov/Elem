@@ -12,12 +12,14 @@ public class Order {
 	public static final int ORDER_DIG=1;
 	public static final int ORDER_PLACE=2;
     public int type;
+    public int declined;
     static public int TYPE_MAX = 3;
 
     public Order(Block b, int type){
         this.b = b;
         this.taken = false;
         this.type = type;
+        this.declined = 0;
     }
 
     public boolean capable(Creature c){

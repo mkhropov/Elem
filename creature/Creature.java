@@ -1,5 +1,6 @@
 package creature;
 
+import java.util.ArrayList;
 import world.*;
 import player.*;
 
@@ -7,7 +8,7 @@ import java.util.Stack;
 import stereometry.Point;
 
 public class Creature extends Entity {
-    World w;
+    public World w;
     public Block b;
     public Stack<Block> path;
     Point np;
@@ -15,6 +16,7 @@ public class Creature extends Entity {
     public Player owner;
     public Order order;
     public boolean capable[];
+	public ArrayList<Order> declinedOrders;
 
     final public void setBlock(Block b, boolean adjustPoint){
         if (this.b != null)
