@@ -12,8 +12,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 import iface.Interface;
-import graphics.Sun;
-import graphics.GraphicalChunk;
+import graphics.Renderer;
 
 import player.*;
 import creature.*;
@@ -22,17 +21,15 @@ public class Game {
 	World world;
     Player p1;
 	Interface iface;
+	Renderer renderer;
 	public static final int MAX_X=25;
 	public static final int MAX_Y=25;
 	public static final int MAX_Z=20;
 	public static final double SCALE=0.7;
-	Sun sun;
 	int fps = 0;
 	long lastFPS;
 	long deltaT;
 	long lastTime, newTime;
-	GraphicalChunk[] gChunks;
-	GraphicalChunk[] gChunksFull;
 
 	public static void main(String[] args) {
 		Game game = new Game();
@@ -70,6 +67,7 @@ public class Game {
 		lastTime = getTime();
 
 		iface = new Interface(world, p1);
+		renderer = new Renderer(world);
 
 		// init OpenGL
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -78,9 +76,6 @@ public class Game {
 		//Set up lighting
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_LIGHT0);
-
-		sun = new Sun();
-		sun.update();
 
 		float light_ambient[] = { 0.7f, 0.7f, 0.7f, 1.0f };
 
@@ -96,30 +91,13 @@ public class Game {
 		GL11.glMaterial(GL11.GL_FRONT, GL11.GL_SPECULAR, buffer);
 		GL11.glMaterialf(GL11.GL_FRONT, GL11.GL_SHININESS, 50.0f);
 
-		gChunks = new GraphicalChunk[MAX_Z];
-		for (int i=0; i<MAX_Z; i++) gChunks[i] = new GraphicalChunk(world, i, GraphicalChunk.MODE_TOP_VIEW);
-		gChunksFull = new GraphicalChunk[MAX_Z];
-		for (int i=0; i<MAX_Z; i++) gChunksFull[i] = new GraphicalChunk(world, i, GraphicalChunk.MODE_SHOW_ALL);
-
 		while (!Display.isCloseRequested()) {
 			newTime = getTime();
 			deltaT = newTime - lastTime;
 			lastTime = newTime;
 			iface.update(deltaT);
-			sun.update();
-			// Clear the screen and depth buffer
-			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-
-			for (int k=iface.current_layer; k>=0; k--) {
-				if (k==iface.current_layer) {
-					GL11.glEnable(GL11.GL_LIGHT1);
-					gChunksFull[k].draw();
-					GL11.glDisable(GL11.GL_LIGHT1);
-				} else {
-					gChunks[k].draw();
-				}
-			}
-                        world.iterate(deltaT);
+			renderer.draw(iface.current_layer);
+            world.iterate(deltaT);
 			for (int i=0; i<world.creature.size(); ++i) world.creature.get(i).draw();
 			Display.update();
 			updateFPS(deltaT);
