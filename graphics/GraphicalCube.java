@@ -12,8 +12,6 @@ Substance m;
 double texU, texV; //Maybe different for each quad?
 boolean[] visible = {false, false, false, false, false, false};
 
-static Random r = new Random();
-
 static final int BOTTOM = 0;
 static final int WEST = 1;
 static final int NORTH = 2;
@@ -26,8 +24,8 @@ GraphicalCube(Block b) {
 	y = b.y;
 	z = b.z;
 	m = b.m;
-	this.texU = (r.nextDouble())*m.m.gs.rand;
-	this.texV = (r.nextDouble())*m.m.gs.rand;
+	texU = Math.sin(x+y+z) * m.m.gs.rand;
+	texV = Math.cos(x-y+z) * m.m.gs.rand;
 }
 
 void draw() {
