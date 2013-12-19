@@ -22,118 +22,118 @@ static final int SOUTH = 4;
 static final int TOP = 5;
 
 GraphicalCube(Block b) {
-x = b.x;
-y = b.y;
-z = b.z;
-m = b.m;
-this.texU = (r.nextDouble())*m.m.gs.rand;
-this.texV = (r.nextDouble())*m.m.gs.rand;
+	x = b.x;
+	y = b.y;
+	z = b.z;
+	m = b.m;
+	this.texU = (r.nextDouble())*m.m.gs.rand;
+	this.texV = (r.nextDouble())*m.m.gs.rand;
 }
 
 void draw() {
-m.m.gs.bind();
+	m.m.gs.bind();
 
-// draw quads
-if (visible[BOTTOM]){
-GL11.glBegin(GL11.GL_QUADS);
-GL11.glNormal3d(0.0, 0.0, -1.0);
-GL11.glTexCoord2d(texU,texV);
-GL11.glVertex3d(this.x+0.0, this.y+0.0, this.z+0.0);
-GL11.glNormal3d(0.0, 0.0, -1.0);
-GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV);
-GL11.glVertex3d(this.x+1.0, this.y+0.0, this.z+0.0);
-GL11.glNormal3d(0.0, 0.0, -1.0);
-GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV+1.0-m.m.gs.rand);
-GL11.glVertex3d(this.x+1.0, this.y+1.0, this.z+0.0);
-GL11.glNormal3d(0.0, 0.0, -1.0);
-GL11.glTexCoord2d(texU,texV+1.0-m.m.gs.rand);
-GL11.glVertex3d(this.x+0.0, this.y+1.0, this.z+0.0);
-GL11.glEnd();
-}
+	// draw quads
+	if (visible[BOTTOM]){
+		GL11.glBegin(GL11.GL_QUADS);
+		GL11.glNormal3d(0.0, 0.0, -1.0);
+		GL11.glTexCoord2d(texU,texV);
+		GL11.glVertex3d(this.x+0.0, this.y+0.0, this.z+0.0);
+		GL11.glNormal3d(0.0, 0.0, -1.0);
+		GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV);
+		GL11.glVertex3d(this.x+1.0, this.y+0.0, this.z+0.0);
+		GL11.glNormal3d(0.0, 0.0, -1.0);
+		GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV+1.0-m.m.gs.rand);
+		GL11.glVertex3d(this.x+1.0, this.y+1.0, this.z+0.0);
+		GL11.glNormal3d(0.0, 0.0, -1.0);
+		GL11.glTexCoord2d(texU,texV+1.0-m.m.gs.rand);
+		GL11.glVertex3d(this.x+0.0, this.y+1.0, this.z+0.0);
+		GL11.glEnd();
+	}
 
-if (visible[WEST]) {
-GL11.glBegin(GL11.GL_QUADS);
-GL11.glNormal3d(-1.0, 0.0, 0.0);
-GL11.glTexCoord2d(texU,texV);
-GL11.glVertex3d(this.x+0.0, this.y+0.0, this.z+0.0);
-GL11.glNormal3d(-1.0, 0.0, 0.0);
-GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV);
-GL11.glVertex3d(this.x+0.0, this.y+1.0, this.z+0.0);
-GL11.glNormal3d(-1.0, 0.0, 0.0);
-GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV+1.0-m.m.gs.rand);
-GL11.glVertex3d(this.x+0.0, this.y+1.0, this.z+1.0);
-GL11.glNormal3d(-1.0, 0.0, 0.0);
-GL11.glTexCoord2d(texU,texV+1.0-m.m.gs.rand);
-GL11.glVertex3d(this.x+0.0, this.y+0.0, this.z+1.0);
-GL11.glEnd();
-}
+	if (visible[WEST]) {
+		GL11.glBegin(GL11.GL_QUADS);
+		GL11.glNormal3d(-1.0, 0.0, 0.0);
+		GL11.glTexCoord2d(texU,texV);
+		GL11.glVertex3d(this.x+0.0, this.y+0.0, this.z+0.0);
+		GL11.glNormal3d(-1.0, 0.0, 0.0);
+		GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV);
+		GL11.glVertex3d(this.x+0.0, this.y+1.0, this.z+0.0);
+		GL11.glNormal3d(-1.0, 0.0, 0.0);
+		GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV+1.0-m.m.gs.rand);
+		GL11.glVertex3d(this.x+0.0, this.y+1.0, this.z+1.0);
+		GL11.glNormal3d(-1.0, 0.0, 0.0);
+		GL11.glTexCoord2d(texU,texV+1.0-m.m.gs.rand);
+		GL11.glVertex3d(this.x+0.0, this.y+0.0, this.z+1.0);
+		GL11.glEnd();
+	}
 
-if (visible[SOUTH]) {
-GL11.glBegin(GL11.GL_QUADS);
-GL11.glNormal3d(0.0, -1.0, 0.0);
-GL11.glTexCoord2d(texU,texV);
-GL11.glVertex3d(this.x+0.0, this.y+0.0, this.z+0.0);
-GL11.glNormal3d(0.0, -1.0, 0.0);
-GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV);
-GL11.glVertex3d(this.x+1.0, this.y+0.0, this.z+0.0);
-GL11.glNormal3d(0.0, -1.0, 0.0);
-GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV+1.0-m.m.gs.rand);
-GL11.glVertex3d(this.x+1.0, this.y+0.0, this.z+1.0);
-GL11.glNormal3d(0.0, -1.0, 0.0);
-GL11.glTexCoord2d(texU,texV+1.0-m.m.gs.rand);
-GL11.glVertex3d(this.x+0.0, this.y+0.0, this.z+1.0);
-GL11.glEnd();
-}
+	if (visible[SOUTH]) {
+		GL11.glBegin(GL11.GL_QUADS);
+		GL11.glNormal3d(0.0, -1.0, 0.0);
+		GL11.glTexCoord2d(texU,texV);
+		GL11.glVertex3d(this.x+0.0, this.y+0.0, this.z+0.0);
+		GL11.glNormal3d(0.0, -1.0, 0.0);
+		GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV);
+		GL11.glVertex3d(this.x+1.0, this.y+0.0, this.z+0.0);
+		GL11.glNormal3d(0.0, -1.0, 0.0);
+		GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV+1.0-m.m.gs.rand);
+		GL11.glVertex3d(this.x+1.0, this.y+0.0, this.z+1.0);
+		GL11.glNormal3d(0.0, -1.0, 0.0);
+		GL11.glTexCoord2d(texU,texV+1.0-m.m.gs.rand);
+		GL11.glVertex3d(this.x+0.0, this.y+0.0, this.z+1.0);
+		GL11.glEnd();
+	}
 
-if (visible[EAST]) {
-GL11.glBegin(GL11.GL_QUADS);
-GL11.glNormal3d(1.0, 0.0, 0.0);
-GL11.glTexCoord2d(texU,texV);
-GL11.glVertex3d(this.x+1.0, this.y+0.0, this.z+0.0);
-GL11.glNormal3d(1.0, 0.0, 0.0);
-GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV);
-GL11.glVertex3d(this.x+1.0, this.y+1.0, this.z+0.0);
-GL11.glNormal3d(1.0, 0.0, 0.0);
-GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV+1.0-m.m.gs.rand);
-GL11.glVertex3d(this.x+1.0, this.y+1.0, this.z+1.0);
-GL11.glNormal3d(1.0, 0.0, 0.0);
-GL11.glTexCoord2d(texU,texV+1.0-m.m.gs.rand);
-GL11.glVertex3d(this.x+1.0, this.y+0.0, this.z+1.0);
-GL11.glEnd();
-}
+	if (visible[EAST]) {
+		GL11.glBegin(GL11.GL_QUADS);
+		GL11.glNormal3d(1.0, 0.0, 0.0);
+		GL11.glTexCoord2d(texU,texV);
+		GL11.glVertex3d(this.x+1.0, this.y+0.0, this.z+0.0);
+		GL11.glNormal3d(1.0, 0.0, 0.0);
+		GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV);
+		GL11.glVertex3d(this.x+1.0, this.y+1.0, this.z+0.0);
+		GL11.glNormal3d(1.0, 0.0, 0.0);
+		GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV+1.0-m.m.gs.rand);
+		GL11.glVertex3d(this.x+1.0, this.y+1.0, this.z+1.0);
+		GL11.glNormal3d(1.0, 0.0, 0.0);
+		GL11.glTexCoord2d(texU,texV+1.0-m.m.gs.rand);
+		GL11.glVertex3d(this.x+1.0, this.y+0.0, this.z+1.0);
+		GL11.glEnd();
+	}
 
-if (visible[TOP]) {
-GL11.glBegin(GL11.GL_QUADS);
-GL11.glNormal3d(0.0, 0.0, 1.0);
-GL11.glTexCoord2d(texU,texV);
-GL11.glVertex3d(this.x+0.0, this.y+0.0, this.z+1.0);
-GL11.glNormal3d(0.0, 0.0, 1.0);
-GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV);
-GL11.glVertex3d(this.x+1.0, this.y+0.0, this.z+1.0);
-GL11.glNormal3d(0.0, 0.0, 1.0);
-GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV+1.0-m.m.gs.rand);
-GL11.glVertex3d(this.x+1.0, this.y+1.0, this.z+1.0);
-GL11.glNormal3d(0.0, 0.0, 1.0);
-GL11.glTexCoord2d(texU,texV+1.0-m.m.gs.rand);
-GL11.glVertex3d(this.x+0.0, this.y+1.0, this.z+1.0);
-GL11.glEnd();
-}
+	if (visible[TOP]) {
+		GL11.glBegin(GL11.GL_QUADS);
+		GL11.glNormal3d(0.0, 0.0, 1.0);
+		GL11.glTexCoord2d(texU,texV);
+		GL11.glVertex3d(this.x+0.0, this.y+0.0, this.z+1.0);
+		GL11.glNormal3d(0.0, 0.0, 1.0);
+		GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV);
+		GL11.glVertex3d(this.x+1.0, this.y+0.0, this.z+1.0);
+		GL11.glNormal3d(0.0, 0.0, 1.0);
+		GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV+1.0-m.m.gs.rand);
+		GL11.glVertex3d(this.x+1.0, this.y+1.0, this.z+1.0);
+		GL11.glNormal3d(0.0, 0.0, 1.0);
+		GL11.glTexCoord2d(texU,texV+1.0-m.m.gs.rand);
+		GL11.glVertex3d(this.x+0.0, this.y+1.0, this.z+1.0);
+		GL11.glEnd();
+	}
 
-if (visible[NORTH]) {
-GL11.glBegin(GL11.GL_QUADS);
-GL11.glNormal3d(0.0, 1.0, 0.0);
-GL11.glTexCoord2d(texU,texV);
-GL11.glVertex3d(this.x+0.0, this.y+1.0, this.z+0.0);
-GL11.glNormal3d(0.0, 1.0, 0.0);
-GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV);
-GL11.glVertex3d(this.x+1.0, this.y+1.0, this.z+0.0);
-GL11.glNormal3d(0.0, 1.0, 0.0);
-GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV+1.0-m.m.gs.rand);
-GL11.glVertex3d(this.x+1.0, this.y+1.0, this.z+1.0);
-GL11.glNormal3d(0.0, 1.0, 0.0);
-GL11.glTexCoord2d(texU,texV+1.0-m.m.gs.rand);
-GL11.glVertex3d(this.x+0.0, this.y+1.0, this.z+1.0);
-GL11.glEnd();
-}
+	if (visible[NORTH]) {
+		GL11.glBegin(GL11.GL_QUADS);
+		GL11.glNormal3d(0.0, 1.0, 0.0);
+		GL11.glTexCoord2d(texU,texV);
+		GL11.glVertex3d(this.x+0.0, this.y+1.0, this.z+0.0);
+		GL11.glNormal3d(0.0, 1.0, 0.0);
+		GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV);
+		GL11.glVertex3d(this.x+1.0, this.y+1.0, this.z+0.0);
+		GL11.glNormal3d(0.0, 1.0, 0.0);
+		GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV+1.0-m.m.gs.rand);
+		GL11.glVertex3d(this.x+1.0, this.y+1.0, this.z+1.0);
+		GL11.glNormal3d(0.0, 1.0, 0.0);
+		GL11.glTexCoord2d(texU,texV+1.0-m.m.gs.rand);
+		GL11.glVertex3d(this.x+0.0, this.y+1.0, this.z+1.0);
+		GL11.glEnd();
+	}
 }
 }

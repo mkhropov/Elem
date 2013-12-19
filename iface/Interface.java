@@ -4,7 +4,7 @@ import world.World;
 import player.Player;
 
 public class Interface {
-	Camera camera;
+	public Camera camera;
 	Player player;
 	World world;
 	Input input;

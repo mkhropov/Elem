@@ -7,24 +7,31 @@ import java.util.ArrayList;
 public class GraphicalChunk {
 	private ArrayList<GraphicalCube> cubes;
 	private World world;
-	private int z;
+	private int x,y,z;
+	private int xsize, ysize;
 	private int mode;
 	public static final int MODE_TOP_VIEW = 0;
 	public static final int MODE_SHOW_ALL = 1;
 	public static final int MODE_FOG_OF_WAR = 2;
 
-	public GraphicalChunk(World w, int z, int mode) {
+	public static final int CHUNK_SIZE = 16;
+
+	public GraphicalChunk(World w, int x, int y, int z, int mode) {
 		this.world = w;
+		this.x = x;
+		this.y = y;
 		this.z = z;
+		xsize = (w.xsize-x>CHUNK_SIZE)?CHUNK_SIZE:(w.xsize-x);
+		ysize = (w.ysize-y>CHUNK_SIZE)?CHUNK_SIZE:(w.ysize-y);
 		this.mode = mode;
-		cubes = new ArrayList<GraphicalCube>(50000);
+		cubes = new ArrayList<GraphicalCube>(256);
 		rebuild();
 	}
 
 	public void rebuild() {
 		cubes.clear();
-		for (int i=0; i<world.xsize; i++)
-			for (int j=0; j<world.ysize; j++){
+		for (int i=x; i<x+xsize; i++)
+			for (int j=y; j<y+ysize; j++){
 				if (world.empty(i,j,z)) continue;
 				if (mode == MODE_SHOW_ALL ||
 						world.empty(i-1,j,z) || world.empty(i+1,j,z) || world.empty(i,j-1,z) ||

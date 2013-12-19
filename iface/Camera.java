@@ -49,7 +49,7 @@ public class Camera {
 		z += new_z;
 	}
 
-	public int[] resolveMousePosition (int x, int y, int current_layer) {
+	public int[] resolvePixel (int x, int y, int current_layer) {
 		IntBuffer viewport = BufferUtils.createIntBuffer(16);
 		FloatBuffer modelview = BufferUtils.createFloatBuffer(16);
 		FloatBuffer projection = BufferUtils.createFloatBuffer(16);

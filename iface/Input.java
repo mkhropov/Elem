@@ -16,7 +16,7 @@ public class Input {
 	}
 
 	public void poll(long deltaT) {
-		int[] pos = iface.camera.resolveMousePosition(Mouse.getEventX(), Mouse.getEventY(), iface.current_layer);
+		int[] pos = iface.camera.resolvePixel(Mouse.getEventX(), Mouse.getEventY(), iface.current_layer);
 		Block where = iface.world.getBlock(pos[0], pos[1], iface.current_layer);
 		if (where != null) {
 			iface.cursor.reposition(where.x, where.y, where.z);
