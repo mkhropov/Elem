@@ -67,7 +67,8 @@ public class Input {
 					iface.camera.rotateRight();
 					break;
 				case 's':
-					iface.player.spawnCreature(new SmartWalkingElem(iface.world, where));
+					if (where != null)
+						iface.player.spawnCreature(new SmartWalkingElem(iface.world, where));
 					break;
                 case '1':
                     System.out.println("MOVE order mode engaged");

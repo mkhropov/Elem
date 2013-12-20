@@ -8,18 +8,15 @@ import java.util.ArrayList;
 
 import physics.material.*;
 import creature.*;
+import item.*;
 
 
 public class Block {
-	// this properties are given for example
 	public int x, y, z; //in a chunk
 	int T; //temperature
-	public Substance m; //to be changed to a class
-//	int liquidLevel;
-//	int liquidId;
-//	Gase gase;
-//	void[] items;
+	public Substance m;
 	public ArrayList<Creature> creature;
+	public ArrayList<Item> item;
 	public static int[][] nearInd = new int[][]
 		{{1, 0, 0}, {0, 1, 0}, {0, 0, 1}
 		,{0, 0, -1}, {-1, 0, 0}, {0, -1, 0}
@@ -45,10 +42,19 @@ public class Block {
 		this.z = z;
 		this.m = null;
 		this.creature = new ArrayList<>();
+		this.item = new ArrayList<>();
 	}
 
-	void setMaterial(Material m) {
+	public void setMaterial(Material m) {
 		this.m = new Substance(m, 1.d);
+	}
+
+	public void destroy(World w){
+		item.add(new ItemBoulder(this, m.w, m.m));
+		this.m = null;
+		w.rend.updateBlock(x, y, z);
+		if ((z+1) < w.zsize)
+	        w.blockArray[x][y][z+1].update(w);
 	}
 
 	boolean nearFits(int[] ind, World w){
@@ -58,10 +64,11 @@ public class Block {
 		return true;
 	}
 
-	public void update(){
-		if (creature != null)
-			for (int i=0; i<creature.size(); ++i)
-				creature.get(i).update();
+	public void update(World w){
+		for (int i=0; i<creature.size(); ++i)
+			creature.get(i).update();
+		for (int i=0; i<item.size(); ++i)
+			item.get(i).update(w);
 	}
 
 	public ArrayList<Block> nearest(World w){
