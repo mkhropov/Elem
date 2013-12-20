@@ -122,6 +122,8 @@ public class Elem extends Creature implements Worker{
 			if (canDig(b)){
 				b.m = null;
 				w.rend.updateBlock(b.x, b.y, b.z);
+				if (b.z+1<w.zsize)
+					w.blockArray[b.x][b.y][b.z+1].update();
 				return true;
 			}
 			return false;

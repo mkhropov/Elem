@@ -73,6 +73,9 @@ public class Creature extends Entity {
     public void iterate(long dT){
     }
 
+	public void update(){
+	}
+
 	public void draw(){
 	}
 }

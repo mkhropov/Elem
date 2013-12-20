@@ -35,7 +35,7 @@ public class SmartWalkingElem extends SmartElem implements Worker {
     }
 
 	@Override
-	void update(){
+	public void update(){
 		fall();
 	}
 

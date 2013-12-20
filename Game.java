@@ -65,8 +65,6 @@ public class Game {
 		renderer = new Renderer(world, iface);
         world.rend = renderer;
 
-        p1.spawnCreature(new SmartWalkingElem(world,
-                world.blockArray[world.xsize/2][world.ysize/2][world.zsize-1]));
 		lastFPS = getTime();
 		lastTime = getTime();
 

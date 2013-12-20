@@ -24,7 +24,7 @@ public class SmartElem extends Elem implements Worker {
         declinedOrders = new ArrayList<>();
     }
 
-	void update(){
+	public void update(){
 	}
 
     boolean getNewOrder(){

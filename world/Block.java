@@ -58,6 +58,12 @@ public class Block {
 		return true;
 	}
 
+	public void update(){
+		if (creature != null)
+			for (int i=0; i<creature.size(); ++i)
+				creature.get(i).update();
+	}
+
 	public ArrayList<Block> nearest(World w){
 		ArrayList<Block> l = new ArrayList<>(nearInd.length);
 		for (int i=0; i<nearInd.length; ++i)
