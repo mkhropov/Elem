@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class ConditionCreature implements Condition {
 
-        @Override
+	@Override
 	public boolean suits(Block b){
 		ArrayList<Block> near = b.nearest(c.w);
 		Block t;

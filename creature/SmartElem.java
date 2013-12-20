@@ -1,15 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package creature;
-
-/**
- *
- * @author Михаил
- */
 
 import world.*;
 import pathfind.*;
@@ -20,7 +9,7 @@ public class SmartElem extends Elem implements Worker {
 
     public SmartElem(World w, Block b){
         super(w, b);
-        capable = new boolean[]{true, true, true};
+        capable = new boolean[]{true, true, true, true};
         declinedOrders = new ArrayList<>();
     }
 
@@ -46,8 +35,11 @@ public class SmartElem extends Elem implements Worker {
 							cond = new ConditionPlace(o.b);
 							break;
 						case Order.ORDER_DIG:
-						case Order.ORDER_PLACE:
+						case Order.ORDER_BUILD:
 							cond = new ConditionReach(o.b, this);
+							break;
+						case Order.ORDER_TAKE:
+							cond = new ConditionItem(o.it);
 							break;
 						default:
 							cond = new ConditionNone();
@@ -89,13 +81,20 @@ public class SmartElem extends Elem implements Worker {
         }
         if (order != null) {
             if (path.size() == 0) {
-                boolean res = true;
-                if (order.type == 1){
-                    res = destroyBlock(order.b);
-					update();
-                } else if (order.type==2)
-                    res = placeBlock(order.b, order.m);
-			    if (res)
+                boolean res;
+				switch (order.type){
+					case Order.ORDER_MOVE:
+						res = this.b.equals(order.b); break;
+					case Order.ORDER_DIG:
+						res = destroyBlock(order.b); break;
+					case Order.ORDER_BUILD:
+						res = placeBlock(order.b, order.m); break;
+					case Order.ORDER_TAKE:
+						res = take(order.it); break;
+					default:
+						res = false; break;
+				}
+                if (res)
                     owner.setOrderDone(order, this);
                 else
                     owner.setOrderDeclined(this.order, this);

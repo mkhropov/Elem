@@ -2,22 +2,30 @@ package item;
 
 import world.*;
 import creature.Creature;
+import physics.material.Material;
 
 public class Item extends Entity{
 	Block b;
 	Creature c;
+	public Material m; //maybe a list in future?..
 	double w;
+	public int type;
+
+	public static final int TYPE_NONE = 0;
+	public static final int TYPE_BUILDABLE = 1;
 
 	public Item(Block b, double w){
 		this.b = b;
 		this.c = null;
 		this.w = w;
+		this.type = TYPE_NONE;
 	}
 
 	public Item(Creature c, double w){
 		this.b = null;
 		this.c = c;
 		this.w = w;
+		this.type = TYPE_NONE;
 	}
 
 	public void update(World world){

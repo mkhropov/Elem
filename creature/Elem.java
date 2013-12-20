@@ -7,7 +7,8 @@ import world.*;
 import physics.material.*;
 import stereometry.Point;
 import stereometry.Vector;
-
+import item.ItemTemplate;
+import item.Item;
 
 public class Elem extends Creature implements Worker{
     public static double size = 0.5;
@@ -129,10 +130,12 @@ public class Elem extends Creature implements Worker{
 
     @Override
     public final boolean placeBlock(Block b, Material m){
-        if ((!canReach(this.b, b)) || (b.m != null))
+        if ((!canReach(this.b, b)) || (b.m != null) ||
+			!((item.type == Item.TYPE_BUILDABLE) && (item.m.equals(m))))
             return false;
         else {
             b.m = new Substance(m, 1.d);
+			item = null;
             w.rend.updateBlock(b.x, b.y, b.z);
             return true;
         }

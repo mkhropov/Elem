@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import world.*;
 import creature.*;
 import physics.material.*;
+import item.Item;
+import item.ItemTemplate;
 
 public class Player {
     World w;
@@ -31,8 +33,10 @@ public class Player {
     }
 
     public void placeBuildOrder(Block b, Material m){
-        Order o = new Order(b, Order.ORDER_PLACE);
-        o.m = m;
+		ItemTemplate it = new ItemTemplate(Item.TYPE_BUILDABLE, m);
+		Order o = new Order(null, Order.ORDER_TAKE); o.it = it;
+		order.add(o);
+        o = new Order(b, Order.ORDER_BUILD); o.it = it; o.m = m;
         order.add(o);
     }
 

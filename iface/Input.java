@@ -34,7 +34,7 @@ public class Input {
                         switch (orderMode){
                             case Order.ORDER_MOVE: iface.player.placeMoveOrder(where); break;
                             case Order.ORDER_DIG: iface.player.placeDigOrder(where); break;
-						    case Order.ORDER_PLACE: iface.player.placeBuildOrder(where, iface.world.material[0]); break;
+						    case Order.ORDER_BUILD: iface.player.placeBuildOrder(where, iface.world.material[0]); break;
                         }
 						System.out.println("Click at "+where.x+" "+where.y+" "+where.z);
 					} else {
@@ -80,7 +80,7 @@ public class Input {
 					break;
 	            case '3':
                     System.out.println("BUILD order mode engaged");
-                    orderMode = Order.ORDER_PLACE;
+                    orderMode = Order.ORDER_BUILD;
 					break;
 				default:
 					break;
