@@ -36,8 +36,7 @@ public class Player {
         order.add(o);
     }
 
-    public void setOrderTaken(int i, Creature c){
-        Order o = order.get(i);
+    public void setOrderTaken(Order o, Creature c){
         c.order = o;
         o.taken = true;
         System.out.println(c+" took order "+o);
@@ -51,12 +50,13 @@ public class Player {
         System.out.println(c+" succesfuly did order "+o);
     }
 
-	public void setOrderDeclined(int i, Creature c){
-        Order o = order.get(i);
+	public void setOrderDeclined(Order o, Creature c){
 		c.declinedOrders.add(o);
+		c.order = null;
 		o.declined++;
+		System.out.println(c+" declined  order "+o);
 	}
-	
+
     public void setOrderCancelled(Order o, Creature c){
         o.taken = false;
         c.order = null;

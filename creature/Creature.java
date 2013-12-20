@@ -3,6 +3,7 @@ package creature;
 import java.util.ArrayList;
 import world.*;
 import player.*;
+import physics.material.Material;
 
 import java.util.Stack;
 import stereometry.Point;
@@ -13,6 +14,7 @@ public class Creature extends Entity {
     public Stack<Block> path;
     Point np;
     double speed;
+	public double digStrength;
     public Player owner;
     public Order order;
     public boolean capable[];
@@ -38,6 +40,7 @@ public class Creature extends Entity {
         setBlock(b, true);
         this.p = this.np;
         this.w = w;
+		this.digStrength = Material.HARD_STEEL;
         this.capable = new boolean[]{false, false, false};
 		w.rend.addEntity(this);
     }
@@ -53,6 +56,10 @@ public class Creature extends Entity {
     public boolean canReach(Block v1, Block b2){
         return true;
     }
+
+	public boolean canDig(Block b){
+		return (b.m.digTime(digStrength) > 0.);
+	}
 
     public boolean move(Block b) {
         if (!canMove(this.b, b))

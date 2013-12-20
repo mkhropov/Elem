@@ -17,7 +17,7 @@ import player.*;
 import java.util.ArrayList;
 
 public class SmartElem extends Elem implements Worker {
-    
+
     public SmartElem(World w, Block b){
         super(w, b);
         capable = new boolean[]{true, true, true};
@@ -55,10 +55,10 @@ public class SmartElem extends Elem implements Worker {
 					}
 					path = w.pf.getPath(this, b, cond);
 				}
-				if (path != null) 
-					owner.setOrderTaken(i, this);
+				if (path != null)
+					owner.setOrderTaken(o, this);
 				else
-					owner.setOrderDeclined(i, this);
+					owner.setOrderDeclined(o, this);
 			}
         }
         return (i != owner.order.size());
@@ -98,7 +98,7 @@ public class SmartElem extends Elem implements Worker {
 			    if (res)
                     owner.setOrderDone(order, this);
                 else
-                    owner.setOrderCancelled(this.order, this);
+                    owner.setOrderDeclined(this.order, this);
             } else {
                 Block t = path.pop();
                 if (canMove(b, t)){
@@ -111,7 +111,7 @@ public class SmartElem extends Elem implements Worker {
         } else {
             if (!getNewOrder()){
 				//feel free to roam or make self-orders
-            } 
+            }
         }
     }
 }

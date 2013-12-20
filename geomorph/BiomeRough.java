@@ -15,6 +15,8 @@ public class BiomeRough extends Biome {
     public final void fillWorld(World w){
         Random gen = new Random((new Date()).getTime());
         Stratum s;
+		s = new Stratum(4*w.xsize, 4*w.ysize, 1);
+		s.drop(w.material[3], w, -w.xsize, -w.ysize);
         s = new Stratum(4*w.xsize, 4*w.ysize, 2);
         s.drop(w.material[0], w, -w.xsize, -w.ysize);
         for (int i=0; i<2*w.zsize/3; ++i){

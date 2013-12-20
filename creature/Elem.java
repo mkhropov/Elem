@@ -119,9 +119,12 @@ public class Elem extends Creature implements Worker{
         if (!canReach(this.b, b))
             return false;
         else {
-            b.m = null;
-            w.rend.updateBlock(b.x, b.y, b.z);
-            return true;
+			if (canDig(b)){
+				b.m = null;
+				w.rend.updateBlock(b.x, b.y, b.z);
+				return true;
+			}
+			return false;
         }
     }
 

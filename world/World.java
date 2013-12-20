@@ -43,10 +43,11 @@ public class World {
                     this.wallArray[i][j][k][2] = new Wall(i, j, k, WallOrient.RIGHT);
                 }
 
-        this.material = new Material[3];
+        this.material = new Material[4];
         this.material[0] = new Stone();
         this.material[1] = new Earth();
         this.material[2] = new Material();
+		this.material[3] = new Bedrock();
 
         this.biome = new BiomeRough();
         this.biome.fillWorld(this);
