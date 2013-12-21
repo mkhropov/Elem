@@ -34,11 +34,14 @@ public class BiomePlains extends Biome {
                             -0.3d);
 		Slipfault morph = new Slipfault(f, 20, 30, 4);
 		applyMorph(morph, w);
-/*		f = new Front(new Point(0, 0, w.zsize),
+		Point p = new Point(w.xsize/2, w.ysize/2, w.zsize);
+		Pointfold pmorph = new Pointfold(p, 10, 30, -4);
+		applyMorph(pmorph, w);
+		f = new Front(new Point(0, 0, w.zsize),
                             new Point(w.xsize, w.ysize, w.zsize),
                             0.d);
         morph = new Slipfault(f, 20, 30, 3);
-        applyMorph(morph, w);*/
+        applyMorph(morph, w);
     }
 
 	@Override

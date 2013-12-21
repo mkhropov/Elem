@@ -6,7 +6,7 @@ public class Granite extends Material {
 	public Granite() {
         tFreeze = new Temperature(4000);
         tBoil =  new Temperature(5000);
-        gs = new GraphicalSurface("granite", 0.3);
+        gs = new GraphicalSurface("Carmen_Red_Granite", 0.3);
 		hardness = HARD_STONE;
 	}
 }
