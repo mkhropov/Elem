@@ -13,8 +13,8 @@ public class Front extends Vector {
     }
 
     public Plane plane(){
-        Vector hv = new Vector(this.p1, new Point(this.p1.y, this.p1.x, this.p1.z));
-        Vector vv = new Vector(this.p1, new Point(this.p1.x, this.p1.y, this.p1.x-1.d));
+        Vector hv = new Vector(-y, x, z);
+        Vector vv = new Vector(0., 0., -1.);
         hv.normalize(); vv.normalize();
         double sa = Math.sin(a); double ca = Math.cos(a);
         Vector av = new Vector(this.p1, sa*hv.x+ca*vv.x, sa*hv.y+ca*vv.y, sa*hv.z+ca*vv.z);

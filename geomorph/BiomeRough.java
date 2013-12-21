@@ -12,8 +12,9 @@ public class BiomeRough extends Biome {
         this.name = "Rough terrain biome";
     }
 
+	@Override
     public final void fillWorld(World w){
-        Random gen = new Random((new Date()).getTime());
+        gen = new Random((new Date()).getTime());
         Stratum s;
 		s = new Stratum(4*w.xsize, 4*w.ysize, 1);
 		s.drop(w.material[3], w, -w.xsize, -w.ysize);
@@ -35,6 +36,7 @@ public class BiomeRough extends Biome {
         }
    }
 
+	@Override
     Temperature getTemperature(){
         return new Temperature(300);
     }

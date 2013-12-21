@@ -39,7 +39,7 @@ public class Plane {
     }
 
     public boolean isUp(Point p){
-        Point u = new Point(this.p); u.z += 1.d;
+        Point u = new Point(this.p); u.z += 1.d; u.x += 1.d;
         double cu = calcP(u);
         double cp = calcP(p);
         return (cu*cp > 0);

@@ -21,8 +21,8 @@ public class Game {
     Player p1;
 	Interface iface;
 	Renderer renderer;
-	public static final int MAX_X=25;
-	public static final int MAX_Y=25;
+	public static final int MAX_X=30;
+	public static final int MAX_Y=30;
 	public static final int MAX_Z=20;
 	public static final double SCALE=0.7;
 	int fps = 0;

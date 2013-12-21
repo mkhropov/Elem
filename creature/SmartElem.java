@@ -62,20 +62,21 @@ public class SmartElem extends Elem implements Worker {
         switch (action){
 			case ACTION_NONE: break;
             case ACTION_MOVE:
-                p.add(mv, (double)dT);
                 if (p.dist(np) < speed*dT) {
 					p = np;
                     action = ACTION_NONE;
-				} else
+				} else {
+					p.add(mv, (double)dT);
                     return;
+				}
                 break;
 			case ACTION_FALL:
 				mv.add(w.gravity, dT/1000.);
-				p.add(mv, 1.);
-				if (p.dist(np) < mv.len()){
+				if (Math.abs(p.z - np.z) < mv.len()){
 					p = np;
 					action = ACTION_NONE;
 				} else {
+					p.add(mv, 1.);
 					return;
 				}
         }

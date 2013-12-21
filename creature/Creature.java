@@ -61,7 +61,7 @@ public class Creature extends Entity {
     }
 
 	public boolean canDig(Block b){
-		return (b.m.digTime(digStrength) > 0.);
+		return (b.m!= null) &&(b.m.digTime(digStrength) > 0.);
 	}
 
 	public boolean take(ItemTemplate it){

@@ -56,7 +56,7 @@ public class Vector {
     public Vector cross(Vector v){
         return new Vector(y*v.z - z*v.y,
                           z*v.x - x*v.z,
-                          z*v.y - y*v.z);
+                          x*v.y - y*v.x);
     }
 
 //distance from front to P
@@ -66,7 +66,7 @@ public class Vector {
 
 //distance from front to projection of P on horizontal plane
     public double distProj(Point p) {
-        Point t = p; t.z = p1.z;
+        Point t = new Point(p); t.z = p1.z;
         return dist(t);
     }
 
