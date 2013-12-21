@@ -43,18 +43,19 @@ public class World {
                     this.wallArray[i][j][k][2] = new Wall(i, j, k, WallOrient.RIGHT);
                 }
 
-        this.material = new Material[4];
+        this.material = new Material[5];
         this.material[0] = new Stone();
         this.material[1] = new Earth();
         this.material[2] = new Material();
 		this.material[3] = new Bedrock();
+		this.material[4] = new Granite();
 
         this.biome = new BiomeRough();
         this.biome.fillWorld(this);
 
         this.pf = new Pathfinder(this);
 
-        this.creature = new ArrayList<Creature>();
+        this.creature = new ArrayList<>();
 //        System.out.printf("total %d creatures\n", creature.size());
 //        this.creature.add(new SmartWalkingElem(this, this.blockArray[0][0][zsize-1]));
 //        Creature cr = this.creature.get(0);

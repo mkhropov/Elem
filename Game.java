@@ -15,7 +15,6 @@ import iface.Interface;
 import graphics.Renderer;
 
 import player.*;
-import creature.*;
 
 public class Game {
 	World world;
