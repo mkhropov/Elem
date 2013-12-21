@@ -28,20 +28,25 @@ public class BiomePlains extends Biome {
         }
 		s = new Stratum(4*w.xsize, 4*w.ysize, 2);
         s.drop(w.material[1], w, -w.xsize, -w.ysize);
-
-        Front f = new Front(new Point(3*w.xsize/4, w.ysize/4, w.zsize),
+		Front f; Point p;
+		f = new Front(new Point(3*w.xsize/4, w.ysize/4, w.zsize),
+                            new Point(w.xsize/4, 3*w.ysize/4, w.zsize),
+                            0.d);
+		Linefold lmorph = new Linefold(f, 15, 30, -3);
+		applyMorph(lmorph, w);
+ /*       f = new Front(new Point(3*w.xsize/4, w.ysize/4, w.zsize),
                             new Point(w.xsize/4, 3*w.ysize/4, w.zsize),
                             -0.3d);
-		Slipfault morph = new Slipfault(f, 20, 30, 4);
-		applyMorph(morph, w);
-		Point p = new Point(w.xsize/2, w.ysize/2, w.zsize);
+		Slipfault smorph = new Slipfault(f, 20, 30, 4);
+		applyMorph(smorph, w);
+		p = new Point(w.xsize/2, w.ysize/2, w.zsize);
 		Pointfold pmorph = new Pointfold(p, 10, 30, -4);
 		applyMorph(pmorph, w);
 		f = new Front(new Point(0, 0, w.zsize),
                             new Point(w.xsize, w.ysize, w.zsize),
                             0.d);
-        morph = new Slipfault(f, 20, 30, 3);
-        applyMorph(morph, w);
+        smorph = new Slipfault(f, 20, 30, 3);
+        applyMorph(smorph, w);*/
     }
 
 	@Override

@@ -23,7 +23,7 @@ public class Slipfault extends Morph {
 // for now Image == Preimage. Mostly - not counting bottom (d)
 	@Override
     public final boolean inImage(Point p){
-		return  (p.z <= f.p1.z)      &&
+		return  //(p.z <= f.p1.z)      &&
 	     		(f.isUp(p))          &&
 				(p.z >= f.p1.z-h-d)    &&
 				(f.distProj(p) <= l) &&
