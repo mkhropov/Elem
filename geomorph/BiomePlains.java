@@ -5,6 +5,7 @@ import java.util.Random;
 import world.*;
 import stereometry.*;
 import physics.Temperature;
+import physics.material.Material;
 
 public class BiomePlains extends Biome {
 
@@ -16,18 +17,16 @@ public class BiomePlains extends Biome {
     public final void fillWorld(World w){
 		Stratum s;
 		int i, k;
+		Material m;
 		gen = new Random((new Date()).getTime());
 		s = new Stratum(4*w.xsize, 4*w.ysize, 1);
 		s.drop(w.material[3], w, -w.xsize, -w.ysize);
 		for (i=0; i<w.zsize/2;){
 			k = gen.nextInt(2)+1; i+=k;
             s = new Stratum(4*w.xsize, 4*w.ysize, k);
-            s.drop(w.material[gen.nextInt(2)*4], w,
-                    -w.xsize,
-                    -w.ysize);
+			m = w.material[(gen.nextInt(3)+4) % 6];
+            s.drop(m, w, -w.xsize,- w.ysize);
         }
-		s = new Stratum(4*w.xsize, 4*w.ysize, 2);
-        s.drop(w.material[1], w, -w.xsize, -w.ysize);
 		Front f; Point p;
 		f = new Front(new Point(w.xsize/2, 0, w.zsize),
                             new Point(w.xsize/2, w.ysize, w.zsize),
@@ -52,6 +51,9 @@ public class BiomePlains extends Biome {
                             0.d);
         smorph = new Slipfault(f, 20, 30, 3);
         applyMorph(smorph, w);*/
+		erosion(w, 2000., w.material[1]);
+		s = new Stratum(4*w.xsize, 4*w.ysize, 2);
+        s.drop(w.material[1], w, -w.xsize, -w.ysize);
     }
 
 	@Override

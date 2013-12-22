@@ -6,6 +6,7 @@ import physics.material.*;
 import java.util.ArrayList;
 import stereometry.*;
 import world.*;
+import static world.Block.nearInd;
 
 public abstract class Biome {
 
@@ -51,4 +52,37 @@ public abstract class Biome {
         for (int i=0; i<worklist.size(); ++i)
             worklist.get(i).m = sublist.get(i);
     }
+	
+	int blockCover(Block b, World w){
+		int t = 0;
+		for (int i=0; i<nearInd.length; ++i)
+			if (b.nearFits(nearInd[i], w))
+				t += (w.blockArray[b.x+nearInd[i][0]]
+								  [b.y+nearInd[i][1]]
+								  [b.z+nearInd[i][2]].m != null) ?
+						(1):(0);
+			else
+				t += (nearInd[i][2]<=0)?(1):(0);
+		return t;
+	}
+	
+	public void erosion(World w, double power, Material erodemat){
+		Block b;
+        for (int k=0; k<w.zsize; ++k)
+			for (int i=0; i<w.xsize; ++i)
+				for (int j=0; j<w.ysize; ++j){
+					b = w.blockArray[i][j][k];
+					if (b.m != null) 
+						if ((17-blockCover(b, w))*power > b.m.m.hardness)
+							b.m = null;
+				}
+		for (int k=0; k<w.zsize; ++k)
+			for (int i=0; i<w.xsize; ++i)
+				for (int j=0; j<w.ysize; ++j){
+					b = w.blockArray[i][j][k];
+					if (b.m == null) 
+						if (blockCover(b, w)>= 17)
+							b.setMaterial(erodemat);
+				}
+	}
 }
