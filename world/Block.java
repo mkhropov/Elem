@@ -17,7 +17,7 @@ public class Block {
 	public Substance m;
 	public ArrayList<Creature> creature;
 	public ArrayList<Item> item;
-	public static int[][] nearInd = new int[][]
+	public static final int[][] nearInd = new int[][]
 		{{1, 0, 0}, {0, 1, 0}, {0, 0, 1}
 		,{0, 0, -1}, {-1, 0, 0}, {0, -1, 0}
 		,{0, -1, -1}, {0, 1, -1}, {1, 0, -1}
@@ -57,7 +57,7 @@ public class Block {
 	        w.blockArray[x][y][z+1].update(w);
 	}
 
-	boolean nearFits(int[] ind, World w){
+	public boolean nearFits(int[] ind, World w){
 		if ((x+ind[0]<0) || (x+ind[0]>=w.xsize)) return false;
 		if ((y+ind[1]<0) || (y+ind[1]>=w.ysize)) return false;
 		if ((z+ind[2]<0) || (z+ind[2]>=w.zsize)) return false;
