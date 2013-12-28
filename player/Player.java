@@ -6,17 +6,35 @@ import creature.*;
 import physics.material.*;
 import item.Item;
 import item.ItemTemplate;
+import physics.magics.*;
 
 public class Player {
-    World w;
+    public World w;
     public ArrayList<Order> order;
     public ArrayList<Creature> creature;
+	public ArrayList<Spell> spellbook;
+	public int mana;
 
     public Player(World w){
         this.w = w;
         this.order = new ArrayList<>();
         this.creature = new ArrayList<>();
+		this.spellbook = new ArrayList<>();
+		spellbook.add(0, new SpellSummon(this));
+		this.mana = 0;
     }
+	
+	public boolean cast(int i, Block b){
+		if (i>spellbook.size())
+			return false;
+		Spell s = spellbook.get(i);
+		if (mana>=s.cost()){
+			mana -= s.cost();
+			s.cast(b);
+			return true;
+		} else
+			return false;
+	}
 
     public void spawnCreature(Creature c){
         w.creature.add(c);

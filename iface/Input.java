@@ -68,7 +68,7 @@ public class Input {
 					break;
 				case 's':
 					if (where != null)
-						iface.player.spawnCreature(new SmartWalkingElem(iface.world, where));
+						iface.player.cast(0, where);
 					break;
                 case '1':
                     System.out.println("MOVE order mode engaged");

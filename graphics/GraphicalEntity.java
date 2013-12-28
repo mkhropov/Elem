@@ -1,7 +1,6 @@
 package graphics;
 
 import world.Entity;
-import stereometry.Point;
 import physics.material.Material;
 
 import org.lwjgl.opengl.GL11;
@@ -14,7 +13,7 @@ public class GraphicalEntity {
 
 	public GraphicalEntity (Entity entity, World w) {
 		e = entity;
-		m = w.material[2];
+		m = w.material[Material.MATERIAL_NONE];
 	}
 
 	void draw() { //Placeholder till we get models
