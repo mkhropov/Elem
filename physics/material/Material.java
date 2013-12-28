@@ -3,6 +3,13 @@ import physics.*;
 import graphics.GraphicalSurface;
 
 public class Material {
+	public static final int MATERIAL_NONE = 0;
+	public static final int MATERIAL_STONE = 1;
+	public static final int MATERIAL_EARTH = 2;
+	public static final int MATERIAL_MRAMOR = 3;
+	public static final int MATERIAL_GRANITE = 4;
+	public static final int MATERIAL_BEDROCK = 5;
+	public static final int MATERIAL_MAX = 6;
     public Temperature tFreeze;
     public Temperature tBoil;
 	public GraphicalSurface gs;

@@ -43,13 +43,13 @@ public class World {
                     this.wallArray[i][j][k][2] = new Wall(i, j, k, WallOrient.RIGHT);
                 }
 
-        this.material = new Material[6];
-        this.material[0] = new Stone();
-        this.material[1] = new Earth();
-        this.material[2] = new Material();
-		this.material[3] = new Bedrock();
-		this.material[4] = new Mramor();
-		this.material[5] = new Granite();
+        this.material = new Material[Material.MATERIAL_MAX];
+        this.material[Material.MATERIAL_STONE] = new Stone();
+        this.material[Material.MATERIAL_EARTH] = new Earth();
+        this.material[Material.MATERIAL_NONE] = new Material();
+		this.material[Material.MATERIAL_BEDROCK] = new Bedrock();
+		this.material[Material.MATERIAL_MRAMOR] = new Mramor();
+		this.material[Material.MATERIAL_GRANITE] = new Granite();
 
         this.biome = new BiomePlains();
         this.biome.fillWorld(this);

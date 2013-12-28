@@ -20,18 +20,18 @@ public class BiomePlains extends Biome {
 		Material m;
 		gen = new Random((new Date()).getTime());
 		s = new Stratum(4*w.xsize, 4*w.ysize, 1);
-		s.drop(w.material[3], w, -w.xsize, -w.ysize);
+		s.drop(w.material[Material.MATERIAL_BEDROCK], w, -w.xsize, -w.ysize);
 		for (i=0; i<w.zsize/2;){
-			k = gen.nextInt(2)+1; i+=k;
+			k = gen.nextInt(1)+2; i+=k;
             s = new Stratum(4*w.xsize, 4*w.ysize, k);
-			m = w.material[(gen.nextInt(3)+4) % 6];
+			m = w.material[1+((gen.nextInt(3)+2) % 4)];
             s.drop(m, w, -w.xsize,- w.ysize);
         }
 		Front f; Point p;
 		f = new Front(new Point(w.xsize/2, 0, w.zsize),
                             new Point(w.xsize/2, w.ysize, w.zsize),
                             0.d);
-		Wavefold wmorph = new Wavefold(f, 15, 30, -3);
+		Wavefold wmorph = new Wavefold(f, 15, 30, 3);
 		applyMorph(wmorph, w);
 		f = new Front(new Point(3*w.xsize/4, w.ysize/4, w.zsize),
                             new Point(w.xsize/4, 3*w.ysize/4, w.zsize),
@@ -53,7 +53,7 @@ public class BiomePlains extends Biome {
         applyMorph(smorph, w);*/
 		erosion(w, 2000., w.material[1]);
 		s = new Stratum(4*w.xsize, 4*w.ysize, 2);
-        s.drop(w.material[1], w, -w.xsize, -w.ysize);
+        s.drop(w.material[Material.MATERIAL_EARTH], w, -w.xsize, -w.ysize);
     }
 
 	@Override
