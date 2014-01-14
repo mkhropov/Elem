@@ -45,6 +45,15 @@ public class Block {
 		this.item = new ArrayList<>();
 	}
 
+	public Block(Block b){
+		this.x = b.x;
+		this.y = b.y;
+		this.z = b.z;
+		this.m = b.m;
+		this.creature = b.creature;
+		this.item = b.item;
+	}
+
 	public void setMaterial(Material m) {
 		this.m = new Substance(m, 1.d);
 	}

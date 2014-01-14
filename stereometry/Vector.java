@@ -10,6 +10,14 @@ public class Vector {
     public double y;
     public double z;
 
+	public Vector(Vector v){
+		this.p1 = v.p1;
+		this.p2 = v.p2;
+		this.x = v.x;
+		this.y = v.y;
+		this.z = v.z;
+	}
+
     public Vector(Point p1, Point p2){
         this.p1 = p1;
         this.p2 = p2;
