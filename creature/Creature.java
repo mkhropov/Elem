@@ -3,6 +3,7 @@ package creature;
 import java.util.ArrayList;
 import world.*;
 import player.*;
+import graphics.Renderer;
 
 import java.util.Stack;
 import stereometry.Point;
@@ -39,7 +40,7 @@ public class Creature extends Entity {
         this.p = this.np;
         this.w = w;
         this.capable = new boolean[]{false, false, false};
-		w.rend.addEntity(this);
+		Renderer.getInstance().addEntity(this);
     }
 
     public boolean canWalk(Block b){

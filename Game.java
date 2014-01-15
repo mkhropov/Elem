@@ -59,11 +59,12 @@ public class Game {
 			System.exit(0);
 		}
 		System.out.println("Display created. OpenGL version: " + GL11.glGetString(GL11.GL_VERSION));
-		world = new World(MAX_X,MAX_Y,MAX_Z);
+		world = World.getInstance();
+		iface = Interface.getInstance();
+		renderer = Renderer.getInstance();
+
 		p1 = new Player(world);
-		iface = new Interface(world, p1);
-		renderer = new Renderer(world, iface);
-        world.rend = renderer;
+		iface.setCurrentPlayer(p1);
 
         p1.spawnCreature(new SmartWalkingElem(world,
                 world.blockArray[world.xsize/2][world.ysize/2][world.zsize-1]));

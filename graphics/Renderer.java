@@ -23,9 +23,18 @@ public class Renderer {
 	private Sun sun;
 	private ArrayList<GraphicalEntity> gEntities;
 
-	public Renderer (World world, Interface iface) {
-		this.world = world;
-		this.iface = iface;
+	private static Renderer instance = null;
+
+	public static Renderer getInstance() {
+		if (instance == null) {
+			instance = new Renderer();
+		}
+		return instance;
+	}
+
+	private Renderer () {
+		this.world = World.getInstance();
+		this.iface = Interface.getInstance();
 		xChunkSize = world.xsize/GraphicalChunk.CHUNK_SIZE;
 		if (world.xsize%GraphicalChunk.CHUNK_SIZE!=0) xChunkSize++;
 		yChunkSize = world.ysize/GraphicalChunk.CHUNK_SIZE;

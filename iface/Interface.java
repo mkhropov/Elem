@@ -16,12 +16,23 @@ public class Interface {
 		camera.update(deltaT);
 	}
 
-	public Interface(World w, Player p){
-		current_layer = w.zsize-1;
-		camera = new Camera(w.xsize/2.0f, w.ysize/2.0f, (float) current_layer);
+	private static Interface instance = null;
+	public static Interface getInstance() {
+		if (instance == null) {
+			instance = new Interface();
+		}
+		return instance;
+	}
+
+	public void setCurrentPlayer(Player p) {
+		player = p;
+	}
+
+	private Interface(){
+		world = World.getInstance();
+		current_layer = world.zsize-1;
+		camera = new Camera(world.xsize/2.0f, world.ysize/2.0f, (float) current_layer);
 		input = new Input(this);
 		cursor = new Cursor();
-		player = p;
-		world = w;
 	}
 }

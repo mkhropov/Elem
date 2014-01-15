@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL11;
 
 import world.*;
 import physics.material.*;
+import graphics.Renderer;
 import stereometry.Point;
 import stereometry.Vector;
 
@@ -120,7 +121,7 @@ public class Elem extends Creature implements Worker{
             return false;
         else {
             b.m = null;
-            w.rend.updateBlock(b.x, b.y, b.z);
+            Renderer.getInstance().updateBlock(b.x, b.y, b.z);
             return true;
         }
     }
@@ -131,7 +132,7 @@ public class Elem extends Creature implements Worker{
             return false;
         else {
             b.m = new Substance(m, 1.d);
-            w.rend.updateBlock(b.x, b.y, b.z);
+            Renderer.getInstance().updateBlock(b.x, b.y, b.z);
             return true;
         }
     }

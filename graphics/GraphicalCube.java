@@ -1,6 +1,5 @@
 package graphics;
 
-import java.util.Random;
 import org.lwjgl.opengl.GL11;
 
 import physics.material.*;
@@ -8,7 +7,7 @@ import world.Block;
 
 class GraphicalCube {
 int x, y, z;
-Substance m;
+GraphicalSurface gs;
 double texU, texV; //Maybe different for each quad?
 boolean[] visible = {false, false, false, false, false, false};
 
@@ -23,13 +22,13 @@ GraphicalCube(Block b) {
 	x = b.x;
 	y = b.y;
 	z = b.z;
-	m = b.m;
-	texU = Math.sin(x+y+z) * m.m.gs.rand;
-	texV = Math.cos(x-y+z) * m.m.gs.rand;
+	gs = GSList.getInstance().get(b.m.m.gsid);
+	texU = Math.sin(x+y+z) * gs.rand;
+	texV = Math.cos(x-y+z) * gs.rand;
 }
 
 void draw() {
-	m.m.gs.bind();
+	gs.bind();
 
 	// draw quads
 	if (visible[BOTTOM]){
@@ -38,13 +37,13 @@ void draw() {
 		GL11.glTexCoord2d(texU,texV);
 		GL11.glVertex3d(this.x+0.0, this.y+0.0, this.z+0.0);
 		GL11.glNormal3d(0.0, 0.0, -1.0);
-		GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV);
+		GL11.glTexCoord2d(texU+1.0-gs.rand,texV);
 		GL11.glVertex3d(this.x+1.0, this.y+0.0, this.z+0.0);
 		GL11.glNormal3d(0.0, 0.0, -1.0);
-		GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV+1.0-m.m.gs.rand);
+		GL11.glTexCoord2d(texU+1.0-gs.rand,texV+1.0-gs.rand);
 		GL11.glVertex3d(this.x+1.0, this.y+1.0, this.z+0.0);
 		GL11.glNormal3d(0.0, 0.0, -1.0);
-		GL11.glTexCoord2d(texU,texV+1.0-m.m.gs.rand);
+		GL11.glTexCoord2d(texU,texV+1.0-gs.rand);
 		GL11.glVertex3d(this.x+0.0, this.y+1.0, this.z+0.0);
 		GL11.glEnd();
 	}
@@ -55,13 +54,13 @@ void draw() {
 		GL11.glTexCoord2d(texU,texV);
 		GL11.glVertex3d(this.x+0.0, this.y+0.0, this.z+0.0);
 		GL11.glNormal3d(-1.0, 0.0, 0.0);
-		GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV);
+		GL11.glTexCoord2d(texU+1.0-gs.rand,texV);
 		GL11.glVertex3d(this.x+0.0, this.y+1.0, this.z+0.0);
 		GL11.glNormal3d(-1.0, 0.0, 0.0);
-		GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV+1.0-m.m.gs.rand);
+		GL11.glTexCoord2d(texU+1.0-gs.rand,texV+1.0-gs.rand);
 		GL11.glVertex3d(this.x+0.0, this.y+1.0, this.z+1.0);
 		GL11.glNormal3d(-1.0, 0.0, 0.0);
-		GL11.glTexCoord2d(texU,texV+1.0-m.m.gs.rand);
+		GL11.glTexCoord2d(texU,texV+1.0-gs.rand);
 		GL11.glVertex3d(this.x+0.0, this.y+0.0, this.z+1.0);
 		GL11.glEnd();
 	}
@@ -72,13 +71,13 @@ void draw() {
 		GL11.glTexCoord2d(texU,texV);
 		GL11.glVertex3d(this.x+0.0, this.y+0.0, this.z+0.0);
 		GL11.glNormal3d(0.0, -1.0, 0.0);
-		GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV);
+		GL11.glTexCoord2d(texU+1.0-gs.rand,texV);
 		GL11.glVertex3d(this.x+1.0, this.y+0.0, this.z+0.0);
 		GL11.glNormal3d(0.0, -1.0, 0.0);
-		GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV+1.0-m.m.gs.rand);
+		GL11.glTexCoord2d(texU+1.0-gs.rand,texV+1.0-gs.rand);
 		GL11.glVertex3d(this.x+1.0, this.y+0.0, this.z+1.0);
 		GL11.glNormal3d(0.0, -1.0, 0.0);
-		GL11.glTexCoord2d(texU,texV+1.0-m.m.gs.rand);
+		GL11.glTexCoord2d(texU,texV+1.0-gs.rand);
 		GL11.glVertex3d(this.x+0.0, this.y+0.0, this.z+1.0);
 		GL11.glEnd();
 	}
@@ -89,13 +88,13 @@ void draw() {
 		GL11.glTexCoord2d(texU,texV);
 		GL11.glVertex3d(this.x+1.0, this.y+0.0, this.z+0.0);
 		GL11.glNormal3d(1.0, 0.0, 0.0);
-		GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV);
+		GL11.glTexCoord2d(texU+1.0-gs.rand,texV);
 		GL11.glVertex3d(this.x+1.0, this.y+1.0, this.z+0.0);
 		GL11.glNormal3d(1.0, 0.0, 0.0);
-		GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV+1.0-m.m.gs.rand);
+		GL11.glTexCoord2d(texU+1.0-gs.rand,texV+1.0-gs.rand);
 		GL11.glVertex3d(this.x+1.0, this.y+1.0, this.z+1.0);
 		GL11.glNormal3d(1.0, 0.0, 0.0);
-		GL11.glTexCoord2d(texU,texV+1.0-m.m.gs.rand);
+		GL11.glTexCoord2d(texU,texV+1.0-gs.rand);
 		GL11.glVertex3d(this.x+1.0, this.y+0.0, this.z+1.0);
 		GL11.glEnd();
 	}
@@ -106,13 +105,13 @@ void draw() {
 		GL11.glTexCoord2d(texU,texV);
 		GL11.glVertex3d(this.x+0.0, this.y+0.0, this.z+1.0);
 		GL11.glNormal3d(0.0, 0.0, 1.0);
-		GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV);
+		GL11.glTexCoord2d(texU+1.0-gs.rand,texV);
 		GL11.glVertex3d(this.x+1.0, this.y+0.0, this.z+1.0);
 		GL11.glNormal3d(0.0, 0.0, 1.0);
-		GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV+1.0-m.m.gs.rand);
+		GL11.glTexCoord2d(texU+1.0-gs.rand,texV+1.0-gs.rand);
 		GL11.glVertex3d(this.x+1.0, this.y+1.0, this.z+1.0);
 		GL11.glNormal3d(0.0, 0.0, 1.0);
-		GL11.glTexCoord2d(texU,texV+1.0-m.m.gs.rand);
+		GL11.glTexCoord2d(texU,texV+1.0-gs.rand);
 		GL11.glVertex3d(this.x+0.0, this.y+1.0, this.z+1.0);
 		GL11.glEnd();
 	}
@@ -123,13 +122,13 @@ void draw() {
 		GL11.glTexCoord2d(texU,texV);
 		GL11.glVertex3d(this.x+0.0, this.y+1.0, this.z+0.0);
 		GL11.glNormal3d(0.0, 1.0, 0.0);
-		GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV);
+		GL11.glTexCoord2d(texU+1.0-gs.rand,texV);
 		GL11.glVertex3d(this.x+1.0, this.y+1.0, this.z+0.0);
 		GL11.glNormal3d(0.0, 1.0, 0.0);
-		GL11.glTexCoord2d(texU+1.0-m.m.gs.rand,texV+1.0-m.m.gs.rand);
+		GL11.glTexCoord2d(texU+1.0-gs.rand,texV+1.0-gs.rand);
 		GL11.glVertex3d(this.x+1.0, this.y+1.0, this.z+1.0);
 		GL11.glNormal3d(0.0, 1.0, 0.0);
-		GL11.glTexCoord2d(texU,texV+1.0-m.m.gs.rand);
+		GL11.glTexCoord2d(texU,texV+1.0-gs.rand);
 		GL11.glVertex3d(this.x+0.0, this.y+1.0, this.z+1.0);
 		GL11.glEnd();
 	}

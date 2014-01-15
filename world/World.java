@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import stereometry.Vector;
 
 public class World {
+    public static int DEFAULT_XSIZE = 300;
+    public static int DEFAULT_YSIZE = 300;
+    public static int DEFAULT_ZSIZE = 20;
     public int xsize, ysize, zsize;
     public Block[][][] blockArray;
     public Wall[][][][] wallArray;
@@ -17,14 +20,22 @@ public class World {
     public Material[] material;
     public ArrayList<Creature> creature;
     public Pathfinder pf;
-    public Renderer rend;
 	public Vector gravity;
 
-    public World(int x, int y, int z) {
-        this.xsize = x;
-        this.ysize = y;
-        this.zsize = z;
-		
+	private static World instance = null;
+
+	public static World getInstance() {
+		if (instance == null) {
+			instance = new World();
+		}
+		return instance;
+	}
+
+    private World() {
+		this.xsize = World.DEFAULT_XSIZE;
+		this.ysize = World.DEFAULT_YSIZE;
+		this.zsize = World.DEFAULT_ZSIZE;
+
 		this.gravity = new Vector(0., 0., -4.9);
 
         this.blockArray = new Block[this.xsize][this.ysize][this.zsize];
