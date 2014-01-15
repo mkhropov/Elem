@@ -6,5 +6,7 @@ public class Stone extends Material {
         tFreeze = new Temperature(4000);
         tBoil = new Temperature(5000);
 		gsid = 1;
+        tBoil =  new Temperature(5000);
+		hardness = HARD_STONE;
 	}
 }

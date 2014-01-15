@@ -21,28 +21,32 @@ public class Slipfault extends Morph {
 
 
 // for now Image == Preimage. Mostly - not counting bottom (d)
+	@Override
     public final boolean inImage(Point p){
-        if ((p.z > f.p1.z)      ||
-            (!f.isUp(p))        ||
-            (p.z < f.p1.z-d)    ||
-            (f.distProj(p) > l) ||
-            (!f.isInside(p))      )
-            return false;
-        else
-            return true;
+		return  //(p.z <= f.p1.z)      &&
+	     		(f.isUp(p))          &&
+				(p.z >= f.p1.z-h-d)    &&
+				(f.distProj(p) <= l) &&
+				(f.isInside(p));
     }
 
+	@Override
     public final Point preimage(Point p){
-//        if (!inImage(p)){
-//            return p;
-//        }
+        if (!inImage(p)){
+            return p;
+        } 
         Point pi = new Point(p);
         double r = f.distProj(pi);
-        if(r<l)
-            pi.z += d*.5d*(Math.cos(r*r*r/(Math.PI*Math.PI))+1);
+        if(r<l){
+			double t = (Math.cos(Math.PI*r*r*r/(l*l*l))+1);
+			t *= .5d;
+			t *= d;
+		    pi.z += t;
+		}
         return pi;
     }
-
+/*
+	@Override
     public final Point image(Point p){
         if (!inImage(p)){
             return p;
@@ -51,6 +55,6 @@ public class Slipfault extends Morph {
         double r = f.distProj(ip);
         ip.z -= d*.5d*(Math.cos(r*r*r/(Math.PI*Math.PI))+1);
         return ip;
-    }
+    }*/
 }
 

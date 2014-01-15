@@ -15,15 +15,14 @@ import iface.Interface;
 import graphics.Renderer;
 
 import player.*;
-import creature.*;
 
 public class Game {
 	World world;
     Player p1;
 	Interface iface;
 	Renderer renderer;
-	public static final int MAX_X=25;
-	public static final int MAX_Y=25;
+	public static final int MAX_X=30;
+	public static final int MAX_Y=30;
 	public static final int MAX_Z=20;
 	public static final double SCALE=0.7;
 	int fps = 0;
@@ -66,8 +65,6 @@ public class Game {
 		p1 = new Player(world);
 		iface.setCurrentPlayer(p1);
 
-        p1.spawnCreature(new SmartWalkingElem(world,
-                world.blockArray[world.xsize/2][world.ysize/2][world.zsize-1]));
 		lastFPS = getTime();
 		lastTime = getTime();
 

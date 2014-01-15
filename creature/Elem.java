@@ -8,7 +8,8 @@ import physics.material.*;
 import graphics.Renderer;
 import stereometry.Point;
 import stereometry.Vector;
-
+import item.ItemTemplate;
+import item.Item;
 
 public class Elem extends Creature implements Worker{
     public static double size = 0.5;
@@ -120,18 +121,22 @@ public class Elem extends Creature implements Worker{
         if (!canReach(this.b, b))
             return false;
         else {
-            b.m = null;
-            Renderer.getInstance().updateBlock(b.x, b.y, b.z);
-            return true;
+			if (canDig(b)){
+				b.destroy(w);
+				return true;
+			}
+			return false;
         }
     }
 
     @Override
     public final boolean placeBlock(Block b, Material m){
-        if ((!canReach(this.b, b)) || (b.m != null))
+        if ((!canReach(this.b, b)) || (b.m != null) ||
+			!((item.type == Item.TYPE_BUILDABLE) && (item.m.equals(m))))
             return false;
         else {
             b.m = new Substance(m, 1.d);
+			item = null;
             Renderer.getInstance().updateBlock(b.x, b.y, b.z);
             return true;
         }

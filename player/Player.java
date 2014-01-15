@@ -4,17 +4,37 @@ import java.util.ArrayList;
 import world.*;
 import creature.*;
 import physics.material.*;
+import item.Item;
+import item.ItemTemplate;
+import physics.magics.*;
 
 public class Player {
-    World w;
+    public World w;
     public ArrayList<Order> order;
     public ArrayList<Creature> creature;
+	public ArrayList<Spell> spellbook;
+	public int mana;
 
     public Player(World w){
         this.w = w;
         this.order = new ArrayList<>();
         this.creature = new ArrayList<>();
+		this.spellbook = new ArrayList<>();
+		spellbook.add(0, new SpellSummon(this));
+		this.mana = 0;
     }
+	
+	public boolean cast(int i, Block b){
+		if (i>spellbook.size())
+			return false;
+		Spell s = spellbook.get(i);
+		if (mana>=s.cost()){
+			mana -= s.cost();
+			s.cast(b);
+			return true;
+		} else
+			return false;
+	}
 
     public void spawnCreature(Creature c){
         w.creature.add(c);
@@ -31,13 +51,14 @@ public class Player {
     }
 
     public void placeBuildOrder(Block b, Material m){
-        Order o = new Order(b, Order.ORDER_PLACE);
-        o.m = m;
+		ItemTemplate it = new ItemTemplate(Item.TYPE_BUILDABLE, m);
+		Order o = new Order(null, Order.ORDER_TAKE); o.it = it;
+		order.add(o);
+        o = new Order(b, Order.ORDER_BUILD); o.it = it; o.m = m;
         order.add(o);
     }
 
-    public void setOrderTaken(int i, Creature c){
-        Order o = order.get(i);
+    public void setOrderTaken(Order o, Creature c){
         c.order = o;
         o.taken = true;
         System.out.println(c+" took order "+o);
@@ -51,12 +72,13 @@ public class Player {
         System.out.println(c+" succesfuly did order "+o);
     }
 
-	public void setOrderDeclined(int i, Creature c){
-        Order o = order.get(i);
+	public void setOrderDeclined(Order o, Creature c){
 		c.declinedOrders.add(o);
+		c.order = null;
 		o.declined++;
+		System.out.println(c+" declined  order "+o);
 	}
-	
+
     public void setOrderCancelled(Order o, Creature c){
         o.taken = false;
         c.order = null;

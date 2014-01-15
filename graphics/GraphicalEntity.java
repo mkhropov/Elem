@@ -1,7 +1,6 @@
 package graphics;
 
 import world.Entity;
-import stereometry.Point;
 import physics.material.Material;
 
 import org.lwjgl.opengl.GL11;

@@ -6,5 +6,6 @@ public class Earth extends Material {
         tFreeze = new Temperature(3000);
         tBoil =  new Temperature(4000);
         gsid = 2;
+		hardness = HARD_EARTH;
 	}
 }

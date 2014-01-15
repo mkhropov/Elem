@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import stereometry.Vector;
 
 public class World {
-    public static int DEFAULT_XSIZE = 300;
-    public static int DEFAULT_YSIZE = 300;
+    public static int DEFAULT_XSIZE = 50;
+    public static int DEFAULT_YSIZE = 50;
     public static int DEFAULT_ZSIZE = 20;
     public int xsize, ysize, zsize;
     public Block[][][] blockArray;
@@ -54,17 +54,20 @@ public class World {
                     this.wallArray[i][j][k][2] = new Wall(i, j, k, WallOrient.RIGHT);
                 }
 
-        this.material = new Material[3];
-        this.material[0] = new Stone();
-        this.material[1] = new Earth();
-        this.material[2] = new Material();
+        this.material = new Material[Material.MATERIAL_MAX];
+        this.material[Material.MATERIAL_STONE] = new Stone();
+        this.material[Material.MATERIAL_EARTH] = new Earth();
+        this.material[Material.MATERIAL_NONE] = new Material();
+		this.material[Material.MATERIAL_BEDROCK] = new Bedrock();
+		this.material[Material.MATERIAL_MARBLE] = new Marble();
+		this.material[Material.MATERIAL_GRANITE] = new Granite();
 
-        this.biome = new BiomeRough();
+        this.biome = new BiomePlains();
         this.biome.fillWorld(this);
 
         this.pf = new Pathfinder(this);
 
-        this.creature = new ArrayList<Creature>();
+        this.creature = new ArrayList<>();
 //        System.out.printf("total %d creatures\n", creature.size());
 //        this.creature.add(new SmartWalkingElem(this, this.blockArray[0][0][zsize-1]));
 //        Creature cr = this.creature.get(0);

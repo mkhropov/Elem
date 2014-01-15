@@ -1,15 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package creature;
-
-/**
- *
- * @author Михаил
- */
 
 import world.*;
 import pathfind.*;
@@ -17,14 +6,14 @@ import player.*;
 import java.util.ArrayList;
 
 public class SmartElem extends Elem implements Worker {
-    
+
     public SmartElem(World w, Block b){
         super(w, b);
-        capable = new boolean[]{true, true, true};
+        capable = new boolean[]{true, true, true, true};
         declinedOrders = new ArrayList<>();
     }
 
-	void update(){
+	public void update(){
 	}
 
     boolean getNewOrder(){
@@ -46,8 +35,11 @@ public class SmartElem extends Elem implements Worker {
 							cond = new ConditionPlace(o.b);
 							break;
 						case Order.ORDER_DIG:
-						case Order.ORDER_PLACE:
+						case Order.ORDER_BUILD:
 							cond = new ConditionReach(o.b, this);
+							break;
+						case Order.ORDER_TAKE:
+							cond = new ConditionItem(o.it);
 							break;
 						default:
 							cond = new ConditionNone();
@@ -55,10 +47,10 @@ public class SmartElem extends Elem implements Worker {
 					}
 					path = w.pf.getPath(this, b, cond);
 				}
-				if (path != null) 
-					owner.setOrderTaken(i, this);
+				if (path != null)
+					owner.setOrderTaken(o, this);
 				else
-					owner.setOrderDeclined(i, this);
+					owner.setOrderDeclined(o, this);
 			}
         }
         return (i != owner.order.size());
@@ -70,35 +62,43 @@ public class SmartElem extends Elem implements Worker {
         switch (action){
 			case ACTION_NONE: break;
             case ACTION_MOVE:
-                p.add(mv, (double)dT);
                 if (p.dist(np) < speed*dT) {
 					p = np;
                     action = ACTION_NONE;
-				} else
+				} else {
+					p.add(mv, (double)dT);
                     return;
+				}
                 break;
 			case ACTION_FALL:
 				mv.add(w.gravity, dT/1000.);
-				p.add(mv, 1.);
-				if (p.dist(np) < mv.len()){
+				if (Math.abs(p.z - np.z) < mv.len()){
 					p = np;
 					action = ACTION_NONE;
 				} else {
+					p.add(mv, 1.);
 					return;
 				}
         }
         if (order != null) {
             if (path.size() == 0) {
-                boolean res = true;
-                if (order.type == 1){
-                    res = destroyBlock(order.b);
-					update();
-                } else if (order.type==2)
-                    res = placeBlock(order.b, order.m);
-			    if (res)
+                boolean res;
+				switch (order.type){
+					case Order.ORDER_MOVE:
+						res = this.b.equals(order.b); break;
+					case Order.ORDER_DIG:
+						res = destroyBlock(order.b); break;
+					case Order.ORDER_BUILD:
+						res = placeBlock(order.b, order.m); break;
+					case Order.ORDER_TAKE:
+						res = take(order.it); break;
+					default:
+						res = false; break;
+				}
+                if (res)
                     owner.setOrderDone(order, this);
                 else
-                    owner.setOrderCancelled(this.order, this);
+                    owner.setOrderDeclined(this.order, this);
             } else {
                 Block t = path.pop();
                 if (canMove(b, t)){
@@ -111,7 +111,7 @@ public class SmartElem extends Elem implements Worker {
         } else {
             if (!getNewOrder()){
 				//feel free to roam or make self-orders
-            } 
+            }
         }
     }
 }

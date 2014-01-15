@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import world.*;
 import player.*;
 import graphics.Renderer;
+import physics.material.Material;
+import item.Item;
+import item.ItemTemplate;
 
 import java.util.Stack;
 import stereometry.Point;
@@ -14,6 +17,8 @@ public class Creature extends Entity {
     public Stack<Block> path;
     Point np;
     double speed;
+	public double digStrength;
+	public Item item; //hand-held
     public Player owner;
     public Order order;
     public boolean capable[];
@@ -39,7 +44,8 @@ public class Creature extends Entity {
         setBlock(b, true);
         this.p = this.np;
         this.w = w;
-        this.capable = new boolean[]{false, false, false};
+		this.digStrength = Material.HARD_STEEL;
+        this.capable = new boolean[]{false, false, false, false};
 		Renderer.getInstance().addEntity(this);
     }
 
@@ -55,6 +61,24 @@ public class Creature extends Entity {
         return true;
     }
 
+	public boolean canDig(Block b){
+		return (b.m!= null) &&(b.m.digTime(digStrength) > 0.);
+	}
+
+	public boolean take(ItemTemplate it){
+		Item i;
+		int k;
+		for (k=0; k<b.item.size(); ++k){
+			i = b.item.get(k);
+			if (it.suits(i)){
+				item = i;
+				b.item.remove(i);
+				break;
+			}
+		}
+		return (k != b.item.size());
+	}
+
     public boolean move(Block b) {
         if (!canMove(this.b, b))
             return false;
@@ -66,6 +90,9 @@ public class Creature extends Entity {
 
     public void iterate(long dT){
     }
+
+	public void update(){
+	}
 
 	public void draw(){
 	}

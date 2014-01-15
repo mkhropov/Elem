@@ -1,3 +1,4 @@
 *.class
 output/
 tags
+*.swp

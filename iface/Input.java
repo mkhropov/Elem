@@ -5,6 +5,7 @@ import org.lwjgl.input.Mouse;
 
 import world.Block;
 import player.Order;
+import creature.SmartWalkingElem;
 
 public class Input {
 	Interface iface;
@@ -33,7 +34,7 @@ public class Input {
                         switch (orderMode){
                             case Order.ORDER_MOVE: iface.player.placeMoveOrder(where); break;
                             case Order.ORDER_DIG: iface.player.placeDigOrder(where); break;
-						    case Order.ORDER_PLACE: iface.player.placeBuildOrder(where, iface.world.material[0]); break;
+						    case Order.ORDER_BUILD: iface.player.placeBuildOrder(where, iface.world.material[0]); break;
                         }
 						System.out.println("Click at "+where.x+" "+where.y+" "+where.z);
 					} else {
@@ -44,38 +45,45 @@ public class Input {
 		}
 
 		while (Keyboard.next()) {
-			if (Keyboard.getEventKeyState()) {
+			if (Keyboard.getEventKeyState())
 				// Key pressed
-				if (Keyboard.getEventCharacter() == 'z') {
+				switch(Keyboard.getEventCharacter()){
+				case 'z':
 					if (iface.current_layer>0) {
 						 iface.current_layer--;
 						 iface.camera.repositionDelta(0.0f, 0.0f, -1.0f);
-					}
-				}
-				if (Keyboard.getEventCharacter() == 'x') {
+					};
+					break;
+				case 'x':
 					if (iface.current_layer<iface.world.zsize-1) {
 						iface.current_layer++;
 						iface.camera.repositionDelta(0.0f, 0.0f, 1.0f);
-					}
-				}
-				if (Keyboard.getEventCharacter() == 'q') {
+					};
+					break;
+				case 'q':
 					iface.camera.rotateLeft();
-				}
-				if (Keyboard.getEventCharacter() == 'e') {
+					break;
+				case 'e':
 					iface.camera.rotateRight();
-				}
-                if (Keyboard.getEventCharacter() == '1') {
+					break;
+				case 's':
+					if (where != null)
+						iface.player.cast(0, where);
+					break;
+                case '1':
                     System.out.println("MOVE order mode engaged");
                     orderMode = Order.ORDER_MOVE;
-                }
-                if (Keyboard.getEventCharacter() == '2') {
+					break;
+                case '2':
                     System.out.println("DIG order mode engaged");
                     orderMode = Order.ORDER_DIG;
-                }
-	            if (Keyboard.getEventCharacter() == '3') {
+					break;
+	            case '3':
                     System.out.println("BUILD order mode engaged");
-                    orderMode = Order.ORDER_PLACE;
-                }
+                    orderMode = Order.ORDER_BUILD;
+					break;
+				default:
+					break;
             }
 		}
 	}
