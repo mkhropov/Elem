@@ -15,6 +15,7 @@ public class Item extends Entity{
 	public static final int TYPE_BUILDABLE = 1;
 
 	public Item(Block b, double w){
+		super(b);
 		this.b = b;
 		this.c = null;
 		this.w = w;
@@ -22,6 +23,7 @@ public class Item extends Entity{
 	}
 
 	public Item(Creature c, double w){
+		super();
 		this.b = null;
 		this.c = c;
 		this.w = w;

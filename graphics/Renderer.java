@@ -74,7 +74,12 @@ public class Renderer {
 	}
 
 	public void removeEntity (Entity e) {
-		System.out.println("Renderer: Entity removal NYI!");
+		for (int i=0; i<gEntities.size(); i++) {
+			if (gEntities.get(i).e == e) {
+				gEntities.remove(i);
+				return;
+			}
+		}
 	}
 
 	void resetMaterial() {
@@ -137,7 +142,8 @@ public class Renderer {
 					gChunks[i][j][k].draw();
 			}
 		}
-		for (int i=0; i<gEntities.size(); i++) gEntities.get(i).draw();
-		iface.cursor.draw();
+		for (int i=0; i<gEntities.size(); i++)
+			if (gEntities.get(i).e.p.z<=current_layer)gEntities.get(i).draw();
+		iface.draw();
 	}
 }

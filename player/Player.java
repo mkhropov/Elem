@@ -23,7 +23,7 @@ public class Player {
 		spellbook.add(0, new SpellSummon(this));
 		this.mana = 0;
     }
-	
+
 	public boolean cast(int i, Block b){
 		if (i>spellbook.size())
 			return false;

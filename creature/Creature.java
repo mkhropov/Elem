@@ -73,6 +73,7 @@ public class Creature extends Entity {
 			if (it.suits(i)){
 				item = i;
 				b.item.remove(i);
+				EventHandler.getInstance().removeEntity(i);
 				break;
 			}
 		}
