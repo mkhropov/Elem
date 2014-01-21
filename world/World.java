@@ -7,7 +7,7 @@ import pathfind.Pathfinder;
 import graphics.Renderer;
 
 import java.util.ArrayList;
-import stereometry.Vector;
+import stereometry.*;
 
 public class World {
     public static int DEFAULT_XSIZE = 50;
@@ -16,11 +16,12 @@ public class World {
     public int xsize, ysize, zsize;
     public Block[][][] blockArray;
     public Wall[][][][] wallArray;
-    Biome biome;
+    public Biome biome;
     public Material[] material;
     public ArrayList<Creature> creature;
     public Pathfinder pf;
 	public Vector gravity;
+	public BoundBox bb;
 
 	private static World instance = null;
 
@@ -36,6 +37,8 @@ public class World {
 		this.ysize = World.DEFAULT_YSIZE;
 		this.zsize = World.DEFAULT_ZSIZE;
 
+		this.bb = new BoundBox(0, 0, 0, xsize, ysize, zsize);
+		
 		this.gravity = new Vector(0., 0., -4.9);
 
         this.blockArray = new Block[this.xsize][this.ysize][this.zsize];

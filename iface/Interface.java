@@ -53,8 +53,11 @@ public class Interface {
 		Button t = new Button(0, 0, 80, 80, "IconSummon",
 						new Command(Command.COMMAND_SPAWN));
 		buttons.add(t);
-		t = new Button(80, 0, 80, 80, "IconNotFound",
+		t = new Button(80, 0, 80, 80, "IconDig",
 						new Command(Command.COMMAND_DIG));
+		buttons.add(t);
+		t = new Button(160, 0, 80, 80, "IconBuild",
+						new Command(Command.COMMAND_BUILD));
 		buttons.add(t);
 	}
 

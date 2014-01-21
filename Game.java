@@ -51,8 +51,8 @@ public class Game {
 
 	public void start() {
 		try {
-		Display.setDisplayMode(new DisplayMode(800,600));
-		Display.create();
+			Display.setDisplayMode(new DisplayMode(800,600));
+			Display.create();
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 			System.exit(0);
@@ -62,7 +62,7 @@ public class Game {
 		iface = Interface.getInstance();
 		renderer = Renderer.getInstance();
 
-		p1 = new Player(world);
+		p1 = new Player();
 		iface.setCurrentPlayer(p1);
 
 		lastFPS = getTime();

@@ -16,8 +16,8 @@ public class Pointfold extends Morph {
         this.l = l;
         this.h = h;
         this.d = d;
+		this.bb = new BoundBox(p.x-l, p.y-l, p.z-h, p.x+l, p.y+l, p.z+1);
     }
-
 
 // for now Image == Preimage. Mostly - not counting bottom (d)
 	@Override
@@ -41,5 +41,10 @@ public class Pointfold extends Morph {
 		}
         return pi;
     }
+	
+	@Override
+	public final BoundBox affected(){
+		return bb;
+	}
 }
 

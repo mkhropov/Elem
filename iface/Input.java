@@ -100,6 +100,10 @@ public class Input {
 					if (where != null)
 						iface.player.cast(0, where);
 					break;
+				case 'a':
+					if (where != null)
+						iface.player.cast(1, where);
+					break;
                 case '1':
                     System.out.println("MOVE order mode engaged");
                     orderMode = Order.ORDER_MOVE;

@@ -9,18 +9,17 @@ import item.ItemTemplate;
 import physics.magics.*;
 
 public class Player {
-    public World w;
     public ArrayList<Order> order;
     public ArrayList<Creature> creature;
 	public ArrayList<Spell> spellbook;
 	public int mana;
 
-    public Player(World w){
-        this.w = w;
+    public Player(){
         this.order = new ArrayList<>();
         this.creature = new ArrayList<>();
 		this.spellbook = new ArrayList<>();
 		spellbook.add(0, new SpellSummon(this));
+		spellbook.add(1, new SpellSunstrike(this));
 		this.mana = 0;
     }
 
@@ -37,7 +36,7 @@ public class Player {
 	}
 
     public void spawnCreature(Creature c){
-        w.creature.add(c);
+        World.getInstance().creature.add(c);
         creature.add(c);
         c.owner = this;
     }
