@@ -3,6 +3,7 @@ package graphics;
 import world.World;
 import org.lwjgl.opengl.GL11;
 import iface.Interface;
+import iface.Cursor;
 
 import java.nio.FloatBuffer;
 import java.nio.ByteBuffer;
@@ -77,12 +78,25 @@ public class Renderer {
 		System.out.println("Renderer: Entity removal NYI!");
 	}
 
-	void resetMaterial() {
+	public void resetMaterial() {
 		ByteBuffer temp = ByteBuffer.allocateDirect(4*4);
 		temp.order(ByteOrder.nativeOrder());
 		FloatBuffer buffer = temp.asFloatBuffer();
 
 		float mat_ambient[] = { 0.5f, 0.5f, 0.5f, 0.0f };
+		buffer.put(mat_ambient); buffer.flip();
+		GL11.glMaterial(GL11.GL_FRONT, GL11.GL_AMBIENT, buffer);
+		GL11.glMaterial(GL11.GL_FRONT, GL11.GL_SPECULAR, buffer);
+		GL11.glMaterial(GL11.GL_FRONT, GL11.GL_DIFFUSE, buffer);
+		GL11.glMaterialf(GL11.GL_FRONT, GL11.GL_SHININESS, 50.0f);
+	}
+
+	public void resetMaterial(float f) {
+		ByteBuffer temp = ByteBuffer.allocateDirect(4*4);
+		temp.order(ByteOrder.nativeOrder());
+		FloatBuffer buffer = temp.asFloatBuffer();
+
+		float mat_ambient[] = { f, f, f, 0.0f };
 		buffer.put(mat_ambient); buffer.flip();
 		GL11.glMaterial(GL11.GL_FRONT, GL11.GL_AMBIENT, buffer);
 		GL11.glMaterial(GL11.GL_FRONT, GL11.GL_SPECULAR, buffer);
@@ -138,6 +152,7 @@ public class Renderer {
 			}
 		}
 		for (int i=0; i<gEntities.size(); i++) gEntities.get(i).draw();
-		iface.cursor.draw();
+		iface.cursor.draw3d();
+		iface.draw();
 	}
 }

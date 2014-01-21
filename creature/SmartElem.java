@@ -46,10 +46,11 @@ public class SmartElem extends Elem implements Worker {
 							break;
 					}
 					path = w.pf.getPath(this, b, cond);
-				}
-				if (path != null)
-					owner.setOrderTaken(o, this);
-				else
+					if (path != null)
+						owner.setOrderTaken(o, this);
+					else
+						owner.setOrderDeclined(o, this);
+			} else
 					owner.setOrderDeclined(o, this);
 			}
         }
