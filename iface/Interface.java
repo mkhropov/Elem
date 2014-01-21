@@ -59,6 +59,9 @@ public class Interface {
 	}
 
 	public void draw(){
+		for (int i=0; i<player.order.size(); i++){
+			drawOrder(player.order.get(i));
+		}
 // entering 2d drawing mode
         GL11.glViewport(0,0,800,600);
 //        glMatrixMode(GL_MODELVIEW);
@@ -83,13 +86,6 @@ public class Interface {
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
         GL11.glLoadIdentity();
 		camera.forceUpdate(0);
-	}
-
-	public void draw() {
-		for (int i=0; i<player.order.size(); i++){
-			drawOrder(player.order.get(i));
-		}
-		cursor.draw();
 	}
 
 	public void drawOrder(Order o) {

@@ -156,9 +156,9 @@ public class Renderer {
 					gChunks[i][j][k].draw();
 			}
 		}
-		iface.cursor.draw3d();
 		for (int i=0; i<gEntities.size(); i++)
 			if (gEntities.get(i).e.p.z<=current_layer)gEntities.get(i).draw();
+		iface.cursor.draw3d();
 		iface.draw();
 	}
 }
