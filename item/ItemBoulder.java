@@ -3,6 +3,7 @@ package item;
 import physics.material.Material;
 import world.Block;
 import creature.Creature;
+import world.EventHandler;
 
 public class ItemBoulder extends Item{
 
@@ -13,6 +14,9 @@ public class ItemBoulder extends Item{
 		this.type = Item.TYPE_BUILDABLE;
 		this.m = m;
 		this.scale = Math.cbrt(w);
+		this.mid = graphics.ModelList.getInstance().findId("boulder");
+		this.gsid = m.gsid;
+		EventHandler.getInstance().addEntity(this);
 	}
 
 	public ItemBoulder(Creature c, double w, Material m){

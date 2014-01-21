@@ -8,15 +8,18 @@ import org.lwjgl.opengl.GL11;
 import world.World;
 
 public class GraphicalEntity {
-	private Entity e;
+	Entity e;
 	Model m;
+	GraphicalSurface gs;
 
 	public GraphicalEntity (Entity entity, World w) {
 		e = entity;
-		m = new graphics.models.Elemental();
+		m = ModelList.getInstance().get(entity.mid);
+		gs = GSList.getInstance().get(entity.gsid);
 	}
 
-	void draw() { //Placeholder till we get models
+	void draw() {
+		gs.bind();
 		m.draw(e.p.x, e.p.y, e.p.z);
 	}
 }

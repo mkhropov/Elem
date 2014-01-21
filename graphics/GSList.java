@@ -21,6 +21,17 @@ public class GSList {
 		add("marble", 0.5);
 		add("granite", 0.5);
 		add("red_granite", 0.5);
+		add("selection", 0.0);
+	}
+
+	public int findId(String name) {
+		int res = 0;
+		for (int i=0; i<list.size(); i++){
+			if (list.get(i).name == name){
+				res = i;
+			}
+		}
+		return res;
 	}
 
 	public void add(String Name, double Rand) {
