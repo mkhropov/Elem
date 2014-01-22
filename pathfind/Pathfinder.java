@@ -8,7 +8,6 @@ public class Pathfinder {
     int xsize;
     int ysize;
     int zsize;
-    World w;
     double[][][] d;
     ArrayList<Block> currLayer;
     ArrayList<Block> nextLayer;
@@ -20,13 +19,20 @@ public class Pathfinder {
       1.73, 1.73, 1.73, 1.73
     };
 
-    public Pathfinder(World w){
-        this.xsize = w.xsize;
-        this.ysize = w.ysize;
-        this.zsize = w.zsize;
-        this.w = w;
+	private static Pathfinder instance = null;
 
-        d = new double[w.xsize][w.ysize][w.zsize];
+	public static Pathfinder getInstance(){
+		if (instance == null)
+			instance = new Pathfinder();
+		return instance;
+	}
+
+    private Pathfinder(){
+        this.xsize = World.DEFAULT_XSIZE;
+        this.ysize = World.DEFAULT_YSIZE;
+        this.zsize = World.DEFAULT_ZSIZE;
+
+        d = new double[xsize][ysize][zsize];
     }
 
     public void clear(){
@@ -49,27 +55,13 @@ public class Pathfinder {
         Stack<Block> q = new Stack<>();
         double D, Dn, Dt;
 		boolean found = false;
-/*		if (b1.equals(b2)){
-			if (inclusive){
-				q.add(b1);
-				return q;
-			} else {
-				near = b1.nearest(w);
-				for (j=0; j<near.size(); ++j){
-                    n = near.get(j);
-                    if (c.canReach(n, b1)){
-						q.add(n);
-                        return q;
-                    }
-                }
-				return null;
-			}
-		}*/
+
         clear();
         nextLayer = new ArrayList<>(1);
         nextLayer.add(b);
         d[b.x][b.y][b.z] = 0.d;
         t = 0;
+
         while ((!found) && (t<1000)){
             currLayer = nextLayer;
             nextLayer = new ArrayList<>(currLayer.size());
@@ -81,7 +73,7 @@ public class Pathfinder {
 					k = m;
 				}
                 D = d[m.x][m.y][m.z];
-                near = m.nearest(w);
+                near = m.nearest();
                 for (j=0; j<near.size(); ++j){
                     n = near.get(j);
                     if (n==null) continue;
@@ -103,7 +95,7 @@ public class Pathfinder {
         q.push(m);
         D = d[m.x][m.y][m.z];
         while(D>0.5d){
-            near = m.nearest(w);
+            near = m.nearest();
             k = m;
             for (j=0; j<near.size(); ++j){
                 n = near.get(j);

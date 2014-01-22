@@ -56,7 +56,7 @@ public abstract class Biome {
 	int blockCover(Block b, World w){
 		int t = 0;
 		for (int i=0; i<nearInd.length; ++i)
-			if (b.nearFits(nearInd[i], w))
+			if (w.isIn(b, nearInd[i]))
 				t += (w.blockArray[b.x+nearInd[i][0]]
 								  [b.y+nearInd[i][1]]
 								  [b.z+nearInd[i][2]].m != null) ?

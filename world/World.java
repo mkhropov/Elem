@@ -38,7 +38,7 @@ public class World {
 		this.zsize = World.DEFAULT_ZSIZE;
 
 		this.bb = new BoundBox(0, 0, 0, xsize, ysize, zsize);
-		
+
 		this.gravity = new Vector(0., 0., -4.9);
 
         this.blockArray = new Block[this.xsize][this.ysize][this.zsize];
@@ -68,20 +68,7 @@ public class World {
         this.biome = new BiomePlains();
         this.biome.fillWorld(this);
 
-        this.pf = new Pathfinder(this);
-
         this.creature = new ArrayList<>();
-//        System.out.printf("total %d creatures\n", creature.size());
-//        this.creature.add(new SmartWalkingElem(this, this.blockArray[0][0][zsize-1]));
-//        Creature cr = this.creature.get(0);
-//        System.out.printf("0: %d %d %d\n", cr.b.x, cr.b.y, cr.b.z);
-//        cr = this.creature.get(1);
-//        System.out.printf("0: %d %d %d\n", cr.b.x, cr.b.y, cr.b.z);
-//        this.creature.add(new SmartWalkingElem(this, this.blockArray[xsize-1][ysize-1][zsize-1]));
- //       System.out.printf("total %d creatures\n", creature.size());
-//        this.creature.get(0).path = pf.getPath(this.creature.get(0),
-//                                           this.creature.get(0).b,
-//                                           this.creature.get(1).b);
     }
 
     public void iterate(long dT){
@@ -90,6 +77,13 @@ public class World {
             creature.get(i).iterate(dT);
         }
     }
+
+	public boolean isIn(Block b, int[] offset){
+	    if ((b.x+offset[0] < 0) || (b.x+offset[0] >= xsize)) return false;
+		if ((b.y+offset[1] < 0) || (b.y+offset[1] >= ysize)) return false;
+		if ((b.z+offset[2] < 0) || (b.z+offset[2] >= zsize)) return false;
+		return true;
+	}
 
 	public boolean empty(int x, int y, int z){
 		if ((x<0) || (x>=xsize)) return true;

@@ -45,7 +45,7 @@ public class SmartElem extends Elem implements Worker {
 							cond = new ConditionNone();
 							break;
 					}
-					path = w.pf.getPath(this, b, cond);
+					path = Pathfinder.getInstance().getPath(this, b, cond);
 					if (path != null)
 						owner.setOrderTaken(o, this);
 					else

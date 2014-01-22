@@ -27,15 +27,6 @@ public class Block {
 		,{-1, 0, -1}, {1, 1, 0}, {1, 0, 1}
 		,{-1, -1, 1}, {-1, 1, -1}, {-1, 1, 1}, {1, -1, -1}
 		,{1, -1, 1}, {1, 1, -1}, {1, 1, 1}, {-1, -1, -1}};
-	 /* public static int[][] nearInd = new int[][]
-		{{1, 1, 0}, {1, 0, 1}, {1, 0, 0}, {1, 0, -1}
-		,{1, -1, 0}, {0, 1, 1}, {0, 1, 0}, {0, 1, -1}
-		,{0, 0, 1}, {0, 0, -1}, {0, -1, 1}, {0, -1, 0}
-		,{0, -1, -1}, {-1, 1, 0}, {-1, 0, 1}, {-1, 0, 0}
-		,{-1, 0, -1}, {-1, -1, 0}};*/
-	/*public static int[][] nearInd = new int[][]
-		{{1, 0, 0}, {0, 1, 0}, {0, 0, 1}, {0, 0, -1},
-		 {0, -1, 0}, {-1, 0, 0}};*/
 
 	public Block(int x, int y, int z) {
 				this.x = x;
@@ -67,13 +58,6 @@ public class Block {
 	        w.blockArray[x][y][z+1].update(w);
 	}
 
-	public boolean nearFits(int[] ind, World w){
-		if ((x+ind[0]<0) || (x+ind[0]>=w.xsize)) return false;
-		if ((y+ind[1]<0) || (y+ind[1]>=w.ysize)) return false;
-		if ((z+ind[2]<0) || (z+ind[2]>=w.zsize)) return false;
-		return true;
-	}
-
 	public void update(World w){
 		for (int i=0; i<creature.size(); ++i)
 			creature.get(i).update();
@@ -81,10 +65,11 @@ public class Block {
 			item.get(i).update(w);
 	}
 
-	public ArrayList<Block> nearest(World w){
+	public ArrayList<Block> nearest(){
+		World w = World.getInstance();
 		ArrayList<Block> l = new ArrayList<>(nearInd.length);
 		for (int i=0; i<nearInd.length; ++i)
-			if (nearFits(nearInd[i], w))
+			if (w.isIn(this, nearInd[i]))
 				l.add(w.blockArray[x+nearInd[i][0]][y+nearInd[i][1]][z+nearInd[i][2]]);
 			else
 				l.add(null);
