@@ -83,7 +83,8 @@ public class World {
     }
 
     public void iterate(long dT){
-		ManaField.getInstance().iterate(dT);
+		if (Renderer.getInstance().draw_mana)
+			ManaField.getInstance().iterate(dT);
         for (int i=0; i<creature.size(); ++i){
 //            System.out.printf("Iterate #%d\n", i);
             creature.get(i).iterate(dT);
