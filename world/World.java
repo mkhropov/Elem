@@ -1,6 +1,6 @@
 package world;
 
-import geomorph.*;
+import generation.*;
 import physics.material.*;
 import creature.*;
 import pathfind.Pathfinder;
@@ -9,10 +9,12 @@ import graphics.Renderer;
 import java.util.ArrayList;
 import stereometry.*;
 
+import physics.mana.*;
+
 public class World {
-    public static int DEFAULT_XSIZE = 50;
-    public static int DEFAULT_YSIZE = 50;
-    public static int DEFAULT_ZSIZE = 20;
+    public static int DEFAULT_XSIZE = 30;
+    public static int DEFAULT_YSIZE = 30;
+    public static int DEFAULT_ZSIZE = 30;
     public int xsize, ysize, zsize;
     public Block[][][] blockArray;
     public Wall[][][][] wallArray;
@@ -69,9 +71,19 @@ public class World {
         this.biome.fillWorld(this);
 
         this.creature = new ArrayList<>();
+
+		ManaField.getInstance().addSource(
+			new ManaSource(blockArray[20][10][10],
+				new Vector(1., 1., 1.),
+				2.));
+/*		ManaField.getInstance().addSource(
+            new ManaSource(blockArray[10][20][15],
+				new Vector(1., 1., 1.),
+				5.));*/
     }
 
     public void iterate(long dT){
+		ManaField.getInstance().iterate(dT);
         for (int i=0; i<creature.size(); ++i){
 //            System.out.printf("Iterate #%d\n", i);
             creature.get(i).iterate(dT);
@@ -85,6 +97,12 @@ public class World {
 		return true;
 	}
 
+	public boolean isIn(double x, double y, double z){
+	    if ((x < 0) || (x >= xsize)) return false;
+		if ((y < 0) || (y >= ysize)) return false;
+		if ((z < 0) || (z >= zsize)) return false;
+		return true;
+	}
 	public boolean empty(int x, int y, int z){
 		if ((x<0) || (x>=xsize)) return true;
 		if ((y<0) || (y>=ysize)) return true;

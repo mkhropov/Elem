@@ -7,6 +7,7 @@ import world.Block;
 import player.Order;
 import creature.SmartWalkingElem;
 import physics.material.Material;
+import graphics.Renderer;
 
 public class Input {
 	Interface iface;
@@ -103,6 +104,10 @@ public class Input {
 				case 'a':
 					if (where != null)
 						iface.player.cast(1, where);
+					break;
+				case 'm':
+					Renderer.getInstance().draw_mana =
+						 !Renderer.getInstance().draw_mana;
 					break;
                 case '1':
                     System.out.println("MOVE order mode engaged");
