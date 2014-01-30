@@ -1,6 +1,6 @@
 package physics.magics;
 
-import geomorph.Pointfold;
+import generation.morphs.Pointfold;
 import graphics.Renderer;
 import player.Player;
 import stereometry.BoundBox;
@@ -9,20 +9,20 @@ import world.Block;
 import world.World;
 
 public class SpellSunstrike extends Spell{
-	
+
 	static{
 		iconName = "IconSunstrike";
 	}
-	
+
 	public SpellSunstrike(Player p){
 		super(p);
 	}
-	
+
 	@Override
 	public int cost(){
 		return 0;
 	}
-	
+
 	@Override
 	public void cast(Block b){
 		World w = World.getInstance();

@@ -1,4 +1,4 @@
-package geomorph;
+package generation;
 
 import java.util.Random;
 import physics.Temperature;
@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import stereometry.*;
 import world.*;
 import static world.Block.nearInd;
+import generation.morphs.Morph;
 
 public abstract class Biome {
 

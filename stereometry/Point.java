@@ -32,19 +32,19 @@ public class Point {
     public Point(Point p, Vector v){
         this(p.x+v.x, p.y+v.y, p.z+v.z);
     }
-    
+
     public Point(Block b){
         this(b.x, b.y, b.z);
     }
-    
+
     public void add(Vector v, double alpha){
         x += alpha*v.x; y += alpha*v.y; z += alpha*v.z;
     }
-    
+
     public double dist(Point p){
         return Math.sqrt((x-p.x)*(x-p.x)+ (y-p.y)*(y-p.y)+(z-p.z)*(z-p.z));
     }
-	
+
 	public double distProj(Point p){
         return Math.sqrt((x-p.x)*(x-p.x)+ (y-p.y)*(y-p.y));
     }

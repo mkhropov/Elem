@@ -59,7 +59,7 @@ public class Elem extends Creature implements Worker{
             pb = this.b;
             setBlock(b, true);
             mv = new Vector(p, np);
-            if (!mv.zero()){
+            if (!mv.isZero()){
                 mv.normalize();
                 mv.scale(speed);
             }

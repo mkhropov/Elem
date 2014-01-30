@@ -1,4 +1,4 @@
-package geomorph;
+package generation.morphs;
 
 import stereometry.*;
 /* Slipfault is a fault-type extension geomorphing, when the fault angle

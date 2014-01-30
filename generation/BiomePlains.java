@@ -1,4 +1,4 @@
-package geomorph;
+package generation;
 
 import java.util.Date;
 import java.util.Random;
@@ -6,6 +6,7 @@ import world.*;
 import stereometry.*;
 import physics.Temperature;
 import physics.material.Material;
+import generation.morphs.*;
 
 public class BiomePlains extends Biome {
 

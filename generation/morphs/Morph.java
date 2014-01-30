@@ -1,9 +1,9 @@
-package geomorph;
+package generation.morphs;
 
 import stereometry.*;
 
 abstract public class Morph {
-	
+
 	public BoundBox bb;
 
     public abstract boolean inImage(Point p);

@@ -1,4 +1,4 @@
-package geomorph;
+package generation.morphs;
 
 import stereometry.*;
 /* Pointfold is a fold-type geomorphing, when the fold

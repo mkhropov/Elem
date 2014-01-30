@@ -11,16 +11,16 @@ public class Vector {
     public double z;
 
 	public Vector(Vector v){
-		this.p1 = v.p1;
-		this.p2 = v.p2;
+		this.p1 = new Point(v.p1);
+		this.p2 = new Point(v.p2);
 		this.x = v.x;
 		this.y = v.y;
 		this.z = v.z;
 	}
 
     public Vector(Point p1, Point p2){
-        this.p1 = p1;
-        this.p2 = p2;
+        this.p1 = new Point(p1);
+        this.p2 = new Point(p2);
         this.x = p2.x-p1.x;
         this.y = p2.y-p1.y;
         this.z = p2.z-p1.z;
@@ -51,10 +51,9 @@ public class Vector {
     }
 
     public void scale(double a){
-        x *= a;
-        y *= a;
-        z *= a;
-        p2 = new Point(p1, this);
+        x *= a; p2.x = p1.x+x;
+        y *= a; p2.y = p1.y+y;
+        z *= a; p2.z = p1.z+z;
     }
 
     public double dot(Vector v){
@@ -79,27 +78,28 @@ public class Vector {
     }
 
     public void normalize(){
+		if (isZero())
+			return;
         double a = this.len();
-        x /= a;
-        y /= a;
-        z /= a;
-        p2 = new Point(p1.x+x, p1.y+y, p1.z+z);
+        x /= a; p2.x = p1.x+x;
+        y /= a; p2.y = p1.y+y;
+        z /= a; p2.z = p1.z+z;
     }
-    
-    public boolean zero(){
+
+    public boolean isZero(){
         return (x==0.) && (y==0.) && (z==0.);
     }
-    
+
     public void toZero(){
-        x = 0.;
-        y = 0.;
-        z = 0.;
+        x = 0.; p2.x = p1.x;
+        y = 0.; p2.y = p1.y;
+        z = 0.; p2.z = p1.z;
     }
-	
+
 	public void add(Vector v, double a){
-		this.x += v.x*a;
-		this.y += v.y*a;
-		this.z += v.z*a;
+		x += v.x*a; p2.x = p1.x+x;
+		y += v.y*a; p2.y = p1.y+y;
+		z += v.z*a; p2.z = p1.z+z;
 	}
 }
 

@@ -1,17 +1,17 @@
-package geomorph;
+package generation.morphs;
 
 import stereometry.*;
-/* Wavefold is a fold-type geomorphing, when the fold
- * is linear and vertically directed, and goes both up and down
+/* Linefold is a fold-type geomorphing, when the fold
+ * is linear and vertically directed
  */
 
-public class Wavefold extends Morph {
+public class Linefold extends Morph {
     Front f; // the fold line
     double l; // morph length
 	double h; //maximum depth of morph applying
     double d; // depth the plate has dropped down/moved up in the centre
 
-    public Wavefold(Front f, double l, double h, double d){
+    public Linefold(Front f, double l, double h, double d){
         this.f = f;
         this.l = l;
         this.h = h;
@@ -34,13 +34,11 @@ public class Wavefold extends Morph {
         } 
         Point pi = new Point(p);
         double r = this.f.distProj(pi);
-		double sig = (f.isUp(pi))?(-1.):(1.);
         if(r<l){
-			double t = Math.abs(Math.sin(Math.PI*r/(l*2))-
-								Math.signum(Math.PI*r/(l*2)));
-			t *= 2.2d*d;
-			t *= Math.sin(Math.PI*r/l);
-		    pi.z = pi.z+sig*t;
+			double t = (Math.cos(Math.PI*r*r*r/(l*l*l))+1);
+			t *= .49d;
+			t *= d;
+		    pi.z += t;
 		}
         return pi;
     }

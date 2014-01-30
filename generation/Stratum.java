@@ -1,4 +1,4 @@
-package geomorph;
+package generation;
 
 import world.*;
 import java.util.Random;

@@ -1,6 +1,4 @@
-package geomorph;
-
-import stereometry.*;
+package stereometry;
 
 public class Front extends Vector {
 
