@@ -14,6 +14,7 @@ import java.util.Comparator;
 
 import world.Entity;
 
+import physics.mana.ManaField;
 
 public class Renderer {
 	private World world;
@@ -23,6 +24,8 @@ public class Renderer {
 	private int xChunkSize, yChunkSize;
 	private Sun sun;
 	private ArrayList<GraphicalEntity> gEntities;
+
+	public boolean draw_mana;
 
 	private static Renderer instance = null;
 
@@ -36,6 +39,7 @@ public class Renderer {
 	private Renderer () {
 		this.world = World.getInstance();
 		this.iface = Interface.getInstance();
+		this.draw_mana = false; //cubes only
 		xChunkSize = world.xsize/GraphicalChunk.CHUNK_SIZE;
 		if (world.xsize%GraphicalChunk.CHUNK_SIZE!=0) xChunkSize++;
 		yChunkSize = world.ysize/GraphicalChunk.CHUNK_SIZE;
@@ -44,8 +48,10 @@ public class Renderer {
 		for (int i=0; i<xChunkSize; i++)
 		for (int j=0; j<yChunkSize; j++)
 		for (int k=0; k<world.zsize; k++) {
-			gChunks[i][j][k] = new GraphicalChunk(world, i*GraphicalChunk.CHUNK_SIZE,
-					j*GraphicalChunk.CHUNK_SIZE, k, GraphicalChunk.MODE_TOP_VIEW);
+			gChunks[i][j][k] = new GraphicalChunk(world,
+								i*GraphicalChunk.CHUNK_SIZE,
+								j*GraphicalChunk.CHUNK_SIZE,
+								k, GraphicalChunk.MODE_TOP_VIEW);
 		}
 		gChunksFull = new GraphicalChunk[xChunkSize][yChunkSize][world.zsize];
 		for (int i=0; i<xChunkSize; i++)
@@ -143,18 +149,27 @@ public class Renderer {
 		Arrays.sort(pos, COMPARE_1);
 		startY = Math.max(pos[0][1],0)/GraphicalChunk.CHUNK_SIZE;
 		endY = Math.min(pos[7][1]/GraphicalChunk.CHUNK_SIZE+1,yChunkSize);
-		for (int k=current_layer; k>=0; k--) {
-			if (k==current_layer) {
-				GL11.glEnable(GL11.GL_LIGHT1);
-				for (int i=startX; i<endX; i++)
-				for (int j=startY; j<endY; j++)
-					gChunksFull[i][j][k].draw();
-				GL11.glDisable(GL11.GL_LIGHT1);
-			} else {
-				for (int i=startX; i<endX; i++)
-				for (int j=startY; j<endY; j++)
-					gChunks[i][j][k].draw();
+		if (!draw_mana){
+			for (int k=current_layer; k>=0; k--) {
+				if (k==current_layer) {
+					GL11.glEnable(GL11.GL_LIGHT1);
+					for (int i=startX; i<endX; i++)
+					for (int j=startY; j<endY; j++)
+						gChunksFull[i][j][k].draw();
+					GL11.glDisable(GL11.GL_LIGHT1);
+				} else {
+					for (int i=startX; i<endX; i++)
+					for (int j=startY; j<endY; j++)
+						gChunks[i][j][k].draw();
+				}
 			}
+		} else {
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+			GL11.glEnable(GL11.GL_COLOR_MATERIAL);
+			GL11.glLineWidth(1);
+			GL11.glColor3d(1., 1., .8);
+			ManaField.getInstance().draw();
+			GL11.glDisable(GL11.GL_COLOR_MATERIAL);
 		}
 		for (int i=0; i<gEntities.size(); i++)
 			if (gEntities.get(i).e.p.z<=current_layer)gEntities.get(i).draw();
