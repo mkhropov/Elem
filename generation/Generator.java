@@ -41,7 +41,7 @@ public class Generator {
 
 	public void generate(){
 		World w = World.getInstance();
-		biomes.add(new Biome(w.xsize/2, w.ysize/2, w.xsize/2));
+		biomes.add(new Plains(w.xsize/2, w.ysize/2, 2*w.xsize, 10));
 		for (Biome b : biomes){
 			b.generate();
 			for (Morph m : b.morphs)
