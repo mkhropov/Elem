@@ -35,7 +35,7 @@ public class ManaField {
 		for (int i=0; i<MF_PARTICLES; ++i)
 			particles[i] = new ManaParticle();
 		gen = new Random();
-//		this.recalc();
+		this.recalc();
 	}
 
 	public void recalc(){
