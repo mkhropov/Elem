@@ -33,7 +33,7 @@ public class SpellSunstrike extends Spell{
 			return;
 		Block t = w.blockArray[b.x][b.y][h];
 		Pointfold f = new Pointfold(new Point(t), 4., 10., 1.1);
-		w.biome.applyMorph(f, w);
+//		w.biome.applyMorph(f, w);
 		BoundBox bb = f.bb.intersect(w.bb);
 		for (int i = (int)Math.ceil(bb.p1.x); i < (int)Math.floor(bb.p2.x); ++i)
 			for (int j = (int)Math.ceil(bb.p1.y); j < (int)Math.floor(bb.p2.y); ++j)
