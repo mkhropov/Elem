@@ -59,6 +59,7 @@ public class Game {
 		}
 		System.out.println("Display created. OpenGL version: " + GL11.glGetString(GL11.GL_VERSION));
 		world = World.getInstance();
+		world.init();
 		iface = Interface.getInstance();
 		renderer = Renderer.getInstance();
 

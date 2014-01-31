@@ -67,20 +67,24 @@ public class World {
 		this.material[Material.MATERIAL_MARBLE] = new Marble();
 		this.material[Material.MATERIAL_GRANITE] = new Granite();
 
-        this.biome = new BiomePlains();
-        this.biome.fillWorld(this);
+//        this.biome = new BiomePlains();
+//        this.biome.fillWorld(this);
 
         this.creature = new ArrayList<>();
+    }
 
-		ManaField.getInstance().addSource(
-			new ManaSource(blockArray[20][10][10],
-				new Vector(1., 1., 1.),
-				2.));
+	public void init(){
+//		ManaField.getInstance().addSource(
+//			new ManaSource(blockArray[20][10][10],
+//				new Vector(1., 1., 1.),
+//				2.));
 /*		ManaField.getInstance().addSource(
             new ManaSource(blockArray[10][20][15],
 				new Vector(1., 1., 1.),
 				5.));*/
-    }
+		Generator.getInstance().generate();
+		Generator.getInstance().apply();
+	}
 
     public void iterate(long dT){
 		if (Renderer.getInstance().draw_mana)
