@@ -41,7 +41,7 @@ public class Generator {
 
 	public void generate(){
 		World w = World.getInstance();
-		biomes.add(new Plains(w.xsize/2, w.ysize/2, 2*w.xsize, 10));
+		biomes.add(new Hills(w.xsize/2, w.ysize/2, 2*w.xsize, 15));
 		for (Biome b : biomes){
 			b.generate();
 			for (Morph m : b.morphs)
@@ -66,7 +66,7 @@ public class Generator {
 						b.m = new Substance(getMaterial(b), 1.);
 //					System.out.print(m+" ");
 				}
-//		erosion(w, 2000., w.material[Material.MATERIAL_EARTH]);
+		erosion(w, 2000., w.material[Material.MATERIAL_EARTH]);
 	}
 
 	public Material getMaterial(Block b) {
@@ -77,7 +77,7 @@ public class Generator {
 		Point p = new Point(b);
 		int i;
 		for (i=0; i<morphs.size(); i++)
-			p = morphs.get(i).preimage(p);
+			morphs.get(i).preimage(p);
 		if (p.z < 1.)
 			return World.getInstance().material[Material.MATERIAL_BEDROCK];
 		i = 0;

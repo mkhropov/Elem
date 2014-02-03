@@ -22,27 +22,25 @@ public class Wavefold extends Morph {
 // for now Image == Preimage. Mostly - not counting bottom (d)
 	@Override
     public final boolean inImage(Point p){
-		return  (p.z >= this.f.p1.z-h+d)    &&
+		return  (p.z >= this.f.p1.z-h)    &&
 				(f.isInside(p))          &&
 				(f.distProj(p) <= l);
     }
 
 	@Override
-    public final Point preimage(Point p){
+    public final void preimage(Point p){
         if (!inImage(p)){
-            return p;
-        } 
-        Point pi = new Point(p);
-        double r = this.f.distProj(pi);
-		double sig = (f.isUp(pi))?(-1.):(1.);
+            return;
+        }
+        double r = this.f.distProj(p);
+		double sig = (f.isUp(p))?(-1.):(1.);
         if(r<l){
 			double t = Math.abs(Math.sin(Math.PI*r/(l*2))-
 								Math.signum(Math.PI*r/(l*2)));
 			t *= 2.2d*d;
 			t *= Math.sin(Math.PI*r/l);
-		    pi.z = pi.z+sig*t;
+		    p.z -= sig*t;
 		}
-        return pi;
     }
 }
 

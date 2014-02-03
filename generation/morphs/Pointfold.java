@@ -17,31 +17,32 @@ public class Pointfold extends Morph {
         this.h = h;
         this.d = d;
 		this.bb = new BoundBox(p.x-l, p.y-l, p.z-h, p.x+l, p.y+l, p.z+1);
+		//FIXME actually it's not bounded up
     }
 
-// for now Image == Preimage. Mostly - not counting bottom (d)
+// Image == Preimage
 	@Override
     public final boolean inImage(Point p){
-		return  (p.z >= this.p.z-h+d)    &&
+		return  (p.z >= this.p.z-h)    &&
 				(this.p.distProj(p) <= l);
     }
 
 	@Override
-    public final Point preimage(Point p){
+    public final void preimage(Point p){
         if (!inImage(p)){
-            return p;
-        } 
-        Point pi = new Point(p);
-        double r = this.p.distProj(pi);
-        if(r<l){
-			double t = (Math.cos(Math.PI*r*r*r/(l*l*l))+1);
+            return;
+        }
+        double r = this.p.distProj(p);
+        if (r < l){
+			double t = (Math.cos(Math.PI*r*r/(l*l))+1);
 			t *= .5d;
 			t *= d;
-		    pi.z += t;
+			if (p.z < this.p.z) // do not overextend down
+				t *= (p.z-this.p.z+h)/h;
+		    p.z -= t;
 		}
-        return pi;
     }
-	
+
 	@Override
 	public final BoundBox affected(){
 		return bb;

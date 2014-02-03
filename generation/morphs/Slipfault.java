@@ -24,26 +24,24 @@ public class Slipfault extends Morph {
 	@Override
     public final boolean inImage(Point p){
 		return  //(p.z <= f.p1.z)      &&
-	     		(f.isUp(p))          &&
+				(f.isUp(p))          &&
 				(p.z >= f.p1.z-h-d)    &&
 				(f.distProj(p) <= l) &&
 				(f.isInside(p));
     }
 
 	@Override
-    public final Point preimage(Point p){
+    public final void preimage(Point p){
         if (!inImage(p)){
-            return p;
-        } 
-        Point pi = new Point(p);
-        double r = f.distProj(pi);
+            return;
+        }
+        double r = f.distProj(p);
         if(r<l){
 			double t = (Math.cos(Math.PI*r*r*r/(l*l*l))+1);
 			t *= .5d;
 			t *= d;
-		    pi.z += t;
+		    p.z -= t;
 		}
-        return pi;
     }
 /*
 	@Override
