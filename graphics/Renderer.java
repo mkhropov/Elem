@@ -25,6 +25,13 @@ public class Renderer {
 	private Sun sun;
 	private ArrayList<GraphicalEntity> gEntities;
 
+	public final static int SHADER_NONE = 0;
+	public final static int SHADER_BASIC = 1;
+	public final static int SHADER_HIGHLIHT = 2;
+	public final static int SHADER_GHOST = 3;
+
+	public int [] shaders;
+
 	public boolean draw_mana;
 
 	private static Renderer instance = null;
@@ -62,6 +69,14 @@ public class Renderer {
 		}
 		this.sun = new Sun();
 		sun.update();
+		shaders = new int[SHADER_MAX];
+		shaders[SHADER_NONE] = 0;
+		shaders[SHADER_BASIC] =
+			ShaderLoader.createShader("basic.vsh", "basic.fsh");
+		shaders[SHADER_HIGHLIGHT] =
+			ShaderLoader.createShader("highlight.vsh", "basic.fsh");
+		shaders[SHADER_GHOST] =
+			ShaderLoader.createShader("basic.vsh", "ghost.fsh");
 		gEntities = new ArrayList<GraphicalEntity>();
 	}
 
@@ -150,20 +165,18 @@ public class Renderer {
 		startY = Math.max(pos[0][1],0)/GraphicalChunk.CHUNK_SIZE;
 		endY = Math.min(pos[7][1]/GraphicalChunk.CHUNK_SIZE+1,yChunkSize);
 		if (!draw_mana){
-			for (int k=current_layer; k>=0; k--) {
-				if (k==current_layer) {
-					GL11.glEnable(GL11.GL_LIGHT1);
-					for (int i=startX; i<endX; i++)
+			glUseProgram(shaders[SHADER_HIGHLIGHT]);
+			for (int i=startX; i<endX; i++)
+				for (int j=startY; j<endY; j++)
+					gChunksFull[i][j][k].draw();
+			glUseProgram(shaders[SHADER_BASIC]);
+			for (int k=current_layer-1; k>=0; k--)
+				for (int i=startX; i<endX; i++)
 					for (int j=startY; j<endY; j++)
 						gChunksFull[i][j][k].draw();
-					GL11.glDisable(GL11.GL_LIGHT1);
-				} else {
-					for (int i=startX; i<endX; i++)
-					for (int j=startY; j<endY; j++)
-						gChunks[i][j][k].draw();
-				}
 			}
 		} else {
+			glUseProgram(0);
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 			GL11.glEnable(GL11.GL_COLOR_MATERIAL);
 			GL11.glLineWidth(1);
@@ -171,6 +184,7 @@ public class Renderer {
 			ManaField.getInstance().draw();
 			GL11.glDisable(GL11.GL_COLOR_MATERIAL);
 		}
+		glUseProgram(0);
 		for (int i=0; i<gEntities.size(); i++)
 			if (gEntities.get(i).e.p.z<=current_layer)gEntities.get(i).draw();
 		iface.cursor.draw3d();
