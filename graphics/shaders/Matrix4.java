@@ -43,7 +43,7 @@ public class Matrix4 {
 		return m;
 	}
 
-	public static Matrix4 persp(float[] s){
+	public static Matrix4 scale(float[] s){
 		assert(s.length == SIZE-1);
 		Matrix4 m = Matrix4.identity();
 		for (int i=0; i<(SIZE-1); ++i)
@@ -51,7 +51,7 @@ public class Matrix4 {
 		return m;
 	}
 
-	public static Matrix4 shift(float[] s){
+	public static Matrix4 persp(float[] s){
 		assert(s.length == SIZE-1);
 		Matrix4 m = Matrix4.identity();
 		for (int i=0; i<(SIZE-1); ++i)
@@ -66,6 +66,13 @@ public class Matrix4 {
 		m.val[((ind+2)%(SIZE-1))*SIZE+((ind+2)%(SIZE-1))] = (float)Math.cos(alpha);
 		m.val[((ind+1)%(SIZE-1))*SIZE+((ind+2)%(SIZE-1))] = (float)Math.sin(alpha);
 		m.val[((ind+2)%(SIZE-1))*SIZE+((ind+1)%(SIZE-1))] = (float)-Math.sin(alpha);
+		return m;
+	}
+
+	public static Matrix4 looakAt(float x, float y, float z, float tx, float ty, float tz){
+		Matrix4 m = Matrix4.shift(new float[]{x, y, z});
+		m = m.multR(rot((float)(Math.signum(y-ty)*Math.acos((ty-y)/((tx-tx)*(tx-x)+(ty-y)*(ty-y)))), 2));
+		m = m.multR(rot((float)(Math.acos((tz-z)/(((tx-tx)*(tx-x)+(ty-y)*(ty-y)+(tz-z)*(tz-z))))), 0));
 		return m;
 	}
 
