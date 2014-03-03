@@ -35,7 +35,7 @@ public class Matrix4 {
 		return m;
 	}
 
-	public static Matrix4 shift(float[] s){
+	public static Matrix4 persp(float[] s){
 		assert(s.length == SIZE-1);
 		Matrix4 m = Matrix4.identity();
 		for (int i=0; i<(SIZE-1); ++i)
@@ -51,7 +51,7 @@ public class Matrix4 {
 		return m;
 	}
 
-	public static Matrix4 persp(float[] s){
+	public static Matrix4 shift(float[] s){
 		assert(s.length == SIZE-1);
 		Matrix4 m = Matrix4.identity();
 		for (int i=0; i<(SIZE-1); ++i)
@@ -69,10 +69,13 @@ public class Matrix4 {
 		return m;
 	}
 
-	public static Matrix4 looakAt(float x, float y, float z, float tx, float ty, float tz){
-		Matrix4 m = Matrix4.shift(new float[]{x, y, z});
-		m = m.multR(rot((float)(Math.signum(y-ty)*Math.acos((ty-y)/((tx-tx)*(tx-x)+(ty-y)*(ty-y)))), 2));
-		m = m.multR(rot((float)(Math.acos((tz-z)/(((tx-tx)*(tx-x)+(ty-y)*(ty-y)+(tz-z)*(tz-z))))), 0));
+	public static Matrix4 lookAt(float x, float y, float z, float tx, float ty, float tz){
+		Matrix4 m = identity();
+		m = m.multR(shift(new float[]{-tx, -ty, -tz}));
+		if (!((tx==x)&&(ty==y))){
+			m = m.multR(rot((float)(Math.signum(y-ty)*Math.acos((ty-y)/Math.sqrt((tx-x)*(tx-x)+(ty-y)*(ty-y)))), 2));
+		}
+		m = m.multR(rot((float)(Math.acos((tz-z)/Math.sqrt(((tx-x)*(tx-x)+(ty-y)*(ty-y)+(tz-z)*(tz-z))))), 0));
 		return m;
 	}
 
@@ -87,5 +90,14 @@ public class Matrix4 {
 
 	public Matrix4 multL(Matrix4 m){
 		return m.multR(this);
+	}
+
+	public void print(){
+		for (int i=0; i<SIZE; ++i){
+			for (int j=0; j<SIZE; ++j)
+				System.out.print(val[i*SIZE+j]+" ");
+			System.out.print("\n");
+		}
+		System.out.print("\n");
 	}
 }
