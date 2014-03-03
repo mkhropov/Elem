@@ -17,7 +17,8 @@ public class ShaderLoader {
 		int l;
 
 		try {
-			f =  new BufferedReader(new FileReader(vertexShaderFname));
+			f =  new BufferedReader(
+				new FileReader("graphics/shaders/"+vertexShaderFname));
 		} catch (java.io.FileNotFoundException e) {
 //			f.close();
 			return 0;
@@ -35,12 +36,14 @@ public class ShaderLoader {
 		l = ARBShaderObjects.glGetObjectParameteriARB(vsh,
 			ARBShaderObjects.GL_OBJECT_INFO_LOG_LENGTH_ARB);
 		if (l > 1){
-			System.out.println("Errors at compiling vertex shader");
+			System.out.println("Errors at compiling vertex shader "+
+				vertexShaderFname+":");
 			System.out.print(ARBShaderObjects.glGetInfoLogARB(vsh, l));
 		}
 
 		try {
-			f =  new BufferedReader(new FileReader(fragmentShaderFname));
+			f =  new BufferedReader(
+				new FileReader("graphics/shaders/"+fragmentShaderFname));
 		} catch (java.io.FileNotFoundException e) {
 //			f.close();
 			return 0;
@@ -58,7 +61,8 @@ public class ShaderLoader {
 		l = ARBShaderObjects.glGetObjectParameteriARB(fsh,
 			ARBShaderObjects.GL_OBJECT_INFO_LOG_LENGTH_ARB);
 		if (l > 1){
-			System.out.println("Errors at compiling fragment shader:");
+			System.out.println("Errors at compiling fragment shader "+
+				fragmentShaderFname+":");
 			System.out.print(ARBShaderObjects.glGetInfoLogARB(fsh, l));
 		}
 

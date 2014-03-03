@@ -8,6 +8,9 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import world.*;
 
+import graphics.shaders.Matrix4;
+import graphics.Renderer;
+
 public class Camera {
 	float x, y, z;
 	float targetAngleZ;
@@ -20,12 +23,17 @@ public class Camera {
 		this.z = z;
 		this.targetAngleZ = (float)Math.toRadians(45.0f);
 		this.currentAngleZ = (float)Math.toRadians(45.0f);
-		GL11.glMatrixMode(GL11.GL_PROJECTION);
+/*		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
 		GLU.gluPerspective(10.0f, 4.0f/3.0f, 1.0f, 1000.0f);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glLoadIdentity();
-		GLU.gluLookAt(x+142f*(float)Math.cos(currentAngleZ), y+142f*(float)Math.sin(currentAngleZ), z+100.4f, x, y, z, 0.0f, 0.0f, 1.0f);
+		GLU.gluLookAt(x+142f*(float)Math.cos(currentAngleZ), y+142f*(float)Math.sin(currentAngleZ), z+100.4f, x, y, z, 0.0f, 0.0f, 1.0f);*/
+/*		Renderer.getInstance().projection = Matrix4.lookAt(
+			x+142f*(float)Math.cos(currentAngleZ),
+			y+142f*(float)Math.sin(currentAngleZ),
+			z+100.4f,
+			x, y, z);*/
 	}
 
 	public void rotateLeft() {
@@ -51,16 +59,14 @@ public class Camera {
 
 	public int[] resolvePixel (int x, int y, int current_layer) {
 		IntBuffer viewport = BufferUtils.createIntBuffer(16);
-		FloatBuffer modelview = BufferUtils.createFloatBuffer(16);
-		FloatBuffer projection = BufferUtils.createFloatBuffer(16);
+		FloatBuffer modelview = Renderer.getInstance().modelview.fb();
+		FloatBuffer projection = Renderer.getInstance().projection.fb();
 		FloatBuffer p0 = BufferUtils.createFloatBuffer(3);
 		FloatBuffer p1 = BufferUtils.createFloatBuffer(3);
 		float winX, winY, winZ;
 		double X0, Y0, Z0;
 		double X1, Y1, Z1;
 
-		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, modelview);
-		GL11.glGetFloat(GL11.GL_PROJECTION_MATRIX, projection);
 		GL11.glGetInteger(GL11.GL_VIEWPORT, viewport);
 
 		GLU.gluUnProject( (float)x, (float)y, 0.0f, modelview, projection, viewport, p0);
@@ -87,8 +93,14 @@ public class Camera {
 		} else {
 			currentAngleZ -= ((cameraAngleSpeed*deltaT)/1000);
 		}
-		GL11.glMatrixMode(GL11.GL_MODELVIEW);
+/*		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glLoadIdentity();
-		GLU.gluLookAt(x+142f*(float)Math.cos(currentAngleZ), y+142f*(float)Math.sin(currentAngleZ), z+100.4f, x, y, z, 0.0f, 0.0f, 1.0f);
+		GLU.gluLookAt(x+142f*(float)Math.cos(currentAngleZ), y+142f*(float)Math.sin(currentAngleZ), z+100.4f, x, y, z, 0.0f, 0.0f, 1.0f);*/
+		Renderer.getInstance().projection = Matrix4.lookAt(
+            x+142f*(float)Math.cos(currentAngleZ),
+            y+142f*(float)Math.sin(currentAngleZ),
+			z+100.4f,
+	        x, y, z);
+//		Renderer.getInstance().projection.print();
 	}
 }

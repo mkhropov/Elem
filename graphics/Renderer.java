@@ -1,9 +1,13 @@
 package graphics;
 
 import world.World;
-import org.lwjgl.opengl.GL11;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL20.*;
 import iface.Interface;
 import iface.Cursor;
+
+import graphics.shaders.ShaderLoader;
+import graphics.shaders.Matrix4;
 
 import java.nio.FloatBuffer;
 import java.nio.ByteBuffer;
@@ -27,10 +31,15 @@ public class Renderer {
 
 	public final static int SHADER_NONE = 0;
 	public final static int SHADER_BASIC = 1;
-	public final static int SHADER_HIGHLIHT = 2;
+	public final static int SHADER_HIGHLIGHT = 2;
 	public final static int SHADER_GHOST = 3;
+	public final static int SHADER_MAX = 4;
 
-	public int [] shaders;
+	public int[] shaders;
+
+	public Matrix4 modelview;
+	public Matrix4 projection;
+	public Matrix4 MVP;
 
 	public boolean draw_mana;
 
@@ -67,8 +76,11 @@ public class Renderer {
 			gChunksFull[i][j][k] = new GraphicalChunk(world, i*GraphicalChunk.CHUNK_SIZE,
 					j*GraphicalChunk.CHUNK_SIZE, k, GraphicalChunk.MODE_SHOW_ALL);
 		}
-		this.sun = new Sun();
-		sun.update();
+		this.modelview = Matrix4.identity();
+		modelview = modelview.multR(Matrix4.scale(new float[]{.001f, .001f, .001f}));
+		this.projection = Matrix4.identity();
+		this.MVP = modelview;//modelview.multR(projection);
+		MVP.print();
 		shaders = new int[SHADER_MAX];
 		shaders[SHADER_NONE] = 0;
 		shaders[SHADER_BASIC] =
@@ -111,10 +123,10 @@ public class Renderer {
 
 		float mat_ambient[] = { 0.5f, 0.5f, 0.5f, 0.0f };
 		buffer.put(mat_ambient); buffer.flip();
-		GL11.glMaterial(GL11.GL_FRONT, GL11.GL_AMBIENT, buffer);
-		GL11.glMaterial(GL11.GL_FRONT, GL11.GL_SPECULAR, buffer);
-		GL11.glMaterial(GL11.GL_FRONT, GL11.GL_DIFFUSE, buffer);
-		GL11.glMaterialf(GL11.GL_FRONT, GL11.GL_SHININESS, 50.0f);
+		glMaterial(GL_FRONT, GL_AMBIENT, buffer);
+		glMaterial(GL_FRONT, GL_SPECULAR, buffer);
+		glMaterial(GL_FRONT, GL_DIFFUSE, buffer);
+		glMaterialf(GL_FRONT, GL_SHININESS, 50.0f);
 	}
 
 	public void resetMaterial(float f) {
@@ -124,10 +136,10 @@ public class Renderer {
 
 		float mat_ambient[] = { f, f, f, 0.0f };
 		buffer.put(mat_ambient); buffer.flip();
-		GL11.glMaterial(GL11.GL_FRONT, GL11.GL_AMBIENT, buffer);
-		GL11.glMaterial(GL11.GL_FRONT, GL11.GL_SPECULAR, buffer);
-		GL11.glMaterial(GL11.GL_FRONT, GL11.GL_DIFFUSE, buffer);
-		GL11.glMaterialf(GL11.GL_FRONT, GL11.GL_SHININESS, 50.0f);
+		glMaterial(GL_FRONT, GL_AMBIENT, buffer);
+		glMaterial(GL_FRONT, GL_SPECULAR, buffer);
+		glMaterial(GL_FRONT, GL_DIFFUSE, buffer);
+		glMaterialf(GL_FRONT, GL_SHININESS, 50.0f);
 	}
 
 	private final Comparator<int[]> COMPARE_0 = new Comparator<int[]>() {
@@ -145,9 +157,8 @@ public class Renderer {
 	};
 
 	public void draw (int current_layer) {
-		resetMaterial();
-		sun.update();
-		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		MVP = modelview;//.multR(projection);
 		int startX, endX, startY, endY;
 		int pos[][] = new int[8][2];
 		pos[0] = iface.camera.resolvePixel(0,0,0);
@@ -168,21 +179,20 @@ public class Renderer {
 			glUseProgram(shaders[SHADER_HIGHLIGHT]);
 			for (int i=startX; i<endX; i++)
 				for (int j=startY; j<endY; j++)
-					gChunksFull[i][j][k].draw();
+					gChunksFull[i][j][current_layer].draw();
 			glUseProgram(shaders[SHADER_BASIC]);
 			for (int k=current_layer-1; k>=0; k--)
 				for (int i=startX; i<endX; i++)
 					for (int j=startY; j<endY; j++)
 						gChunksFull[i][j][k].draw();
-			}
 		} else {
-			glUseProgram(0);
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
-			GL11.glEnable(GL11.GL_COLOR_MATERIAL);
-			GL11.glLineWidth(1);
-			GL11.glColor3d(1., 1., .8);
+			glUseProgram(shaders[SHADER_NONE]);
+			glBindTexture(GL_TEXTURE_2D, 0);
+			glEnable(GL_COLOR_MATERIAL);
+			glLineWidth(1);
+			glColor3d(1., 1., .8);
 			ManaField.getInstance().draw();
-			GL11.glDisable(GL11.GL_COLOR_MATERIAL);
+			glDisable(GL_COLOR_MATERIAL);
 		}
 		glUseProgram(0);
 		for (int i=0; i<gEntities.size(); i++)

@@ -11,6 +11,6 @@ void main(){
 						color.g*light.g,
 						color.b*light.b,
 						color.a);
-	gl_FragColor = (.5, .5+(color.x+color.y+color.z)/6., .5, .5);
+	gl_FragColor = vec4(.5, .5+(color.x+color.y+color.z)/6., .5, .5);
 }
 

@@ -45,4 +45,8 @@ public class GSList {
 	public GraphicalSurface get(int id){
 		return list.get(id);
 	}
+
+	public GraphicalSurface get(String name){
+		return list.get(findId(name));
+	}
 }
