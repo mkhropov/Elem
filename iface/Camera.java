@@ -29,7 +29,7 @@ public class Camera {
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glLoadIdentity();
 		GLU.gluLookAt(x+142f*(float)Math.cos(currentAngleZ), y+142f*(float)Math.sin(currentAngleZ), z+100.4f, x, y, z, 0.0f, 0.0f, 1.0f);*/
-/*		Renderer.getInstance().projection = Matrix4.lookAt(
+/*		Renderer.getInstance().proj = Matrix4.lookAt(
 			x+142f*(float)Math.cos(currentAngleZ),
 			y+142f*(float)Math.sin(currentAngleZ),
 			z+100.4f,
@@ -59,8 +59,8 @@ public class Camera {
 
 	public int[] resolvePixel (int x, int y, int current_layer) {
 		IntBuffer viewport = BufferUtils.createIntBuffer(16);
-		FloatBuffer modelview = Renderer.getInstance().modelview.fb();
-		FloatBuffer projection = Renderer.getInstance().projection.fb();
+		FloatBuffer modelview = Renderer.getInstance().view.fb();
+		FloatBuffer projection = Renderer.getInstance().proj.fb();
 		FloatBuffer p0 = BufferUtils.createFloatBuffer(3);
 		FloatBuffer p1 = BufferUtils.createFloatBuffer(3);
 		float winX, winY, winZ;
@@ -96,7 +96,7 @@ public class Camera {
 /*		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glLoadIdentity();
 		GLU.gluLookAt(x+142f*(float)Math.cos(currentAngleZ), y+142f*(float)Math.sin(currentAngleZ), z+100.4f, x, y, z, 0.0f, 0.0f, 1.0f);*/
-		Renderer.getInstance().projection = Matrix4.lookAt(
+		Renderer.getInstance().view = Matrix4.lookAt(
             x+142f*(float)Math.cos(currentAngleZ),
             y+142f*(float)Math.sin(currentAngleZ),
 			z+100.4f,

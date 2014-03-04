@@ -63,6 +63,7 @@ public class ManaParticle extends Entity {
 		GL11.glColor3d(color.x, color.y, color.z);
 		GL11.glBegin(GL11.GL_POINTS);
 		GL11.glVertex3d(p.x, p.y, p.z);
+		GL11.glEnd();
 		/*
 		int size = tail.size();
 		if (size>1)

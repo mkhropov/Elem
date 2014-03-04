@@ -37,9 +37,9 @@ public class Renderer {
 
 	public int[] shaders;
 
-	public Matrix4 modelview;
-	public Matrix4 projection;
-	public Matrix4 MVP;
+	public Matrix4 view;
+	public Matrix4 proj;
+	public Matrix4 VP;
 
 	public boolean draw_mana;
 
@@ -76,17 +76,18 @@ public class Renderer {
 			gChunksFull[i][j][k] = new GraphicalChunk(world, i*GraphicalChunk.CHUNK_SIZE,
 					j*GraphicalChunk.CHUNK_SIZE, k, GraphicalChunk.MODE_SHOW_ALL);
 		}
-		this.modelview = Matrix4.identity();
-		modelview = modelview.multR(Matrix4.scale(new float[]{.001f, .001f, .001f}));
-		this.projection = Matrix4.identity();
-		this.MVP = modelview;//modelview.multR(projection);
-		MVP.print();
+		this.view = Matrix4.lookAt(-.25f, -.25f, -2.f, .5f, .5f, 0.f);
+		this.proj = Matrix4.scale(new float[]{.3f/4.f, -.1f, .001f});
+		this.VP = view.multR(proj);
+
 		shaders = new int[SHADER_MAX];
 		shaders[SHADER_NONE] = 0;
 		shaders[SHADER_BASIC] =
 			ShaderLoader.createShader("basic.vsh", "basic.fsh");
+//		System.out.println("[SHADER_BASIC]="+shaders[SHADER_BASIC]);
 		shaders[SHADER_HIGHLIGHT] =
 			ShaderLoader.createShader("highlight.vsh", "basic.fsh");
+//		System.out.println("[SHADER_HIGHLIGHT]="+shaders[SHADER_HIGHLIGHT]);
 		shaders[SHADER_GHOST] =
 			ShaderLoader.createShader("basic.vsh", "ghost.fsh");
 		gEntities = new ArrayList<GraphicalEntity>();
@@ -158,7 +159,7 @@ public class Renderer {
 
 	public void draw (int current_layer) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		MVP = modelview;//.multR(projection);
+		VP = view.multR(proj);
 		int startX, endX, startY, endY;
 		int pos[][] = new int[8][2];
 		pos[0] = iface.camera.resolvePixel(0,0,0);
@@ -184,7 +185,7 @@ public class Renderer {
 			for (int k=current_layer-1; k>=0; k--)
 				for (int i=startX; i<endX; i++)
 					for (int j=startY; j<endY; j++)
-						gChunksFull[i][j][k].draw();
+						gChunks[i][j][k].draw();
 		} else {
 			glUseProgram(shaders[SHADER_NONE]);
 			glBindTexture(GL_TEXTURE_2D, 0);
@@ -194,7 +195,7 @@ public class Renderer {
 			ManaField.getInstance().draw();
 			glDisable(GL_COLOR_MATERIAL);
 		}
-		glUseProgram(0);
+		glUseProgram(shaders[SHADER_NONE]);
 		for (int i=0; i<gEntities.size(); i++)
 			if (gEntities.get(i).e.p.z<=current_layer)gEntities.get(i).draw();
 		iface.cursor.draw3d();

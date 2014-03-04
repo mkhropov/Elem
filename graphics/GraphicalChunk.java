@@ -41,6 +41,7 @@ public class GraphicalChunk {
 	public int t_attr;
 	public int n_attr;
 	public int mvp_uniform;
+	public int t_uniform;
 	static float[][] vert = new float[][]{
 		{0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 1.f, 1.f, 0.f, 0.f, 1.f, 0.f},//~ z-1
 		{0.f, 0.f, 1.f, 1.f, 0.f, 1.f, 1.f, 1.f, 1.f, 0.f, 1.f, 1.f},//~ z+1
@@ -49,7 +50,7 @@ public class GraphicalChunk {
 		{0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 1.f, 1.f, 0.f, 0.f, 1.f},//~ x-1
 		{1.f, 0.f, 0.f, 1.f, 1.f, 0.f, 1.f, 1.f, 1.f, 1.f, 0.f, 1.f} //~ x+1
 	};
-	static float[] text = new float[]{0.f, 0.f, 0.f, 1.f, 1.f, 0.f, 1.f, 1.f};
+	static float[] text = new float[]{0.f, 0.f, 0.f, 1.f, 1.f, 1.f, 1.f, 0.f};
 	static float[][] norm = new float[][]{
 		{ 0.f, 0.f, -1.f, 0.f, 0.f, -1.f, 0.f, 0.f, -1.f, 0.f, 0.f, -1.f},
 		{ 0.f, 0.f, 1.f,  0.f, 0.f, 1.f,  0.f, 0.f, 1.f,  0.f, 0.f, 1.f },
@@ -87,8 +88,8 @@ public class GraphicalChunk {
 			vbuf.put(vert[f][3*i+0]+b.x);
 			vbuf.put(vert[f][3*i+1]+b.y);
 			vbuf.put(vert[f][3*i+2]+b.z);
-			tbuf.put(text[2*i+0]+(float)Math.sin(b.x+b.y+b.z));//FIX textures
-			tbuf.put(text[2*i+1]+(float)Math.cos(b.x+b.y+b.z));// offsets
+			tbuf.put(text[2*i+0]);//+(float)Math.sin(b.x+b.y+b.z));//FIX textures
+			tbuf.put(text[2*i+1]);//+(float)Math.cos(b.x+b.y+b.z));// offsets
 			nbuf.put(norm[f][3*i+0]);
 			nbuf.put(norm[f][3*i+1]);
 			nbuf.put(norm[f][3*i+2]);
@@ -123,6 +124,19 @@ public class GraphicalChunk {
 		nbuf.limit(nbuf.position());
 		ibuf.limit(ibuf.position());
 		vbuf.rewind(); tbuf.rewind(); nbuf.rewind(); ibuf.rewind();
+/*		System.out.println("vbuf = ");
+		for (int i=0; i<vbuf.limit()/3; ++i)
+			System.out.print(i+" = "+vbuf.get(3*i)+" "+vbuf.get(3*i+1)+" "+vbuf.get(3*i+2)+"    \n");
+		System.out.println("tbuf = ");
+		for (int i=0; i<tbuf.limit()/2; ++i)
+	        System.out.print(i+" = "+tbuf.get(2*i)+" "+tbuf.get(2*i+1)+"    \n");
+		System.out.println("nbuf = ");
+		for (int i=0; i<nbuf.limit()/3; ++i)
+	        System.out.print(i+" = "+nbuf.get(3*i)+" "+nbuf.get(3*i+1)+" "+nbuf.get(3*i+2)+"    \n");
+		System.out.println("ibuf = ");
+		for (int i=0; i<ibuf.limit(); ++i)
+			System.out.print(ibuf.get(i)+" ");
+		System.out.println("\n");*/
 		/* submit all generated buffers onto videocard */
 		glBindVertexArray(vao);
 		glBindBuffer(GL_ARRAY_BUFFER, v_b);
@@ -140,15 +154,18 @@ public class GraphicalChunk {
 	public void draw() {
 		int p = glGetInteger(GL_CURRENT_PROGRAM);
 		mvp_uniform = glGetUniformLocation(p, "MVP");
+		t_uniform = glGetUniformLocation(p, "tex");
 		v_attr = glGetAttribLocation(p, "position");
 		t_attr = glGetAttribLocation(p, "texture");
 		n_attr = glGetAttribLocation(p, "normal");
 
 		glBindVertexArray(vao);
-		glUniformMatrix4(mvp_uniform, false, Renderer.getInstance().MVP.fb());
+		// model matrix is identity(), because cubes are static in world
+		glUniformMatrix4(mvp_uniform, false, Renderer.getInstance().VP.fb());
 
+		glUniform1i(t_uniform, 0);
 		glActiveTexture(GL_TEXTURE0+0);
-		GSList.getInstance().get("stone").bind();
+		GSList.getInstance().get("earth").bind();
 
 		glEnableVertexAttribArray(v_attr);
 		glBindBuffer(GL_ARRAY_BUFFER, v_b);
