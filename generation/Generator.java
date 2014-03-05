@@ -68,7 +68,7 @@ public class Generator {
 					b =  w.blockArray[i][j][k];
 					m = getMaterial(b);
 					if (m != null)
-						b.m = new Substance(getMaterial(b), 1.);
+						b.m = new Substance(m, 1.);
 //					System.out.print(m+" ");
 				}
 		}
@@ -91,7 +91,7 @@ public class Generator {
 		i = 0;
 		double z = 1.;
 		for (i=0; i < stratums.size(); ++i){
-			if (stratums.get(i).isIn(p))
+//			if (stratums.get(i).isIn(p))
 				z += stratums.get(i).w(p);
 			if (z > p.z)
 				return stratums.get(i).m;

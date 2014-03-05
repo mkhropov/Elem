@@ -53,12 +53,12 @@ public class Stratum {
 		return Math.cos(a*a*a*a*Math.PI/2.);
 	}
 
-	public double w(Point p) { //assuming isIn(p)==true
+	public double w(Point p) { //assuming isIn(p)==true NO MORE
 		double r = O.distProj(p);
 		double phi = Math.acos((p.x-x)/r)*Math.signum(p.y-y);
 		if (r < 0.1)
 			return width;
 		else
-			return width*w(r/R(phi));
+			return width*w(Math.min(r/R(phi), 1.));
 	}
 }
