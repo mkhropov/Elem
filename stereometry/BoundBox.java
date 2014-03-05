@@ -29,4 +29,9 @@ public class BoundBox {
 		else
 			return new BoundBox(a, a);
 	}
+
+	public boolean isIn(Point p){
+		return ((p.x>=p1.x) && (p.y>=p1.y) && (p.z>=p1.z) &&
+				(p.x<=p2.x) && (p.y<=p2.y) && (p.z<=p2.z));
+	}
 }

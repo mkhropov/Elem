@@ -41,6 +41,7 @@ public class Generator {
 
 	public void generate(){
 		World w = World.getInstance();
+		System.out.print("Generating biomes ...");
 		biomes.add(new Hills(w.xsize/2, w.ysize/2, 2*w.xsize, 15));
 		for (Biome b : biomes){
 			b.generate();
@@ -49,6 +50,8 @@ public class Generator {
 			for (Stratum s : b.stratums)
 				stratums.add(s);
 		}
+		System.out.print(" "+biomes.size()+" biomes, "+morphs.size()+" morphs, "+
+						stratums.size()+" stratums\n");
 		generated = true;
 	}
 
@@ -56,8 +59,10 @@ public class Generator {
 		World w = World.getInstance();
 		Material m;
 		Block b;
-//		System.out.print("Total "+stratums.size()+" stratums\n");
-		for (int i=0; i<w.xsize; ++i)
+		System.out.print("Filling blocks ");
+		for (int i=0; i<w.xsize; ++i){
+			if (i%(w.xsize/30) == 0)
+				System.out.print(".");
 			for (int j=0; j<w.ysize; ++j)
 				for (int k=0; k<w.zsize; ++k){
 					b =  w.blockArray[i][j][k];
@@ -66,6 +71,8 @@ public class Generator {
 						b.m = new Substance(getMaterial(b), 1.);
 //					System.out.print(m+" ");
 				}
+		}
+		System.out.print(" done\n");
 		erosion(w, 2000., w.material[Material.MATERIAL_EARTH]);
 	}
 
@@ -77,7 +84,8 @@ public class Generator {
 		Point p = new Point(b);
 		int i;
 		for (i=0; i<morphs.size(); i++)
-			morphs.get(i).preimage(p);
+//			if morphs.get(i).affected().isIn(p)
+				morphs.get(i).preimage(p);
 		if (p.z < 1.)
 			return World.getInstance().material[Material.MATERIAL_BEDROCK];
 		i = 0;
@@ -107,7 +115,10 @@ public class Generator {
 
 	public void erosion(World w, double power, Material erodemat){
 		Block b;
-		for (int k=0; k<w.zsize; ++k)
+		System.out.print("Applying arosion ");
+		for (int k=0; k<w.zsize; ++k){
+			if (k%(w.xsize/30) == 0)
+				System.out.print(".");
 			for (int i=0; i<w.xsize; ++i)
 				for (int j=0; j<w.ysize; ++j){
 					b = w.blockArray[i][j][k];
@@ -115,7 +126,11 @@ public class Generator {
 						if ((17-blockCover(b, w))*power > b.m.m.hardness)
 							b.m = null;
 				}
-		for (int k=0; k<w.zsize; ++k)
+		}
+		System.out.print(" done\n Filling gaps ");
+		for (int k=0; k<w.zsize; ++k){
+			if (k%(w.xsize/30) == 0)
+				System.out.print(".");
 			for (int i=0; i<w.xsize; ++i)
 				for (int j=0; j<w.ysize; ++j){
 					b = w.blockArray[i][j][k];
@@ -123,5 +138,7 @@ public class Generator {
 						if (blockCover(b, w)>= 17)
 							b.setMaterial(erodemat);
 				}
+		}
+		System.out.print(" done\n");
 	}
 }

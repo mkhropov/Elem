@@ -12,8 +12,8 @@ import stereometry.*;
 import physics.mana.*;
 
 public class World {
-    public static int DEFAULT_XSIZE = 30;
-    public static int DEFAULT_YSIZE = 30;
+    public static int DEFAULT_XSIZE = 50;
+    public static int DEFAULT_YSIZE = 50;
     public static int DEFAULT_ZSIZE = 30;
     public int xsize, ysize, zsize;
     public Block[][][] blockArray;
@@ -43,14 +43,19 @@ public class World {
 
 		this.gravity = new Vector(0., 0., -4.9);
 
+		System.out.print("Reserving world space ");
         this.blockArray = new Block[this.xsize][this.ysize][this.zsize];
-        for (int i=0; i<this.xsize; i++)
+        for (int i=0; i<this.xsize; i++){
+			if (i%(this.xsize/30) == 0)
+				System.out.print(".");
             for (int j=0; j<this.ysize; j++)
                 for (int k=0; k<this.zsize; k++)
                     this.blockArray[i][j][k] = new Block(i, j, k);
+		}
+		System.out.print(" done\n");
 
 //FIXME how to make C-like enums, that are compatible with int?
-        this.wallArray = new Wall[this.xsize][this.ysize][this.zsize][3];
+/*        this.wallArray = new Wall[this.xsize][this.ysize][this.zsize][3];
         for (int i=0; i<this.xsize; i++)
             for (int j=0; j<this.ysize; j++)
                 for (int k=0; k<this.zsize; k++) {
@@ -58,7 +63,7 @@ public class World {
                     this.wallArray[i][j][k][1] = new Wall(i, j, k, WallOrient.LEFT);
                     this.wallArray[i][j][k][2] = new Wall(i, j, k, WallOrient.RIGHT);
                 }
-
+*/
         this.material = new Material[Material.MATERIAL_MAX];
         this.material[Material.MATERIAL_STONE] = new Stone();
         this.material[Material.MATERIAL_EARTH] = new Earth();
