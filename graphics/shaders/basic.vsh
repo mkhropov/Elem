@@ -10,9 +10,9 @@ varying vec2 uv;
 varying vec3 light;
 
 void main(){
-	const vec3 lvec = normalize(vec3(1., 2., 3.));
-	const vec3 lcol = vec3(.8, .8, .8);
-	const vec3 amb = vec3(.3, .3, .3);
+	const vec3 lvec = normalize(vec3(-3., 1., 2.));
+	const vec3 lcol = vec3(.7, .7, .7);
+	const vec3 amb = vec3(.5, .5, .5);
 
 	gl_Position = MVP * vec4(position, 1.);
 
