@@ -1,6 +1,7 @@
 package generation.morphs;
 
 import stereometry.*;
+import world.World;
 /* Pointfold is a fold-type geomorphing, when the fold
  * is located circulary around it's peak/valley
  */
@@ -16,8 +17,7 @@ public class Pointfold extends Morph {
         this.l = l;
         this.h = h;
         this.d = d;
-		this.bb = new BoundBox(p.x-l, p.y-l, p.z-h, p.x+l, p.y+l, p.z+1);
-		//FIXME actually it's not bounded up
+		this.bb = new BoundBox(p.x-l, p.y-l, 0, p.x+l, p.y+l, World.getInstance().zsize);
     }
 
 // Image == Preimage
@@ -42,10 +42,5 @@ public class Pointfold extends Morph {
 		    p.z -= t;
 		}
     }
-
-	@Override
-	public final BoundBox affected(){
-		return bb;
-	}
 }
 

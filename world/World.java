@@ -12,9 +12,9 @@ import stereometry.*;
 import physics.mana.*;
 
 public class World {
-    public static int DEFAULT_XSIZE = 50;
-    public static int DEFAULT_YSIZE = 50;
-    public static int DEFAULT_ZSIZE = 30;
+    public static int DEFAULT_XSIZE = 64;
+    public static int DEFAULT_YSIZE = 64;
+    public static int DEFAULT_ZSIZE = 64;
     public int xsize, ysize, zsize;
     public Block[][][] blockArray;
     public Wall[][][][] wallArray;

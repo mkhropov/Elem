@@ -17,6 +17,14 @@ public class Slipfault extends Morph {
         this.l = l;
         this.h = h;
         this.d = d;
+		this.bb = new BoundBox(Math.min(f.p1.x, f.p2.x)-Math.abs(v.x),
+                               Math.min(f.p1.y, f.p2.y)-Math.abs(v.y),
+                               0,
+                               Math.max(f.p1.x, f.p2.x)+Math.abs(v.x),
+                               Math.max(f.p1.y, f.p2.y)+Math.abs(v.y),
+                               World.getInstance().zsize);
+
+
     }
 
 

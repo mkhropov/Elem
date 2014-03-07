@@ -30,6 +30,16 @@ public class BoundBox {
 			return new BoundBox(a, a);
 	}
 
+	public boolean intersects(BoundBox t){
+		Point a = new Point(Math.max(this.p1.x, t.p1.x),
+							Math.max(this.p1.y, t.p1.y),
+							Math.max(this.p1.z, t.p1.z));
+		Point b = new Point(Math.min(this.p2.x, t.p2.x),
+							Math.min(this.p2.y, t.p2.y),
+							Math.min(this.p2.z, t.p2.z));
+		return (a.x<b.x && a.y<b.y && a.z<b.z);
+	}
+
 	public boolean isIn(Point p){
 		return ((p.x>=p1.x) && (p.y>=p1.y) && (p.z>=p1.z) &&
 				(p.x<=p2.x) && (p.y<=p2.y) && (p.z<=p2.z));

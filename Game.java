@@ -14,6 +14,8 @@ import java.nio.ByteOrder;
 import iface.Interface;
 import graphics.Renderer;
 
+import generation.Generator;
+
 import player.*;
 
 public class Game {
@@ -60,6 +62,19 @@ public class Game {
 		System.out.println("Display created. OpenGL version: " + GL11.glGetString(GL11.GL_VERSION));
 		world = World.getInstance();
 		world.init();
+		newTime = getTime();
+		for (int k=0; k<10; ++k){
+			System.out.print("Iteration "+k+":\n");
+			lastTime = newTime;
+			Generator.getInstance().apply();
+			newTime = getTime();
+			deltaT = newTime-lastTime;
+			System.out.println("Full time      "+(double)deltaT);
+			System.out.println("Time per morph "+((double)deltaT)/(Generator.getInstance().morphs.size()));
+			System.out.println("Time per cube  "+((double)deltaT)/(Generator.getInstance().morphs.size()*world.xsize*world.ysize*world.zsize));
+			System.out.println();
+		}
+
 		iface = Interface.getInstance();
 		renderer = Renderer.getInstance();
 

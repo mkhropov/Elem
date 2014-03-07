@@ -1,7 +1,9 @@
 package generation;
 
+import world.World;
 import physics.material.Material;
 import stereometry.Point;
+import stereometry.BoundBox;
 
 public class Stratum {
     public int x;
@@ -15,6 +17,7 @@ public class Stratum {
 	public static final int C_MAX=5;
 	public int coef[];
 	public double offset[];
+	public BoundBox bb;
 
     public Stratum(int x, int y, double rmin, double rmax, double width, Material m) {
         this.x = x;
@@ -30,6 +33,7 @@ public class Stratum {
 		this.offset = new double[C_NUM];
 		for (int i=0; i<C_NUM; i++)
 			offset[i] = Generator.getInstance().rnd.nextDouble()*2*Math.PI;
+		this.bb = new BoundBox(x-rmax, y-rmax, 0, x+rmax, y+rmax, World.getInstance().zsize);
 	}
 
 	public double R(double phi) { // border
@@ -41,12 +45,7 @@ public class Stratum {
 	}
 
 	public boolean isIn(Point p) {
-		double r = O.distProj(p);
-		double phi = Math.acos((p.x-x)/r)*Math.signum(p.y-y);
-		if (r < 0.01)
-			return true;
-		else
-			return (r <= R(phi));
+		return bb.isIn(p);
 	}
 
 	public double w(double a) { // a in [0, 1]
