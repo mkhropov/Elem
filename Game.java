@@ -23,10 +23,6 @@ public class Game {
     Player p1;
 	Interface iface;
 	Renderer renderer;
-	public static final int MAX_X=30;
-	public static final int MAX_Y=30;
-	public static final int MAX_Z=20;
-	public static final double SCALE=0.7;
 	int fps = 0;
 	long lastFPS;
 	long deltaT;
@@ -63,7 +59,7 @@ public class Game {
 		world = World.getInstance();
 		world.init();
 		newTime = getTime();
-		for (int k=0; k<10; ++k){
+		for (int k=0; k<0; ++k){
 			System.out.print("Iteration "+k+":\n");
 			lastTime = newTime;
 			Generator.getInstance().apply();
