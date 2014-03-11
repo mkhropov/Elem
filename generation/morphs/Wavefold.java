@@ -23,6 +23,7 @@ public class Wavefold extends Morph {
                                0,
                                Math.max(f.p1.x, f.p2.x)+Math.abs(v.x),
                                Math.max(f.p1.y, f.p2.y)+Math.abs(v.y),
+							   World.getInstance().zsize);
 
     }
 
