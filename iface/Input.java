@@ -91,17 +91,29 @@ public class Input {
 						iface.camera.repositionDelta(0.0f, 0.0f, 1.0f);
 					};
 					break;
+				case 'w':
+					iface.camera.repositionDelta(0.f, -1.f, 0.f);
+					break;
+				case 'a':
+					iface.camera.repositionDelta(1.f, 0.f, 0.f);
+					break;
+				case 's':
+					iface.camera.repositionDelta(0.f, 1.f, 0.f);
+					break;
+				case 'd':
+					iface.camera.repositionDelta(-1.f, 0.f, 0.f);
+					break;
 				case 'q':
 					iface.camera.rotateLeft();
 					break;
 				case 'e':
 					iface.camera.rotateRight();
 					break;
-				case 's':
+				case 'b':
 					if (where != null)
 						iface.player.cast(0, where);
 					break;
-				case 'a':
+				case 'n':
 					if (where != null)
 						iface.player.cast(1, where);
 					break;

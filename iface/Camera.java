@@ -45,8 +45,8 @@ public class Camera {
 	}
 
 	public void repositionDelta(float dx, float dy, float dz) {
-		x += dx;
-		y += dy;
+		x += dy*Math.cos(targetAngleZ)+dx*Math.sin(targetAngleZ);
+		y += dy*Math.sin(targetAngleZ)-dx*Math.cos(targetAngleZ);
 		z += dz;
 		forceUpdate(0);
 	}
