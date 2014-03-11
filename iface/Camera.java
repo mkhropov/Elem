@@ -45,16 +45,10 @@ public class Camera {
 	}
 
 	public void repositionDelta(float dx, float dy, float dz) {
-		x += dx;
-		y += dy;
+		x += dy*Math.cos(targetAngleZ)+dx*Math.sin(targetAngleZ);
+		y += dy*Math.sin(targetAngleZ)-dx*Math.cos(targetAngleZ);
 		z += dz;
 		forceUpdate(0);
-	}
-
-	public void repositionAbsolute(float new_x, float new_y, float new_z) {
-		x += new_x;
-		y += new_y;
-		z += new_z;
 	}
 
 	public int[] resolvePixel (int x, int y, int current_layer) {
