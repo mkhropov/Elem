@@ -57,13 +57,19 @@ public class Generator {
 		biomes.add(new Hills(w.xsize/2, w.ysize/2, 2*w.xsize, 15));
 		for (Biome b : biomes){
 			b.generate();
-			for (GenerationChunk[] gca : genChunks)
-				for (GenerationChunk gc : gca){
-					for (Morph m : b.morphs)
+
+			for (Morph m : b.morphs){
+				morphs.add(m);
+				for (GenerationChunk[] gca : genChunks)
+					for (GenerationChunk gc : gca)
 						gc.addMorph(m);
-					for (Stratum s : b.stratums)
+			}
+			for (Stratum s : b.stratums){
+				stratums.add(s);
+				for (GenerationChunk[] gca : genChunks)
+					for (GenerationChunk gc : gca)
 						gc.addStratum(s);
-				}
+			}
 		}
 		System.out.print(" "+biomes.size()+" biomes, "+morphs.size()+" morphs, "+
 						stratums.size()+" stratums\n");
@@ -106,8 +112,7 @@ public class Generator {
 		Point p = new Point(b);
 		int i;
 		for (i=0; i<gc.morphs.size(); i++)
-//			if morphs.get(i).affected().isIn(p)
-				gc.morphs.get(i).preimage(p);
+			gc.morphs.get(i).preimage(p);
 		if (p.z < 1.)
 			return World.getInstance().material[Material.MATERIAL_BEDROCK];
 		i = 0;
