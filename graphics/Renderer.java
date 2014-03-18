@@ -24,7 +24,6 @@ public class Renderer {
 	private World world;
 	private Interface iface;
 	private GraphicalChunk[][][] gChunks;
-	private GraphicalChunk[][][] gChunksFull;
 	private int xChunkSize, yChunkSize;
 	private Sun sun;
 	private ArrayList<GraphicalEntity> gEntities;
@@ -56,26 +55,21 @@ public class Renderer {
 		this.world = World.getInstance();
 		this.iface = Interface.getInstance();
 		this.draw_mana = false; //cubes only
+
 		xChunkSize = world.xsize/GraphicalChunk.CHUNK_SIZE;
 		if (world.xsize%GraphicalChunk.CHUNK_SIZE!=0) xChunkSize++;
 		yChunkSize = world.ysize/GraphicalChunk.CHUNK_SIZE;
 		if (world.ysize%GraphicalChunk.CHUNK_SIZE!=0) yChunkSize++;
+
 		gChunks = new GraphicalChunk[xChunkSize][yChunkSize][world.zsize];
 		for (int i=0; i<xChunkSize; i++)
-		for (int j=0; j<yChunkSize; j++)
-		for (int k=0; k<world.zsize; k++) {
-			gChunks[i][j][k] = new GraphicalChunk(world,
+			for (int j=0; j<yChunkSize; j++)
+				for (int k=0; k<world.zsize; k++)
+					gChunks[i][j][k] = new GraphicalChunk(world,
 								i*GraphicalChunk.CHUNK_SIZE,
 								j*GraphicalChunk.CHUNK_SIZE,
-								k, GraphicalChunk.MODE_TOP_VIEW);
-		}
-		gChunksFull = new GraphicalChunk[xChunkSize][yChunkSize][world.zsize];
-		for (int i=0; i<xChunkSize; i++)
-		for (int j=0; j<yChunkSize; j++)
-		for (int k=0; k<world.zsize; k++) {
-			gChunksFull[i][j][k] = new GraphicalChunk(world, i*GraphicalChunk.CHUNK_SIZE,
-					j*GraphicalChunk.CHUNK_SIZE, k, GraphicalChunk.MODE_SHOW_ALL);
-		}
+								k);
+
 		this.view = Matrix4.lookAt(-.25f, -.25f, -2.f, .5f, .5f, 0.f);
 		this.proj = Matrix4.scale(new float[]{.3f/4.f, -.1f, .001f});
 		this.VP = view.multR(proj);
@@ -97,11 +91,8 @@ public class Renderer {
 		int chunkX = x/GraphicalChunk.CHUNK_SIZE;
 		int chunkY = y/GraphicalChunk.CHUNK_SIZE;
 		gChunks[chunkX][chunkY][z].rebuild();
-		gChunksFull[chunkX][chunkY][z].rebuild();
-		if (z>0) {
+		if (z>0)
 			gChunks[chunkX][chunkY][z-1].rebuild();
-			gChunksFull[chunkX][chunkY][z-1].rebuild();
-		}
 	}
 
 	public void addEntity (Entity e) {
@@ -180,12 +171,12 @@ public class Renderer {
 			glUseProgram(shaders[SHADER_HIGHLIGHT]);
 			for (int i=startX; i<endX; i++)
 				for (int j=startY; j<endY; j++)
-					gChunksFull[i][j][current_layer].draw();
+					gChunks[i][j][current_layer].draw(true);
 			glUseProgram(shaders[SHADER_BASIC]);
 			for (int k=current_layer-1; k>=0; k--)
 				for (int i=startX; i<endX; i++)
 					for (int j=startY; j<endY; j++)
-						gChunks[i][j][k].draw();
+						gChunks[i][j][k].draw(false);
 		} else {
 			glUseProgram(shaders[SHADER_NONE]);
 			glBindTexture(GL_TEXTURE_2D, 0);
@@ -196,6 +187,7 @@ public class Renderer {
 			glDisable(GL_COLOR_MATERIAL);
 		}
 		glUseProgram(shaders[SHADER_NONE]);
+		resetMaterial();
 		for (int i=0; i<gEntities.size(); i++)
 			if (gEntities.get(i).e.p.z<=current_layer)gEntities.get(i).draw();
 		iface.cursor.draw3d();

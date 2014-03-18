@@ -15,14 +15,9 @@ import static org.lwjgl.opengl.GL11.*;
 //import java.util.ArrayList;
 
 public class GraphicalChunk {
-//	private ArrayList<GraphicalCube> cubes;
 	private World world;
 	private int x,y,z;
 	private int xsize, ysize;
-	private int mode;
-	public static final int MODE_TOP_VIEW = 0;
-	public static final int MODE_SHOW_ALL = 1;
-	public static final int MODE_FOG_OF_WAR = 2;
 
 	public static final int CHUNK_SIZE = 16;
 
@@ -30,6 +25,7 @@ public class GraphicalChunk {
 	public FloatBuffer tbuf;
 	public FloatBuffer nbuf;
 	public IntBuffer ibuf;
+	public int tail_size; //indices for invisible top sides
 
 	public int vao;
 	public int v_b;
@@ -60,18 +56,20 @@ public class GraphicalChunk {
 		{ 1.f, 0.f, 0.f,  1.f, 0.f, 0.f,  1.f, 0.f, 0.f,  1.f, 0.f, 0.f }
 	};
 
-	public GraphicalChunk(World w, int x, int y, int z, int mode) {
+	public GraphicalChunk(World w, int x, int y, int z){
 		this.world = w;
 		this.x = x;
 		this.y = y;
 		this.z = z;
+		this.tail_size = 0;
 		xsize = (w.xsize-x>CHUNK_SIZE)?CHUNK_SIZE:(w.xsize-x);
 		ysize = (w.ysize-y>CHUNK_SIZE)?CHUNK_SIZE:(w.ysize-y);
-		this.mode = mode;
+
 		this.vbuf = BufferUtils.createFloatBuffer(xsize*ysize*6*4*3);
 		this.tbuf = BufferUtils.createFloatBuffer(xsize*ysize*6*4*2);
 		this.nbuf = BufferUtils.createFloatBuffer(xsize*ysize*6*4*3);
 		this.ibuf = BufferUtils.createIntBuffer(xsize*ysize*6*6);
+
 		this.vao = glGenVertexArrays();
 		glBindVertexArray(vao);
 		this.v_b = glGenBuffers();
@@ -79,6 +77,7 @@ public class GraphicalChunk {
 		this.n_b = glGenBuffers();
 		this.i_b = glGenBuffers();
 		glBindVertexArray(0);
+
 		rebuild();
 	}
 
@@ -116,9 +115,22 @@ public class GraphicalChunk {
 					addFace(b, 3);
 				if (world.empty(i,j,z-1))
 					addFace(b, 0);
-				if (world.empty(i,j,z+1) || (mode == MODE_SHOW_ALL))
+				if (world.empty(i,j,z+1))
 					addFace(b, 1);
 			}
+
+		/* now add usually invisible top sides to the end of the buffer */
+		tail_size = 0;
+		for (int i=x; i<x+xsize; i++)
+			for (int j=y; j<y+ysize; j++){
+				if (world.empty(i,j,z)) continue;
+				b = world.blockArray[i][j][z];
+				if (!world.empty(i,j,z+1)){
+					addFace(b, 1);
+					tail_size++;
+				}
+			}
+
 		vbuf.limit(vbuf.position());
 		tbuf.limit(tbuf.position());
 		nbuf.limit(nbuf.position());
@@ -151,7 +163,14 @@ public class GraphicalChunk {
 		glBindVertexArray(0);
 	}
 
-	public void draw() {
+	public void rebuild(int x, int y, int z){
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		rebuild();
+	}
+
+	public void draw(boolean show_top) {
 		int p = glGetInteger(GL_CURRENT_PROGRAM);
 		mvp_uniform = glGetUniformLocation(p, "MVP");
 		t_uniform = glGetUniformLocation(p, "tex");
@@ -179,8 +198,11 @@ public class GraphicalChunk {
 		glBindBuffer(GL_ARRAY_BUFFER, n_b);
 		glVertexAttribPointer(n_attr, 3, GL_FLOAT, true, 0, 0);
 
+		/* if show_top is not set ->
+		 do not draw underground top sides of cubes */
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, i_b);
-		glDrawElements(GL_TRIANGLES, ibuf.limit(), GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, ibuf.limit()-(show_top?0:tail_size),
+			GL_UNSIGNED_INT, 0);
 
 		glDisableVertexAttribArray(n_attr);
 		glDisableVertexAttribArray(t_attr);
