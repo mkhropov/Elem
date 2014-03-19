@@ -5,6 +5,7 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 import iface.Interface;
 import iface.Cursor;
+import iface.Camera;
 
 import graphics.shaders.ShaderLoader;
 import graphics.shaders.Matrix4;
@@ -23,7 +24,9 @@ import physics.mana.ManaField;
 public class Renderer {
 	private World world;
 	private Interface iface;
-	private GraphicalChunk[][][] gChunks;
+	public int gChunks_size;
+	private GraphicalChunk[] gChunks;
+	public int zdepth;
 	private int xChunkSize, yChunkSize;
 	private Sun sun;
 	private ArrayList<GraphicalEntity> gEntities;
@@ -55,20 +58,17 @@ public class Renderer {
 		this.world = World.getInstance();
 		this.iface = Interface.getInstance();
 		this.draw_mana = false; //cubes only
+		this.zdepth = 10;
 
 		xChunkSize = world.xsize/GraphicalChunk.CHUNK_SIZE;
 		if (world.xsize%GraphicalChunk.CHUNK_SIZE!=0) xChunkSize++;
 		yChunkSize = world.ysize/GraphicalChunk.CHUNK_SIZE;
 		if (world.ysize%GraphicalChunk.CHUNK_SIZE!=0) yChunkSize++;
 
-		gChunks = new GraphicalChunk[xChunkSize][yChunkSize][world.zsize];
-		for (int i=0; i<xChunkSize; i++)
-			for (int j=0; j<yChunkSize; j++)
-				for (int k=0; k<world.zsize; k++)
-					gChunks[i][j][k] = new GraphicalChunk(world,
-								i*GraphicalChunk.CHUNK_SIZE,
-								j*GraphicalChunk.CHUNK_SIZE,
-								k);
+		gChunks_size = zdepth*16; //FIXME
+		gChunks = new GraphicalChunk[gChunks_size];
+		for (int i=0; i<gChunks_size; i++)
+			gChunks[i] = new GraphicalChunk(world, 0, 0, 0);
 
 		this.view = Matrix4.lookAt(-.25f, -.25f, -2.f, .5f, .5f, 0.f);
 		this.proj = Matrix4.scale(new float[]{.3f/4.f, -.1f, .001f});
@@ -88,11 +88,16 @@ public class Renderer {
 	}
 
 	public void updateBlock (int x, int y, int z) {
-		int chunkX = x/GraphicalChunk.CHUNK_SIZE;
+		int i=0;
+		while ((gChunks[i]==null) || (!gChunks[i].contains(x, y, z)))
+			++i;
+		if (i < gChunks_size)
+			gChunks[i].needs_update = true;
+/*		int chunkX = x/GraphicalChunk.CHUNK_SIZE;
 		int chunkY = y/GraphicalChunk.CHUNK_SIZE;
 		gChunks[chunkX][chunkY][z].rebuild();
 		if (z>0)
-			gChunks[chunkX][chunkY][z-1].rebuild();
+			gChunks[chunkX][chunkY][z-1].rebuild(); */
 	}
 
 	public void addEntity (Entity e) {
@@ -148,35 +153,97 @@ public class Renderer {
 		}
 	};
 
-	public void draw (int current_layer) {
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		VP = view.multR(proj);
+	public GraphicalChunk get_chunk(int x, int y, int z){
+		for (int t=0; t<gChunks_size; ++t){
+			if ((gChunks[t].x == x) &&
+				(gChunks[t].y == y) &&
+				(gChunks[t].z == z))
+				return gChunks[t];
+		}
+		return null;
+	}
+
+	public GraphicalChunk get_unused_chunk(){
+		for (int t=0; t<gChunks_size; ++t){
+			if (!gChunks[t].used)
+				return gChunks[t];
+		}
+		return null; //FIXME should be damn sure enough chunks were allocated
+	}
+
+	public void recalc_chunks() {
+		GraphicalChunk gc;
+		Camera c = Interface.getInstance().camera;
+		int top = Interface.getInstance().current_layer;
+		int bot = Math.max(0, top - zdepth);
 		int startX, endX, startY, endY;
 		int pos[][] = new int[8][2];
-		pos[0] = iface.camera.resolvePixel(0,0,0);
-		pos[1] = iface.camera.resolvePixel(800,0,0);
-		pos[2] = iface.camera.resolvePixel(0,600,0);
-		pos[3] = iface.camera.resolvePixel(800,600,0);
-		pos[4] = iface.camera.resolvePixel(0,0,current_layer);
-		pos[5] = iface.camera.resolvePixel(800,0,current_layer);
-		pos[6] = iface.camera.resolvePixel(0,600,current_layer);
-		pos[7] = iface.camera.resolvePixel(800,600,current_layer);
+		pos[0] = c.resolvePixel(0, 0, bot);
+		pos[1] = c.resolvePixel(800, 0, bot);
+		pos[2] = c.resolvePixel(0, 600, bot);
+		pos[3] = c.resolvePixel(800, 600, bot);
+		pos[4] = c.resolvePixel(0, 0, top);
+		pos[5] = c.resolvePixel(800, 0, top);
+		pos[6] = c.resolvePixel(0, 600, top);
+		pos[7] = c.resolvePixel(800, 600, top);
 		Arrays.sort(pos, COMPARE_0);
 		startX = Math.max(pos[0][0],0)/GraphicalChunk.CHUNK_SIZE;
 		endX = Math.min(pos[7][0]/GraphicalChunk.CHUNK_SIZE+1,xChunkSize);
 		Arrays.sort(pos, COMPARE_1);
 		startY = Math.max(pos[0][1],0)/GraphicalChunk.CHUNK_SIZE;
 		endY = Math.min(pos[7][1]/GraphicalChunk.CHUNK_SIZE+1,yChunkSize);
+		for (int k=0; k<gChunks_size; ++k)
+			gChunks[k].used = false;
+		for (int k = top; k > bot; --k)
+			for (int i = startX; i < endX; ++i)
+				for (int j = startY; j < endY; ++j){
+					gc = get_chunk(i, j, k);
+					if (gc != null)
+						gc.used = true;
+				}
+		for (int k = top; k > bot; --k)
+			for (int i = startX; i < endX; ++i)
+				for (int j = startY; j < endY; ++j){
+					gc = get_chunk(i, j, k);
+					if (gc == null){
+						gc = get_unused_chunk();
+						gc.used = true;
+						//FIXME not enough chunks reserved?
+						gc.rebuild(i, j, k);
+					} else if (gc.needs_update)
+						gc.rebuild();
+				}
+
+/*		for (int k=0; k<gChunks_size; ++k)
+			if (gChunks[k].used)
+				System.out.println(gChunks[k].x+" "+
+						gChunks[k].y+" "+gChunks[k].z);
+			else
+				System.out.println("Not used");*/
+	}
+
+
+	public void draw () {
+		int current_layer = Interface.getInstance().current_layer;
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		for (int i=0; i<gChunks_size; ++i)
+			if ((gChunks[i] != null) && (gChunks[i].needs_update))
+				gChunks[i].rebuild();
+		VP = view.multR(proj);
+
+		recalc_chunks();
+
 		if (!draw_mana){
 			glUseProgram(shaders[SHADER_HIGHLIGHT]);
-			for (int i=startX; i<endX; i++)
-				for (int j=startY; j<endY; j++)
-					gChunks[i][j][current_layer].draw(true);
+			for (int i=0; i<gChunks_size; i++)
+				if (gChunks[i].used && (gChunks[i].z==current_layer))
+					gChunks[i].draw(true);
+//			System.out.println("higlight layer printed");
 			glUseProgram(shaders[SHADER_BASIC]);
-			for (int k=current_layer-1; k>=0; k--)
-				for (int i=startX; i<endX; i++)
-					for (int j=startY; j<endY; j++)
-						gChunks[i][j][k].draw(false);
+			for (int i=0; i<gChunks_size; i++)
+				if (gChunks[i].used && (gChunks[i].z!=current_layer))
+						gChunks[i].draw(false);
+//			 System.out.println("regular layers printed");
 		} else {
 			glUseProgram(shaders[SHADER_NONE]);
 			glBindTexture(GL_TEXTURE_2D, 0);

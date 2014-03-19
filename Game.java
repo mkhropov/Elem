@@ -101,7 +101,7 @@ public class Game {
 			deltaT = newTime - lastTime;
 			lastTime = newTime;
 			iface.update(deltaT);
-			renderer.draw(iface.current_layer);
+			renderer.draw();
             world.iterate(deltaT);
 			Display.update();
 			updateFPS(deltaT);

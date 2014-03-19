@@ -144,8 +144,8 @@ public class Generator {
 		Block b;
 		System.out.print("Applying erosion ");
 		for (int k=0; k<w.zsize; ++k){
-			if (k%(w.xsize/30) == 0)
-				System.out.print(".");
+//			if (k%(w.xsize/30) == 0)
+//				System.out.print(".");
 			for (int i=0; i<w.xsize; ++i)
 				for (int j=0; j<w.ysize; ++j){
 					b = w.blockArray[i][j][k];
@@ -156,8 +156,8 @@ public class Generator {
 		}
 		System.out.print(" done\nFilling gaps ");
 		for (int k=0; k<w.zsize; ++k){
-			if (k%(w.xsize/30) == 0)
-				System.out.print(".");
+//			if (k%(w.xsize/30) == 0)
+//				System.out.print(".");
 			for (int i=0; i<w.xsize; ++i)
 				for (int j=0; j<w.ysize; ++j){
 					b = w.blockArray[i][j][k];
