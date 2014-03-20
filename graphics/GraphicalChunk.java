@@ -113,8 +113,8 @@ public class GraphicalChunk {
 		Block b;
 		/* fill vertex/texture/normal/indices buffers */
 		vbuf.clear(); tbuf.clear(); nbuf.clear(); ibuf.clear();
-		for (int i=x; i<x+xsize; i++)
-			for (int j=y; j<y+ysize; j++){
+		for (int i=x*CHUNK_SIZE; i<x*CHUNK_SIZE+xsize; i++)
+			for (int j=y*CHUNK_SIZE; j<y*CHUNK_SIZE+ysize; j++){
 				if (world.empty(i,j,z)) continue;
 				b = world.blockArray[i][j][z];
 				if (world.empty(i-1,j,z))
@@ -133,8 +133,8 @@ public class GraphicalChunk {
 
 		/* now add usually invisible top sides to the end of the buffer */
 		tail_size = 0;
-		for (int i=x; i<x+xsize; i++)
-			for (int j=y; j<y+ysize; j++){
+		for (int i=x*CHUNK_SIZE; i<x*CHUNK_SIZE+xsize; i++)
+			for (int j=y*CHUNK_SIZE; j<y*CHUNK_SIZE+ysize; j++){
 				if (world.empty(i,j,z)) continue;
 				b = world.blockArray[i][j][z];
 				if (!world.empty(i,j,z+1)){
