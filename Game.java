@@ -66,7 +66,6 @@ public class Game {
 			newTime = getTime();
 			deltaT = newTime-lastTime;
 			System.out.println("Full time      "+(double)deltaT);
-			System.out.println("Time per morph "+((double)deltaT)/(Generator.getInstance().morphs.size()));
 			System.out.println("Time per cube  "+((double)deltaT)/(Generator.getInstance().morphs.size()*world.xsize*world.ysize*world.zsize));
 			System.out.println();
 		}
