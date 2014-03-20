@@ -6,7 +6,8 @@ public class Marble extends Material {
 	public Marble() {
         tFreeze = new Temperature(4000);
         tBoil =  new Temperature(5000);
-        gsid = 3;
+		tex_u = 0.f;
+		tex_v = 0.5f;
 		hardness = 1.5*HARD_STONE;
 	}
 }

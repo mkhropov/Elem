@@ -99,8 +99,8 @@ public class GraphicalChunk {
 			vbuf.put(vert[f][3*i+0]+b.x);
 			vbuf.put(vert[f][3*i+1]+b.y);
 			vbuf.put(vert[f][3*i+2]+b.z);
-			tbuf.put(text[2*i+0]);//+(float)Math.sin(b.x+b.y+b.z));//FIX textures
-			tbuf.put(text[2*i+1]);//+(float)Math.cos(b.x+b.y+b.z));// offsets
+			tbuf.put(b.m.m.tex_u+(text[2*i+0]+((float)Math.sin(b.x+b.y+b.z)+1.f)/2.f)/8.f);//FIX textures
+			tbuf.put(b.m.m.tex_v+(text[2*i+1]+((float)Math.cos(b.x+b.y+b.z)+1.f)/2.f)/8.f);// offsets
 			nbuf.put(norm[f][3*i+0]);
 			nbuf.put(norm[f][3*i+1]);
 			nbuf.put(norm[f][3*i+2]);
@@ -202,8 +202,7 @@ public class GraphicalChunk {
 
 		glUniform1i(t_uniform, 0);
 		glActiveTexture(GL_TEXTURE0+0);
-		GSList.getInstance().get("stone").bind();
-//		System.out.println("Texture bound "+GSList.getInstance().get("stone"));
+		GSList.getInstance().get("textures").bind();
 
 		glEnableVertexAttribArray(v_attr);
 		glBindBuffer(GL_ARRAY_BUFFER, v_b);
