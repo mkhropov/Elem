@@ -14,7 +14,7 @@ import physics.mana.*;
 public class World {
     public static int DEFAULT_XSIZE = 64;
     public static int DEFAULT_YSIZE = 64;
-    public static int DEFAULT_ZSIZE = 64;
+    public static int DEFAULT_ZSIZE = 32;
     public int xsize, ysize, zsize;
     public Block[][][] blockArray;
     public Wall[][][][] wallArray;
@@ -46,8 +46,8 @@ public class World {
 		System.out.print("Reserving world space ");
         this.blockArray = new Block[this.xsize][this.ysize][this.zsize];
         for (int i=0; i<this.xsize; i++){
-			if (i%(this.xsize/30) == 0)
-				System.out.print(".");
+//			if (i%(this.xsize/30) == 0)
+//				System.out.print(".");
             for (int j=0; j<this.ysize; j++)
                 for (int k=0; k<this.zsize; k++)
                     this.blockArray[i][j][k] = new Block(i, j, k);

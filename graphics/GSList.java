@@ -21,6 +21,7 @@ public class GSList {
 		add("marble", 0.5);
 		add("granite", 0.5);
 		add("red_granite", 0.5);
+		add("textures", 0.0);
 		add("selection", 0.0);
 	}
 

@@ -11,7 +11,8 @@ public class Material {
 	public static final int MATERIAL_MAX = 6;
     public Temperature tFreeze;
     public Temperature tBoil;
-	public int gsid;
+	public float tex_u;
+	public float tex_v;
 	public double hardness;
 	public static final double HARD_NONE = 0.d;
 	public static final double HARD_EARTH = 50.d;
@@ -22,7 +23,8 @@ public class Material {
 	public Material() {
         tFreeze = new Temperature(9000000);
         tBoil =  new Temperature(9000000);
-		gsid = 0;
+		tex_u = 0.f;
+		tex_v = 0.f;
 		hardness = HARD_NONE;
     }
 }

@@ -15,7 +15,7 @@ public class ItemBoulder extends Item{
 		this.m = m;
 		this.scale = Math.cbrt(w);
 		this.mid = graphics.ModelList.getInstance().findId("boulder");
-		this.gsid = m.gsid;
+//		this.gsid = m.gsid;
 		EventHandler.getInstance().addEntity(this);
 	}
 

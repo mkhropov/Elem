@@ -16,8 +16,10 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class GraphicalChunk {
 	private World world;
-	private int x,y,z;
+	public int x,y,z;
 	private int xsize, ysize;
+	public boolean needs_update;
+	public boolean used;
 
 	public static final int CHUNK_SIZE = 16;
 
@@ -62,6 +64,8 @@ public class GraphicalChunk {
 		this.y = y;
 		this.z = z;
 		this.tail_size = 0;
+		this.used = false;
+		this.needs_update = true;
 		xsize = (w.xsize-x>CHUNK_SIZE)?CHUNK_SIZE:(w.xsize-x);
 		ysize = (w.ysize-y>CHUNK_SIZE)?CHUNK_SIZE:(w.ysize-y);
 
@@ -73,12 +77,20 @@ public class GraphicalChunk {
 		this.vao = glGenVertexArrays();
 		glBindVertexArray(vao);
 		this.v_b = glGenBuffers();
+		glBindBuffer(GL_ARRAY_BUFFER, v_b);
+		glBufferData(GL_ARRAY_BUFFER, vbuf, GL_STATIC_DRAW);
 		this.t_b = glGenBuffers();
+		glBindBuffer(GL_ARRAY_BUFFER, v_b);
+		glBufferData(GL_ARRAY_BUFFER, vbuf, GL_STATIC_DRAW);
 		this.n_b = glGenBuffers();
+		glBindBuffer(GL_ARRAY_BUFFER, v_b);
+		glBufferData(GL_ARRAY_BUFFER, vbuf, GL_STATIC_DRAW);
 		this.i_b = glGenBuffers();
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, i_b);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, ibuf, GL_STATIC_DRAW);
 		glBindVertexArray(0);
 
-		rebuild();
+//		rebuild();
 	}
 
 	void addFace(Block b, int f){
@@ -87,8 +99,8 @@ public class GraphicalChunk {
 			vbuf.put(vert[f][3*i+0]+b.x);
 			vbuf.put(vert[f][3*i+1]+b.y);
 			vbuf.put(vert[f][3*i+2]+b.z);
-			tbuf.put(text[2*i+0]);//+(float)Math.sin(b.x+b.y+b.z));//FIX textures
-			tbuf.put(text[2*i+1]);//+(float)Math.cos(b.x+b.y+b.z));// offsets
+			tbuf.put(b.m.m.tex_u+(text[2*i+0]+((float)Math.sin(b.x+b.y+b.z)+1.f)/2.f)/8.f);//FIX textures
+			tbuf.put(b.m.m.tex_v+(text[2*i+1]+((float)Math.cos(b.x+b.y+b.z)+1.f)/2.f)/8.f);// offsets
 			nbuf.put(norm[f][3*i+0]);
 			nbuf.put(norm[f][3*i+1]);
 			nbuf.put(norm[f][3*i+2]);
@@ -101,8 +113,8 @@ public class GraphicalChunk {
 		Block b;
 		/* fill vertex/texture/normal/indices buffers */
 		vbuf.clear(); tbuf.clear(); nbuf.clear(); ibuf.clear();
-		for (int i=x; i<x+xsize; i++)
-			for (int j=y; j<y+ysize; j++){
+		for (int i=x*CHUNK_SIZE; i<x*CHUNK_SIZE+xsize; i++)
+			for (int j=y*CHUNK_SIZE; j<y*CHUNK_SIZE+ysize; j++){
 				if (world.empty(i,j,z)) continue;
 				b = world.blockArray[i][j][z];
 				if (world.empty(i-1,j,z))
@@ -121,13 +133,13 @@ public class GraphicalChunk {
 
 		/* now add usually invisible top sides to the end of the buffer */
 		tail_size = 0;
-		for (int i=x; i<x+xsize; i++)
-			for (int j=y; j<y+ysize; j++){
+		for (int i=x*CHUNK_SIZE; i<x*CHUNK_SIZE+xsize; i++)
+			for (int j=y*CHUNK_SIZE; j<y*CHUNK_SIZE+ysize; j++){
 				if (world.empty(i,j,z)) continue;
 				b = world.blockArray[i][j][z];
 				if (!world.empty(i,j,z+1)){
 					addFace(b, 1);
-					tail_size++;
+					tail_size += 6;
 				}
 			}
 
@@ -152,15 +164,21 @@ public class GraphicalChunk {
 		/* submit all generated buffers onto videocard */
 		glBindVertexArray(vao);
 		glBindBuffer(GL_ARRAY_BUFFER, v_b);
+//		glBufferSubData(GL_ARRAY_BUFFER, 0, vbuf);
 		glBufferData(GL_ARRAY_BUFFER, vbuf, GL_STATIC_DRAW);
 		glBindBuffer(GL_ARRAY_BUFFER, t_b);
+//		glBufferSubData(GL_ARRAY_BUFFER, 0, tbuf);
 		glBufferData(GL_ARRAY_BUFFER, tbuf, GL_STATIC_DRAW);
 		glBindBuffer(GL_ARRAY_BUFFER, n_b);
+//		glBufferSubData(GL_ARRAY_BUFFER, 0, nbuf);
 		glBufferData(GL_ARRAY_BUFFER, nbuf, GL_STATIC_DRAW);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, i_b);
+//		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, ibuf);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, ibuf, GL_STATIC_DRAW);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		glBindVertexArray(0);
+//		System.out.println(x+" "+y+" "+z);
+//		System.out.println(ibuf+", tail size "+tail_size);
+		needs_update = false;
 	}
 
 	public void rebuild(int x, int y, int z){
@@ -184,29 +202,39 @@ public class GraphicalChunk {
 
 		glUniform1i(t_uniform, 0);
 		glActiveTexture(GL_TEXTURE0+0);
-		GSList.getInstance().get("earth").bind();
+		GSList.getInstance().get("textures").bind();
 
 		glEnableVertexAttribArray(v_attr);
 		glBindBuffer(GL_ARRAY_BUFFER, v_b);
 		glVertexAttribPointer(v_attr, 3, GL_FLOAT, false, 0, 0);
+//		System.out.println("Vertices sent "+vbuf);
 
 		glEnableVertexAttribArray(t_attr);
 		glBindBuffer(GL_ARRAY_BUFFER, t_b);
 		glVertexAttribPointer(t_attr, 2, GL_FLOAT, false, 0, 0);
+//		System.out.println("Texture coord sent "+tbuf);
 
 		glEnableVertexAttribArray(n_attr);
 		glBindBuffer(GL_ARRAY_BUFFER, n_b);
 		glVertexAttribPointer(n_attr, 3, GL_FLOAT, true, 0, 0);
+//		System.out.println("Normals sent "+nbuf);
 
 		/* if show_top is not set ->
 		 do not draw underground top sides of cubes */
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, i_b);
 		glDrawElements(GL_TRIANGLES, ibuf.limit()-(show_top?0:tail_size),
 			GL_UNSIGNED_INT, 0);
+//		 System.out.println("Indices applied");
 
 		glDisableVertexAttribArray(n_attr);
 		glDisableVertexAttribArray(t_attr);
         glDisableVertexAttribArray(v_attr);
 		glBindVertexArray(0);
+	}
+
+	public boolean contains(int nx, int ny, int nz){
+		return ((nx >= x) && (nx < x+xsize) &&
+				(ny >= y) && (ny < y+ysize) &&
+				(nz == z));
 	}
 }
