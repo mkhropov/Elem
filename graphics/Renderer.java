@@ -27,6 +27,7 @@ public class Renderer {
 	public int gChunks_size;
 	private GraphicalChunk[] gChunks;
 	public int zdepth;
+	public int fdepth;
 	private int xChunkSize, yChunkSize;
 	private Sun sun;
 	private ArrayList<GraphicalEntity> gEntities;
@@ -35,9 +36,12 @@ public class Renderer {
 	public final static int SHADER_BASIC = 1;
 	public final static int SHADER_HIGHLIGHT = 2;
 	public final static int SHADER_GHOST = 3;
-	public final static int SHADER_MAX = 4;
+	public final static int SHADER_FADE = 4;
+	public final static int SHADER_MAX = 5;
 
 	public int[] shaders;
+
+	public int fade_attr;
 
 	public Matrix4 view;
 	public Matrix4 proj;
@@ -58,14 +62,15 @@ public class Renderer {
 		this.world = World.getInstance();
 		this.iface = Interface.getInstance();
 		this.draw_mana = false; //cubes only
-		this.zdepth = 10;
+		this.zdepth = 7;
+		this.fdepth = 7;
 
 		xChunkSize = world.xsize/GraphicalChunk.CHUNK_SIZE;
 		if (world.xsize%GraphicalChunk.CHUNK_SIZE!=0) xChunkSize++;
 		yChunkSize = world.ysize/GraphicalChunk.CHUNK_SIZE;
 		if (world.ysize%GraphicalChunk.CHUNK_SIZE!=0) yChunkSize++;
 
-		gChunks_size = zdepth*16; //FIXME
+		gChunks_size = (zdepth+fdepth)*50; //FIXME
 		gChunks = new GraphicalChunk[gChunks_size];
 		for (int i=0; i<gChunks_size; i++)
 			gChunks[i] = new GraphicalChunk(world, 0, 0, 0);
@@ -84,6 +89,11 @@ public class Renderer {
 //		System.out.println("[SHADER_HIGHLIGHT]="+shaders[SHADER_HIGHLIGHT]);
 		shaders[SHADER_GHOST] =
 			ShaderLoader.createShader("basic.vsh", "ghost.fsh");
+		shaders[SHADER_FADE] =
+			ShaderLoader.createShader("basic.vsh", "fadeout.fsh");
+
+		fade_attr = glGetUniformLocation(shaders[SHADER_FADE], "fade");
+
 		gEntities = new ArrayList<GraphicalEntity>();
 	}
 
@@ -175,7 +185,7 @@ public class Renderer {
 		GraphicalChunk gc;
 		Camera c = Interface.getInstance().camera;
 		int top = Interface.getInstance().current_layer;
-		int bot = Math.max(0, top - zdepth);
+		int bot = Math.max(0, top - zdepth - fdepth);
 		int startX, endX, startY, endY;
 		int pos[][] = new int[8][2];
 		pos[0] = c.resolvePixel(0, 0, bot);
@@ -192,6 +202,8 @@ public class Renderer {
 		Arrays.sort(pos, COMPARE_1);
 		startY = Math.max(pos[0][1],0)/GraphicalChunk.CHUNK_SIZE;
 		endY = Math.min(pos[7][1]/GraphicalChunk.CHUNK_SIZE+1,yChunkSize);
+//		if(zdepth*(startX-endX)*(startY-endY) > gChunks_size)
+//			System.out.println(zdepth*(startX-endX)*(startY-endY)+">"+gChunks_size);
 		for (int k=0; k<gChunks_size; ++k)
 			gChunks[k].used = false;
 		for (int k = top; k > bot; --k)
@@ -225,6 +237,7 @@ public class Renderer {
 
 	public void draw () {
 		int current_layer = Interface.getInstance().current_layer;
+		float fade;
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		for (int i=0; i<gChunks_size; ++i)
 			if ((gChunks[i] != null) && (gChunks[i].needs_update))
@@ -239,10 +252,14 @@ public class Renderer {
 				if (gChunks[i].used && (gChunks[i].z==current_layer))
 					gChunks[i].draw(true);
 //			System.out.println("higlight layer printed");
-			glUseProgram(shaders[SHADER_BASIC]);
+			glUseProgram(shaders[SHADER_FADE]);
 			for (int i=0; i<gChunks_size; i++)
-				if (gChunks[i].used && (gChunks[i].z!=current_layer))
-						gChunks[i].draw(false);
+				if (gChunks[i].used && (gChunks[i].z!=current_layer)){
+					fade = (current_layer-gChunks[i].z) - zdepth;
+					fade = (fade<0.f)?(1.f):(1.f-fade/fdepth);
+					glUniform1f(fade_attr, fade);
+					gChunks[i].draw(false);
+				}
 //			 System.out.println("regular layers printed");
 		} else {
 			glUseProgram(shaders[SHADER_NONE]);
