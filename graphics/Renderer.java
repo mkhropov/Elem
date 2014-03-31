@@ -62,8 +62,8 @@ public class Renderer {
 		this.world = World.getInstance();
 		this.iface = Interface.getInstance();
 		this.draw_mana = false; //cubes only
-		this.zdepth = 7;
-		this.fdepth = 7;
+		this.zdepth = 1;
+		this.fdepth = 12;
 
 		xChunkSize = world.xsize/GraphicalChunk.CHUNK_SIZE;
 		if (world.xsize%GraphicalChunk.CHUNK_SIZE!=0) xChunkSize++;

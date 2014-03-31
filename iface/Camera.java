@@ -21,8 +21,8 @@ public class Camera {
 		this.x = x;
 		this.y = y;
 		this.z = z;
-		this.targetAngleZ = (float)Math.toRadians(45.0f);
-		this.currentAngleZ = (float)Math.toRadians(45.0f);
+		this.targetAngleZ = (float)Math.toRadians(30.0f);
+		this.currentAngleZ = (float)Math.toRadians(30.0f);
 /*		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
 		GLU.gluPerspective(10.0f, 4.0f/3.0f, 1.0f, 1000.0f);
