@@ -4,6 +4,7 @@ import world.Entity;
 import physics.material.Material;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 
 import world.World;
 
@@ -19,7 +20,6 @@ public class GraphicalEntity {
 	}
 
 	void draw() {
-		gs.bind();
-		m.draw(e.p.x, e.p.y, e.p.z);
+		m.draw((float)e.p.x, (float)e.p.y, (float)e.p.z, 0.f, gs);
 	}
 }

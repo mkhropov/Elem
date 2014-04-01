@@ -14,10 +14,13 @@ public class ModelList {
 	}
 
 	private ModelList() {
+		Model m;
+		Renderer r = Renderer.getInstance();
 		list = new ArrayList<Model>();
-		add(new graphics.models.Void());
-		add(new graphics.models.Cube());
-		add(new graphics.models.Boulder());
+		m = ModelLoader.getInstance().load("res/box.obj", "box");
+		m.prepare(r.shaders[Renderer.SHADER_BASIC]);
+		m.scale = .3f; m.a0 = .5f; m.a1 = .5f; m.a2 = .3f;
+		add(m);
 	}
 
 	public int findId(String name) {

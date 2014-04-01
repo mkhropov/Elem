@@ -1,6 +1,7 @@
 package graphics;
 
 import world.World;
+import world.Block;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 import iface.Interface;
@@ -98,11 +99,28 @@ public class Renderer {
 	}
 
 	public void updateBlock (int x, int y, int z) {
-		int i=0;
-		while ((gChunks[i]==null) || (!gChunks[i].contains(x, y, z)))
-			++i;
-		if (i < gChunks_size)
-			gChunks[i].needs_update = true;
+		int I;
+		int i, j, k;
+//		System.out.println("Updating block "+x+","+y+","+z);
+		for (int t=-1; t<6; ++t){
+			I = 0;
+			if (t>=0){
+				i = x+Block.nearInd[t][0];
+				j = y+Block.nearInd[t][1];
+				k = z+Block.nearInd[t][2];
+			} else {
+				i = x;
+				j = y;
+				k = z;
+			}
+			while ((I < gChunks_size) &&
+				   ((gChunks[I]==null) || (!gChunks[I].contains(i, j, k))))
+				++I;
+			if (I < gChunks_size){
+				gChunks[I].needs_update = true;
+//				System.out.println("Update sheduled to chunk "+I);
+			}
+		}
 /*		int chunkX = x/GraphicalChunk.CHUNK_SIZE;
 		int chunkY = y/GraphicalChunk.CHUNK_SIZE;
 		gChunks[chunkX][chunkY][z].rebuild();
@@ -270,10 +288,12 @@ public class Renderer {
 			ManaField.getInstance().draw();
 			glDisable(GL_COLOR_MATERIAL);
 		}
+		glUseProgram(shaders[SHADER_BASIC]);
+		for (int i=0; i<gEntities.size(); i++)
+			if (gEntities.get(i).e.p.z<=current_layer)
+				gEntities.get(i).draw();
 		glUseProgram(shaders[SHADER_NONE]);
 		resetMaterial();
-		for (int i=0; i<gEntities.size(); i++)
-			if (gEntities.get(i).e.p.z<=current_layer)gEntities.get(i).draw();
 		iface.cursor.draw3d();
 		iface.draw();
 	}

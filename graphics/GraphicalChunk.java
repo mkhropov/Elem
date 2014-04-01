@@ -17,6 +17,7 @@ import static org.lwjgl.opengl.GL11.*;
 public class GraphicalChunk {
 	private World world;
 	public int x,y,z;
+	int rx, ry;
 	private int xsize, ysize;
 	public boolean needs_update;
 	public boolean used;
@@ -61,13 +62,15 @@ public class GraphicalChunk {
 	public GraphicalChunk(World w, int x, int y, int z){
 		this.world = w;
 		this.x = x;
+		this.rx = x*CHUNK_SIZE;
 		this.y = y;
+		this.ry = y*CHUNK_SIZE;
 		this.z = z;
 		this.tail_size = 0;
 		this.used = false;
 		this.needs_update = true;
-		xsize = (w.xsize-x>CHUNK_SIZE)?CHUNK_SIZE:(w.xsize-x);
-		ysize = (w.ysize-y>CHUNK_SIZE)?CHUNK_SIZE:(w.ysize-y);
+		xsize = (w.xsize-rx > CHUNK_SIZE)?CHUNK_SIZE:(w.xsize-rx);
+		ysize = (w.ysize-ry > CHUNK_SIZE)?CHUNK_SIZE:(w.ysize-ry);
 
 		this.vbuf = BufferUtils.createFloatBuffer(xsize*ysize*6*4*3);
 		this.tbuf = BufferUtils.createFloatBuffer(xsize*ysize*6*4*2);
@@ -99,8 +102,8 @@ public class GraphicalChunk {
 			vbuf.put(vert[f][3*i+0]+b.x);
 			vbuf.put(vert[f][3*i+1]+b.y);
 			vbuf.put(vert[f][3*i+2]+b.z);
-			tbuf.put(b.m.m.tex_u+(text[2*i+0]+((float)Math.sin(b.x+b.y+b.z)+1.f)/2.f)/8.f);//FIX textures
-			tbuf.put(b.m.m.tex_v+(text[2*i+1]+((float)Math.cos(b.x+b.y+b.z)+1.f)/2.f)/8.f);// offsets
+			tbuf.put(b.m.m.tex_u+text[2*i+0]/8.f+((float)Math.sin(b.x+b.y+b.z)+1.f)/16.f);//FIX textures
+			tbuf.put(b.m.m.tex_v+text[2*i+1]/8.f+((float)Math.cos(b.x+b.y+b.z)+1.f)/16.f);// offsets
 			nbuf.put(norm[f][3*i+0]);
 			nbuf.put(norm[f][3*i+1]);
 			nbuf.put(norm[f][3*i+2]);
@@ -113,8 +116,8 @@ public class GraphicalChunk {
 		Block b;
 		/* fill vertex/texture/normal/indices buffers */
 		vbuf.clear(); tbuf.clear(); nbuf.clear(); ibuf.clear();
-		for (int i=x*CHUNK_SIZE; i<x*CHUNK_SIZE+xsize; i++)
-			for (int j=y*CHUNK_SIZE; j<y*CHUNK_SIZE+ysize; j++){
+		for (int i=rx; i<rx+xsize; i++)
+			for (int j=ry; j<ry+ysize; j++){
 				if (world.empty(i,j,z)) continue;
 				b = world.blockArray[i][j][z];
 				if (world.empty(i-1,j,z))
@@ -133,8 +136,8 @@ public class GraphicalChunk {
 
 		/* now add usually invisible top sides to the end of the buffer */
 		tail_size = 0;
-		for (int i=x*CHUNK_SIZE; i<x*CHUNK_SIZE+xsize; i++)
-			for (int j=y*CHUNK_SIZE; j<y*CHUNK_SIZE+ysize; j++){
+		for (int i=rx; i<rx+xsize; i++)
+			for (int j=ry; j<ry+ysize; j++){
 				if (world.empty(i,j,z)) continue;
 				b = world.blockArray[i][j][z];
 				if (!world.empty(i,j,z+1)){
@@ -183,7 +186,9 @@ public class GraphicalChunk {
 
 	public void rebuild(int x, int y, int z){
 		this.x = x;
+		this.rx = x*CHUNK_SIZE;
 		this.y = y;
+		this.ry = y*CHUNK_SIZE;
 		this.z = z;
 		rebuild();
 	}
@@ -233,8 +238,8 @@ public class GraphicalChunk {
 	}
 
 	public boolean contains(int nx, int ny, int nz){
-		return ((nx >= x) && (nx < x+xsize) &&
-				(ny >= y) && (ny < y+ysize) &&
+		return ((nx >= rx) && (nx < rx+xsize) &&
+				(ny >= ry) && (ny < ry+ysize) &&
 				(nz == z));
 	}
 }
