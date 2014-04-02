@@ -1,16 +1,18 @@
 #version 120
 
 uniform sampler2D tex;
+uniform int enabled;
 
 varying vec3 light;
 varying vec2 uv;
 
 void main(){
 	vec4 color = texture2D(tex, uv);
-	color =        vec4(color.r*light.r,
-						color.g*light.g,
-						color.b*light.b,
-						color.a);
-	gl_FragColor = vec4(.5, .5+(color.x+color.y+color.z)/6., .5, .5);
+//	float i = (color.r+color.g+color.b)/6.;
+	float i = .5;
+	if (enabled == 1)
+		gl_FragColor = vec4(.4, .4+i, .4, 0.6);
+	else
+		gl_FragColor = vec4(.4+i, .4, .4, 0.6);
 }
 

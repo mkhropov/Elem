@@ -61,7 +61,6 @@ public class Renderer {
 
 	private Renderer () {
 		this.world = World.getInstance();
-		this.iface = Interface.getInstance();
 		this.draw_mana = false; //cubes only
 		this.zdepth = 1;
 		this.fdepth = 12;
@@ -292,9 +291,9 @@ public class Renderer {
 		for (int i=0; i<gEntities.size(); i++)
 			if (gEntities.get(i).e.p.z<=current_layer)
 				gEntities.get(i).draw();
+		glUseProgram(shaders[SHADER_GHOST]);
+		Interface.getInstance().cursor.draw3d();
 		glUseProgram(shaders[SHADER_NONE]);
-		resetMaterial();
-		iface.cursor.draw3d();
-		iface.draw();
+		Interface.getInstance().draw();
 	}
 }

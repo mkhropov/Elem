@@ -13,8 +13,8 @@ import stereometry.*;
 import physics.mana.*;
 
 public class World {
-    public static int DEFAULT_XSIZE = 1024;
-    public static int DEFAULT_YSIZE = 1024;
+    public static int DEFAULT_XSIZE = 64;
+    public static int DEFAULT_YSIZE = 64;
     public static int DEFAULT_ZSIZE = 32;
     public int xsize, ysize, zsize;
     public char[][][] m;

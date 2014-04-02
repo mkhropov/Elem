@@ -1,11 +1,12 @@
 package iface;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 
-import graphics.Renderer;
+import graphics.*;
 
 public class Cursor {
 
@@ -16,10 +17,13 @@ public class Cursor {
 	public int state;
 
 	public int x, y, z;
-	public boolean disabled;
+
+	int enabled_uniform; //shader uniform location
+	Model model;
+	GraphicalSurface gs;
 
 	public Cursor(){
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+	//	GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		try {
 			org.lwjgl.input.Cursor emptyCursor = new org.lwjgl.input.Cursor(1, 1, 0, 0, 1, BufferUtils.createIntBuffer(1), null);
 			Mouse.setNativeCursor(emptyCursor);
@@ -27,7 +31,14 @@ public class Cursor {
 			 e.printStackTrace();
 			 System.exit(0);
 		}
-	//	icon = 
+		Renderer r = Renderer.getInstance();
+		enabled_uniform = GL20.glGetUniformLocation(
+			r.shaders[Renderer.SHADER_GHOST], "enabled");
+		int m = ModelList.getInstance().findId("cursor");
+		model = ModelList.getInstance().get(m);
+		int g = graphics.GSList.getInstance().findId("marble");
+		gs = GSList.getInstance().get(g);
+
 		state = STATE_IFACE;
 	}
 
@@ -35,7 +46,6 @@ public class Cursor {
 		this.x = x;
 		this.y = y;
 		this.z = z;
-		disabled = false;
 	}
 
 	public void draw2d(){
@@ -70,85 +80,7 @@ public class Cursor {
 		if (state == STATE_IFACE)
 			return; //or exception
 
-		Renderer.getInstance().resetMaterial();
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glEnable(GL11.GL_COLOR_MATERIAL);
-
-		if (state == STATE_ENABLED){
-			GL11.glColor4d(0.0, 0.5, 0.8, 0.5);
-		} else if (state == STATE_DISABLED){
-			GL11.glColor4d(0.8, 0.0, 0.0, 0.5);
-		} else {
-			return; //or exception
-		}
-
-		GL11.glBegin(GL11.GL_QUADS);
-		GL11.glNormal3d(0.0, 0.0, -1.0);
-		GL11.glVertex3d(x-0.01, y-0.01, z-0.01);
-		GL11.glNormal3d(0.0, 0.0, -1.0);
-		GL11.glVertex3d(x+1.01, y-0.01, z-0.01);
-		GL11.glNormal3d(0.0, 0.0, -1.0);
-		GL11.glVertex3d(x+1.01, y+1.01, z-0.01);
-		GL11.glNormal3d(0.0, 0.0, -1.0);
-		GL11.glVertex3d(x-0.01, y+1.01, z-0.01);
-		GL11.glEnd();
-
-		GL11.glBegin(GL11.GL_QUADS);
-		GL11.glNormal3d(-1.0, 0.0, 0.0);
-		GL11.glVertex3d(x-0.01, y-0.01, z-0.01);
-		GL11.glNormal3d(-1.0, 0.0, 0.0);
-		GL11.glVertex3d(x-0.01, y+1.01, z-0.01);
-		GL11.glNormal3d(-1.0, 0.0, 0.0);
-		GL11.glVertex3d(x-0.01, y+1.01, z+1.01);
-		GL11.glNormal3d(-1.0, 0.0, 0.0);
-		GL11.glVertex3d(x-0.01, y-0.01, z+1.01);
-		GL11.glEnd();
-
-		GL11.glBegin(GL11.GL_QUADS);
-		GL11.glNormal3d(0.0, -1.0, 0.0);
-		GL11.glVertex3d(x-0.01, y-0.01, z-0.01);
-		GL11.glNormal3d(0.0, -1.0, 0.0);
-		GL11.glVertex3d(x+1.01, y-0.01, z-0.01);
-		GL11.glNormal3d(0.0, -1.0, 0.0);
-		GL11.glVertex3d(x+1.01, y-0.01, z+1.01);
-		GL11.glNormal3d(0.0, -1.0, 0.0);
-		GL11.glVertex3d(x-0.01, y-0.01, z+1.01);
-		GL11.glEnd();
-
-		GL11.glBegin(GL11.GL_QUADS);
-		GL11.glNormal3d(1.0, 0.0, 0.0);
-		GL11.glVertex3d(x+1.01, y-0.01, z-0.01);
-		GL11.glNormal3d(1.0, 0.0, 0.0);
-		GL11.glVertex3d(x+1.01, y+1.01, z-0.01);
-		GL11.glNormal3d(1.0, 0.0, 0.0);
-		GL11.glVertex3d(x+1.01, y+1.01, z+1.01);
-		GL11.glNormal3d(1.0, 0.0, 0.0);
-		GL11.glVertex3d(x+1.01, y-0.01, z+1.01);
-		GL11.glEnd();
-
-		GL11.glBegin(GL11.GL_QUADS);
-		GL11.glNormal3d(0.0, 0.0, 1.0);
-		GL11.glVertex3d(x-0.01, y-0.01, z+1.01);
-		GL11.glNormal3d(0.0, 0.0, 1.0);
-		GL11.glVertex3d(x+1.01, y-0.01, z+1.01);
-		GL11.glNormal3d(0.0, 0.0, 1.0);
-		GL11.glVertex3d(x+1.01, y+1.01, z+1.01);
-		GL11.glNormal3d(0.0, 0.0, 1.0);
-		GL11.glVertex3d(x-0.01, y+1.01, z+1.01);
-		GL11.glEnd();
-
-		GL11.glBegin(GL11.GL_QUADS);
-		GL11.glNormal3d(0.0, 1.0, 0.0);
-		GL11.glVertex3d(x-0.01, y+1.01, z-0.01);
-		GL11.glNormal3d(0.0, 1.0, 0.0);
-		GL11.glVertex3d(x+1.01, y+1.01, z-0.01);
-		GL11.glNormal3d(0.0, 1.0, 0.0);
-		GL11.glVertex3d(x+1.01, y+1.01, z+1.01);
-		GL11.glNormal3d(0.0, 1.0, 0.0);
-		GL11.glVertex3d(x-0.01, y+1.01, z+1.01);
-		GL11.glEnd();
-
-		GL11.glDisable(GL11.GL_COLOR_MATERIAL);
-		GL11.glDisable(GL11.GL_BLEND);
+		GL20.glUniform1i(((state == STATE_ENABLED)?(1):(0)), enabled_uniform);
+		model.draw(x, y, z, 0.f, gs);
 	}
 }
