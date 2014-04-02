@@ -10,7 +10,7 @@ public class ConditionCreature implements Condition {
 
 	@Override
 	public boolean suits(Block b){
-		ArrayList<Block> near = b.nearest(c.w);
+		ArrayList<Block> near = b.nearest();
 		Block t;
 		for (int i=0; i<near.size(); ++i){
 			t = near.get(i);

@@ -1,6 +1,7 @@
 package generation.morphs;
 
 import stereometry.*;
+import world.World;
 /* Slipfault is a fault-type extension geomorphing, when the fault angle
  * is less more then 45' and the stratums are slipping down the fault
  * It's commonly called 'dipslip'
@@ -17,6 +18,8 @@ public class Slipfault extends Morph {
         this.l = l;
         this.h = h;
         this.d = d;
+		Vector v = new Vector(f.y, -f.x, 0);
+		v.normalize(); v.scale(l);
 		this.bb = new BoundBox(Math.min(f.p1.x, f.p2.x)-Math.abs(v.x),
                                Math.min(f.p1.y, f.p2.y)-Math.abs(v.y),
                                0,
