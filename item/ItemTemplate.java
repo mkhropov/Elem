@@ -5,9 +5,9 @@ import physics.material.Material;
 public class ItemTemplate{
 
 	public int type;
-	public Material m;
+	public char m; //material code
 
-	public ItemTemplate(int type, Material m){
+	public ItemTemplate(int type, char m){
 		this.type = type;
 		this.m = m;
 	}
@@ -17,7 +17,7 @@ public class ItemTemplate{
 			return false;
 		return (((i.type == type) ||
 				 (type == Item.TYPE_NONE)) &&
-				((i.m.equals(m)) ||
-				 (m == null)));
+				((i.m == m) ||
+				 (m == Material.MATERIAL_NONE)));
 	}
 }

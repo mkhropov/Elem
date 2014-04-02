@@ -7,7 +7,7 @@ import physics.material.Material;
 public class Item extends Entity{
 	Block b;
 	Creature c;
-	public Material m; //maybe a list in future?..
+	public char m; //maybe a list in future?..
 	double w;
 	public int type;
 
@@ -22,6 +22,10 @@ public class Item extends Entity{
 		this.type = TYPE_NONE;
 	}
 
+	public Item(int x, int y, int z, double w){
+		this(World.getInstance().getBlock(x, y, z), w);
+	}
+
 	public Item(Creature c, double w){
 		super();
 		this.b = null;
@@ -30,16 +34,23 @@ public class Item extends Entity{
 		this.type = TYPE_NONE;
 	}
 
-	public void update(World world){
+	public boolean isIn(int x, int y, int z){
+		return (b.x==x && b.y==y && b.z==z);
+	}
+
+	public boolean isIn(Block t){
+		return (b.x==t.x && b.y==t.y && b.z==t.z);
+	}
+
+	public void update(){
+		World w = World.getInstance();
 		if (b!=null){
 			int i = b.z;
 			while (i > 0)
-				if (world.blockArray[b.x][b.y][--i].m != null)
+				if (w.m[b.x][b.y][--i] != Material.MATERIAL_NONE)
 					break;
 			if (i!=(b.z-1)){
-				b.item.remove(this);
-				b = world.blockArray[b.x][b.y][i+1];
-				b.item.add(this);
+				b = w.getBlock(b.x, b.y, i+1);
 			}
 		}
 	}

@@ -7,6 +7,7 @@ import stereometry.BoundBox;
 import stereometry.Point;
 import world.Block;
 import world.World;
+import physics.material.Material;
 
 public class SpellSunstrike extends Spell{
 
@@ -27,11 +28,11 @@ public class SpellSunstrike extends Spell{
 	public void cast(Block b){
 		World w = World.getInstance();
 		int h = w.zsize-1;
-		while (h>0 && (w.blockArray[b.x][b.y][h].m == null))
+		while (h>0 && (w.m[b.x][b.y][h] == Material.MATERIAL_NONE))
 			h--;
 		if (h==0)
 			return;
-		Block t = w.blockArray[b.x][b.y][h];
+		Block t = w.getBlock(b.x, b.y, h);
 		Pointfold f = new Pointfold(new Point(t), 4., 10., 1.1);
 //		w.biome.applyMorph(f, w);
 		BoundBox bb = f.bb.intersect(w.bb);

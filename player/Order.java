@@ -9,7 +9,7 @@ public class Order {
     public boolean taken;
     public Block b;
     public ItemTemplate it;
-	public Material m;
+	public char m; //material code
 //	public CreatureTemplate ct;
 	public static final int ORDER_MOVE  = 0;
 	public static final int ORDER_DIG   = 1;

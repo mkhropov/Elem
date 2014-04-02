@@ -1,8 +1,10 @@
 package pathfind;
 
+import java.util.ArrayList;
+
+import world.World;
 import world.Block;
 import creature.Creature;
-import java.util.ArrayList;
 
 public class ConditionCreature implements Condition {
 
@@ -13,7 +15,7 @@ public class ConditionCreature implements Condition {
 		for (int i=0; i<near.size(); ++i){
 			t = near.get(i);
 			if (this.c.canReach(b, t) &&
-				t.creature.contains(target))
+				World.getInstance().getCreature(b).contains(target))
 				return true;
 		}
 		return false;

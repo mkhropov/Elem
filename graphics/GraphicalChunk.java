@@ -96,14 +96,15 @@ public class GraphicalChunk {
 //		rebuild();
 	}
 
-	void addFace(Block b, int f){
+	void addFace(int X, int Y, int Z, int f){
+		World w = World.getInstance();
 		int ind = (ibuf.position()>0)?(ibuf.get(ibuf.position()-1)+1):0;
 		for (int i = 0; i<4; ++i){
-			vbuf.put(vert[f][3*i+0]+b.x);
-			vbuf.put(vert[f][3*i+1]+b.y);
-			vbuf.put(vert[f][3*i+2]+b.z);
-			tbuf.put(b.m.m.tex_u+text[2*i+0]/8.f+((float)Math.sin(b.x+b.y+b.z)+1.f)/16.f);//FIX textures
-			tbuf.put(b.m.m.tex_v+text[2*i+1]/8.f+((float)Math.cos(b.x+b.y+b.z)+1.f)/16.f);// offsets
+			vbuf.put(vert[f][3*i+0]+X);
+			vbuf.put(vert[f][3*i+1]+Y);
+			vbuf.put(vert[f][3*i+2]+Z);
+			tbuf.put(w.material[w.m[X][Y][Z]].tex_u+text[2*i+0]/8.f+((float)Math.sin(X+Y+Z)+1.f)/16.f);//FIX textures
+			tbuf.put(w.material[w.m[X][Y][Z]].tex_v+text[2*i+1]/8.f+((float)Math.cos(X+Y+Z)+1.f)/16.f);// offsets
 			nbuf.put(norm[f][3*i+0]);
 			nbuf.put(norm[f][3*i+1]);
 			nbuf.put(norm[f][3*i+2]);
@@ -113,25 +114,23 @@ public class GraphicalChunk {
 	}
 
 	public void rebuild() {
-		Block b;
 		/* fill vertex/texture/normal/indices buffers */
 		vbuf.clear(); tbuf.clear(); nbuf.clear(); ibuf.clear();
 		for (int i=rx; i<rx+xsize; i++)
 			for (int j=ry; j<ry+ysize; j++){
 				if (world.empty(i,j,z)) continue;
-				b = world.blockArray[i][j][z];
 				if (world.empty(i-1,j,z))
-					addFace(b, 4);
+					addFace(i, j, z, 4);
 				if (world.empty(i+1,j,z))
-					addFace(b, 5);
+					addFace(i, j, z, 5);
 				if (world.empty(i,j-1,z))
-					addFace(b, 2);
+					addFace(i, j, z, 2);
 				if (world.empty(i,j+1,z))
-					addFace(b, 3);
+					addFace(i, j, z, 3);
 				if (world.empty(i,j,z-1))
-					addFace(b, 0);
+					addFace(i, j, z, 0);
 				if (world.empty(i,j,z+1))
-					addFace(b, 1);
+					addFace(i, j, z, 1);
 			}
 
 		/* now add usually invisible top sides to the end of the buffer */
@@ -139,9 +138,8 @@ public class GraphicalChunk {
 		for (int i=rx; i<rx+xsize; i++)
 			for (int j=ry; j<ry+ysize; j++){
 				if (world.empty(i,j,z)) continue;
-				b = world.blockArray[i][j][z];
 				if (!world.empty(i,j,z+1)){
-					addFace(b, 1);
+					addFace(i, j, z, 1);
 					tail_size += 6;
 				}
 			}

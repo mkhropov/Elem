@@ -6,15 +6,15 @@ import world.Block;
 import world.World;
 
 public class SpellSummon extends Spell{
-	
-	static{
+
+	static {
 		iconName = "IconSummon";
 	}
-	
+
 	public SpellSummon(Player p){
 		super(p);
 	}
-	
+
 	@Override
 	public int cost(){
 		if (owner.creature.size()<10)
@@ -22,9 +22,9 @@ public class SpellSummon extends Spell{
 		else
 			return 1;
 	}
-	
+
 	@Override
 	public void cast(Block b){
-		owner.spawnCreature(new SmartWalkingElem(World.getInstance(), b));
+		owner.spawnCreature(new SmartWalkingElem(b));
 	}
 }

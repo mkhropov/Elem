@@ -13,22 +13,23 @@ package creature;
 
 import world.*;
 import stereometry.Vector;
-
+import physics.material.Material;
 
 public class SmartWalkingElem extends SmartElem implements Worker {
 
-    public SmartWalkingElem(World w, Block b){
-        super(w, b);
+    public SmartWalkingElem(Block b){
+        super(b);
         fall();
     }
 
     final void fall(){
+		World w = World.getInstance();
         int i = b.z;
         while (i > 0)
-            if (w.blockArray[b.x][b.y][--i].m != null)
+            if (w.m[b.x][b.y][--i] != Material.MATERIAL_NONE)
                 break;
 		if (i!=(b.z-1)){
-			setBlock(w.blockArray[b.x][b.y][i+1], true);
+			setBlock(w.getBlock(b.x, b.y, i+1), true);
 			mv = new Vector(0., 0., 0.);
 			action = ACTION_FALL;
 		}
@@ -41,8 +42,9 @@ public class SmartWalkingElem extends SmartElem implements Worker {
 
     @Override
     public boolean canWalk(Block b){
+		World w = World.getInstance();
         return (b.z!=0) &&
-            (w.blockArray[b.x][b.y][b.z-1].m != null) &&
-            ((b.m == null) || (b.m.w < (1. - Elem.size)));
+            (w.m[b.x][b.y][b.z-1] != Material.MATERIAL_NONE) &&
+            (w.m[b.x][b.y][b.z] == Material.MATERIAL_NONE);// || (b.m.w < (1. - Elem.size)));
     }
 }

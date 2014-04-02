@@ -8,7 +8,6 @@ import world.Block;
 import static world.Block.nearInd;
 import world.World;
 import physics.material.Material;
-import physics.material.Substance;
 import stereometry.Point;
 import generation.morphs.Morph;
 
@@ -79,8 +78,6 @@ public class Generator {
 	public void apply(){
 		World w = World.getInstance();
 		GenerationChunk gc;
-		Material m;
-		Block b;
 		System.out.print("Filling blocks ");
 		for (int t=0; t<x; ++t)
 		for (int s=0; s<y; ++s){
@@ -91,67 +88,60 @@ public class Generator {
 			for (int j=gc.y; j<gc.y+GenerationChunk.GEN_CHUNK_YSIZE; ++j){
 				if (i>=w.xsize || j>=w.ysize)
 					continue;
-				for (int k=0; k<w.zsize; ++k){
-					b =  w.blockArray[i][j][k];
-					m = getMaterial(b, gc);
-					if (m != null)
-						b.m = new Substance(m, 1.);
-//				System.out.print(m+" ");
-				}
+				for (int k=0; k<w.zsize; ++k)
+					w.m[i][j][k] = getMaterial(i, j, k, gc);
 			}
 		}
 		System.out.print(" done\n");
-		erosion(w, 2000., w.material[Material.MATERIAL_EARTH]);
+		erosion(w, 2000., Material.MATERIAL_EARTH);
 	}
 
-	public Material getMaterial(Block b, GenerationChunk gc) {
+	public char getMaterial(int x, int y, int z, GenerationChunk gc) {
 		if (!generated)
 			generate();
-		if (b.z == 0)
-			return World.getInstance().material[Material.MATERIAL_BEDROCK];
-		Point p = new Point(b);
+		if (z == 0)
+			return Material.MATERIAL_BEDROCK;
+		Point p = new Point(x, y, z);
 		int i;
 		for (i=0; i<gc.morphs.size(); i++)
 			gc.morphs.get(i).preimage(p);
 		if (p.z < 1.)
-			return World.getInstance().material[Material.MATERIAL_BEDROCK];
+			return Material.MATERIAL_BEDROCK;
 		i = 0;
-		double z = 1.;
+		double dz = 1.;
 		for (i=0; i < gc.stratums.size(); ++i){
 			if (gc.stratums.get(i).isIn(p))
-				z += gc.stratums.get(i).w(p);
-			if (z > p.z)
+				dz += gc.stratums.get(i).w(p);
+			if (dz > p.z)
 				return gc.stratums.get(i).m;
 		}
-		return null;
+		return Material.MATERIAL_NONE;
 	}
 
 
-	int blockCover(Block b, World w){
+	int blockCover(int x, int y, int z, World w){
 		int t = 0;
 		for (int i=0; i<nearInd.length; ++i)
-			if (w.isIn(b, nearInd[i]))
-				t += (w.blockArray[b.x+nearInd[i][0]]
-								  [b.y+nearInd[i][1]]
-								  [b.z+nearInd[i][2]].m != null) ?
+			if (w.isIn(x, y, z, nearInd[i]))
+				t += (w.m[x+nearInd[i][0]]
+						 [y+nearInd[i][1]]
+						 [z+nearInd[i][2]] != Material.MATERIAL_NONE) ?
 						(1):(0);
 			else
 				t += (nearInd[i][2]<=0)?(1):(0);
 		return t;
 	}
 
-	public void erosion(World w, double power, Material erodemat){
-		Block b;
+	public void erosion(World w, double power, char erodemat){
 		System.out.print("Applying erosion ");
 		for (int k=0; k<w.zsize; ++k){
 //			if (k%(w.xsize/30) == 0)
 //				System.out.print(".");
 			for (int i=0; i<w.xsize; ++i)
 				for (int j=0; j<w.ysize; ++j){
-					b = w.blockArray[i][j][k];
-					if (b.m != null)
-						if ((17-blockCover(b, w))*power > b.m.m.hardness)
-							b.m = null;
+					if ((17-blockCover(i, j, k, w))*power >
+						w.material[w.m[i][j][k]].hardness)
+						w.m[i][j][k] = Material.MATERIAL_NONE;
 				}
 		}
 		System.out.print(" done\nFilling gaps ");
@@ -159,12 +149,10 @@ public class Generator {
 //			if (k%(w.xsize/30) == 0)
 //				System.out.print(".");
 			for (int i=0; i<w.xsize; ++i)
-				for (int j=0; j<w.ysize; ++j){
-					b = w.blockArray[i][j][k];
-					if (b.m == null)
-						if (blockCover(b, w)>= 17)
-							b.setMaterial(erodemat);
-				}
+				for (int j=0; j<w.ysize; ++j)
+					if ((w.m[i][j][k] == Material.MATERIAL_NONE) &&
+							(blockCover(i, j, k, w)>= 17))
+						w.m[i][j][k] = erodemat;
 		}
 		System.out.print(" done\n");
 	}

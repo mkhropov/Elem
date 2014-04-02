@@ -49,7 +49,7 @@ public class Player {
         order.add(new Order(b, Order.ORDER_DIG));
     }
 
-    public void placeBuildOrder(Block b, Material m){
+    public void placeBuildOrder(Block b, char m){
 		ItemTemplate it = new ItemTemplate(Item.TYPE_BUILDABLE, m);
 		Order o = new Order(null, Order.ORDER_TAKE); o.it = it;
 		order.add(o);

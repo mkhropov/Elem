@@ -5,5 +5,5 @@ import physics.material.*;
 
 public interface Worker {
     boolean destroyBlock(Block b);
-    boolean placeBlock(Block b, Material m);
+    boolean placeBlock(Block b, char m);
 }

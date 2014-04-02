@@ -12,7 +12,6 @@ import java.util.Stack;
 import stereometry.Point;
 
 public class Creature extends Entity {
-    public World w;
     public Block b;
     public Stack<Block> path;
     Point np;
@@ -29,25 +28,24 @@ public class Creature extends Entity {
 	static final int ACTION_FALL = 2;
 
     final public void setBlock(Block b, boolean adjustPoint){
-        if (this.b != null)
-            this.b.creature.remove(this);
         this.b = b;
-        this.b.creature.add(this);
         if (adjustPoint){
             this.p = np;
             this.np = new Point(b);
         }
     }
 
-    public Creature(World w, Block b){
-//        w.creature.add(this);
+    public Creature(Block b){
         setBlock(b, true);
         this.p = this.np;
-        this.w = w;
 		this.digStrength = Material.HARD_STEEL;
         this.capable = new boolean[]{false, false, false, false};
 		Renderer.getInstance().addEntity(this);
     }
+
+	public boolean isIn(int x, int y, int z){
+		return (x==b.x && y==b.y && z==b.z);
+	}
 
     public boolean canWalk(Block b){
         return true;
@@ -62,22 +60,23 @@ public class Creature extends Entity {
     }
 
 	public boolean canDig(Block b){
-		return (b.m!= null) &&(b.m.digTime(digStrength) > 0.);
+		return (b.m != Material.MATERIAL_NONE) &&
+			(World.getInstance().material[b.m].digTime(digStrength) > 0.);
 	}
 
 	public boolean take(ItemTemplate it){
 		Item i;
+		World w = World.getInstance();
 		int k;
-		for (k=0; k<b.item.size(); ++k){
-			i = b.item.get(k);
-			if (it.suits(i)){
+		for (k=0; k < w.item.size(); ++k){
+			i = w.item.get(k);
+			if (it.suits(i) && i.isIn(b)){
 				item = i;
-				b.item.remove(i);
 				EventHandler.getInstance().removeEntity(i);
 				break;
 			}
 		}
-		return (k != b.item.size());
+		return (k != w.item.size());
 	}
 
     public boolean move(Block b) {

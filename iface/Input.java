@@ -58,13 +58,13 @@ public class Input {
 		//				iface.player.order.clear();
                         switch (iface.commandMode){
                             case Command.COMMAND_SPAWN:
-								iface.player.spawnCreature(new SmartWalkingElem(iface.world, where));
+								iface.player.spawnCreature(new SmartWalkingElem(where));
 								break;
                             case Command.COMMAND_DIG:
 								iface.player.placeDigOrder(where);
 								break;
 						    case Command.COMMAND_BUILD:
-								iface.player.placeBuildOrder(where, iface.world.material[Material.MATERIAL_MARBLE]);
+								iface.player.placeBuildOrder(where, Material.MATERIAL_MARBLE);
 								break;
                         }
 						System.out.println("Click at "+where.x+" "+where.y+" "+where.z);

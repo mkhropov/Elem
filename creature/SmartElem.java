@@ -7,8 +7,8 @@ import java.util.ArrayList;
 
 public class SmartElem extends Elem implements Worker {
 
-    public SmartElem(World w, Block b){
-        super(w, b);
+    public SmartElem(Block b){
+        super(b);
         capable = new boolean[]{true, true, true, true};
         declinedOrders = new ArrayList<>();
     }
@@ -72,7 +72,7 @@ public class SmartElem extends Elem implements Worker {
 				}
                 break;
 			case ACTION_FALL:
-				mv.add(w.gravity, dT/1000.);
+				mv.add(World.getInstance().gravity, dT/1000.);
 				if (Math.abs(p.z - np.z) < mv.len()){
 					p = np;
 					action = ACTION_NONE;

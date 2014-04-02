@@ -2,13 +2,13 @@ package physics.material;
 import physics.*;
 
 public class Material {
-	public static final int MATERIAL_NONE = 0;
-	public static final int MATERIAL_STONE = 1;
-	public static final int MATERIAL_EARTH = 2;
-	public static final int MATERIAL_MARBLE = 3;
-	public static final int MATERIAL_GRANITE = 4;
-	public static final int MATERIAL_BEDROCK = 5;
-	public static final int MATERIAL_MAX = 6;
+	public static final char MATERIAL_NONE = 0;
+	public static final char MATERIAL_STONE = 1;
+	public static final char MATERIAL_EARTH = 2;
+	public static final char MATERIAL_MARBLE = 3;
+	public static final char MATERIAL_GRANITE = 4;
+	public static final char MATERIAL_BEDROCK = 5;
+	public static final char MATERIAL_MAX = 6;
     public Temperature tFreeze;
     public Temperature tBoil;
 	public float tex_u;
@@ -27,4 +27,11 @@ public class Material {
 		tex_v = 0.f;
 		hardness = HARD_NONE;
     }
+
+	public double digTime(double str) {
+		if (str<=hardness)
+			return -1.;
+		else
+			return (400./(str-hardness));
+	}
 }

@@ -12,14 +12,14 @@ public class Stratum {
 	public double rmin;
 	public double rmax;
 	public double width;
-	public Material m;
+	public char m;
 	public static final int C_NUM=3;
 	public static final int C_MAX=5;
 	public int coef[];
 	public double offset[];
 	public BoundBox bb;
 
-    public Stratum(int x, int y, double rmin, double rmax, double width, Material m) {
+    public Stratum(int x, int y, double rmin, double rmax, double width, char m) {
         this.x = x;
         this.y = y;
 		this.m = m;

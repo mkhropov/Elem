@@ -27,18 +27,18 @@ public class Hills extends Biome {
 		double dR;
 		int hn = 0;
 		int w;
-		Material m;
+		char m;
 		while (hn < 4*h/5.-2){
 			switch (rnd.nextInt(3)){
 				case 0:
-					m = World.getInstance().material[Material.MATERIAL_STONE];
+					m = Material.MATERIAL_STONE;
 					break;
 				case 1:
-					m = World.getInstance().material[Material.MATERIAL_MARBLE];
+					m = Material.MATERIAL_MARBLE;
 					break;
 				case 2:
 				default:
-					m = World.getInstance().material[Material.MATERIAL_GRANITE];
+					m = Material.MATERIAL_GRANITE;
 					break;
 			}
 			w = rnd.nextInt(3)+1;
@@ -48,7 +48,7 @@ public class Hills extends Biome {
 		}
 		double V = R*R*(h-hn); // volume/PI
 		double v = 0;
-		m = World.getInstance().material[Material.MATERIAL_EARTH];
+		m = Material.MATERIAL_EARTH;
 		while (v < V){
 			dR = rnd.nextDouble();
 			s = new Stratum(x+rnd.nextInt(2*R)-R, y+rnd.nextInt(2*R)-R, stratumR*(1+dR/5-.25)*.9, stratumR*(1+dR/5-.25)*1.1, 1, m);

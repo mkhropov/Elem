@@ -18,8 +18,8 @@ public class Elem extends Creature implements Worker{
     Block pb;
     Vector mv;
 
-    public Elem(World w, Block b){
-        super(w, b);
+    public Elem(Block b){
+        super(b);
         pb = b;
         np = p;
         mv = new Vector(0., 0., 0.);
@@ -30,11 +30,13 @@ public class Elem extends Creature implements Worker{
 
     @Override
     public boolean canWalk(Block b){
-        return (b.m == null) || (b.m.w < (1. - Elem.size));
+        return (b.m == Material.MATERIAL_NONE);
+		// || (b.m.w < (1. - Elem.size));
     }
 
     @Override
     public boolean canMove(Block b1, Block b2){
+		World w = World.getInstance();
         if (!canWalk(b2)) return false;
         int dx = b2.x-b1.x;
         int dy = b2.y-b1.y;
@@ -42,12 +44,12 @@ public class Elem extends Creature implements Worker{
         if ((Math.abs(dx)>1) || (Math.abs(dy)>1) || (Math.abs(dz)>1)) return false;
         if ((Math.abs(dx)+Math.abs(dy)+Math.abs(dz)) > 2) return false;
         if (dz == 0)
-            return (canWalk(w.blockArray[b1.x+dx][b1.y][b1.z]) ||
-                    canWalk(w.blockArray[b1.x][b1.y+dy][b1.z]));
+            return (canWalk(w.getBlock(b1.x+dx, b1.y, b1.z)) ||
+                    canWalk(w.getBlock(b1.x, b1.y+dy, b1.z)));
         if (dz > 0)
-            return (w.blockArray[b1.x][b1.y][b1.z+1].m==null);
+            return (w.m[b1.x][b1.y][b1.z+1] == Material.MATERIAL_NONE);
         if (dz < 0)
-            return (w.blockArray[b1.x+dx][b1.y+dy][b1.z].m == null);
+            return (w.m[b1.x+dx][b1.y+dy][b1.z] == Material.MATERIAL_NONE);
         return true;
     }
 
@@ -80,7 +82,8 @@ public class Elem extends Creature implements Worker{
         if (dz > 0)
             return ((dx==0) && (dy==0));
         if (dz < 0)
-            return (w.blockArray[b1.x+dx][b1.y+dy][b1.z].m == null);
+            return (World.getInstance().m[b1.x+dx][b1.y+dy][b1.z] ==
+					Material.MATERIAL_NONE);
         return true;
     }
 
@@ -99,11 +102,11 @@ public class Elem extends Creature implements Worker{
                 dx = gen.nextInt(3)-1;
                 dy = gen.nextInt(3)-1;
                 dz = gen.nextInt(3)-1;
-                if (!((b.x+dx>=0)&&(b.x+dx<w.xsize))) continue;
-                if (!((b.y+dy>=0)&&(b.y+dy<w.ysize))) continue;
-                if (!((b.z+dz>=0)&&(b.z+dz<w.zsize))) continue;
-                t = w.blockArray[b.x+dx][b.y+dy][b.z+dz];
-                if (!canMove(b, t)) continue;
+				if (!World.getInstance().isIn(b.x+dx, b.y+dy, b.z+dz))
+					continue;
+                t = World.getInstance().getBlock(b.x+dx, b.y+dy, b.z+dz);
+                if (!canMove(b, t))
+					continue;
                 break;
             }
  //           int p = gen.nextInt(100);
@@ -122,7 +125,7 @@ public class Elem extends Creature implements Worker{
             return false;
         else {
 			if (canDig(b)){
-				b.destroy(w);
+				World.getInstance().destroyBlock(b);
 				return true;
 			}
 			return false;
@@ -130,12 +133,12 @@ public class Elem extends Creature implements Worker{
     }
 
     @Override
-    public final boolean placeBlock(Block b, Material m){
-        if ((!canReach(this.b, b)) || (b.m != null) ||
-			!((item.type == Item.TYPE_BUILDABLE) && (item.m.equals(m))))
+    public final boolean placeBlock(Block b, char m){
+        if ((!canReach(this.b, b)) || (b.m != Material.MATERIAL_NONE) ||
+			!((item.type == Item.TYPE_BUILDABLE) && (item.m == m)))
             return false;
         else {
-            b.m = new Substance(m, 1.d);
+            World.getInstance().m[b.x][b.y][b.z] = m;
 			item = null;
             Renderer.getInstance().updateBlock(b.x, b.y, b.z);
             return true;

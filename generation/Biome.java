@@ -24,6 +24,6 @@ public class Biome {
     }
 
 	public void generate(){
-		stratums.add(new Stratum(x, y, 2*R/3, 4*R/3, 3, World.getInstance().material[Material.MATERIAL_EARTH]));
+		stratums.add(new Stratum(x, y, 2*R/3, 4*R/3, 3, Material.MATERIAL_EARTH));
 	}
 }
