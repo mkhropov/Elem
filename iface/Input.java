@@ -11,11 +11,9 @@ import graphics.Renderer;
 
 public class Input {
 	Interface iface;
-    int orderMode;
 
 	public Input (Interface I){
 		iface = I;
-        orderMode = Order.ORDER_MOVE;
 	}
 
 	public void poll(long deltaT) {
@@ -122,16 +120,13 @@ public class Input {
 						 !Renderer.getInstance().draw_mana;
 					break;
                 case '1':
-                    System.out.println("MOVE order mode engaged");
-                    orderMode = Order.ORDER_MOVE;
+					(new Command(Command.COMMAND_SPAWN)).execute();
 					break;
                 case '2':
-                    System.out.println("DIG order mode engaged");
-                    orderMode = Order.ORDER_DIG;
+					(new Command(Command.COMMAND_DIG)).execute();
 					break;
 	            case '3':
-                    System.out.println("BUILD order mode engaged");
-                    orderMode = Order.ORDER_BUILD;
+					(new Command(Command.COMMAND_BUILD)).execute();
 					break;
 				default:
 					break;
