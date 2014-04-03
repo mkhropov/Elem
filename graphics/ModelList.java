@@ -18,11 +18,16 @@ public class ModelList {
 		Renderer r = Renderer.getInstance();
 		list = new ArrayList<Model>();
 
-		m = ModelLoader.getInstance().load("res/box.obj", "box");
+		m = ModelLoader.getInstance().load("res/box.obj", "elem");
 		m.prepare(r.shaders[Renderer.SHADER_BASIC]);
 		m.scale = .3f; m.a0 = .5f; m.a1 = .5f; m.a2 = .3f;
 		add(m);
 
+		m = ModelLoader.getInstance().load("res/box.obj", "boulder");
+		m.prepare(r.shaders[Renderer.SHADER_BASIC]);
+		m.scale = .2f; m.a0 = .5f; m.a1 = .5f; m.a2 = .2f;
+		add(m);
+		
 		m = ModelLoader.getInstance().load("res/box.obj", "cursor");
 		m.prepare(r.shaders[Renderer.SHADER_GHOST]);
 		m.scale = .6f; m.a0 = .55f; m.a1 = .55f; m.a2 = .55f;
