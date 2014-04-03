@@ -15,6 +15,10 @@ public class Entity {
 		this.a = 0.f;
 	}
 
+	public void setP(Block b){
+		this.p = new Point(b);
+	}
+
 	public Entity(Block b) {
 		p = new Point(b);
 		mid = graphics.ModelList.getInstance().findId("box");

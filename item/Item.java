@@ -51,6 +51,7 @@ public class Item extends Entity{
 					break;
 			if (i!=(b.z-1)){
 				b = w.getBlock(b.x, b.y, i+1);
+				setP(b);
 			}
 		}
 	}
