@@ -20,6 +20,6 @@ public class GraphicalEntity {
 	}
 
 	void draw() {
-		m.draw((float)e.p.x, (float)e.p.y, (float)e.p.z, 0.f, gs);
+		m.draw((float)e.p.x, (float)e.p.y, (float)e.p.z, e.a, gs);
 	}
 }

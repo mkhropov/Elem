@@ -4,13 +4,15 @@ import stereometry.Point;
 
 public class Entity {
 	public Point p;
+	public float a; //orientation
 	public int mid;
 	public int gsid;
 
 	public Entity(Block b, int mid, int gsid) {
-		p = new Point(b);
+		this.p = new Point(b);
 		this.mid = mid;
 		this.gsid = gsid;
+		this.a = 0.f;
 	}
 
 	public Entity(Block b) {

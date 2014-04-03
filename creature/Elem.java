@@ -61,6 +61,7 @@ public class Elem extends Creature implements Worker{
             pb = this.b;
             setBlock(b, true);
             mv = new Vector(p, np);
+			a = (float)(Math.signum(np.x-p.x)*Math.acos((np.y-p.y)/Math.sqrt((np.x-p.x)*(np.x-p.x)+(np.y-p.y)*(np.y-p.y))));
             if (!mv.isZero()){
                 mv.normalize();
                 mv.scale(speed);
