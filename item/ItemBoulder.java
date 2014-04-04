@@ -3,6 +3,7 @@ package item;
 import physics.material.Material;
 import world.Block;
 import creature.Creature;
+import graphics.Renderer;
 import world.EventHandler;
 
 public class ItemBoulder extends Item{
@@ -26,7 +27,7 @@ public class ItemBoulder extends Item{
 		this.scale = Math.cbrt(w);
 		this.mid = graphics.ModelList.getInstance().findId("boulder");
 		this.gsid = graphics.GSList.getInstance().findId(assoc[m]);
-		EventHandler.getInstance().addEntity(this);
+		Renderer.getInstance().addEntity(this);
 	}
 
 	public ItemBoulder(int x, int y, int z, double w, char m){
@@ -36,7 +37,7 @@ public class ItemBoulder extends Item{
 		this.scale = Math.cbrt(w);
 		this.mid = graphics.ModelList.getInstance().findId("boulder");
 		this.gsid = graphics.GSList.getInstance().findId(assoc[m]);
-		EventHandler.getInstance().addEntity(this);
+		Renderer.getInstance().addEntity(this);
 	}
 
 	public ItemBoulder(Creature c, double w, char m){
@@ -46,5 +47,6 @@ public class ItemBoulder extends Item{
 		this.scale = Math.cbrt(w);
 		this.mid = graphics.ModelList.getInstance().findId("boulder");
 		this.gsid = graphics.GSList.getInstance().findId(assoc[m]);
+	//	Renderer.getInstance().addEntity(this);
 	}
 }

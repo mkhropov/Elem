@@ -72,7 +72,8 @@ public class Creature extends Entity {
 			i = w.item.get(k);
 			if (it.suits(i) && i.isIn(b)){
 				item = i;
-				EventHandler.getInstance().removeEntity(i);
+				World.getInstance().item.remove(i);//EventHandler.getInstance().removeEntity(i);
+				Renderer.getInstance().removeEntity(i);
 				break;
 			}
 		}

@@ -18,7 +18,6 @@ public class Input {
 
 	public void poll(long deltaT) {
 		Button b = null;
-		boolean mouseOnInterface = false;
 		int x = Mouse.getEventX();
 		int y = Mouse.getEventY();
 		Block where;
@@ -28,20 +27,16 @@ public class Input {
 		for (int i=0; i<iface.buttons.size(); ++i){
 			b = iface.buttons.get(i);
 			if (b.isIn(x, 600-y)){
-				mouseOnInterface = true;
 				where = null;
 			}
 		}
 
-		if (mouseOnInterface){
-			iface.cursor.state = Cursor.STATE_IFACE;
-			iface.cursor.reposition(x, y, 0);
-		} else if (where != null) {
+		if (where != null) {
 			iface.cursor.state = Cursor.STATE_ENABLED;
-			iface.cursor.reposition(where.x, where.y, where.z);
+			iface.cursor.reposition(where.x, where.y, where.z, x, y);
 		} else {
 			iface.cursor.state = Cursor.STATE_DISABLED;
-			iface.cursor.reposition(pos[0], pos[1], iface.current_layer);
+			iface.cursor.reposition(pos[0], pos[1], iface.current_layer, x, y);
 		}
 
 		while (Mouse.next()){

@@ -4,6 +4,7 @@ import graphics.Renderer;
 
 public class EventHandler {
 	Renderer r;
+//	World w;
 	static private EventHandler instance = null;
 
 	public static EventHandler getInstance() {
@@ -15,6 +16,7 @@ public class EventHandler {
 
 	private EventHandler() {
 		r = Renderer.getInstance();
+//		w = World.getInstance();
 	}
 
 	public void updateBlock(int x, int y, int z) {
@@ -26,6 +28,7 @@ public class EventHandler {
 	}
 
 	public void removeEntity(Entity e) {
+//		w.item.remove(e);
 		r.removeEntity(e);
 	}
 
