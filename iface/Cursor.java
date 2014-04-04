@@ -18,7 +18,7 @@ public class Cursor {
 
 	public int x, y, z;
 
-	int enabled_uniform; //shader uniform location
+	int channel_uniform; //shader uniform location
 	Model model;
 	GraphicalSurface gs;
 
@@ -32,8 +32,8 @@ public class Cursor {
 			 System.exit(0);
 		}
 		Renderer r = Renderer.getInstance();
-		enabled_uniform = GL20.glGetUniformLocation(
-			r.shaders[Renderer.SHADER_GHOST], "enabled");
+		channel_uniform = GL20.glGetUniformLocation(
+			r.shaders[Renderer.SHADER_GHOST], "channel");
 		int m = ModelList.getInstance().findId("cursor");
 		model = ModelList.getInstance().get(m);
 		int g = graphics.GSList.getInstance().findId("marble");
@@ -80,7 +80,7 @@ public class Cursor {
 		if (state == STATE_IFACE)
 			return; //or exception
 
-		GL20.glUniform1i(((state == STATE_ENABLED)?(1):(0)), enabled_uniform);
+		GL20.glUniform1i(((state == STATE_ENABLED)?(1):(0)), channel_uniform);
 		model.draw(x, y, z, 0.f, gs);
 	}
 }

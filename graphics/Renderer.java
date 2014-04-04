@@ -127,17 +127,12 @@ public class Renderer {
 			gChunks[chunkX][chunkY][z-1].rebuild(); */
 	}
 
-	public void addEntity (Entity e) {
-		gEntities.add(new GraphicalEntity(e, world));
+	public void addEntity(GraphicalEntity e) {
+		gEntities.add(e);
 	}
 
-	public void removeEntity (Entity e) {
-		for (int i=0; i<gEntities.size(); i++) {
-			if (gEntities.get(i).e == e) {
-				gEntities.remove(i);
-				return;
-			}
-		}
+	public void removeEntity(GraphicalEntity e) {
+		gEntities.remove(e);
 	}
 
 	public void resetMaterial() {
@@ -288,9 +283,10 @@ public class Renderer {
 			glDisable(GL_COLOR_MATERIAL);
 		}
 		glUseProgram(shaders[SHADER_BASIC]);
-		for (int i=0; i<gEntities.size(); i++)
-			if (gEntities.get(i).e.p.z<=current_layer)
+		for (int i=0; i<gEntities.size(); i++){
+			if (gEntities.get(i).getP().z<=current_layer)
 				gEntities.get(i).draw();
+		}
 		glUseProgram(shaders[SHADER_GHOST]);
 		Interface.getInstance().cursor.draw3d();
 		glUseProgram(shaders[SHADER_NONE]);

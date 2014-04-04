@@ -93,8 +93,4 @@ public class Creature extends Entity {
 
 	public void update(){
 	}
-
-	public void draw(){
-	}
 }
-

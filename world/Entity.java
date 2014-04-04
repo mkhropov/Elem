@@ -1,12 +1,15 @@
 package world;
 
 import stereometry.Point;
+import graphics.*;
 
-public class Entity {
+public class Entity implements GraphicalEntity {
 	public Point p;
 	public float a; //orientation
 	public int mid;
 	public int gsid;
+	Model m;
+	GraphicalSurface gs;
 
 	public Entity(Block b, int mid, int gsid) {
 		this.p = new Point(b);
@@ -19,6 +22,10 @@ public class Entity {
 		this.p = new Point(b);
 	}
 
+	public Point getP(){
+		return p;
+	}
+
 	public Entity(Block b) {
 		p = new Point(b);
 		mid = graphics.ModelList.getInstance().findId("box");
@@ -28,5 +35,23 @@ public class Entity {
 	public Entity() {
 		mid = graphics.ModelList.getInstance().findId("box");
 		gsid = graphics.GSList.getInstance().findId("stone");
+	}
+
+	public void setModel(int mid) {
+		this.mid = mid;
+		m = ModelList.getInstance().get(mid);
+	}
+
+	public void setGS(int gsid) {
+		this.gsid = gsid;
+		gs = GSList.getInstance().get(gsid);
+	}
+
+	public void draw(){
+//		m.draw((float)p.x, (float)p.y, (float)p.z, a, gs);
+//FIXME
+		ModelList.getInstance().get(mid).draw(
+			(float)p.x, (float)p.y, (float)p.z, a,
+			GSList.getInstance().get(gsid));
 	}
 }

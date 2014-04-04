@@ -1,6 +1,7 @@
 package player;
 
 import java.util.ArrayList;
+import graphics.Renderer;
 import world.*;
 import creature.*;
 import physics.material.*;
@@ -46,7 +47,9 @@ public class Player {
     }
 
     public void placeDigOrder(Block b){
-        order.add(new Order(b, Order.ORDER_DIG));
+		Order o = new Order(b, Order.ORDER_DIG);
+        order.add(o);
+		Renderer.getInstance().addEntity(o.cube);
     }
 
     public void placeBuildOrder(Block b, char m){
@@ -55,6 +58,7 @@ public class Player {
 		order.add(o);
         o = new Order(b, Order.ORDER_BUILD); o.it = it; o.m = m;
         order.add(o);
+		Renderer.getInstance().addEntity(o.cube);
     }
 
     public void setOrderTaken(Order o, Creature c){
@@ -64,6 +68,9 @@ public class Player {
     }
 
     public void setOrderDone(Order o, Creature c){
+		if ((o.type == Order.ORDER_BUILD) ||
+			(o.type == Order.ORDER_DIG))
+			Renderer.getInstance().removeEntity(o.cube);
         order.remove(o);
         c.order = null;
 		for (int i=0; i<order.size(); ++i)

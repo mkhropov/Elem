@@ -4,10 +4,12 @@ import world.Block;
 import physics.material.*;
 import creature.*;
 import item.ItemTemplate;
+import iface.CommandCube;
 
 public class Order {
     public boolean taken;
     public Block b;
+	public CommandCube cube;
     public ItemTemplate it;
 	public char m; //material code
 //	public CreatureTemplate ct;
@@ -24,6 +26,8 @@ public class Order {
         this.taken = false;
         this.type = type;
         this.declined = 0;
+		if ((type == ORDER_DIG) || (type == ORDER_BUILD))
+			this.cube = new CommandCube(type, b.x, b.y, b.z);
     }
 
     public boolean capable(Creature c){
