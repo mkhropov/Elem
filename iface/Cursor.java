@@ -7,6 +7,8 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 
 import graphics.*;
+import physics.material.Material;
+import world.World;
 
 public class Cursor {
 
@@ -16,8 +18,8 @@ public class Cursor {
 	public static final int STATE_MAX      = 3;
 	public int state;
 
-	public int x, y, z;
-	public int X, Y;
+	public int x, y, z;  //3D
+	public int X, Y;     //2D
 
 	int channel_uniform; //shader uniform location
 	Model model;
@@ -47,6 +49,17 @@ public class Cursor {
 		this.x = x;
 		this.y = y;
 		this.z = z;
+		char m = World.getInstance().m[x][y][z];
+		switch(Interface.getInstance().commandMode){
+			case Command.COMMAND_BUILD:
+			case Command.COMMAND_SPAWN:
+				state = (m == Material.MATERIAL_NONE)?(STATE_ENABLED):(STATE_DISABLED);
+				break;
+			case Command.COMMAND_DIG:
+				state = (m != Material.MATERIAL_NONE)?(STATE_ENABLED):(STATE_DISABLED);
+				break;
+			default: break;
+		}
 		this.X = X;
 		this.Y = Y;
 	}
@@ -83,7 +96,7 @@ public class Cursor {
 		if (state == STATE_IFACE)
 			return; //or exception
 
-		GL20.glUniform1i(((state == STATE_ENABLED)?(1):(0)), channel_uniform);
+		GL20.glUniform1i(channel_uniform, ((state == STATE_ENABLED)?(1):(0)));
 		model.draw(x, y, z, 0.f, gs);
 	}
 }

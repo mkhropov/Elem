@@ -44,7 +44,7 @@ public class CommandCube implements GraphicalEntity {
 	public void draw(){
 		Renderer r = Renderer.getInstance();
 		GL20.glUseProgram(r.shaders[Renderer.SHADER_GHOST]);
-		GL20.glUniform1i(2, channel_uniform);
+		GL20.glUniform1i(channel_uniform, 2);
 		model.draw(x, y, z, 0.f, gs);
 		GL20.glUseProgram(r.shaders[Renderer.SHADER_BASIC]);
 	}
