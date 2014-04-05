@@ -37,6 +37,8 @@ public class Player {
 	}
 
     public void spawnCreature(Creature c){
+		if (c.b.m != Material.MATERIAL_NONE)
+			return;
         World.getInstance().creature.add(c);
         creature.add(c);
         c.owner = this;
@@ -47,12 +49,16 @@ public class Player {
     }
 
     public void placeDigOrder(Block b){
+		if (b.m == Material.MATERIAL_NONE)
+			return;
 		Order o = new Order(b, Order.ORDER_DIG);
         order.add(o);
 		Renderer.getInstance().addEntity(o.cube);
     }
 
     public void placeBuildOrder(Block b, char m){
+		if (b.m != Material.MATERIAL_NONE)
+			return;
 		ItemTemplate it = new ItemTemplate(Item.TYPE_BUILDABLE, m);
 		Order o = new Order(null, Order.ORDER_TAKE); o.it = it;
 		order.add(o);

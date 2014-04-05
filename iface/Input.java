@@ -4,16 +4,30 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import world.Block;
-import player.Order;
 import creature.SmartWalkingElem;
+import graphics.*;
+import org.lwjgl.opengl.GL20;
 import physics.material.Material;
-import graphics.Renderer;
+import world.World;
 
 public class Input {
 	Interface iface;
+	int startX, startY;
+	int endX, endY;
+	Model m;
+	GraphicalSurface gs;
+	int channel_uniform;
+	boolean draw = false;
 
 	public Input (Interface I){
+		Renderer r = Renderer.getInstance();
+		channel_uniform = GL20.glGetUniformLocation(
+		            r.shaders[Renderer.SHADER_GHOST], "channel");
 		iface = I;
+		int mid = ModelList.getInstance().findId("cube");
+		m = ModelList.getInstance().get(mid);
+		int gsid = GSList.getInstance().findId("IconDig");
+		gs = GSList.getInstance().get(gsid);
 	}
 
 	public void poll(long deltaT) {
@@ -38,32 +52,55 @@ public class Input {
 			iface.cursor.state = Cursor.STATE_DISABLED;
 			iface.cursor.reposition(pos[0], pos[1], iface.current_layer, x, y);
 		}
+		endX = iface.cursor.x;
+		endY = iface.cursor.y;
 
 		while (Mouse.next()){
-			if (Mouse.getEventButtonState()) {
-				if (Mouse.getEventButton() == 0) {
+			if (Mouse.getEventButton() == 0) {
+				if (Mouse.getEventButtonState()) {
+					if (where != null){
+						startX = endX;
+						startY = endY;
+						draw = true;
+					}
+				} else { //button released
 					for (int i=0; i<iface.buttons.size(); ++i){
 						b = iface.buttons.get(i);
 						if (b.isIn(x, 600-y))
 							b.onPress();
 					}
 					if (where != null) {
+						draw = false;
 		//				iface.player.order.clear();
-                        switch (iface.commandMode){
-                            case Command.COMMAND_SPAWN:
-								iface.player.spawnCreature(new SmartWalkingElem(where));
-								break;
-                            case Command.COMMAND_DIG:
-								iface.player.placeDigOrder(where);
-								break;
-						    case Command.COMMAND_BUILD:
-								iface.player.placeBuildOrder(where, Material.MATERIAL_MARBLE);
-								break;
-                        }
-						System.out.println("Click at "+where.x+" "+where.y+" "+where.z);
-					} else {
-						System.out.println("Click at void");
-					}
+						int i, j;
+						i = startX; 
+						do {
+							j = startY;
+							do {
+								switch (iface.commandMode){
+								case Command.COMMAND_SPAWN:
+									iface.player.spawnCreature(
+											new SmartWalkingElem(
+													World.getInstance().getBlock(i, j, iface.current_layer)));
+									break;
+								case Command.COMMAND_DIG:
+									iface.player.placeDigOrder(
+											World.getInstance().getBlock(i, j, iface.current_layer));
+									break;
+								case Command.COMMAND_BUILD:
+									iface.player.placeBuildOrder(
+											World.getInstance().getBlock(i, j, iface.current_layer),
+											Material.MATERIAL_MARBLE);
+									break;
+								}
+								j+=Math.signum(where.y-startY);
+							} while(j != where.y+Math.signum(endY - startY)); 
+							i+=Math.signum(where.x-startX);
+						} while(i != where.x+Math.signum(where.x-startX));
+	//					System.out.println("Click at "+where.x+" "+where.y+" "+where.z);
+					}// else {
+		//				System.out.println("Click at void");
+	//				}
 				}
 			}
 		}
@@ -127,5 +164,23 @@ public class Input {
 					break;
             }
 		}
+	}
+	
+	public void draw(){
+		if (! draw)
+			return;
+		GL20.glUseProgram(Renderer.getInstance().shaders[Renderer.SHADER_GHOST]);
+		GL20.glUniform1i(channel_uniform, 2);
+		int i, j;
+		i = startX;
+		do {
+			j = startY;
+			do {
+				m.draw(i, j, iface.current_layer, 0.f, gs);
+				j += Math.signum(endY - startY);
+			} while (j != endY+Math.signum(endY - startY));
+			i += Math.signum(endX - startX);
+		} while (i != endX+Math.signum(endX - startX));
+		GL20.glUseProgram(Renderer.getInstance().shaders[Renderer.SHADER_NONE]);
 	}
 }

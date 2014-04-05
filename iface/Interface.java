@@ -65,6 +65,7 @@ public class Interface {
 		for (int i=0; i<player.order.size(); i++){
 			drawOrder(player.order.get(i));
 		}
+		input.draw();
 // entering 2d drawing mode
 		GL11.glViewport(0,0,800,600);
 //		glMatrixMode(GL_MODELVIEW);
