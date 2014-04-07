@@ -8,15 +8,15 @@ public class Pathfinder {
     int xsize;
     int ysize;
     int zsize;
-    double[][][] d;
+    float[][][] d;
     ArrayList<Block> currLayer;
     ArrayList<Block> nextLayer;
-    static double dist[] = new double[]
-    { 1., 1., 1., 1., 1., 1.,
-      1.414, 1.414, 1.414, 1.414, 1.414, 1.414,
-      1.414, 1.414, 1.414, 1.414, 1.414, 1.414,
-      1.73, 1.73, 1.73, 1.73,
-      1.73, 1.73, 1.73, 1.73
+    static float dist[] = new float[]
+    { 1.f, 1.f, 1.f, 1.f, 1.f, 1.f,
+      1.414f, 1.414f, 1.414f, 1.414f, 1.414f, 1.414f,
+      1.414f, 1.414f, 1.414f, 1.414f, 1.414f, 1.414f,
+      1.73f, 1.73f, 1.73f, 1.73f,
+      1.73f, 1.73f, 1.73f, 1.73f
     };
 
 	private static Pathfinder instance = null;
@@ -32,14 +32,14 @@ public class Pathfinder {
         this.ysize = World.DEFAULT_YSIZE;
         this.zsize = World.DEFAULT_ZSIZE;
 
-        d = new double[xsize][ysize][zsize];
+        d = new float[xsize][ysize][zsize];
     }
 
     public void clear(){
         for (int i=0; i<xsize; ++i)
             for (int j=0; j<ysize; ++j)
                 for (int k=0; k<zsize; ++k)
-                    d[i][j][k] = -1.d;
+                    d[i][j][k] = -1.f;
     }
 
    /* double dist(Block b1, Block b2){
@@ -53,13 +53,13 @@ public class Pathfinder {
         int i, j, l, t;
         Block m, n, k = null;
         Stack<Block> q = new Stack<>();
-        double D, Dn, Dt;
+        float D, Dn, Dt;
 		boolean found = false;
 
         clear();
         nextLayer = new ArrayList<>(1);
         nextLayer.add(b);
-        d[b.x][b.y][b.z] = 0.d;
+        d[b.x][b.y][b.z] = 0.f;
         t = 0;
 
         while ((!found) && (t<1000)){
@@ -79,7 +79,7 @@ public class Pathfinder {
                     if (n==null) continue;
                     Dn = D+dist[j];
                     Dt = d[n.x][n.y][n.z];
-                    if (c.canMove(m, n) && ((Dt<0.d)||(Dt > Dn))){
+                    if (c.canMove(m, n) && ((Dt<0.f)||(Dt > Dn))){
                         d[n.x][n.y][n.z] = Dn;
                         nextLayer.add(n);
                     }
@@ -88,20 +88,19 @@ public class Pathfinder {
             t++;
         }
         if (k == null) {
-            System.out.printf("Path timed out\n");
             return null;
         } else
 			 m = k;
         q.push(m);
         D = d[m.x][m.y][m.z];
-        while(D>0.5d){
+        while(D>0.5f){
             near = m.nearest();
             k = m;
             for (j=0; j<near.size(); ++j){
                 n = near.get(j);
                 if(n==null) continue;
                 Dn = d[n.x][n.y][n.z];
-                if ((Dn>-0.5) && (Dn < D) && c.canMove(n, m)){
+                if ((Dn>-0.5f) && (Dn < D) && c.canMove(n, m)){
                     k = n;
                     D = Dn;
                 }
