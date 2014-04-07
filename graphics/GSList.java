@@ -17,7 +17,7 @@ public class GSList {
 		list = new ArrayList<GraphicalSurface>();
 		add("void", 0.5);
 		add("stone", 0.5);
-		add("earth", 0.5);
+//		add("earth", 0.5);
 		add("marble", 0.5);
 		add("granite", 0.5);
 		add("red_granite", 0.5);

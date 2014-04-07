@@ -92,7 +92,7 @@ public class Model {
 		n_attr = glGetAttribLocation(prog, "normal");
 
 		int t_uniform = glGetUniformLocation(prog, "tex");
-		System.out.print("Texture uniform found at "+t_uniform+"\n");
+//		System.out.print("Texture uniform found at "+t_uniform+"\n");
 		glUniform1i(t_uniform, 0);
 /*		try {
 			texture = TextureLoader.getTexture("PNG",
@@ -104,7 +104,7 @@ public class Model {
 						", height="+texture.getTextureHeight()+"\n");
 */
 		mvp_uniform = glGetUniformLocation(prog, "MVP");
-		System.out.print("MVP uniform found at "+mvp_uniform+"\n");
+//		System.out.print("MVP uniform found at "+mvp_uniform+"\n");
 		a0 = 0.f; a1 = 0.f; a2 = 0.f; scale = 1.f;
 
 		glBindVertexArray(0);

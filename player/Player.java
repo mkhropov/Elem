@@ -70,7 +70,7 @@ public class Player {
     public void setOrderTaken(Order o, Creature c){
         c.order = o;
         o.taken = true;
-        System.out.println(c+" took order "+o);
+  //      System.out.println(c+" took order "+o);
     }
 
     public void setOrderDone(Order o, Creature c){
@@ -81,19 +81,19 @@ public class Player {
         c.order = null;
 		for (int i=0; i<order.size(); ++i)
 			order.get(i).declined = 0;
-        System.out.println(c+" succesfuly did order "+o);
+//        System.out.println(c+" succesfuly did order "+o);
     }
 
 	public void setOrderDeclined(Order o, Creature c){
 		c.declinedOrders.add(o);
 		c.order = null;
 		o.declined++;
-		System.out.println(c+" declined  order "+o);
+	//	System.out.println(c+" declined  order "+o);
 	}
 
     public void setOrderCancelled(Order o, Creature c){
         o.taken = false;
         c.order = null;
-        System.out.println(c+" aborted order "+o);
+      //  System.out.println(c+" aborted order "+o);
     }
 }

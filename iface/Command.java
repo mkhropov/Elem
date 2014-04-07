@@ -18,6 +18,6 @@ public class Command {
 
 	public void execute(){
 		Interface.getInstance().commandMode = type;
-		System.out.println("commandMode switched to "+type);
+//		System.out.println("commandMode switched to "+type);
 	}
 }

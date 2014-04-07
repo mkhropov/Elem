@@ -73,7 +73,7 @@ public class Input {
 						draw = false;
 		//				iface.player.order.clear();
 						int i, j;
-						i = startX; 
+						i = startX;
 						do {
 							j = startY;
 							do {
@@ -94,7 +94,7 @@ public class Input {
 									break;
 								}
 								j+=Math.signum(where.y-startY);
-							} while(j != where.y+Math.signum(endY - startY)); 
+							} while(j != where.y+Math.signum(endY - startY));
 							i+=Math.signum(where.x-startX);
 						} while(i != where.x+Math.signum(where.x-startX));
 	//					System.out.println("Click at "+where.x+" "+where.y+" "+where.z);
@@ -165,7 +165,7 @@ public class Input {
             }
 		}
 	}
-	
+
 	public void draw(){
 		if (! draw)
 			return;

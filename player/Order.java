@@ -31,7 +31,7 @@ public class Order {
     }
 
     public boolean capable(Creature c){
-		System.out.println(it);
+//		System.out.println(it);
         if (c.capable.length < ORDER_MAX){
             System.out.printf("Creature capablities not updated\n");
             return false;
