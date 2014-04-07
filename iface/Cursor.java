@@ -46,10 +46,18 @@ public class Cursor {
 	}
 
 	public void reposition (int x, int y, int z, int X, int Y) {
+		this.X = X;
+		this.Y = Y;
 		this.x = x;
 		this.y = y;
 		this.z = z;
-		char m = World.getInstance().m[x][y][z];
+		char m;
+		if (World.getInstance().isIn(x, y, z))
+			m = World.getInstance().m[x][y][z];
+		else {
+			state = STATE_DISABLED;
+			return;
+		}
 		switch(Interface.getInstance().commandMode){
 			case Command.COMMAND_BUILD:
 			case Command.COMMAND_SPAWN:
@@ -60,8 +68,6 @@ public class Cursor {
 				break;
 			default: break;
 		}
-		this.X = X;
-		this.Y = Y;
 	}
 
 	public void draw2d(){
