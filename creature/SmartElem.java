@@ -86,7 +86,7 @@ public class SmartElem extends Elem implements Worker {
                 boolean res;
 				switch (order.type){
 					case Order.ORDER_MOVE:
-						res = this.b.equals(order.b); break;
+						res = this.b.isSame(order.b); break;
 					case Order.ORDER_DIG:
 						res = destroyBlock(order.b); break;
 					case Order.ORDER_BUILD:

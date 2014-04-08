@@ -27,7 +27,7 @@ public class Elem extends Creature implements Worker{
         gen = new Random(b.x+b.y+b.z);
         action = 0;
 		mid = graphics.ModelList.getInstance().findId("elem");
-		gsid = graphics.GSList.getInstance().findId("void");
+		gsid = graphics.GSList.getInstance().findId("texture");
     }
 
     @Override
@@ -74,7 +74,7 @@ public class Elem extends Creature implements Worker{
     }
 
     public boolean canReach(Block b1, Block b2){
-		if (b1.equals(b2)) return false;
+		if (b1.isSame(b2)) return false;
         int dx = b2.x-b1.x;
         int dy = b2.y-b1.y;
         int dz = b2.z-b1.z;

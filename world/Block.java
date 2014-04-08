@@ -50,4 +50,8 @@ public class Block {
 				l.add(null);
 		return l;
 	}
+
+	public boolean isSame(Block b){
+		return (x==b.x && y==b.y && z==b.z);
+	}
 }

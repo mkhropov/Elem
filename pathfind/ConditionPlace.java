@@ -4,7 +4,7 @@ import world.Block;
 
 public class ConditionPlace implements Condition {
 	public boolean suits(Block b){
-		return this.b.equals(b);
+		return this.b.isSame(b);
 	}
 
 	Block b;
