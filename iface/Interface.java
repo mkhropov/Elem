@@ -42,23 +42,30 @@ public class Interface {
 		player = p;
 	}
 
+	public void setCommandMode(int commandMode){
+		this.commandMode = commandMode;
+		for (int i=0; i<buttons.size(); ++i) {
+			buttons.get(i).active = buttons.get(i).c.type == commandMode;
+		}
+	}
+
 	private Interface() {
 		world = World.getInstance();
 		current_layer = world.zsize-1;
 		camera = new Camera(world.xsize/2.0f, world.ysize/2.0f, (float) current_layer);
 		input = new Input(this);
 		cursor = new Cursor();
-		commandMode = Command.COMMAND_SPAWN;
 		buttons = new ArrayList<>();
-		Button t = new Button(300, 530, 60, 60, "IconSummon",
+		Button t = new Button(300, 530, 60, 60, "IconSummon", "IconSummonD",
 						new Command(Command.COMMAND_SPAWN));
 		buttons.add(t);
-		t = new Button(370, 530, 60, 60, "IconDig",
+		t = new Button(370, 530, 60, 60, "IconDig", "IconDigD",
 						new Command(Command.COMMAND_DIG));
 		buttons.add(t);
-		t = new Button(440, 530, 60, 60, "IconBuild",
+		t = new Button(440, 530, 60, 60, "IconBuild", "IconBuildD",
 						new Command(Command.COMMAND_BUILD));
 		buttons.add(t);
+		this.setCommandMode(Command.COMMAND_SPAWN);
 	}
 
 	public void draw(){

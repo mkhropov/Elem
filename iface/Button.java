@@ -10,18 +10,22 @@ public class Button {
 	public int y;
 	public int dx;
 	public int dy;
+	public boolean active;
 
-	public GraphicalSurface icon;
+	public GraphicalSurface activeIcon;
+	public GraphicalSurface inactiveIcon;
 
 	public Command c;
 
-	public Button(int x, int y, int dx, int dy, String icon, Command c){
+	public Button(int x, int y, int dx, int dy, String activeIcon, String inactiveIcon, Command c){
 		this.x = x;
 		this.y = y;
 		this.dx = dx;
 		this.dy = dy;
-		this.icon = new GraphicalSurface(icon, 0);
+		this.activeIcon = new GraphicalSurface(activeIcon, 0);
+		this.inactiveIcon = new GraphicalSurface(inactiveIcon, 0);
 		this.c = c;
+		this.active = false;
 	}
 
 	public void onPress(){
@@ -35,7 +39,11 @@ public class Button {
 	}
 
 	public void draw(){
-		icon.bind();
+		if (active) {
+			activeIcon.bind();
+		} else {
+			inactiveIcon.bind();
+		}
 		GL11.glBegin(GL11.GL_QUADS);
 		GL11.glTexCoord2d(0., 0.);
 		GL11.glVertex2d(x, y);

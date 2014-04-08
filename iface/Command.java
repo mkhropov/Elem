@@ -17,7 +17,7 @@ public class Command {
 	}
 
 	public void execute(){
-		Interface.getInstance().commandMode = type;
+		Interface.getInstance().setCommandMode(type);
 //		System.out.println("commandMode switched to "+type);
 	}
 }
