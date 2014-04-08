@@ -51,6 +51,8 @@ public class Player {
     public void placeDigOrder(Block b){
 		if (b.m == Material.MATERIAL_NONE)
 			return;
+		if (blockAlreadyRequested(b))
+			return;
 		Order o = new Order(b, Order.ORDER_DIG);
         order.add(o);
 		Renderer.getInstance().addEntity(o.cube);
@@ -59,6 +61,8 @@ public class Player {
     public void placeBuildOrder(Block b, char m){
 		if (b.m != Material.MATERIAL_NONE)
 			return;
+		if (blockAlreadyRequested(b))
+			return;
 		ItemTemplate it = new ItemTemplate(Item.TYPE_BUILDABLE, m);
 		Order o = new Order(null, Order.ORDER_TAKE); o.it = it;
 		order.add(o);
@@ -66,6 +70,13 @@ public class Player {
         order.add(o);
 		Renderer.getInstance().addEntity(o.cube);
     }
+
+	public boolean blockAlreadyRequested(Block b){
+		for (int i=0; i<order.size(); ++i)
+			if (order.get(i).b.isSame(b))
+				return true;
+		return false;
+	}
 
     public void setOrderTaken(Order o, Creature c){
         c.order = o;
