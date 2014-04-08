@@ -106,6 +106,9 @@ public class SmartElem extends Elem implements Worker {
                     move(t);
                 } else {
                     path.clear();
+					if ((order.type == Order.ORDER_BUILD) &&
+						(item != null))
+						drop();
                     owner.setOrderCancelled(this.order, this);
                 }
             }

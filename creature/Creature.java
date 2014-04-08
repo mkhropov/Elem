@@ -80,6 +80,14 @@ public class Creature extends Entity {
 		return (k != w.item.size());
 	}
 
+	public void drop(){
+		if (item == null)
+			return;
+		World.getInstance().item.add(item);
+		Renderer.getInstance().addEntity(item);
+		item = null;
+	}
+
     public boolean move(Block b) {
         if (!canMove(this.b, b))
             return false;
