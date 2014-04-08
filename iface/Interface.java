@@ -50,13 +50,13 @@ public class Interface {
 		cursor = new Cursor();
 		commandMode = Command.COMMAND_SPAWN;
 		buttons = new ArrayList<>();
-		Button t = new Button(0, 0, 80, 80, "IconSummon",
+		Button t = new Button(300, 530, 60, 60, "IconSummon",
 						new Command(Command.COMMAND_SPAWN));
 		buttons.add(t);
-		t = new Button(80, 0, 80, 80, "IconDig",
+		t = new Button(370, 530, 60, 60, "IconDig",
 						new Command(Command.COMMAND_DIG));
 		buttons.add(t);
-		t = new Button(160, 0, 80, 80, "IconBuild",
+		t = new Button(440, 530, 60, 60, "IconBuild",
 						new Command(Command.COMMAND_BUILD));
 		buttons.add(t);
 	}

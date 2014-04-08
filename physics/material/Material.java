@@ -13,6 +13,7 @@ public class Material {
     public Temperature tBoil;
 	public float tex_u;
 	public float tex_v;
+	public float rand;
 	public double hardness;
 	public static final double HARD_NONE = 0.d;
 	public static final double HARD_EARTH = 50.d;
@@ -25,6 +26,7 @@ public class Material {
         tBoil =  new Temperature(9000000);
 		tex_u = 0.f;
 		tex_v = 0.f;
+		rand = 0.f;
 		hardness = HARD_NONE;
     }
 

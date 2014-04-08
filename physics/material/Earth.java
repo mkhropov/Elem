@@ -7,6 +7,7 @@ public class Earth extends Material {
         tBoil =  new Temperature(4000);
 		tex_u = 0.25f;
 		tex_v = 0.f;
+		rand = 0.5f;
 		hardness = HARD_EARTH;
 	}
 }

@@ -103,8 +103,12 @@ public class GraphicalChunk {
 			vbuf.put(vert[f][3*i+0]+X);
 			vbuf.put(vert[f][3*i+1]+Y);
 			vbuf.put(vert[f][3*i+2]+Z);
-			tbuf.put(w.material[w.m[X][Y][Z]].tex_u+text[2*i+0]/8.f+((float)Math.sin(X+Y+Z)+1.f)/16.f);//FIX textures
-			tbuf.put(w.material[w.m[X][Y][Z]].tex_v+text[2*i+1]/8.f+((float)Math.cos(X+Y+Z)+1.f)/16.f);// offsets
+			tbuf.put(w.material[w.m[X][Y][Z]].tex_u
+					+(1-w.material[w.m[X][Y][Z]].rand)*text[2*i+0]/8.f
+					+w.material[w.m[X][Y][Z]].rand*((float)Math.abs(Math.sin(1.9*X+Y+Z)))/4.f);//FIX textures
+			tbuf.put(w.material[w.m[X][Y][Z]].tex_v
+					+(1-w.material[w.m[X][Y][Z]].rand)*text[2*i+1]/8.f
+					+w.material[w.m[X][Y][Z]].rand*((float)Math.abs(Math.sin(X-1.9*Y+Z)))/4.f);// offsets
 			nbuf.put(norm[f][3*i+0]);
 			nbuf.put(norm[f][3*i+1]);
 			nbuf.put(norm[f][3*i+2]);
