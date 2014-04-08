@@ -12,7 +12,7 @@ varying vec3 light;
 void main(){
 	const vec3 lvec = normalize(vec3(-3., 1., 2.));
 	const vec3 lcol = vec3(.7, .7, .7);
-	const vec3 amb = vec3(1., 1., 1.);
+	const vec3 amb = vec3(0.8, 0.8, 0.8);
 
 	gl_Position = MVP * vec4(position, 1.);
 
