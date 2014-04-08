@@ -62,8 +62,8 @@ public class Elem extends Creature implements Worker{
         else { //delayed movement - we are in process
             pb = this.b;
             setBlock(b, true);
+			turn(np);
             mv = new Vector(p, np);
-			a = (float)(Math.signum(np.x-p.x)*Math.acos((np.y-p.y)/Math.sqrt((np.x-p.x)*(np.x-p.x)+(np.y-p.y)*(np.y-p.y))));
             if (!mv.isZero()){
                 mv.normalize();
                 mv.scale(speed);
@@ -128,6 +128,7 @@ public class Elem extends Creature implements Worker{
             return false;
         else {
 			if (canDig(b)){
+				turn(new Point(b));
 				World.getInstance().destroyBlock(b);
 				return true;
 			}
@@ -141,6 +142,7 @@ public class Elem extends Creature implements Worker{
 			!((item.type == Item.TYPE_BUILDABLE) && (item.m == m)))
             return false;
         else {
+			turn(new Point(b));
             World.getInstance().m[b.x][b.y][b.z] = m;
 			item = null;
             Renderer.getInstance().updateBlock(b.x, b.y, b.z);

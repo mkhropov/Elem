@@ -10,6 +10,7 @@ import item.ItemTemplate;
 
 import java.util.Stack;
 import stereometry.Point;
+import stereometry.Vector;
 
 public class Creature extends Entity {
     public Block b;
@@ -96,6 +97,11 @@ public class Creature extends Entity {
             return true;
         }
     }
+
+	public void turn(Point np){
+		if (!(new Vector(p, np)).isZero())
+			a = (float)(Math.signum(np.x-p.x)*Math.acos((np.y-p.y)/Math.sqrt((np.x-p.x)*(np.x-p.x)+(np.y-p.y)*(np.y-p.y))));
+	}
 
     public void iterate(long dT){
     }
