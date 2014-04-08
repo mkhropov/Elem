@@ -18,9 +18,9 @@ public class ModelList {
 		Renderer r = Renderer.getInstance();
 		list = new ArrayList<Model>();
 
-		m = ModelLoader.getInstance().load("res/box.obj", "elem");
+		m = ModelLoader.getInstance().load("res/wisp.obj", "elem");
 		m.prepare(r.shaders[Renderer.SHADER_BASIC]);
-		m.scale = .3f; m.a0 = .5f; m.a1 = .5f; m.a2 = .3f;
+		m.scale = 0.5f; m.a0 = .5f; m.a1 = .5f; m.a2 = .5f;
 		add(m);
 
 		m = ModelLoader.getInstance().load("res/box.obj", "boulder");

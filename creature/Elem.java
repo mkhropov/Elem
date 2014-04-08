@@ -27,7 +27,7 @@ public class Elem extends Creature implements Worker{
         gen = new Random(b.x+b.y+b.z);
         action = 0;
 		mid = graphics.ModelList.getInstance().findId("elem");
-		gsid = graphics.GSList.getInstance().findId("texture");
+		gsid = graphics.GSList.getInstance().findId("elem");
     }
 
     @Override

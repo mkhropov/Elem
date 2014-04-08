@@ -23,6 +23,7 @@ public class GSList {
 		add("red_granite", 0.5);
 		add("textures", 0.0);
 		add("selection", 0.0);
+		add("elem", 0.0);
 		add("IconDig", 0.0);
 		add("IconBuild", 0.0);
 	}
