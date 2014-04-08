@@ -38,11 +38,13 @@ public class Renderer {
 	public final static int SHADER_HIGHLIGHT = 2;
 	public final static int SHADER_GHOST = 3;
 	public final static int SHADER_FADE = 4;
-	public final static int SHADER_MAX = 5;
+	public final static int SHADER_HIGHLIGHT_FLAT = 5;
+	public final static int SHADER_MAX = 6;
 
 	public int[] shaders;
 
 	public int fade_attr;
+	public int z_attr;
 
 	public Matrix4 view;
 	public Matrix4 proj;
@@ -87,12 +89,15 @@ public class Renderer {
 		shaders[SHADER_HIGHLIGHT] =
 			ShaderLoader.createShader("highlight.vsh", "basic.fsh");
 //		System.out.println("[SHADER_HIGHLIGHT]="+shaders[SHADER_HIGHLIGHT]);
+		shaders[SHADER_HIGHLIGHT_FLAT] = 
+			ShaderLoader.createShader("highlight_flat.vsh", "basic.fsh");
 		shaders[SHADER_GHOST] =
 			ShaderLoader.createShader("basic.vsh", "ghost.fsh");
 		shaders[SHADER_FADE] =
 			ShaderLoader.createShader("basic.vsh", "fadeout.fsh");
 
 		fade_attr = glGetUniformLocation(shaders[SHADER_FADE], "fade");
+		z_attr = glGetUniformLocation(shaders[SHADER_HIGHLIGHT_FLAT], "z");
 
 		gEntities = new ArrayList<GraphicalEntity>();
 	}
@@ -249,7 +254,7 @@ public class Renderer {
 
 	public void draw () {
 		int current_layer = Interface.getInstance().current_layer;
-		float fade;
+		float fade, z;
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		for (int i=0; i<gChunks_size; ++i)
 			if ((gChunks[i] != null) && (gChunks[i].needs_update))
@@ -259,10 +264,13 @@ public class Renderer {
 		recalc_chunks();
 
 		if (!draw_mana){
-			glUseProgram(shaders[SHADER_HIGHLIGHT]);
+			glUseProgram(shaders[SHADER_HIGHLIGHT_FLAT]);
 			for (int i=0; i<gChunks_size; i++)
-				if (gChunks[i].used && (gChunks[i].z==current_layer))
+				if (gChunks[i].used && (gChunks[i].z==current_layer)) {
+					z = current_layer + 0.5f;
+					glUniform1f(z_attr, z);
 					gChunks[i].draw(true);
+				}
 //			System.out.println("higlight layer printed");
 			glUseProgram(shaders[SHADER_FADE]);
 			for (int i=0; i<gChunks_size; i++)
