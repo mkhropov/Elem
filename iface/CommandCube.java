@@ -28,9 +28,9 @@ public class CommandCube implements GraphicalEntity {
 		int m = ModelList.getInstance().findId("cube");
 		model = ModelList.getInstance().get(m);
 		int g;
-		if (command == Command.COMMAND_BUILD)
+		if (command == CommandSwitchMode.MODE_BUILD)
 			g = graphics.GSList.getInstance().findId("IconBuild");
-		else if (command == Command.COMMAND_DIG)
+		else if (command == CommandSwitchMode.MODE_DIG)
 			g = graphics.GSList.getInstance().findId("IconDig");
 		else
 			g = graphics.GSList.getInstance().findId("IconNotFound");
@@ -46,6 +46,6 @@ public class CommandCube implements GraphicalEntity {
 		GL20.glUseProgram(r.shaders[Renderer.SHADER_GHOST]);
 		GL20.glUniform1i(channel_uniform, 2);
 		model.draw(x, y, z, 0.f, gs);
-		GL20.glUseProgram(r.shaders[Renderer.SHADER_BASIC]);
+		GL20.glUseProgram(r.shaders[Renderer.SHADER_FADE]);
 	}
 }

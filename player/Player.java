@@ -111,7 +111,7 @@ public class Player {
 
 	public boolean blockAlreadyRequested(Block b){
 		for (int i=0; i<order.size(); ++i)
-			if (order.get(i).b.isSame(b))
+			if ((order.get(i).b != null) && (order.get(i).b.isSame(b)))
 				return true;
 		return false;
 	}
