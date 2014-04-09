@@ -1,6 +1,8 @@
 package graphics;
 
 import world.*;
+import iface.Interface;
+import player.Player;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -16,6 +18,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class GraphicalChunk {
 	private World world;
+	private Player player;
 	public int x,y,z;
 	int rx, ry;
 	private int xsize, ysize;
@@ -28,7 +31,8 @@ public class GraphicalChunk {
 	public FloatBuffer tbuf;
 	public FloatBuffer nbuf;
 	public IntBuffer ibuf;
-	public int tail_size; //indices for invisible top sides
+
+	private int tailSize;
 
 	public int vao;
 	public int v_b;
@@ -66,7 +70,7 @@ public class GraphicalChunk {
 		this.y = y;
 		this.ry = y*CHUNK_SIZE;
 		this.z = z;
-		this.tail_size = 0;
+		this.tailSize = 0;
 		this.used = false;
 		this.needs_update = true;
 		xsize = (w.xsize-rx > CHUNK_SIZE)?CHUNK_SIZE:(w.xsize-rx);
@@ -92,23 +96,26 @@ public class GraphicalChunk {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, i_b);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, ibuf, GL_STATIC_DRAW);
 		glBindVertexArray(0);
-
-//		rebuild();
 	}
 
-	void addFace(int X, int Y, int Z, int f){
+	void addFace(int X, int Y, int Z, int f, boolean fog){
 		World w = World.getInstance();
 		int ind = (ibuf.position()>0)?(ibuf.get(ibuf.position()-1)+1):0;
 		for (int i = 0; i<4; ++i){
 			vbuf.put(vert[f][3*i+0]+X);
 			vbuf.put(vert[f][3*i+1]+Y);
 			vbuf.put(vert[f][3*i+2]+Z);
-			tbuf.put(w.material[w.m[X][Y][Z]].tex_u
+			if (fog) {
+				tbuf.put(0.75f+0.5f*text[2*i+0]/8.f+0.5f*((float)Math.abs(Math.sin(1.9*X+Y+Z)))/4.f);
+				tbuf.put(0.75f+0.5f*text[2*i+1]/8.f+0.5f*((float)Math.abs(Math.sin(X-1.9*Y+Z)))/4.f);
+			} else {
+				tbuf.put(w.material[w.m[X][Y][Z]].tex_u
 					+(1-w.material[w.m[X][Y][Z]].rand)*text[2*i+0]/8.f
 					+w.material[w.m[X][Y][Z]].rand*((float)Math.abs(Math.sin(1.9*X+Y+Z)))/4.f);//FIX textures
-			tbuf.put(w.material[w.m[X][Y][Z]].tex_v
+				tbuf.put(w.material[w.m[X][Y][Z]].tex_v
 					+(1-w.material[w.m[X][Y][Z]].rand)*text[2*i+1]/8.f
 					+w.material[w.m[X][Y][Z]].rand*((float)Math.abs(Math.sin(X-1.9*Y+Z)))/4.f);// offsets
+			}
 			nbuf.put(norm[f][3*i+0]);
 			nbuf.put(norm[f][3*i+1]);
 			nbuf.put(norm[f][3*i+2]);
@@ -118,35 +125,58 @@ public class GraphicalChunk {
 	}
 
 	public void rebuild() {
+		player = Interface.getInstance().player;
 		/* fill vertex/texture/normal/indices buffers */
 		vbuf.clear(); tbuf.clear(); nbuf.clear(); ibuf.clear();
-		for (int i=rx; i<rx+xsize; i++)
-			for (int j=ry; j<ry+ysize; j++){
-				if (world.empty(i,j,z)) continue;
-				if (world.empty(i-1,j,z))
-					addFace(i, j, z, 4);
-				if (world.empty(i+1,j,z))
-					addFace(i, j, z, 5);
-				if (world.empty(i,j-1,z))
-					addFace(i, j, z, 2);
-				if (world.empty(i,j+1,z))
-					addFace(i, j, z, 3);
-				if (world.empty(i,j,z-1))
-					addFace(i, j, z, 0);
-				if (world.empty(i,j,z+1))
-					addFace(i, j, z, 1);
-			}
 
-		/* now add usually invisible top sides to the end of the buffer */
-		tail_size = 0;
-		for (int i=rx; i<rx+xsize; i++)
-			for (int j=ry; j<ry+ysize; j++){
-				if (world.empty(i,j,z)) continue;
-				if (!world.empty(i,j,z+1)){
-					addFace(i, j, z, 1);
-					tail_size += 6;
+		if ((Interface.getInstance().viewMode & Renderer.VIEW_MODE_MASK) == Renderer.VIEW_MODE_FOW){
+			// First pass - fow only
+			for (int i=rx; i<rx+xsize; i++)
+				for (int j=ry; j<ry+ysize; j++){
+					if (world.empty(i,j,z)) continue;
+					if (!player.blockKnown(i,j,z)) continue;
+					addFace(i, j, z, 4, false);
+					addFace(i, j, z, 5, false);
+					addFace(i, j, z, 2, false);
+					addFace(i, j, z, 3, false);
+					addFace(i, j, z, 1, false);
 				}
-			}
+
+			//Second pass - unknown stuff
+			tailSize = 0;
+			for (int i=rx; i<rx+xsize; i++)
+				for (int j=ry; j<ry+ysize; j++){
+					if (player.blockKnown(i,j,z)) continue;
+					addFace(i, j, z, 1, true);
+					tailSize += 6;
+				}
+		} else {
+			for (int i=rx; i<rx+xsize; i++)
+				for (int j=ry; j<ry+ysize; j++){
+					if (world.empty(i,j,z)) continue;
+					if (world.empty(i-1,j,z))
+						addFace(i, j, z, 4, false);
+					if (world.empty(i+1,j,z))
+						addFace(i, j, z, 5, false);
+					if (world.empty(i,j-1,z))
+						addFace(i, j, z, 2, false);
+					if (world.empty(i,j+1,z))
+						addFace(i, j, z, 3, false);
+					if (world.empty(i,j,z+1))
+						addFace(i, j, z, 1, false);
+				}
+
+			/* now add usually invisible top sides to the end of the buffer */
+			tailSize = 0;
+			for (int i=rx; i<rx+xsize; i++)
+				for (int j=ry; j<ry+ysize; j++){
+					if (world.empty(i,j,z)) continue;
+					if (!world.empty(i,j,z+1)){
+						addFace(i, j, z, 1, false);
+						tailSize += 6;
+					}
+				}
+		}
 
 		vbuf.limit(vbuf.position());
 		tbuf.limit(tbuf.position());
@@ -195,7 +225,7 @@ public class GraphicalChunk {
 		rebuild();
 	}
 
-	public void draw(boolean show_top) {
+	public void draw(boolean showTop) {
 		int p = glGetInteger(GL_CURRENT_PROGRAM);
 		mvp_uniform = glGetUniformLocation(p, "MVP");
 		t_uniform = glGetUniformLocation(p, "tex");
@@ -226,12 +256,8 @@ public class GraphicalChunk {
 		glVertexAttribPointer(n_attr, 3, GL_FLOAT, true, 0, 0);
 //		System.out.println("Normals sent "+nbuf);
 
-		/* if show_top is not set ->
-		 do not draw underground top sides of cubes */
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, i_b);
-		glDrawElements(GL_TRIANGLES, ibuf.limit()-(show_top?0:tail_size),
-			GL_UNSIGNED_INT, 0);
-//		 System.out.println("Indices applied");
+		glDrawElements(GL_TRIANGLES, ibuf.limit()-(showTop?0:tailSize), GL_UNSIGNED_INT, 0);
 
 		glDisableVertexAttribArray(n_attr);
 		glDisableVertexAttribArray(t_attr);

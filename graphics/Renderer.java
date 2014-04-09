@@ -127,7 +127,6 @@ public class Renderer {
 				++I;
 			if (I < gChunks_size){
 				gChunks[I].needs_update = true;
-//				System.out.println("Update sheduled to chunk "+I);
 			}
 		}
 /*		int chunkX = x/GraphicalChunk.CHUNK_SIZE;
@@ -244,8 +243,10 @@ public class Renderer {
 						gc.used = true;
 						//FIXME not enough chunks reserved?
 						gc.rebuild(i, j, k);
-					} else if (gc.needs_update)
+					} else if (gc.needs_update) {
+						System.out.println("Rebuilding");
 						gc.rebuild();
+					}
 				}
 
 /*		for (int k=0; k<gChunks_size; ++k)
@@ -262,8 +263,9 @@ public class Renderer {
 		float fade, z;
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		for (int i=0; i<gChunks_size; ++i)
-			if ((gChunks[i] != null) && (gChunks[i].needs_update))
+			if ((gChunks[i] != null) && (gChunks[i].needs_update)) {
 				gChunks[i].rebuild();
+			}
 		VP = view.multR(proj);
 
 		recalc_chunks();

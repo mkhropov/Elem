@@ -13,16 +13,54 @@ public class Player {
     public ArrayList<Order> order;
     public ArrayList<Creature> creature;
 	public ArrayList<Spell> spellbook;
+	public char[][][] blockMeta; //For now FOW only, 7 bits free
+	public final static char META_FOW = 1;
 	public int mana;
 
     public Player(){
         this.order = new ArrayList<>();
         this.creature = new ArrayList<>();
 		this.spellbook = new ArrayList<>();
+		World w = World.getInstance();
+		this.blockMeta = new char[w.xsize][w.ysize][w.zsize];
+		for (int i=0; i<w.xsize; i++)
+			for (int j=0; j<w.ysize; j++)
+				for (int k=w.zsize-1; k>=0; k--) {
+					blockMeta[i][j][k] |= META_FOW;
+					if (!w.empty(i,j,k)) break;
+				}
 		spellbook.add(0, new SpellSummon(this));
 		spellbook.add(1, new SpellSunstrike(this));
 		this.mana = 0;
     }
+
+	public boolean blockKnown(int x, int y, int z) {
+		if (World.getInstance().isIn(x,y,z)){
+			return (blockMeta[x][y][z] & META_FOW) == META_FOW;
+		} else {
+			return false;
+		}
+	}
+
+	public void addBlockKnownSingle(int x, int y, int z) {
+		if (!World.getInstance().isIn(x,y,z)) return;
+		blockMeta[x][y][z] |= META_FOW;
+		Renderer.getInstance().updateBlock(x,y,z);
+	}
+
+	public void addBlockKnown(int x, int y, int z) {
+		addBlockKnownSingle(x,y,z);
+		addBlockKnownSingle(x+1,y,z);
+		addBlockKnownSingle(x-1,y,z);
+		addBlockKnownSingle(x,y-1,z);
+		addBlockKnownSingle(x+1,y-1,z);
+		addBlockKnownSingle(x-1,y-1,z);
+		addBlockKnownSingle(x,y+1,z);
+		addBlockKnownSingle(x+1,y+1,z);
+		addBlockKnownSingle(x-1,y+1,z);
+		addBlockKnownSingle(x,y,z-1);
+		addBlockKnownSingle(x,y,z+1);
+	}
 
 	public boolean cast(int i, Block b){
 		if (i>spellbook.size())

@@ -6,6 +6,7 @@ import item.*;
 import creature.*;
 import pathfind.Pathfinder;
 import graphics.Renderer;
+import iface.Interface;
 
 import java.util.ArrayList;
 import stereometry.*;
@@ -118,6 +119,8 @@ public class World {
 	public void destroyBlock(int x, int y, int z){
 		item.add(new ItemBoulder(x, y, z, 1., m[x][y][z]));
 		m[x][y][z] = Material.MATERIAL_NONE;
+		Interface.getInstance().player.addBlockKnown(x, y, z);
+		// FIXME!!! DIRTY HACK HERE
 		Renderer.getInstance().updateBlock(x, y, z);
 		if ((z+1) < zsize)
 			updateBlock(x, y, z+1);

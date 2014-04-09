@@ -16,7 +16,7 @@ import graphics.Renderer;
 
 public class Interface {
 	public Camera camera;
-	Player player;
+	public Player player;
 	World world;
 	Input input;
 	public int current_layer;
@@ -57,7 +57,7 @@ public class Interface {
 		input = new Input(this);
 		cursor = new Cursor();
 		buttons = new ArrayList<>();
-		viewMode = Renderer.VIEW_MODE_FULL;
+		viewMode = Renderer.VIEW_MODE_FOW;
 		Button t = new Button(300, 530, 60, 60, "IconSummon", "IconSummonD",
 						new Command(Command.COMMAND_SPAWN));
 		buttons.add(t);
