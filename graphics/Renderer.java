@@ -24,7 +24,6 @@ import physics.mana.ManaField;
 
 public class Renderer {
 	private World world;
-	private Interface iface;
 	public int gChunks_size;
 	private GraphicalChunk[] gChunks;
 	public int zdepth;
@@ -40,6 +39,12 @@ public class Renderer {
 	public final static int SHADER_FADE = 4;
 	public final static int SHADER_HIGHLIGHT_FLAT = 5;
 	public final static int SHADER_MAX = 6;
+
+	public final static int VIEW_MODE_MASK=63;
+	public final static int VIEW_MODE_FULL=1;      //Show all blocks, debug only
+	public final static int VIEW_MODE_FOW=2;       //Show only known blocks
+	public final static int VIEW_MODE_FOW_OCD=3;   //Show only known blocks open to air
+	public final static int VIEW_MODE_FLAT=64; //Should top layer be flat
 
 	public int[] shaders;
 
@@ -264,11 +269,15 @@ public class Renderer {
 		recalc_chunks();
 
 		if (!draw_mana){
-			glUseProgram(shaders[SHADER_HIGHLIGHT_FLAT]);
+			if ((Interface.getInstance().viewMode & VIEW_MODE_FLAT)!=0) {
+				z = current_layer + 0.5f;
+				glUniform1f(z_attr, z);
+				glUseProgram(shaders[SHADER_HIGHLIGHT_FLAT]);
+			} else {
+				glUseProgram(shaders[SHADER_HIGHLIGHT]);
+			}
 			for (int i=0; i<gChunks_size; i++)
 				if (gChunks[i].used && (gChunks[i].z==current_layer)) {
-					z = current_layer + 0.5f;
-					glUniform1f(z_attr, z);
 					gChunks[i].draw(true);
 				}
 //			System.out.println("higlight layer printed");

@@ -106,7 +106,7 @@ public class Input {
 		}
 
 		while (Keyboard.next()) {
-			if (Keyboard.getEventKeyState())
+			if (Keyboard.getEventKeyState()) {
 				// Key pressed
 				switch(Keyboard.getEventCharacter()){
 				case 'z':
@@ -160,9 +160,22 @@ public class Input {
 	            case '3':
 					(new Command(Command.COMMAND_BUILD)).execute();
 					break;
+				case ' ':
+					iface.viewMode |= Renderer.VIEW_MODE_FLAT;
+					break;
 				default:
 					break;
             }
+		} else {
+			// Key released
+			switch(Keyboard.getEventKey()){
+				case Keyboard.KEY_SPACE:
+					iface.viewMode = iface.viewMode & ~Renderer.VIEW_MODE_FLAT;
+					break;
+				default:
+					break;
+            }
+		}
 		}
 	}
 
