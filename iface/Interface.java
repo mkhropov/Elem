@@ -22,6 +22,7 @@ public class Interface {
 	public int current_layer;
 	public Cursor cursor;
 	public ArrayList<Button> buttons;
+	public int viewMode;
 
 	public char buildMaterial;
 	public int commandMode;
@@ -58,6 +59,7 @@ public class Interface {
 		input = new Input(this);
 		cursor = new Cursor();
 		buttons = new ArrayList<>();
+		viewMode = Renderer.VIEW_MODE_FULL;
 		Button t = new Button(300, 530, 60, 60, "IconSummon", "IconSummonD",
 						new CommandSwitchMode(CommandSwitchMode.MODE_SPAWN));
 		buttons.add(t);
@@ -81,9 +83,6 @@ public class Interface {
 }
 
 	public void draw(){
-		for (int i=0; i<player.order.size(); i++){
-			drawOrder(player.order.get(i));
-		}
 		input.draw();
 // entering 2d drawing mode
 		GL11.glViewport(0,0,800,600);
@@ -115,19 +114,5 @@ public class Interface {
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glLoadIdentity();
 		camera.forceUpdate(0);
-	}
-
-	public void drawOrder(Order o) {
-	/*	int gsid = 0;
-		if (o.type == Order.ORDER_DIG) {
-			gsid = GSList.getInstance().findId("selection");
-		} else if (o.type == Order.ORDER_BUILD) {
-			gsid = o.m.gsid;
-		}
-		if (o.b != null) {
-			GraphicalSurface gs = GSList.getInstance().get(gsid);
-			Model m = new graphics.models.Cube(gs);
-			m.draw(o.b.x, o.b.y, o.b.z);
-		}*/
 	}
 }
