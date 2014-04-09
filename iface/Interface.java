@@ -3,6 +3,7 @@ package iface;
 import world.World;
 import player.Player;
 import player.Order;
+import physics.material.Material;
 
 import graphics.*;
 
@@ -12,7 +13,6 @@ import org.lwjgl.util.glu.GLU;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
-import graphics.Renderer;
 
 public class Interface {
 	public Camera camera;
@@ -23,6 +23,7 @@ public class Interface {
 	public Cursor cursor;
 	public ArrayList<Button> buttons;
 
+	public char buildMaterial;
 	public int commandMode;
 
 	public void update(long deltaT){
@@ -44,9 +45,10 @@ public class Interface {
 
 	public void setCommandMode(int commandMode){
 		this.commandMode = commandMode;
-		for (int i=0; i<buttons.size(); ++i) {
-			buttons.get(i).active = buttons.get(i).c.type == commandMode;
-		}
+	}
+
+	public void setBuildMaterial(char material){
+		this.buildMaterial = material;
 	}
 
 	private Interface() {
@@ -57,16 +59,26 @@ public class Interface {
 		cursor = new Cursor();
 		buttons = new ArrayList<>();
 		Button t = new Button(300, 530, 60, 60, "IconSummon", "IconSummonD",
-						new Command(Command.COMMAND_SPAWN));
+						new CommandSwitchMode(CommandSwitchMode.MODE_SPAWN));
 		buttons.add(t);
 		t = new Button(370, 530, 60, 60, "IconDig", "IconDigD",
-						new Command(Command.COMMAND_DIG));
+						new CommandSwitchMode(CommandSwitchMode.MODE_DIG));
 		buttons.add(t);
 		t = new Button(440, 530, 60, 60, "IconBuild", "IconBuildD",
-						new Command(Command.COMMAND_BUILD));
+						new CommandSwitchMode(CommandSwitchMode.MODE_BUILD));
 		buttons.add(t);
-		this.setCommandMode(Command.COMMAND_SPAWN);
-	}
+		this.setCommandMode(CommandSwitchMode.MODE_SPAWN);
+		t = new Button(500, 530, 20, 20, "marble", "marble",
+						new CommandSwitchMaterial(Material.MATERIAL_MARBLE));
+		buttons.add(t);
+		t = new Button(500, 550, 20, 20, "earth", "earth",
+						new CommandSwitchMaterial(Material.MATERIAL_EARTH));
+		buttons.add(t);
+		t = new Button(500, 570, 20, 20, "stone", "stone",
+						new CommandSwitchMaterial(Material.MATERIAL_STONE));
+		buttons.add(t);
+		this.setBuildMaterial(Material.MATERIAL_MARBLE);
+}
 
 	public void draw(){
 		for (int i=0; i<player.order.size(); i++){

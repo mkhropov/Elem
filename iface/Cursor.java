@@ -59,11 +59,11 @@ public class Cursor {
 			return;
 		}
 		switch(Interface.getInstance().commandMode){
-			case Command.COMMAND_BUILD:
-			case Command.COMMAND_SPAWN:
+			case CommandSwitchMode.MODE_BUILD:
+			case CommandSwitchMode.MODE_SPAWN:
 				state = (m == Material.MATERIAL_NONE)?(STATE_ENABLED):(STATE_DISABLED);
 				break;
-			case Command.COMMAND_DIG:
+			case CommandSwitchMode.MODE_DIG:
 				state = (m != Material.MATERIAL_NONE)?(STATE_ENABLED):(STATE_DISABLED);
 				break;
 			default: break;

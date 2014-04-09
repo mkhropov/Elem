@@ -10,7 +10,6 @@ public class Button {
 	public int y;
 	public int dx;
 	public int dy;
-	public boolean active;
 
 	public GraphicalSurface activeIcon;
 	public GraphicalSurface inactiveIcon;
@@ -25,7 +24,6 @@ public class Button {
 		this.activeIcon = new GraphicalSurface(activeIcon, 0);
 		this.inactiveIcon = new GraphicalSurface(inactiveIcon, 0);
 		this.c = c;
-		this.active = false;
 	}
 
 	public void onPress(){
@@ -39,7 +37,7 @@ public class Button {
 	}
 
 	public void draw(){
-		if (active) {
+		if (c.isActive()) {
 			activeIcon.bind();
 		} else {
 			inactiveIcon.bind();

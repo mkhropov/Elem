@@ -78,19 +78,19 @@ public class Input {
 							j = startY;
 							do {
 								switch (iface.commandMode){
-								case Command.COMMAND_SPAWN:
+								case CommandSwitchMode.MODE_SPAWN:
 									iface.player.spawnCreature(
 											new SmartWalkingElem(
 													World.getInstance().getBlock(i, j, iface.current_layer)));
 									break;
-								case Command.COMMAND_DIG:
+								case CommandSwitchMode.MODE_DIG:
 									iface.player.placeDigOrder(
 											World.getInstance().getBlock(i, j, iface.current_layer));
 									break;
-								case Command.COMMAND_BUILD:
+								case CommandSwitchMode.MODE_BUILD:
 									iface.player.placeBuildOrder(
 											World.getInstance().getBlock(i, j, iface.current_layer),
-											Material.MATERIAL_MARBLE);
+											iface.buildMaterial);
 									break;
 								}
 								j+=Math.signum(where.y-startY);
@@ -152,13 +152,13 @@ public class Input {
 						 !Renderer.getInstance().draw_mana;
 					break;
                 case '1':
-					(new Command(Command.COMMAND_SPAWN)).execute();
+					(new CommandSwitchMode(CommandSwitchMode.MODE_SPAWN)).execute();
 					break;
                 case '2':
-					(new Command(Command.COMMAND_DIG)).execute();
+					(new CommandSwitchMode(CommandSwitchMode.MODE_DIG)).execute();
 					break;
 	            case '3':
-					(new Command(Command.COMMAND_BUILD)).execute();
+					(new CommandSwitchMode(CommandSwitchMode.MODE_BUILD)).execute();
 					break;
 				default:
 					break;
