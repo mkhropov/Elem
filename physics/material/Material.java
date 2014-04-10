@@ -9,8 +9,6 @@ public class Material {
 	public static final char MATERIAL_GRANITE = 4;
 	public static final char MATERIAL_BEDROCK = 5;
 	public static final char MATERIAL_MAX = 6;
-    public Temperature tFreeze;
-    public Temperature tBoil;
 	public float tex_u;
 	public float tex_v;
 	public float rand;
@@ -22,8 +20,6 @@ public class Material {
 	public static final double HARD_MAX = 100000.d;
 
 	public Material() {
-        tFreeze = new Temperature(9000000);
-        tBoil =  new Temperature(9000000);
 		tex_u = 0.f;
 		tex_v = 0.f;
 		rand = 0.f;
