@@ -7,13 +7,11 @@ import java.util.concurrent.Callable;
 import graphics.GraphicalSurface;
 import graphics.Renderer;
 
-public class Button {
+public class Button extends Element {
 	private int x;
 	private int y;
 	private int dx;
 	private int dy;
-
-	public boolean active = false;
 
 	private static GraphicalSurface activeIcon;
 	private static GraphicalSurface inactiveIcon;
@@ -30,6 +28,8 @@ public class Button {
 
 	public Button(int x, int y, int dx, int dy, String iconName){
 		if (!initialized) classInit();
+		this.active = false;
+		this.visible = true;
 		this.x = x;
 		this.y = y;
 		this.dx = dx;
@@ -56,6 +56,7 @@ public class Button {
 	}
 
 	public void draw(){
+		if (!visible) return;
 		if (active) {
 			activeIcon.bind();
 		} else {

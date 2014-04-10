@@ -80,19 +80,21 @@ public class Interface {
 		input = new Input(this);
 		cursor = new Cursor();
 		menus = new Menu[MENU_COUNT];
-		SelectorMenu t = new SelectorMenu();
-		menus[MENU_TOOLBAR] = new SelectorMenu();
+		SelectorMenu t = new SelectorMenu(new Element());
 		t.addButton(new Button(300, 530, 60, 60, "IconSummon"), COMMAND_MODE_SPAWN);
 		t.addButton(new Button(370, 530, 60, 60, "IconDig"), COMMAND_MODE_DIG);
-		t.addButton(new Button(440, 530, 60, 60, "IconBuild"), COMMAND_MODE_BUILD);
+		Button b = new Button(440, 530, 60, 60, "IconBuild");
+		b.bindAction(new Runnable() { @Override public void run() {
+				Interface.getInstance().menus[Interface.MENU_BUILD_MATERIAL].toggle();}}, 1);
+		t.addButton(b, COMMAND_MODE_BUILD);
 		menus[MENU_TOOLBAR] = t;
 		menus[MENU_TOOLBAR].show();
-		t = new SelectorMenu();
-		t.addButton(new Button(500, 530, 20, 20, "marble"), (int)Material.MATERIAL_MARBLE);
-		t.addButton(new Button(500, 550, 20, 20, "earth"), (int)Material.MATERIAL_EARTH);
-		t.addButton(new Button(500, 570, 20, 20, "stone"), (int)Material.MATERIAL_STONE);
+		t = new SelectorMenu(b);
+		t.show();
+		t.addButton(new Button(400, 480, 40, 40, "marble"), (int)Material.MATERIAL_MARBLE);
+		t.addButton(new Button(450, 480, 40, 40, "earth"), (int)Material.MATERIAL_EARTH);
+		t.addButton(new Button(500, 480, 40, 40, "stone"), (int)Material.MATERIAL_STONE);
 		menus[MENU_BUILD_MATERIAL] = t;
-		menus[MENU_BUILD_MATERIAL].show();
 
 		viewMode = Renderer.VIEW_MODE_FOW;
 		this.setCommandMode(COMMAND_MODE_SPAWN);

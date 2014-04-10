@@ -16,7 +16,8 @@ public class SelectorMenu extends Menu {
 		}
 	}
 
-	public SelectorMenu(){
+	public SelectorMenu(Element p){
+		super(p);
 		buttons = new ArrayList<Button>();
 		options = new ArrayList<Integer>();
 	}
@@ -31,7 +32,7 @@ public class SelectorMenu extends Menu {
 		buttons.get(options.indexOf(state)).active = true;
 	}
 
-	public void _draw(){
+	void _draw(){
 		Iterator<Button> i = buttons.iterator();
 		while(i.hasNext()) {
 			i.next().draw();

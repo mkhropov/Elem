@@ -1,8 +1,13 @@
 package iface;
 
-public abstract class Menu {
-	private boolean visible = false;
-	public Menu(){}
+public abstract class Menu extends Element {
+	private Element parent;
+
+	public Menu(Element p){
+		this.visible = false;
+		this.active = false;
+		parent = p;
+	}
 
 	public void show() {
 		visible = true;
@@ -17,10 +22,10 @@ public abstract class Menu {
 	}
 
 	public void draw() {
-		if(visible) _draw();
+		if (visible && parent.visible && parent.active) _draw();
 	}
 
-	public abstract void _draw();
+	abstract void _draw();
 	public abstract void click(int x, int y, int mButton);
 	public abstract boolean hover (int x, int y);
 }
