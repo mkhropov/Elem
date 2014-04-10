@@ -202,6 +202,12 @@ public class Renderer {
 		return null; //FIXME should be damn sure enough chunks were allocated
 	}
 
+	public void reset() {
+		for (int k=0; k<gChunks_size; ++k)
+			gChunks[k].needs_update = true;
+		recalc_chunks();
+	}
+
 	public void recalc_chunks() {
 		GraphicalChunk gc;
 		Camera c = Interface.getInstance().camera;
@@ -244,7 +250,6 @@ public class Renderer {
 						//FIXME not enough chunks reserved?
 						gc.rebuild(i, j, k);
 					} else if (gc.needs_update) {
-						System.out.println("Rebuilding");
 						gc.rebuild();
 					}
 				}

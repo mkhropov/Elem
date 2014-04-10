@@ -147,8 +147,14 @@ public class Input {
 						iface.player.cast(1, where);
 					break;
 				case 'm':
-					Renderer.getInstance().draw_mana =
-						 !Renderer.getInstance().draw_mana;
+//					Renderer.getInstance().draw_mana =
+//						 !Renderer.getInstance().draw_mana;
+					if ((iface.viewMode&Renderer.VIEW_MODE_MASK) != Renderer.VIEW_MODE_FULL) {
+						iface.viewMode = Renderer.VIEW_MODE_FULL | (iface.viewMode&(~Renderer.VIEW_MODE_MASK));
+					} else {
+						iface.viewMode = Renderer.VIEW_MODE_FOW | (iface.viewMode&(~Renderer.VIEW_MODE_MASK));
+					}
+					Renderer.getInstance().reset();
 					break;
                 case '1':
 					iface.setCommandMode(Interface.COMMAND_MODE_SPAWN);
