@@ -60,23 +60,23 @@ public class Interface {
 		cursor = new Cursor();
 		buttons = new ArrayList<>();
 		viewMode = Renderer.VIEW_MODE_FOW;
-		Button t = new Button(300, 530, 60, 60, "IconSummon", "IconSummonD",
+		Button t = new Button(300, 530, 60, 60, "IconSummon",
 						new CommandSwitchMode(CommandSwitchMode.MODE_SPAWN));
 		buttons.add(t);
-		t = new Button(370, 530, 60, 60, "IconDig", "IconDigD",
+		t = new Button(370, 530, 60, 60, "IconDig",
 						new CommandSwitchMode(CommandSwitchMode.MODE_DIG));
 		buttons.add(t);
-		t = new Button(440, 530, 60, 60, "IconBuild", "IconBuildD",
+		t = new Button(440, 530, 60, 60, "IconBuild",
 						new CommandSwitchMode(CommandSwitchMode.MODE_BUILD));
 		buttons.add(t);
 		this.setCommandMode(CommandSwitchMode.MODE_SPAWN);
-		t = new Button(500, 530, 20, 20, "marble", "marble",
+		t = new Button(500, 530, 20, 20, "marble",
 						new CommandSwitchMaterial(Material.MATERIAL_MARBLE));
 		buttons.add(t);
-		t = new Button(500, 550, 20, 20, "earth", "earth",
+		t = new Button(500, 550, 20, 20, "earth",
 						new CommandSwitchMaterial(Material.MATERIAL_EARTH));
 		buttons.add(t);
-		t = new Button(500, 570, 20, 20, "stone", "stone",
+		t = new Button(500, 570, 20, 20, "stone",
 						new CommandSwitchMaterial(Material.MATERIAL_STONE));
 		buttons.add(t);
 		this.setBuildMaterial(Material.MATERIAL_MARBLE);

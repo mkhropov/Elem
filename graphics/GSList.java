@@ -17,7 +17,7 @@ public class GSList {
 		list = new ArrayList<GraphicalSurface>();
 		add("void", 0.5);
 		add("stone", 0.5);
-//		add("earth", 0.5);
+		add("earth", 0.5);
 		add("marble", 0.5);
 		add("granite", 0.5);
 		add("red_granite", 0.5);
@@ -26,6 +26,9 @@ public class GSList {
 		add("elem", 0.0);
 		add("IconDig", 0.0);
 		add("IconBuild", 0.0);
+		add("IconSummon", 0.0);
+		add("IconActive", 0.0);
+		add("IconInactive", 0.0);
 	}
 
 	public int findId(String name) {

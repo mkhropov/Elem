@@ -1,5 +1,7 @@
 package iface;
 
+import graphics.GSList;
+
 import org.lwjgl.opengl.GL11;
 import java.util.concurrent.Callable;
 import graphics.GraphicalSurface;
@@ -11,18 +13,25 @@ public class Button {
 	public int dx;
 	public int dy;
 
-	public GraphicalSurface activeIcon;
-	public GraphicalSurface inactiveIcon;
+	static GraphicalSurface activeIcon;
+	static GraphicalSurface inactiveIcon;
+	GraphicalSurface icon;
 
 	public Command c;
 
-	public Button(int x, int y, int dx, int dy, String activeIcon, String inactiveIcon, Command c){
+	private static boolean initialized = false;
+	private void classInit() {
+		activeIcon = GSList.getInstance().get("IconActive");
+		inactiveIcon = GSList.getInstance().get("IconInactive");
+	}
+
+	public Button(int x, int y, int dx, int dy, String iconName, Command c){
+		if (!initialized) classInit();
 		this.x = x;
 		this.y = y;
 		this.dx = dx;
 		this.dy = dy;
-		this.activeIcon = new GraphicalSurface(activeIcon, 0);
-		this.inactiveIcon = new GraphicalSurface(inactiveIcon, 0);
+		this.icon = GSList.getInstance().get(iconName);
 		this.c = c;
 	}
 
@@ -51,6 +60,17 @@ public class Button {
 		GL11.glVertex2d(x+dx, y+dy);
 		GL11.glTexCoord2d(0., 1.);
 		GL11.glVertex2d(x, y+dy);
+		GL11.glEnd();
+		icon.bind();
+		GL11.glBegin(GL11.GL_QUADS);
+		GL11.glTexCoord2d(0., 0.);
+		GL11.glVertex2d(x+0.1*dx, y+0.1*dy);
+		GL11.glTexCoord2d(1., 0.);
+		GL11.glVertex2d(x+0.9*dx, y+0.1*dy);
+		GL11.glTexCoord2d(1., 1.);
+		GL11.glVertex2d(x+0.9*dx, y+0.9*dy);
+		GL11.glTexCoord2d(0., 1.);
+		GL11.glVertex2d(x+0.1*dx, y+0.9*dy);
 		GL11.glEnd();
 	}
 }
