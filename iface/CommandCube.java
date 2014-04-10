@@ -28,9 +28,9 @@ public class CommandCube implements GraphicalEntity {
 		int m = ModelList.getInstance().findId("cube");
 		model = ModelList.getInstance().get(m);
 		int g;
-		if (command == CommandSwitchMode.MODE_BUILD)
+		if (command == Interface.COMMAND_MODE_BUILD)
 			g = graphics.GSList.getInstance().findId("IconBuild");
-		else if (command == CommandSwitchMode.MODE_DIG)
+		else if (command == Interface.COMMAND_MODE_DIG)
 			g = graphics.GSList.getInstance().findId("IconDig");
 		else
 			g = graphics.GSList.getInstance().findId("IconNotFound");

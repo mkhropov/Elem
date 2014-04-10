@@ -21,11 +21,20 @@ public class Interface {
 	Input input;
 	public int current_layer;
 	public Cursor cursor;
-	public ArrayList<Button> buttons;
-	public int viewMode;
 
-	public char buildMaterial;
-	public int commandMode;
+	public static final int COMMAND_MODE_SPAWN = 0;
+	public static final int COMMAND_MODE_DIG = 1;
+	public static final int COMMAND_MODE_BUILD = 2;
+
+
+	public static final int MENU_TOOLBAR = 0;
+	public static final int MENU_BUILD_MATERIAL = 1;
+	public static final int MENU_COUNT = 2;
+
+
+	public Menu[] menus;
+
+	public int viewMode;
 
 	public void update(long deltaT){
 		input.poll(deltaT);
@@ -45,11 +54,23 @@ public class Interface {
 	}
 
 	public void setCommandMode(int commandMode){
-		this.commandMode = commandMode;
+		SelectorMenu t = (SelectorMenu)menus[MENU_TOOLBAR];
+		t.setState(commandMode);
+	}
+
+	public int getCommandMode(){
+		SelectorMenu t = (SelectorMenu)menus[MENU_TOOLBAR];
+		return t.getState();
 	}
 
 	public void setBuildMaterial(char material){
-		this.buildMaterial = material;
+		SelectorMenu t = (SelectorMenu)menus[MENU_BUILD_MATERIAL];
+		t.setState((int)material);
+	}
+
+	public char getBuildMaterial(){
+		SelectorMenu t = (SelectorMenu)menus[MENU_BUILD_MATERIAL];
+		return (char)t.getState();
 	}
 
 	private Interface() {
@@ -58,27 +79,23 @@ public class Interface {
 		camera = new Camera(world.xsize/2.0f, world.ysize/2.0f, (float) current_layer);
 		input = new Input(this);
 		cursor = new Cursor();
-		buttons = new ArrayList<>();
+		menus = new Menu[MENU_COUNT];
+		SelectorMenu t = new SelectorMenu();
+		menus[MENU_TOOLBAR] = new SelectorMenu();
+		t.addButton(new Button(300, 530, 60, 60, "IconSummon"), COMMAND_MODE_SPAWN);
+		t.addButton(new Button(370, 530, 60, 60, "IconDig"), COMMAND_MODE_DIG);
+		t.addButton(new Button(440, 530, 60, 60, "IconBuild"), COMMAND_MODE_BUILD);
+		menus[MENU_TOOLBAR] = t;
+		menus[MENU_TOOLBAR].show();
+		t = new SelectorMenu();
+		t.addButton(new Button(500, 530, 20, 20, "marble"), (int)Material.MATERIAL_MARBLE);
+		t.addButton(new Button(500, 550, 20, 20, "earth"), (int)Material.MATERIAL_EARTH);
+		t.addButton(new Button(500, 570, 20, 20, "stone"), (int)Material.MATERIAL_STONE);
+		menus[MENU_BUILD_MATERIAL] = t;
+		menus[MENU_BUILD_MATERIAL].show();
+
 		viewMode = Renderer.VIEW_MODE_FOW;
-		Button t = new Button(300, 530, 60, 60, "IconSummon",
-						new CommandSwitchMode(CommandSwitchMode.MODE_SPAWN));
-		buttons.add(t);
-		t = new Button(370, 530, 60, 60, "IconDig",
-						new CommandSwitchMode(CommandSwitchMode.MODE_DIG));
-		buttons.add(t);
-		t = new Button(440, 530, 60, 60, "IconBuild",
-						new CommandSwitchMode(CommandSwitchMode.MODE_BUILD));
-		buttons.add(t);
-		this.setCommandMode(CommandSwitchMode.MODE_SPAWN);
-		t = new Button(500, 530, 20, 20, "marble",
-						new CommandSwitchMaterial(Material.MATERIAL_MARBLE));
-		buttons.add(t);
-		t = new Button(500, 550, 20, 20, "earth",
-						new CommandSwitchMaterial(Material.MATERIAL_EARTH));
-		buttons.add(t);
-		t = new Button(500, 570, 20, 20, "stone",
-						new CommandSwitchMaterial(Material.MATERIAL_STONE));
-		buttons.add(t);
+		this.setCommandMode(COMMAND_MODE_SPAWN);
 		this.setBuildMaterial(Material.MATERIAL_MARBLE);
 }
 
@@ -99,8 +116,8 @@ public class Interface {
 		GL11.glEnable(GL11.GL_COLOR_MATERIAL);
 		GL11.glColor3d(1., 1., 1.);
 
-		for (int i=0; i<buttons.size(); ++i)
-			buttons.get(i).draw();
+		for (int i=0; i<MENU_COUNT; ++i)
+			menus[i].draw();
 
 		cursor.draw2d();
 

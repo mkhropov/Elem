@@ -30,7 +30,6 @@ public class Player {
 					if (!w.empty(i,j,k)) break;
 				}
 		spellbook.add(0, new SpellSummon(this));
-		spellbook.add(1, new SpellSunstrike(this));
 		this.mana = 0;
     }
 

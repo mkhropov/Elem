@@ -8,16 +8,19 @@ import graphics.GraphicalSurface;
 import graphics.Renderer;
 
 public class Button {
-	public int x;
-	public int y;
-	public int dx;
-	public int dy;
+	private int x;
+	private int y;
+	private int dx;
+	private int dy;
 
-	static GraphicalSurface activeIcon;
-	static GraphicalSurface inactiveIcon;
+	public boolean active = false;
+
+	private static GraphicalSurface activeIcon;
+	private static GraphicalSurface inactiveIcon;
 	GraphicalSurface icon;
 
-	public Command c;
+	private Runnable c;
+	private int mbt = 0;// TODO: Change to lists button -> action
 
 	private static boolean initialized = false;
 	private void classInit() {
@@ -25,7 +28,7 @@ public class Button {
 		inactiveIcon = GSList.getInstance().get("IconInactive");
 	}
 
-	public Button(int x, int y, int dx, int dy, String iconName, Command c){
+	public Button(int x, int y, int dx, int dy, String iconName){
 		if (!initialized) classInit();
 		this.x = x;
 		this.y = y;
@@ -35,18 +38,25 @@ public class Button {
 		this.c = c;
 	}
 
-	public void onPress(){
-		c.execute();
+	public void onClick(int mButton){
+		if(mButton == mbt){
+			if(c!=null) c.run();
+		}
 	}
 
-	public boolean isIn(int x, int y){
+	public void bindAction(Runnable command, int mButton) {
+		c = command;
+		mbt = mButton;
+	}
+
+	public boolean hover(int x, int y){
 //		System.out.printf("%d %d %d %d %d %d\n", x, y, this.x, this.y, dx, dy);
 		return ((x>=this.x) && (x<this.x+dx) &&
 				(y>=this.y) && (y<this.y+dy));
 	}
 
 	public void draw(){
-		if (c.isActive()) {
+		if (active) {
 			activeIcon.bind();
 		} else {
 			inactiveIcon.bind();

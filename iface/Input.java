@@ -38,9 +38,8 @@ public class Input {
 		int[] pos = iface.camera.resolvePixel(x, y, iface.current_layer);
 		where = iface.world.getBlock(pos[0], pos[1], iface.current_layer);
 
-		for (int i=0; i<iface.buttons.size(); ++i){
-			b = iface.buttons.get(i);
-			if (b.isIn(x, 600-y)){
+		for (int i=0; i<Interface.MENU_COUNT; ++i){
+			if (iface.menus[i].hover(x, 600-y)){
 				where = null;
 			}
 		}
@@ -56,6 +55,11 @@ public class Input {
 		endY = iface.cursor.y;
 
 		while (Mouse.next()){
+			if (!Mouse.getEventButtonState()) {
+				for (int i=0; i<Interface.MENU_COUNT; ++i){
+					iface.menus[i].click(x, 600-y, Mouse.getEventButton());
+				}
+			}
 			if (Mouse.getEventButton() == 0) {
 				if (Mouse.getEventButtonState()) {
 					if (where != null){
@@ -64,11 +68,6 @@ public class Input {
 						draw = true;
 					}
 				} else { //button released
-					for (int i=0; i<iface.buttons.size(); ++i){
-						b = iface.buttons.get(i);
-						if (b.isIn(x, 600-y))
-							b.onPress();
-					}
 					if (where != null) {
 						draw = false;
 		//				iface.player.order.clear();
@@ -77,20 +76,20 @@ public class Input {
 						do {
 							j = startY;
 							do {
-								switch (iface.commandMode){
-								case CommandSwitchMode.MODE_SPAWN:
+								switch (iface.getCommandMode()){
+								case Interface.COMMAND_MODE_SPAWN:
 									iface.player.spawnCreature(
 											new SmartWalkingElem(
 													World.getInstance().getBlock(i, j, iface.current_layer)));
 									break;
-								case CommandSwitchMode.MODE_DIG:
+								case Interface.COMMAND_MODE_DIG:
 									iface.player.placeDigOrder(
 											World.getInstance().getBlock(i, j, iface.current_layer));
 									break;
-								case CommandSwitchMode.MODE_BUILD:
+								case Interface.COMMAND_MODE_BUILD:
 									iface.player.placeBuildOrder(
 											World.getInstance().getBlock(i, j, iface.current_layer),
-											iface.buildMaterial);
+											iface.getBuildMaterial());
 									break;
 								}
 								j+=Math.signum(where.y-startY);
@@ -152,13 +151,13 @@ public class Input {
 						 !Renderer.getInstance().draw_mana;
 					break;
                 case '1':
-					(new CommandSwitchMode(CommandSwitchMode.MODE_SPAWN)).execute();
+					iface.setCommandMode(Interface.COMMAND_MODE_SPAWN);
 					break;
                 case '2':
-					(new CommandSwitchMode(CommandSwitchMode.MODE_DIG)).execute();
+					iface.setCommandMode(Interface.COMMAND_MODE_DIG);
 					break;
 	            case '3':
-					(new CommandSwitchMode(CommandSwitchMode.MODE_BUILD)).execute();
+					iface.setCommandMode(Interface.COMMAND_MODE_BUILD);
 					break;
 				case ' ':
 					iface.viewMode |= Renderer.VIEW_MODE_FLAT;

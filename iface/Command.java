@@ -1,6 +1,5 @@
 package iface;
 
-public interface Command {
-	public void execute();
-	public boolean isActive();
+public interface Command extends Runnable{
+	public void run();
 }
