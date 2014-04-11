@@ -107,7 +107,7 @@ public class World {
 	}
 	
 	public void setDirection (int x, int y, int z, int d) {
-		block[x][y][z] = (block[x][y][z]&~FORM_MASK)|d;
+		block[x][y][z] = (block[x][y][z]&~DIRECTION_MASK)|d;
 	}
 	
 	public boolean hasSolidBorder(int x, int y, int z, int d) {
@@ -183,6 +183,8 @@ public class World {
 	public void destroyBlock(int x, int y, int z){
 		item.add(new ItemBoulder(x, y, z, 1., getMaterialID(x, y, z)));
 		setMaterial(x, y, z, Material.MATERIAL_NONE);
+		setForm(x, y, z, FORM_BLOCK);
+		setDirection(x, y, z, DIRECTION_UP);
 		Interface.getInstance().player.addBlockKnown(x, y, z);
 		// FIXME!!! DIRTY HACK HERE
 		Renderer.getInstance().updateBlock(x, y, z);
@@ -229,7 +231,8 @@ public class World {
 		if ((x<0) || (x>=xsize)) return true;
 		if ((y<0) || (y>=ysize)) return true;
 		if ((z<0) || (z>=zsize)) return true;
-		return (getMaterialID(x, y, z) == Material.MATERIAL_NONE);
+		return (getMaterialID(x, y, z) == Material.MATERIAL_NONE)
+				|| (getForm(x, y, z) == FORM_FLOOR);
 	}
 	
 	public boolean isAir(int x, int y, int z){

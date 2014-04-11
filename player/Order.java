@@ -1,17 +1,21 @@
 package player;
 
 import world.Block;
+import world.World;
 import physics.material.*;
 import creature.*;
 import item.ItemTemplate;
 import iface.CommandCube;
+import iface.Interface;
 
 public class Order {
     public boolean taken;
     public Block b;
 	public CommandCube cube;
     public ItemTemplate it;
-	public char m; //material code
+	public int m; //material code
+	public int f; //form code
+	public int d; //direction code
 //	public CreatureTemplate ct;
 	public static final int ORDER_MOVE  = 0;
 	public static final int ORDER_DIG   = 1;
@@ -26,6 +30,10 @@ public class Order {
         this.taken = false;
         this.type = type;
         this.declined = 0;
+		this.m = Interface.getInstance().getBuildMaterial();
+		this.f = (type == ORDER_DIG)?(Interface.getInstance().getDigForm()):
+				(Interface.getInstance().getBuildForm());
+		this.d = Interface.getInstance().getDirection();
 		if ((type == ORDER_DIG) || (type == ORDER_BUILD))
 			this.cube = new CommandCube(type, b.x, b.y, b.z);
     }

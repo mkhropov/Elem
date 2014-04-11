@@ -46,14 +46,21 @@ public class GraphicalChunk {
 	public int n_attr;
 	public int mvp_uniform;
 	public int t_uniform;
-	static float[][] vert = new float[][]{
+	static float[][][] vert = new float[][][]{{
 		{0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 1.f, 1.f, 0.f, 0.f, 1.f, 0.f},//~ z-1
 		{0.f, 0.f, 1.f, 1.f, 0.f, 1.f, 1.f, 1.f, 1.f, 0.f, 1.f, 1.f},//~ z+1
 		{0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 1.f, 0.f, 1.f, 0.f, 0.f, 1.f},//~ y-1
 		{0.f, 1.f, 0.f, 1.f, 1.f, 0.f, 1.f, 1.f, 1.f, 0.f, 1.f, 1.f},//~ y+1
 		{0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 1.f, 1.f, 0.f, 0.f, 1.f},//~ x-1
 		{1.f, 0.f, 0.f, 1.f, 1.f, 0.f, 1.f, 1.f, 1.f, 1.f, 0.f, 1.f} //~ x+1
-	};
+	},{
+		{0.f, 0.f, -0.2f, 1.f, 0.f, -0.2f, 1.f, 1.f, -0.2f, 0.f, 1.f, -0.2f},//~ z-1
+		{0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 1.f, 1.f, 0.f, 0.f, 1.f, 0.f},//~ z+1
+		{0.f, 0.f, -0.2f, 1.f, 0.f, -0.2f, 1.f, 0.f, 0.f, 0.f, 0.f, 0.f},//~ y-1
+		{0.f, 1.f, -0.2f, 1.f, 1.f, -0.2f, 1.f, 1.f, 0.f, 0.f, 1.f, 0.f},//~ y+1
+		{0.f, 0.f, -0.2f, 0.f, 1.f, -0.2f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f},//~ x-1
+		{1.f, 0.f, -0.2f, 1.f, 1.f, -0.2f, 1.f, 1.f, 0.f, 1.f, 0.f, 0.f} //~ x+1
+	}};
 	static float[] text = new float[]{0.f, 0.f, 0.f, 1.f, 1.f, 1.f, 1.f, 0.f};
 	static float[][] norm = new float[][]{
 		{ 0.f, 0.f, -1.f, 0.f, 0.f, -1.f, 0.f, 0.f, -1.f, 0.f, 0.f, -1.f},
@@ -101,11 +108,12 @@ public class GraphicalChunk {
 
 	void addFace(int X, int Y, int Z, int f, boolean fog){
 		Material m = World.getInstance().getMaterial(X, Y, Z);
+		int form = World.getInstance().getForm(X, Y, Z);
 		int ind = (ibuf.position()>0)?(ibuf.get(ibuf.position()-1)+1):0;
 		for (int i = 0; i<4; ++i){
-			vbuf.put(vert[f][3*i+0]+X);
-			vbuf.put(vert[f][3*i+1]+Y);
-			vbuf.put(vert[f][3*i+2]+Z);
+			vbuf.put(vert[form>>10][f][3*i+0]+X);
+			vbuf.put(vert[form>>10][f][3*i+1]+Y);
+			vbuf.put(vert[form>>10][f][3*i+2]+Z);
 			if (fog) {
 				tbuf.put(0.75f+0.5f*text[2*i+0]/8.f+0.5f*((float)Math.abs(Math.sin(1.9*X+Y+Z)))/4.f);
 				tbuf.put(0.75f+0.5f*text[2*i+1]/8.f+0.5f*((float)Math.abs(Math.sin(X-1.9*Y+Z)))/4.f);
@@ -134,7 +142,7 @@ public class GraphicalChunk {
 			// First pass - fow only
 			for (int i=rx; i<rx+xsize; i++)
 				for (int j=ry; j<ry+ysize; j++){
-					if (!world.isFull(i,j,z)) continue;
+					if (world.isAir(i,j,z)) continue;
 					if (!player.blockKnown(i,j,z)) continue;
 					addFace(i, j, z, 4, false);
 					addFace(i, j, z, 5, false);

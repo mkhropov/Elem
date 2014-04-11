@@ -7,7 +7,7 @@ public class ItemTemplate{
 	public int type;
 	public int m; //material code
 
-	public ItemTemplate(int type, char m){
+	public ItemTemplate(int type, int m){
 		this.type = type;
 		this.m = m;
 	}

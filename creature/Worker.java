@@ -2,8 +2,9 @@ package creature;
 
 import world.*;
 import physics.material.*;
+import player.Order;
 
 public interface Worker {
-    boolean destroyBlock(Block b);
-    boolean placeBlock(Block b, int m);
+    boolean digBlock(Order o);
+    boolean placeBlock(Order o);
 }

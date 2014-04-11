@@ -95,7 +95,7 @@ public class Player {
 		Renderer.getInstance().addEntity(o.cube);
     }
 
-    public void placeBuildOrder(Block b, char m){
+    public void placeBuildOrder(Block b, int m){
 		if (b.m != Material.MATERIAL_NONE)
 			return;
 		if (blockAlreadyRequested(b))

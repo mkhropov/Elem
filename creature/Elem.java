@@ -10,6 +10,7 @@ import stereometry.Point;
 import stereometry.Vector;
 import item.ItemTemplate;
 import item.Item;
+import player.Order;
 
 public class Elem extends Creature implements Worker{
     public static double size = 0.5;
@@ -122,13 +123,20 @@ public class Elem extends Creature implements Worker{
     }
 
     @Override
-    public final boolean destroyBlock(Block b){
+    public final boolean digBlock(Order o){
+		Block b = o.b;
         if (!canReach(this.b, b))
             return false;
         else {
 			if (canDig(b)){
 				turn(new Point(b));
+				int m = World.getInstance().getMaterialID(b.x, b.y, b.z);
 				World.getInstance().destroyBlock(b);
+				if (o.f!=World.FORM_BLOCK){
+					World.getInstance().setMaterial(b.x, b.y, b.z, m);
+					World.getInstance().setForm(b.x, b.y, b.z, o.f);
+					World.getInstance().setDirection(b.x, b.y, b.z, o.d);
+				}
 				return true;
 			}
 			return false;
@@ -136,14 +144,17 @@ public class Elem extends Creature implements Worker{
     }
 
     @Override
-    public final boolean placeBlock(Block b, int m){
+    public final boolean placeBlock(Order o){
+		Block b = o.b;
+		int m = o.m;
         if ((!canReach(this.b, b)) || (b.m != Material.MATERIAL_NONE) ||
-			!((item.type == Item.TYPE_BUILDABLE) && (item.m == m)))
+			!((item.type == Item.TYPE_BUILDABLE) && (item.m == o.m)))
             return false;
         else {
 			turn(new Point(b));
-            World.getInstance().setMaterial(b.x, b.y, b.z, m);
-            World.getInstance().setForm(b.x, b.y, b.z, World.FORM_BLOCK);
+            World.getInstance().setMaterial(b.x, b.y, b.z, o.m);
+            World.getInstance().setForm(b.x, b.y, b.z, o.f);
+            World.getInstance().setDirection(b.x, b.y, b.z, o.d);
 			item = null;
             Renderer.getInstance().updateBlock(b.x, b.y, b.z);
             return true;

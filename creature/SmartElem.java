@@ -88,9 +88,9 @@ public class SmartElem extends Elem implements Worker {
 					case Order.ORDER_MOVE:
 						res = this.b.isSame(order.b); break;
 					case Order.ORDER_DIG:
-						res = destroyBlock(order.b); break;
+						res = digBlock(order); break;
 					case Order.ORDER_BUILD:
-						res = placeBlock(order.b, order.m); break;
+						res = placeBlock(order); break;
 					case Order.ORDER_TAKE:
 						res = take(order.it); break;
 					default:

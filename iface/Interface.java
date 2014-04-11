@@ -65,14 +65,26 @@ public class Interface {
 
 	public void setBuildMaterial(char material){
 		SelectorMenu t = (SelectorMenu)menus[MENU_BUILD_MATERIAL];
-		t.setState((int)material);
+		t.setState(material);
 	}
 
-	public char getBuildMaterial(){
+	public int getBuildMaterial(){
 		SelectorMenu t = (SelectorMenu)menus[MENU_BUILD_MATERIAL];
-		return (char)t.getState();
+		return t.getState();
 	}
-
+	
+	public int getBuildForm(){
+		return World.FORM_BLOCK;
+	}
+	
+	public int getDigForm(){
+		return World.FORM_FLOOR;
+	}
+	
+	public int getDirection(){
+		return World.DIRECTION_UP;
+	}
+	
 	private Interface() {
 		world = World.getInstance();
 		current_layer = world.zsize-1;
@@ -91,9 +103,9 @@ public class Interface {
 		menus[MENU_TOOLBAR].show();
 		t = new SelectorMenu(b);
 		t.show();
-		t.addButton(new Button(400, 480, 40, 40, "marble"), (int)Material.MATERIAL_MARBLE);
-		t.addButton(new Button(450, 480, 40, 40, "earth"), (int)Material.MATERIAL_EARTH);
-		t.addButton(new Button(500, 480, 40, 40, "stone"), (int)Material.MATERIAL_STONE);
+		t.addButton(new Button(400, 480, 40, 40, "marble"), Material.MATERIAL_MARBLE);
+		t.addButton(new Button(450, 480, 40, 40, "earth"), Material.MATERIAL_EARTH);
+		t.addButton(new Button(500, 480, 40, 40, "stone"), Material.MATERIAL_STONE);
 		menus[MENU_BUILD_MATERIAL] = t;
 
 		viewMode = Renderer.VIEW_MODE_FOW;
