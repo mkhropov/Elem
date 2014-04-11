@@ -233,14 +233,14 @@ public class Renderer {
 //			System.out.println(zdepth*(startX-endX)*(startY-endY)+">"+gChunks_size);
 		for (int k=0; k<gChunks_size; ++k)
 			gChunks[k].used = false;
-		for (int k = top; k > bot; --k)
+		for (int k = top; k >= bot; --k)
 			for (int i = startX; i < endX; ++i)
 				for (int j = startY; j < endY; ++j){
 					gc = get_chunk(i, j, k);
 					if (gc != null)
 						gc.used = true;
 				}
-		for (int k = top; k > bot; --k)
+		for (int k = top; k >= bot; --k)
 			for (int i = startX; i < endX; ++i)
 				for (int j = startY; j < endY; ++j){
 					gc = get_chunk(i, j, k);
