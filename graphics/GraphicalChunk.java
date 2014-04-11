@@ -3,6 +3,7 @@ package graphics;
 import world.*;
 import iface.Interface;
 import player.Player;
+import physics.material.Material;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -99,7 +100,7 @@ public class GraphicalChunk {
 	}
 
 	void addFace(int X, int Y, int Z, int f, boolean fog){
-		World w = World.getInstance();
+		Material m = World.getInstance().getMaterial(X, Y, Z);
 		int ind = (ibuf.position()>0)?(ibuf.get(ibuf.position()-1)+1):0;
 		for (int i = 0; i<4; ++i){
 			vbuf.put(vert[f][3*i+0]+X);
@@ -109,12 +110,12 @@ public class GraphicalChunk {
 				tbuf.put(0.75f+0.5f*text[2*i+0]/8.f+0.5f*((float)Math.abs(Math.sin(1.9*X+Y+Z)))/4.f);
 				tbuf.put(0.75f+0.5f*text[2*i+1]/8.f+0.5f*((float)Math.abs(Math.sin(X-1.9*Y+Z)))/4.f);
 			} else {
-				tbuf.put(w.material[w.m[X][Y][Z]].tex_u
-					+(1-w.material[w.m[X][Y][Z]].rand)*text[2*i+0]/8.f
-					+w.material[w.m[X][Y][Z]].rand*((float)Math.abs(Math.sin(1.9*X+Y+Z)))/4.f);//FIX textures
-				tbuf.put(w.material[w.m[X][Y][Z]].tex_v
-					+(1-w.material[w.m[X][Y][Z]].rand)*text[2*i+1]/8.f
-					+w.material[w.m[X][Y][Z]].rand*((float)Math.abs(Math.sin(X-1.9*Y+Z)))/4.f);// offsets
+				tbuf.put(m.tex_u
+					+(1-m.rand)*text[2*i+0]/8.f
+					+m.rand*((float)Math.abs(Math.sin(1.9*X+Y+Z)))/4.f);//FIX textures
+				tbuf.put(m.tex_v
+					+(1-m.rand)*text[2*i+1]/8.f
+					+m.rand*((float)Math.abs(Math.sin(X-1.9*Y+Z)))/4.f);// offsets
 			}
 			nbuf.put(norm[f][3*i+0]);
 			nbuf.put(norm[f][3*i+1]);
@@ -133,7 +134,7 @@ public class GraphicalChunk {
 			// First pass - fow only
 			for (int i=rx; i<rx+xsize; i++)
 				for (int j=ry; j<ry+ysize; j++){
-					if (world.empty(i,j,z)) continue;
+					if (!world.isFull(i,j,z)) continue;
 					if (!player.blockKnown(i,j,z)) continue;
 					addFace(i, j, z, 4, false);
 					addFace(i, j, z, 5, false);
@@ -153,16 +154,16 @@ public class GraphicalChunk {
 		} else {
 			for (int i=rx; i<rx+xsize; i++)
 				for (int j=ry; j<ry+ysize; j++){
-					if (world.empty(i,j,z)) continue;
-					if (world.empty(i-1,j,z))
+					if (!world.isFull(i,j,z)) continue;
+					if (!world.isFull(i-1,j,z))
 						addFace(i, j, z, 4, false);
-					if (world.empty(i+1,j,z))
+					if (!world.isFull(i+1,j,z))
 						addFace(i, j, z, 5, false);
-					if (world.empty(i,j-1,z))
+					if (!world.isFull(i,j-1,z))
 						addFace(i, j, z, 2, false);
-					if (world.empty(i,j+1,z))
+					if (!world.isFull(i,j+1,z))
 						addFace(i, j, z, 3, false);
-					if (world.empty(i,j,z+1))
+					if (!world.isFull(i,j,z+1))
 						addFace(i, j, z, 1, false);
 				}
 
@@ -170,8 +171,8 @@ public class GraphicalChunk {
 			tailSize = 0;
 			for (int i=rx; i<rx+xsize; i++)
 				for (int j=ry; j<ry+ysize; j++){
-					if (world.empty(i,j,z)) continue;
-					if (!world.empty(i,j,z+1)){
+					if (!world.isFull(i,j,z)) continue;
+					if (world.isFull(i,j,z+1)){
 						addFace(i, j, z, 1, false);
 						tailSize += 6;
 					}

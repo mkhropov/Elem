@@ -14,7 +14,7 @@ import graphics.Renderer;
 
 public class Block {
 	public int x, y, z; //in a chunk
-	public char m; //material code from Material
+	public int m; //material code from Material
 
 	public static final int[][] nearInd = new int[][]
 		{{1, 0, 0}, {0, 1, 0}, {0, 0, 1}
@@ -30,7 +30,7 @@ public class Block {
 		this.x = x;
 		this.y = y;
 		this.z = z;
-		this.m = World.getInstance().m[x][y][z];
+		this.m = World.getInstance().getMaterialID(x, y, z);
 	}
 
 	public Block(Block b){

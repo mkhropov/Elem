@@ -7,7 +7,6 @@ import graphics.Renderer;
 import world.EventHandler;
 
 public class ItemBoulder extends Item{
-
 	double scale;
 	static final String[] assoc;
 
@@ -20,7 +19,7 @@ public class ItemBoulder extends Item{
 		assoc[Material.MATERIAL_BEDROCK] = "bedrock";
 	}
 
-	public ItemBoulder(Block b, double w, char m){
+	public ItemBoulder(Block b, double w, int m){
 		super(b, w);
 		this.type = Item.TYPE_BUILDABLE;
 		this.m = m;
@@ -30,7 +29,7 @@ public class ItemBoulder extends Item{
 		Renderer.getInstance().addEntity(this);
 	}
 
-	public ItemBoulder(int x, int y, int z, double w, char m){
+	public ItemBoulder(int x, int y, int z, double w, int m){
 		super(x, y, z, w);
 		this.m = m;
 		this.type = Item.TYPE_BUILDABLE;

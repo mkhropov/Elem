@@ -7,8 +7,8 @@ import physics.material.Material;
 public class Item extends Entity{
 	Block b;
 	Creature c;
-	public char m; //maybe a list in future?..
 	double w;
+	public int m; //maybe a list in future?..
 	public int type;
 
 	public static final int TYPE_NONE = 0;
@@ -47,7 +47,8 @@ public class Item extends Entity{
 		if (b!=null){
 			int i = b.z;
 			while (i > 0)
-				if (w.m[b.x][b.y][--i] != Material.MATERIAL_NONE)
+				if (w.hasSolidBorder(b.x, b.y, --i, World.DIRECTION_UP)
+						|| w.hasSolidBorder(b.x, b.y, i, World.DIRECTION_DOWN))
 					break;
 			if (i!=(b.z-1)){
 				b = w.getBlock(b.x, b.y, i+1);

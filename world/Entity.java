@@ -8,7 +8,7 @@ public class Entity implements GraphicalEntity {
 	public float a; //orientation
 	public int mid;
 	public int gsid;
-	Model m;
+	Model model;
 	GraphicalSurface gs;
 
 	public Entity(Block b, int mid, int gsid) {
@@ -39,7 +39,7 @@ public class Entity implements GraphicalEntity {
 
 	public void setModel(int mid) {
 		this.mid = mid;
-		m = ModelList.getInstance().get(mid);
+		model = ModelList.getInstance().get(mid);
 	}
 
 	public void setGS(int gsid) {

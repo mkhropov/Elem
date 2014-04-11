@@ -25,11 +25,13 @@ public class SmartWalkingElem extends SmartElem implements Worker {
     final void fall(){
 		World w = World.getInstance();
         int i = b.z;
-        while (i > 0)
-            if (w.m[b.x][b.y][--i] != Material.MATERIAL_NONE)
+        while (i > 0) {
+            if (w.hasSolidFloor(b.x, b.y, i))
                 break;
-		if (i!=(b.z-1)){
-			setBlock(w.getBlock(b.x, b.y, i+1), true);
+			--i;
+		}
+		if (i!=(b.z)){
+			setBlock(w.getBlock(b.x, b.y, i), true);
 			mv = new Vector(0., 0., 0.);
 			action = ACTION_FALL;
 		}
@@ -44,7 +46,7 @@ public class SmartWalkingElem extends SmartElem implements Worker {
     public boolean canWalk(Block b){
 		World w = World.getInstance();
         return (b.z!=0) &&
-            (w.m[b.x][b.y][b.z-1] != Material.MATERIAL_NONE) &&
-            (w.m[b.x][b.y][b.z] == Material.MATERIAL_NONE);// || (b.m.w < (1. - Elem.size)));
+            (w.hasSolidFloor(b.x, b.y, b.z)) &&
+            (w.isEmpty(b.x, b.y, b.z));// || (b.m.w < (1. - Elem.size)));
     }
 }

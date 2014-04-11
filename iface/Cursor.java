@@ -51,9 +51,9 @@ public class Cursor {
 		this.x = x;
 		this.y = y;
 		this.z = z;
-		char m;
+		boolean isAir;
 		if (World.getInstance().isIn(x, y, z))
-			m = World.getInstance().m[x][y][z];
+			isAir = World.getInstance().isAir(x, y, z);
 		else {
 			state = STATE_DISABLED;
 			return;
@@ -61,10 +61,10 @@ public class Cursor {
 		switch(Interface.getInstance().getCommandMode()){
 			case Interface.COMMAND_MODE_BUILD:
 			case Interface.COMMAND_MODE_SPAWN:
-				state = (m == Material.MATERIAL_NONE)?(STATE_ENABLED):(STATE_DISABLED);
+				state = (isAir)?(STATE_ENABLED):(STATE_DISABLED);
 				break;
 			case Interface.COMMAND_MODE_DIG:
-				state = (m != Material.MATERIAL_NONE)?(STATE_ENABLED):(STATE_DISABLED);
+				state = (!isAir)?(STATE_ENABLED):(STATE_DISABLED);
 				break;
 			default: break;
 		}

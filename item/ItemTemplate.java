@@ -5,7 +5,7 @@ import physics.material.Material;
 public class ItemTemplate{
 
 	public int type;
-	public char m; //material code
+	public int m; //material code
 
 	public ItemTemplate(int type, char m){
 		this.type = type;

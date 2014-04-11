@@ -49,9 +49,9 @@ public class Elem extends Creature implements Worker{
             return (canWalk(w.getBlock(b1.x+dx, b1.y, b1.z)) ||
                     canWalk(w.getBlock(b1.x, b1.y+dy, b1.z)));
         if (dz > 0)
-            return (w.m[b1.x][b1.y][b1.z+1] == Material.MATERIAL_NONE);
+            return (w.isEmpty(b1.x, b1.y, b1.z+1));
         if (dz < 0)
-            return (w.m[b1.x+dx][b1.y+dy][b1.z] == Material.MATERIAL_NONE);
+            return (w.isEmpty(b1.x+dx, b1.y+dy, b1.z));
         return true;
     }
 
@@ -85,8 +85,7 @@ public class Elem extends Creature implements Worker{
         if (dz > 0)
             return ((dx==0) && (dy==0));
         if (dz < 0)
-            return (World.getInstance().m[b1.x+dx][b1.y+dy][b1.z] ==
-					Material.MATERIAL_NONE);
+            return (World.getInstance().isEmpty(b1.x+dx, b1.y+dy, b1.z));
         return true;
     }
 
@@ -137,13 +136,14 @@ public class Elem extends Creature implements Worker{
     }
 
     @Override
-    public final boolean placeBlock(Block b, char m){
+    public final boolean placeBlock(Block b, int m){
         if ((!canReach(this.b, b)) || (b.m != Material.MATERIAL_NONE) ||
 			!((item.type == Item.TYPE_BUILDABLE) && (item.m == m)))
             return false;
         else {
 			turn(new Point(b));
-            World.getInstance().m[b.x][b.y][b.z] = m;
+            World.getInstance().setMaterial(b.x, b.y, b.z, m);
+            World.getInstance().setForm(b.x, b.y, b.z, World.FORM_BLOCK);
 			item = null;
             Renderer.getInstance().updateBlock(b.x, b.y, b.z);
             return true;

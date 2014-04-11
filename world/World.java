@@ -18,7 +18,26 @@ public class World {
     public static int DEFAULT_YSIZE = 64;
     public static int DEFAULT_ZSIZE = 32;
     public int xsize, ysize, zsize;
-    public char[][][] m;
+    private int[][][] block;
+	
+	public static final int MATERIAL_MASK = 0x03ff;
+	public static final int FORM_MASK = 0x1c00;
+	public static final int DIRECTION_MASK = 0xe000;
+	
+	public static final int FORM_BLOCK = 0x0000;
+	public static final int FORM_FLOOR = 0x0400;
+	
+	public static final int DIRECTION_DOWN = 0x2000;
+	public static final int DIRECTION_UP = 0x4000;
+	public static final int DIRECTION_X_PLUS = 0x6000;
+	public static final int DIRECTION_EAST = 0x6000;
+	public static final int DIRECTION_X_MINUS = 0x8000;
+	public static final int DIRECTION_WEST = 0x8000;
+	public static final int DIRECTION_Y_PLUS = 0xa000;
+	public static final int DIRECTION_NORTH = 0xa000;
+	public static final int DIRECTION_Y_MINUS = 0xc000;
+	public static final int DIRECTION_SOUTH = 0xc000;
+	
     public Material[] material;
     public ArrayList<Creature> creature;
 	public ArrayList<Item> item;
@@ -44,11 +63,11 @@ public class World {
 		this.gravity = new Vector(0., 0., -4.9);
 
 		System.out.print("Reserving world space ...");
-        this.m = new char[xsize][ysize][zsize];
+        this.block = new int[xsize][ysize][zsize];
         for (int i=0; i<xsize; i++)
             for (int j=0; j<ysize; j++)
                 for (int k=0; k<zsize; k++)
-                    m[i][j][k] = Material.MATERIAL_NONE;
+                    block[i][j][k] = Material.MATERIAL_NONE;
 		System.out.print(" done\n");
 
         this.material = new Material[Material.MATERIAL_MAX];
@@ -62,6 +81,51 @@ public class World {
         this.creature = new ArrayList<>();
 		this.item = new ArrayList<>();
     }
+	
+	public Material getMaterial (int x, int y, int z) {
+		return material[block[x][y][z]&MATERIAL_MASK];
+	}
+	
+	public int getMaterialID (int x, int y, int z) {
+		return block[x][y][z]&MATERIAL_MASK;
+	}
+	
+	public void setMaterial (int x, int y, int z, int m) {
+		block[x][y][z] = (block[x][y][z]&~MATERIAL_MASK)|m;
+	}
+	
+	public int getForm (int x, int y, int z) {
+		return block[x][y][z]&FORM_MASK;
+	}
+	
+	public void setForm (int x, int y, int z, int f) {
+		block[x][y][z] = (block[x][y][z]&~FORM_MASK)|f;
+	}
+	
+	public int getDirection( int x, int y, int z) {
+		return block[x][y][z]&DIRECTION_MASK;
+	}
+	
+	public void setDirection (int x, int y, int z, int d) {
+		block[x][y][z] = (block[x][y][z]&~FORM_MASK)|d;
+	}
+	
+	public boolean hasSolidBorder(int x, int y, int z, int d) {
+		if (getMaterialID(x,y,z) == Material.MATERIAL_NONE) {
+			return false;
+		} else {
+			switch (getForm(x,y,z)) {
+				case FORM_BLOCK: return true;
+				case FORM_FLOOR: return (d==DIRECTION_DOWN);
+				default: return true;
+			}
+		}
+	}
+	
+	public boolean hasSolidFloor(int x, int y, int z){
+		return hasSolidBorder(x, y, z, DIRECTION_DOWN)
+				|| hasSolidBorder(x, y, z-1, DIRECTION_UP);
+	}
 
 	public void init(){
 //		ManaField.getInstance().addSource(
@@ -117,8 +181,8 @@ public class World {
 	}
 
 	public void destroyBlock(int x, int y, int z){
-		item.add(new ItemBoulder(x, y, z, 1., m[x][y][z]));
-		m[x][y][z] = Material.MATERIAL_NONE;
+		item.add(new ItemBoulder(x, y, z, 1., getMaterialID(x, y, z)));
+		setMaterial(x, y, z, Material.MATERIAL_NONE);
 		Interface.getInstance().player.addBlockKnown(x, y, z);
 		// FIXME!!! DIRTY HACK HERE
 		Renderer.getInstance().updateBlock(x, y, z);
@@ -161,11 +225,26 @@ public class World {
 		return true;
 	}
 
-	public boolean empty(int x, int y, int z){
+	public boolean isEmpty(int x, int y, int z){
 		if ((x<0) || (x>=xsize)) return true;
 		if ((y<0) || (y>=ysize)) return true;
 		if ((z<0) || (z>=zsize)) return true;
-		return (m[x][y][z] == Material.MATERIAL_NONE);
+		return (getMaterialID(x, y, z) == Material.MATERIAL_NONE);
+	}
+	
+	public boolean isAir(int x, int y, int z){
+		if ((x<0) || (x>=xsize)) return true;
+		if ((y<0) || (y>=ysize)) return true;
+		if ((z<0) || (z>=zsize)) return true;
+		return (getMaterialID(x, y, z) == Material.MATERIAL_NONE);
+	}
+	
+	public boolean isFull(int x, int y, int z){
+		if ((x<0) || (x>=xsize)) return false;
+		if ((y<0) || (y>=ysize)) return false;
+		if ((z<0) || (z>=zsize)) return false;
+		return (getMaterialID(x, y, z) != Material.MATERIAL_NONE)
+				&& (getForm(x, y, z) == FORM_BLOCK);
 	}
 
 }

@@ -28,7 +28,7 @@ public class SpellSunstrike extends Spell{
 	public void cast(Block b){
 		World w = World.getInstance();
 		int h = w.zsize-1;
-		while (h>0 && (w.m[b.x][b.y][h] == Material.MATERIAL_NONE))
+		while (h>0 && (w.getMaterialID(b.x, b.y, h) == Material.MATERIAL_NONE))
 			h--;
 		if (h==0)
 			return;

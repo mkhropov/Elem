@@ -29,7 +29,7 @@ public class ManaParticle extends Entity {
 	public void set(Point p, double ttl){
 		this.p = new Point(p);
 		this.speed = ManaField.getInstance().field[(int)p.x][(int)p.y][(int)p.z];
-		this.drawed = World.getInstance().empty((int)p.x, (int)p.y, (int)p.z);
+		this.drawed = World.getInstance().isEmpty((int)p.x, (int)p.y, (int)p.z);
 		this.drawed &= ((int)p.z <= Interface.getInstance().current_layer);
 		this.ttl = ttl;
 		this.used = true;
@@ -51,7 +51,7 @@ public class ManaParticle extends Entity {
 			del();
 		} else {
 			speed = ManaField.getInstance().field[(int)p.x][(int)p.y][(int)p.z];
-			drawed = World.getInstance().empty((int)p.x, (int)p.y, (int)p.z);
+			drawed = World.getInstance().isEmpty((int)p.x, (int)p.y, (int)p.z);
 			drawed &= ((int)p.z <= Interface.getInstance().current_layer);
 		}
 	}

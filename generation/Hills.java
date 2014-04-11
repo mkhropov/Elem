@@ -27,7 +27,7 @@ public class Hills extends Biome {
 		double dR;
 		int hn = 0;
 		int w;
-		char m;
+		int m;
 		while (hn < 4*h/5.-2){
 			switch (rnd.nextInt(3)){
 				case 0:

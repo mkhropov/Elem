@@ -27,7 +27,7 @@ public class Player {
 			for (int j=0; j<w.ysize; j++)
 				for (int k=w.zsize-1; k>=0; k--) {
 					blockMeta[i][j][k] |= META_FOW;
-					if (!w.empty(i,j,k)) break;
+					if (!w.isAir(i,j,k)) break;
 				}
 		spellbook.add(0, new SpellSummon(this));
 		this.mana = 0;

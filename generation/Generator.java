@@ -89,14 +89,14 @@ public class Generator {
 				if (i>=w.xsize || j>=w.ysize)
 					continue;
 				for (int k=0; k<w.zsize; ++k)
-					w.m[i][j][k] = getMaterial(i, j, k, gc);
+					w.setMaterial(i,j,k,getMaterial(i, j, k, gc));
 			}
 		}
 		System.out.print(" done\n");
 		erosion(w, 2000., Material.MATERIAL_EARTH);
 	}
 
-	public char getMaterial(int x, int y, int z, GenerationChunk gc) {
+	public int getMaterial(int x, int y, int z, GenerationChunk gc) {
 		if (!generated)
 			generate();
 		if (z == 0)
@@ -107,7 +107,6 @@ public class Generator {
 			gc.morphs.get(i).preimage(p);
 		if (p.z < 1.)
 			return Material.MATERIAL_BEDROCK;
-		i = 0;
 		double dz = 1.;
 		for (i=0; i < gc.stratums.size(); ++i){
 			if (gc.stratums.get(i).isIn(p))
@@ -123,16 +122,16 @@ public class Generator {
 		int t = 0;
 		for (int i=0; i<nearInd.length; ++i)
 			if (w.isIn(x, y, z, nearInd[i]))
-				t += (w.m[x+nearInd[i][0]]
-						 [y+nearInd[i][1]]
-						 [z+nearInd[i][2]] != Material.MATERIAL_NONE) ?
-						(1):(0);
+				t += (w.isAir(x+nearInd[i][0], 
+						 y+nearInd[i][1],
+						 z+nearInd[i][2]))?
+						(0):(1);
 			else
 				t += (nearInd[i][2]<=0)?(1):(0);
 		return t;
 	}
 
-	public void erosion(World w, double power, char erodemat){
+	public void erosion(World w, double power, int erodemat){
 		System.out.print("Applying erosion ");
 		for (int k=0; k<w.zsize; ++k){
 //			if (k%(w.xsize/30) == 0)
@@ -140,8 +139,8 @@ public class Generator {
 			for (int i=0; i<w.xsize; ++i)
 				for (int j=0; j<w.ysize; ++j){
 					if ((17-blockCover(i, j, k, w))*power >
-						w.material[w.m[i][j][k]].hardness)
-						w.m[i][j][k] = Material.MATERIAL_NONE;
+						w.getMaterial(i,j,k).hardness)
+						w.setMaterial(i,j,k, Material.MATERIAL_NONE);
 				}
 		}
 		System.out.print(" done\nFilling gaps ");
@@ -150,9 +149,9 @@ public class Generator {
 //				System.out.print(".");
 			for (int i=0; i<w.xsize; ++i)
 				for (int j=0; j<w.ysize; ++j)
-					if ((w.m[i][j][k] == Material.MATERIAL_NONE) &&
+					if ((w.isAir(i, j, k)) &&
 							(blockCover(i, j, k, w)>= 17))
-						w.m[i][j][k] = erodemat;
+						w.setMaterial(i, j, k, erodemat);
 		}
 		System.out.print(" done\n");
 	}
