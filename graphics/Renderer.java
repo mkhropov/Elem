@@ -48,7 +48,8 @@ public class Renderer {
 
 	public int[] shaders;
 
-	public int fade_attr;
+	public int curr_z_attr;
+	public int max_z_attr;
 	public int z_attr;
 
 	public Matrix4 view;
@@ -94,14 +95,15 @@ public class Renderer {
 		shaders[SHADER_HIGHLIGHT] =
 			ShaderLoader.createShader("highlight.vsh", "basic.fsh");
 //		System.out.println("[SHADER_HIGHLIGHT]="+shaders[SHADER_HIGHLIGHT]);
-		shaders[SHADER_HIGHLIGHT_FLAT] = 
+		shaders[SHADER_HIGHLIGHT_FLAT] =
 			ShaderLoader.createShader("highlight_flat.vsh", "basic.fsh");
 		shaders[SHADER_GHOST] =
 			ShaderLoader.createShader("basic.vsh", "ghost.fsh");
 		shaders[SHADER_FADE] =
-			ShaderLoader.createShader("basic.vsh", "fadeout.fsh");
+			ShaderLoader.createShader("fog.vsh", "fadeout.fsh");
 
-		fade_attr = glGetUniformLocation(shaders[SHADER_FADE], "fade");
+		curr_z_attr = glGetUniformLocation(shaders[SHADER_FADE], "curr_z");
+		max_z_attr = glGetUniformLocation(shaders[SHADER_FADE], "max_z");
 		z_attr = glGetUniformLocation(shaders[SHADER_HIGHLIGHT_FLAT], "z");
 
 		gEntities = new ArrayList<GraphicalEntity>();
@@ -259,7 +261,11 @@ public class Renderer {
 
 	public void draw () {
 		int current_layer = Interface.getInstance().current_layer;
-		float fade, z;
+		float z;
+		glClearColor(.9f*(current_layer-2.f)/world.zsize,
+					 .9f*(current_layer-2.f)/world.zsize,
+					 1.f*(current_layer-2.f)/world.zsize,
+					 1.f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		for (int i=0; i<gChunks_size; ++i)
 			if ((gChunks[i] != null) && (gChunks[i].needs_update))
@@ -282,11 +288,13 @@ public class Renderer {
 				}
 //			System.out.println("higlight layer printed");
 			glUseProgram(shaders[SHADER_FADE]);
+			glUniform1f(max_z_attr, (float)world.zsize);
+			glUniform1f(curr_z_attr, (float)current_layer);
 			for (int i=0; i<gChunks_size; i++)
 				if (gChunks[i].used && (gChunks[i].z!=current_layer)){
-					fade = (current_layer-gChunks[i].z) - zdepth;
-					fade = (fade<0.f)?(1.f):(1.f-fade/fdepth);
-					glUniform1f(fade_attr, fade);
+//					fade = (current_layer-gChunks[i].z) - zdepth;
+//					fade = (fade<0.f)?(1.f):(1.f-fade/fdepth);
+//					glUniform1f(fade_attr, fade);
 					gChunks[i].draw(false);
 				}
 //			 System.out.println("regular layers printed");
@@ -299,7 +307,9 @@ public class Renderer {
 			ManaField.getInstance().draw();
 			glDisable(GL_COLOR_MATERIAL);
 		}
-		glUseProgram(shaders[SHADER_BASIC]);
+		glUseProgram(shaders[SHADER_FADE]);
+		glUniform1f(max_z_attr, (float)world.zsize);
+		glUniform1f(curr_z_attr, (float)current_layer);
 		for (int i=0; i<gEntities.size(); i++){
 			if (gEntities.get(i).getP().z<=current_layer)
 				gEntities.get(i).draw();

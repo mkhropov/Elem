@@ -19,12 +19,12 @@ public class ModelList {
 		list = new ArrayList<Model>();
 
 		m = ModelLoader.getInstance().load("res/wisp.obj", "elem");
-		m.prepare(r.shaders[Renderer.SHADER_BASIC]);
+		m.prepare(r.shaders[Renderer.SHADER_FADE]);
 		m.scale = 0.5f; m.a0 = .5f; m.a1 = .5f; m.a2 = .5f;
 		add(m);
 
 		m = ModelLoader.getInstance().load("res/box.obj", "boulder");
-		m.prepare(r.shaders[Renderer.SHADER_BASIC]);
+		m.prepare(r.shaders[Renderer.SHADER_FADE]);
 		m.scale = .2f; m.a0 = .5f; m.a1 = .5f; m.a2 = .2f;
 		add(m);
 

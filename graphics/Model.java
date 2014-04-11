@@ -31,7 +31,7 @@ public class Model {
 	public int i_b;
 
 	public float a0, a1, a2;
-	public float d0, d1;
+	public float phi, theta;
 	public float scale;
 
 	public int v_attr; // corresponding shader attributes
@@ -50,6 +50,7 @@ public class Model {
 		vao = glGenVertexArrays();
 		scale = 1.f;
 		a0 = 0.f; a1 = 0.f; a2 = 0.f;
+		phi = 0.f; theta = 0.f;
 		initialized = false;
 	}
 
@@ -105,7 +106,7 @@ public class Model {
 */
 		mvp_uniform = glGetUniformLocation(prog, "MVP");
 //		System.out.print("MVP uniform found at "+mvp_uniform+"\n");
-		a0 = 0.f; a1 = 0.f; a2 = 0.f; scale = 1.f;
+//		a0 = 0.f; a1 = 0.f; a2 = 0.f; scale = 1.f;
 
 		glBindVertexArray(0);
 
@@ -131,13 +132,14 @@ public class Model {
 		glBindVertexArray(vao);
 		Matrix4 m = Matrix4.identity();
 		m = m.multR(Matrix4.scale(new float[]{scale, scale, scale}));
+		m = m.multR(Matrix4.rot(phi, 2));
+		m = m.multR(Matrix4.rot(theta, 0));
 		m = m.multR(Matrix4.rot(a, 2));
 		m = m.multR(Matrix4.shift(new float[]{a0, a1, a2}));
 		m = m.multR(Matrix4.shift(new float[]{x, y, z}));
 //		m = m.multR(Matrix4.rot((float)(Math.PI/4.), 2));
 //		m = m.multR(Matrix4.rot(a1, 1));
 //		m = m.multR(Matrix4.rot((float)(Math.PI/4.), 0));
-//		m = m.multR(Matrix4.shift(new float[]{d0, d1, 0.f}));
 //		m = m.multR(Matrix4.scale(new float[]{scale, scale, 1.f}));
 //		m = m.multR(Matrix4.lookAt(0.f, 0.f, -1.f, 0.5f, 0.5f, 0.f));
 //		m = m.multR(Matrix4.scale(new float[]{3.f/4.f, 1.f, .1f}));
