@@ -12,6 +12,9 @@ import stereometry.*;
 
 import physics.mana.*;
 
+import player.*;
+import iface.Interface;
+
 public class World {
     public static int DEFAULT_XSIZE = 64;
     public static int DEFAULT_YSIZE = 64;
@@ -91,6 +94,13 @@ public class World {
 		return (new Block(x, y, z));
 	}
 
+	public Block getBlock(Point p){
+		if ((p.x<0) || (p.x > xsize-1)) return null;
+		if ((p.y<0) || (p.y > ysize-1)) return null;
+		if ((p.z<0) || (p.z > zsize-1)) return null;
+		return (new Block((int)p.x, (int)p.y, (int)p.z));
+	}
+
 	public ArrayList<Creature> getCreature(int x, int y, int z){
 		ArrayList<Creature> res = new ArrayList<>(0);
 		for (int i=0; i<creature.size(); ++i)
@@ -165,4 +175,16 @@ public class World {
 		return (m[x][y][z] == Material.MATERIAL_NONE);
 	}
 
+	public Order getOrder(int x, int y, int z){
+		Order o = null;
+		Player p = Interface.getInstance().player; //FIXME
+		//in future we will need to access all players here
+		//or move this method somewhere else
+		for (int i=0; i<p.order.size(); ++i){
+			o = p.order.get(i);
+			if (o.b.x==x && o.b.y==y && o.b.z==z)
+				return o;
+		}
+		return null;
+	}
 }

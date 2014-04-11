@@ -105,6 +105,7 @@ public class Game {
 			iface.update(deltaT);
 			renderer.draw();
             world.iterate(deltaT);
+			p1.iterate();
 			Display.update();
 			updateFPS(deltaT);
 			Display.sync(60);

@@ -16,7 +16,7 @@ import java.util.concurrent.Callable;
 
 public class Interface {
 	public Camera camera;
-	Player player;
+	public Player player;
 	World world;
 	Input input;
 	public int current_layer;
