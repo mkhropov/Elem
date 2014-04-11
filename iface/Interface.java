@@ -81,9 +81,8 @@ public class Interface {
 	}
 	
 	public int getBuildForm(){
-		return World.FORM_BLOCK;
-	//	SelectorMenu t = (SelectorMenu)menus[MENU_BUILD_FORM];
-	//	return t.getState();
+		SelectorMenu t = (SelectorMenu)menus[MENU_BUILD_FORM];
+		return t.getState();
 	}
 	
 	public void setDigForm(int form){
@@ -128,13 +127,17 @@ public class Interface {
 		bDig.setFace(t);
 		t = new SelectorMenu(bBuild);
 		t.show();
+		t.addButton(new Button(290, 480, 40, 40, "IconFloor"), World.FORM_FLOOR);
+		t.addButton(new Button(340, 480, 40, 40, "IconBlock"), World.FORM_BLOCK);
+		t.setState(World.FORM_BLOCK);
 		menus[MENU_BUILD_FORM] = t;
+		bBuild.setFace(t);
 		t = new SelectorMenu(bBuild);
 		t.show();
-		t.addButton(new Button(400, 480, 40, 40, "marble"), Material.MATERIAL_MARBLE);
-		t.addButton(new Button(450, 480, 40, 40, "earth"), Material.MATERIAL_EARTH);
-		t.addButton(new Button(500, 480, 40, 40, "stone"), Material.MATERIAL_STONE);
-		t.addButton(new Button(550, 480, 40, 40, "granite"), Material.MATERIAL_GRANITE);
+		t.addButton(new Button(410, 480, 40, 40, "marble"), Material.MATERIAL_MARBLE);
+		t.addButton(new Button(460, 480, 40, 40, "earth"), Material.MATERIAL_EARTH);
+		t.addButton(new Button(510, 480, 40, 40, "stone"), Material.MATERIAL_STONE);
+		t.addButton(new Button(560, 480, 40, 40, "granite"), Material.MATERIAL_GRANITE);
 		menus[MENU_BUILD_MATERIAL] = t;
 
 		viewMode = Renderer.VIEW_MODE_FOW;
