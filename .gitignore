@@ -2,3 +2,9 @@
 output/
 tags
 *.swp
+/nbproject/project.xml
+/nbproject/build-impl.xml
+/manifest.mf
+/nbproject/genfiles.properties
+/nbproject/project.properties
+/build.xml
