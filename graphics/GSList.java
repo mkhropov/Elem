@@ -20,11 +20,11 @@ public class GSList {
 		add("earth", 0.5);
 		add("marble", 0.5);
 		add("granite", 0.5);
-		add("red_granite", 0.5);
 		add("textures", 0.0);
 		add("selection", 0.0);
 		add("elem", 0.0);
 		add("IconDig", 0.0);
+		add("IconChannel", 0.0);
 		add("IconBuild", 0.0);
 		add("IconSummon", 0.0);
 		add("IconActive", 0.0);

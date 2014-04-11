@@ -3,9 +3,7 @@ package iface;
 import graphics.GSList;
 
 import org.lwjgl.opengl.GL11;
-import java.util.concurrent.Callable;
 import graphics.GraphicalSurface;
-import graphics.Renderer;
 
 public class Button extends Element {
 	private int x;
@@ -15,7 +13,7 @@ public class Button extends Element {
 
 	private static GraphicalSurface activeIcon;
 	private static GraphicalSurface inactiveIcon;
-	GraphicalSurface icon;
+	ButtonFace face;
 
 	private Runnable c;
 	private int mbt = 0;// TODO: Change to lists button -> action
@@ -34,13 +32,33 @@ public class Button extends Element {
 		this.y = y;
 		this.dx = dx;
 		this.dy = dy;
-		this.icon = GSList.getInstance().get(iconName);
+		this.face = new ButtonFaceIcon(iconName);
 		this.c = c;
+	}
+	
+	public Button(int x, int y, int dx, int dy, SelectorMenu menu){
+		if (!initialized) classInit();
+		this.active = false;
+		this.visible = true;
+		this.x = x;
+		this.y = y;
+		this.dx = dx;
+		this.dy = dy;
+		this.face = new ButtonFaceMenuState(menu);
+		this.c = c;
+	}
+	
+	public void setFace(SelectorMenu menu){
+		this.face = new ButtonFaceMenuState(menu);
+	}
+
+	public void setFace(String iconName){
+		this.face = new ButtonFaceIcon(iconName);
 	}
 
 	public void onClick(int mButton){
 		if(mButton == mbt){
-			if(c!=null) c.run();
+			if(c!=null && active) c.run();
 		}
 	}
 
@@ -72,16 +90,6 @@ public class Button extends Element {
 		GL11.glTexCoord2d(0., 1.);
 		GL11.glVertex2d(x, y+dy);
 		GL11.glEnd();
-		icon.bind();
-		GL11.glBegin(GL11.GL_QUADS);
-		GL11.glTexCoord2d(0., 0.);
-		GL11.glVertex2d(x+0.1*dx, y+0.1*dy);
-		GL11.glTexCoord2d(1., 0.);
-		GL11.glVertex2d(x+0.9*dx, y+0.1*dy);
-		GL11.glTexCoord2d(1., 1.);
-		GL11.glVertex2d(x+0.9*dx, y+0.9*dy);
-		GL11.glTexCoord2d(0., 1.);
-		GL11.glVertex2d(x+0.1*dx, y+0.9*dy);
-		GL11.glEnd();
+		face.draw(x, y, dx, dy);
 	}
 }

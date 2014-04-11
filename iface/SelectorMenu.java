@@ -25,6 +25,10 @@ public class SelectorMenu extends Menu {
 	public int getState(){
 		return state;
 	}
+	
+	public ButtonFace getButtonFace(){
+		return buttons.get(options.indexOf(state)).face;
+	}
 
 	public void setState(int newState){
 		buttons.get(options.indexOf(state)).active = false;

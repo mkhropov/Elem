@@ -28,8 +28,10 @@ public class Interface {
 
 
 	public static final int MENU_TOOLBAR = 0;
-	public static final int MENU_BUILD_MATERIAL = 1;
-	public static final int MENU_COUNT = 2;
+	public static final int MENU_DIG_FORM = 1;
+	public static final int MENU_BUILD_FORM = 2;
+	public static final int MENU_BUILD_MATERIAL = 3;
+	public static final int MENU_COUNT = 4;
 
 
 	public Menu[] menus;
@@ -72,13 +74,26 @@ public class Interface {
 		SelectorMenu t = (SelectorMenu)menus[MENU_BUILD_MATERIAL];
 		return t.getState();
 	}
+
+	public void setBuildForm(int form){
+		SelectorMenu t = (SelectorMenu)menus[MENU_BUILD_FORM];
+		t.setState(form);
+	}
 	
 	public int getBuildForm(){
 		return World.FORM_BLOCK;
+	//	SelectorMenu t = (SelectorMenu)menus[MENU_BUILD_FORM];
+	//	return t.getState();
+	}
+	
+	public void setDigForm(int form){
+		SelectorMenu t = (SelectorMenu)menus[MENU_DIG_FORM];
+		t.setState(form);
 	}
 	
 	public int getDigForm(){
-		return World.FORM_FLOOR;
+		SelectorMenu t = (SelectorMenu)menus[MENU_DIG_FORM];
+		return t.getState();
 	}
 	
 	public int getDirection(){
@@ -94,18 +109,32 @@ public class Interface {
 		menus = new Menu[MENU_COUNT];
 		SelectorMenu t = new SelectorMenu(new Element());
 		t.addButton(new Button(300, 530, 60, 60, "IconSummon"), COMMAND_MODE_SPAWN);
-		t.addButton(new Button(370, 530, 60, 60, "IconDig"), COMMAND_MODE_DIG);
-		Button b = new Button(440, 530, 60, 60, "IconBuild");
-		b.bindAction(new Runnable() { @Override public void run() {
+		Button bDig = new Button(370, 530, 60, 60, "IconDig");
+		bDig.bindAction(new Runnable() { @Override public void run() {
+				Interface.getInstance().menus[Interface.MENU_DIG_FORM].toggle();}}, 1);
+		t.addButton(bDig, COMMAND_MODE_DIG);
+		Button bBuild = new Button(440, 530, 60, 60, "IconBuild");
+		bBuild.bindAction(new Runnable() { @Override public void run() {
+				Interface.getInstance().menus[Interface.MENU_BUILD_FORM].toggle();
 				Interface.getInstance().menus[Interface.MENU_BUILD_MATERIAL].toggle();}}, 1);
-		t.addButton(b, COMMAND_MODE_BUILD);
+		t.addButton(bBuild, COMMAND_MODE_BUILD);
 		menus[MENU_TOOLBAR] = t;
 		menus[MENU_TOOLBAR].show();
-		t = new SelectorMenu(b);
+		t = new SelectorMenu(bDig);
+		t.show();
+		t.addButton(new Button(355, 480, 40, 40, "IconDig"), World.FORM_FLOOR);
+		t.addButton(new Button(405, 480, 40, 40, "IconChannel"), World.FORM_BLOCK);
+		menus[MENU_DIG_FORM] = t;
+		bDig.setFace(t);
+		t = new SelectorMenu(bBuild);
+		t.show();
+		menus[MENU_BUILD_FORM] = t;
+		t = new SelectorMenu(bBuild);
 		t.show();
 		t.addButton(new Button(400, 480, 40, 40, "marble"), Material.MATERIAL_MARBLE);
 		t.addButton(new Button(450, 480, 40, 40, "earth"), Material.MATERIAL_EARTH);
 		t.addButton(new Button(500, 480, 40, 40, "stone"), Material.MATERIAL_STONE);
+		t.addButton(new Button(550, 480, 40, 40, "granite"), Material.MATERIAL_GRANITE);
 		menus[MENU_BUILD_MATERIAL] = t;
 
 		viewMode = Renderer.VIEW_MODE_FOW;
