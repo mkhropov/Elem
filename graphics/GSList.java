@@ -29,6 +29,7 @@ public class GSList {
 		add("IconBlock", 0.0);
 		add("IconFloor", 0.0);
 		add("IconSummon", 0.0);
+		add("IconCancel", 0.0);
 		add("IconActive", 0.0);
 		add("IconInactive", 0.0);
 	}

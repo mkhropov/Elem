@@ -25,6 +25,7 @@ public class Interface {
 	public static final int COMMAND_MODE_SPAWN = 0;
 	public static final int COMMAND_MODE_DIG = 1;
 	public static final int COMMAND_MODE_BUILD = 2;
+	public static final int COMMAND_MODE_CANCEL = 3;
 
 
 	public static final int MENU_TOOLBAR = 0;
@@ -107,16 +108,17 @@ public class Interface {
 		cursor = new Cursor();
 		menus = new Menu[MENU_COUNT];
 		SelectorMenu t = new SelectorMenu(new Element());
-		t.addButton(new Button(300, 530, 60, 60, "IconSummon"), COMMAND_MODE_SPAWN);
-		Button bDig = new Button(370, 530, 60, 60, "IconDig");
+		t.addButton(new Button(265, 530, 60, 60, "IconSummon"), COMMAND_MODE_SPAWN);
+		Button bDig = new Button(335, 530, 60, 60, "IconDig");
 		bDig.bindAction(new Runnable() { @Override public void run() {
 				Interface.getInstance().menus[Interface.MENU_DIG_FORM].toggle();}}, 1);
 		t.addButton(bDig, COMMAND_MODE_DIG);
-		Button bBuild = new Button(440, 530, 60, 60, "IconBuild");
+		Button bBuild = new Button(405, 530, 60, 60, "IconBuild");
 		bBuild.bindAction(new Runnable() { @Override public void run() {
 				Interface.getInstance().menus[Interface.MENU_BUILD_FORM].toggle();
 				Interface.getInstance().menus[Interface.MENU_BUILD_MATERIAL].toggle();}}, 1);
 		t.addButton(bBuild, COMMAND_MODE_BUILD);
+		t.addButton(new Button(475, 530, 60, 60, "IconCancel"), COMMAND_MODE_CANCEL);
 		menus[MENU_TOOLBAR] = t;
 		menus[MENU_TOOLBAR].show();
 		t = new SelectorMenu(bDig);
@@ -127,8 +129,8 @@ public class Interface {
 		bDig.setFace(t);
 		t = new SelectorMenu(bBuild);
 		t.show();
-		t.addButton(new Button(290, 480, 40, 40, "IconFloor"), World.FORM_FLOOR);
-		t.addButton(new Button(340, 480, 40, 40, "IconBlock"), World.FORM_BLOCK);
+		t.addButton(new Button(300, 480, 40, 40, "IconFloor"), World.FORM_FLOOR);
+		t.addButton(new Button(350, 480, 40, 40, "IconBlock"), World.FORM_BLOCK);
 		t.setState(World.FORM_BLOCK);
 		menus[MENU_BUILD_FORM] = t;
 		bBuild.setFace(t);

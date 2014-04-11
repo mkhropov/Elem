@@ -97,6 +97,9 @@ public class Input {
 											World.getInstance().getBlock(i, j, iface.current_layer),
 											iface.getBuildMaterial());
 									break;
+								case Interface.COMMAND_MODE_CANCEL:
+									iface.player.cancelOrders(World.getInstance().getBlock(i, j, iface.current_layer));
+									break;
 								}
 								j+=Math.signum(where.y-startY);
 							} while(j != where.y+Math.signum(endY - startY));

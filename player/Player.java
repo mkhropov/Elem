@@ -121,14 +121,18 @@ public class Player {
   //      System.out.println(c+" took order "+o);
     }
 
-    public void setOrderDone(Order o, Creature c){
+	public void destroyOrder(Order o) {
 		if ((o.type == Order.ORDER_BUILD) ||
 			(o.type == Order.ORDER_DIG))
 			Renderer.getInstance().removeEntity(o.cube);
         order.remove(o);
-        c.order = null;
 		for (int i=0; i<order.size(); ++i)
 			order.get(i).declined = 0;
+	}
+	
+    public void setOrderDone(Order o, Creature c){
+        c.order = null;
+		destroyOrder(o);
 //        System.out.println(c+" succesfuly did order "+o);
     }
 
@@ -144,4 +148,22 @@ public class Player {
         c.order = null;
       //  System.out.println(c+" aborted order "+o);
     }
+	
+	public void cancelOrders(Block b){
+		Order o;
+		for (int i=0; i<order.size(); ++i) {
+			o = order.get(i);
+			if ((o.b != null) && (o.b.isSame(b))){
+				if (o.taken){
+					for (int j=0; j<creature.size(); ++j) 
+						if (creature.get(j).order==o){
+							setOrderDone(o, creature.get(j));
+							break;
+						}
+				} else {
+					destroyOrder(o);
+				}
+			}
+		}
+	}
 }
