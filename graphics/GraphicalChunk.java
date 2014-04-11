@@ -162,7 +162,7 @@ public class GraphicalChunk {
 		} else {
 			for (int i=rx; i<rx+xsize; i++)
 				for (int j=ry; j<ry+ysize; j++){
-					if (!world.isFull(i,j,z)) continue;
+					if (world.isAir(i,j,z)) continue;
 					if (!world.isFull(i-1,j,z))
 						addFace(i, j, z, 4, false);
 					if (!world.isFull(i+1,j,z))
