@@ -83,6 +83,12 @@ public class Input {
 													World.getInstance().getBlock(i, j, iface.current_layer)));
 									break;
 								case Interface.COMMAND_MODE_DIG:
+									if (iface.getDigForm()==World.FORM_BLOCK){
+										iface.setDigForm(World.FORM_FLOOR);
+										iface.player.placeDigOrder(
+												World.getInstance().getBlock(i, j, iface.current_layer-1));
+										iface.setDigForm(World.FORM_BLOCK);										
+									}
 									iface.player.placeDigOrder(
 											World.getInstance().getBlock(i, j, iface.current_layer));
 									break;
