@@ -8,3 +8,6 @@ tags
 /nbproject/genfiles.properties
 /nbproject/project.properties
 /build.xml
+build/
+dist/
+nbproject/
