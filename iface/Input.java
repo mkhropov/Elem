@@ -35,9 +35,11 @@ public class Input {
 		int[] pos = iface.camera.resolvePixel(x, y, iface.current_layer);
 		where = iface.world.getBlock(pos[0], pos[1], iface.current_layer);
 
+		boolean onMenu = false;
 		for (int i=0; i<Interface.MENU_COUNT; ++i){
 			if (iface.menus[i].hover(x, 600-y)){
 				where = null;
+				onMenu = true;
 			}
 		}
 
@@ -48,6 +50,7 @@ public class Input {
 			iface.cursor.state = Cursor.STATE_DISABLED;
 			iface.cursor.reposition(pos[0], pos[1], iface.current_layer, x, y);
 		}
+		if (onMenu) iface.cursor.state = Cursor.STATE_IFACE;
 		endX = iface.cursor.x;
 		endY = iface.cursor.y;
 

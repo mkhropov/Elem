@@ -39,12 +39,10 @@ public class Cursor {
 		hue_uniform = GL20.glGetUniformLocation(
 			r.shaders[Renderer.SHADER_GHOST], "hue");
 		hue = new float[]{0.f, 0.f, 0.f, .6f};
-		int m = ModelList.getInstance().findId("cursor");
-		model = ModelList.getInstance().get(m);
-		int g = graphics.GSList.getInstance().findId("marble");
-		gs = GSList.getInstance().get(g);
+		model = ModelList.getInstance().get("cursor");
+		gs = GSList.getInstance().get("selection");
 
-		state = STATE_ENABLED;
+		state = STATE_IFACE;
 	}
 
 	public void reposition (int x, int y, int z, int X, int Y) {

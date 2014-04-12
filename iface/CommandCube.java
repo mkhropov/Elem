@@ -1,10 +1,6 @@
 package iface;
 
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.LWJGLException;
 
 import graphics.*;
 import stereometry.Point;
