@@ -172,6 +172,9 @@ public class Input {
 	            case '3':
 					iface.setCommandMode(Interface.COMMAND_MODE_BUILD);
 					break;
+	            case '4':
+					iface.setCommandMode(Interface.COMMAND_MODE_CANCEL);
+					break;
 				case ' ':
 					iface.viewMode |= Renderer.VIEW_MODE_FLAT;
 					break;
