@@ -268,8 +268,8 @@ public class Renderer {
 		if (!draw_mana){
 			if ((Interface.getInstance().viewMode & VIEW_MODE_FLAT)!=0) {
 				z = current_layer + 0.5f;
-				glUniform1f(z_attr, z);
 				glUseProgram(shaders[SHADER_HIGHLIGHT_FLAT]);
+				glUniform1f(z_attr, z);
 			} else {
 				glUseProgram(shaders[SHADER_HIGHLIGHT]);
 			}
