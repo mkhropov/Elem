@@ -31,7 +31,6 @@ public class Input {
 	}
 
 	public void poll(long deltaT) {
-		Button b = null;
 		int x = Mouse.getEventX();
 		int y = Mouse.getEventY();
 		Block where;
@@ -185,6 +184,9 @@ public class Input {
 			switch(Keyboard.getEventKey()){
 				case Keyboard.KEY_SPACE:
 					iface.viewMode = iface.viewMode & ~Renderer.VIEW_MODE_FLAT;
+					break;
+				case Keyboard.KEY_F3:
+					iface.debug=!iface.debug;
 					break;
 				default:
 					break;

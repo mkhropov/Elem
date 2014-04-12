@@ -10,8 +10,14 @@ import graphics.*;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
+import java.awt.Font;
+import org.newdawn.slick.TrueTypeFont;
+import org.newdawn.slick.util.ResourceLoader;
+
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
+import org.lwjgl.input.Mouse;
+import world.Block;
 
 
 public class Interface {
@@ -21,7 +27,11 @@ public class Interface {
 	Input input;
 	public int current_layer;
 	public Cursor cursor;
+	TrueTypeFont sansSerif;
+	TrueTypeFont serif;
 
+	public boolean debug = false;
+	
 	public static final int COMMAND_MODE_SPAWN = 0;
 	public static final int COMMAND_MODE_DIG = 1;
 	public static final int COMMAND_MODE_BUILD = 2;
@@ -107,6 +117,10 @@ public class Interface {
 		input = new Input(this);
 		cursor = new Cursor();
 		menus = new Menu[MENU_COUNT];
+		Font awtFont = new Font("Times New Roman", Font.PLAIN, 12);
+		serif = new TrueTypeFont(awtFont, true);
+		awtFont = new Font("Helvetica", Font.BOLD, 12);
+		sansSerif = new TrueTypeFont(awtFont, true);
 		SelectorMenu t = new SelectorMenu(new Element());
 		t.addButton(new Button(265, 530, 60, 60, "IconSummon"), COMMAND_MODE_SPAWN);
 		Button bDig = new Button(335, 530, 60, 60, "IconDig");
@@ -166,6 +180,16 @@ public class Interface {
 
 		for (int i=0; i<MENU_COUNT; ++i)
 			menus[i].draw();
+		
+		if (debug){
+			int x = Mouse.getEventX();
+			int y = Mouse.getEventY();
+			Block where;
+			int[] pos = camera.resolvePixel(x, y, current_layer);
+			where = world.getBlock(pos[0], pos[1], current_layer);
+			sansSerif.drawString(8, 2,
+					"Mouse coords:   x "+where.x+"   y "+where.y+"   z "+where.z);
+		}
 
 		cursor.draw2d();
 
