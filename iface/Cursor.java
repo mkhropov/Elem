@@ -37,10 +37,8 @@ public class Cursor {
 		Renderer r = Renderer.getInstance();
 		channel_uniform = GL20.glGetUniformLocation(
 			r.shaders[Renderer.SHADER_GHOST], "channel");
-		int m = ModelList.getInstance().findId("cursor");
-		model = ModelList.getInstance().get(m);
-		int g = graphics.GSList.getInstance().findId("marble");
-		gs = GSList.getInstance().get(g);
+		model = ModelList.getInstance().get("cursor");
+		gs = GSList.getInstance().get("selection");
 
 		state = STATE_IFACE;
 	}
