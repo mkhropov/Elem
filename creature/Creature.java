@@ -141,7 +141,7 @@ public class Creature extends Entity {
 	boolean action_fall(long dT){
 		World w = World.getInstance();
 		int i = (int)p.z;
-		while (w.isAir((int)p.x, (int)p.y, i))
+		while (w.isEmpty((int)p.x, (int)p.y, i))
 			i--;
 		i++;
 		p.add(mv, dT/1000.);
@@ -184,6 +184,7 @@ public class Creature extends Entity {
 	}
 
 	public boolean isIn(int x, int y, int z){
+//		System.out.println("Is ("+p.x+","+p.y+","+p.z+" in ("+(int)p.x+","+(int)p.y+","+(int)p.z+")?");
 		return (x==(int)p.x && y==(int)p.y && z==(int)p.z);
 	}
 
@@ -311,6 +312,6 @@ public class Creature extends Entity {
     }
 
 	public void update(){
-		start_action(new Action(Action.ACTION_FALL), true);
+		start_action(new Action(ACTION_FALL), true);
 	}
 }

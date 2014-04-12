@@ -209,12 +209,11 @@ public class World {
 	}
 
 	public void updateBlock(int x, int y, int z){
-		for (int i=0; i<creature.size(); ++i)
-			if (creature.get(i).isIn(x, y, z))
-				creature.get(i).update();
-		for (int i=0; i<item.size(); ++i)
-			if (item.get(i).isIn(x, y, z))
-				item.get(i).update();
+		System.out.println("Updating ("+x+","+y+","+z+")");
+		for (Creature c: getCreature(x, y, z))
+			c.update();
+		for (Item i: getItem(x, y, z))
+			i.update();
 	}
 
 	public void updateBlock(Block b){

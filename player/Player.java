@@ -78,7 +78,7 @@ public class Player {
 
 	public void spawnCreature(Creature c){
 		World w = World.getInstance();
-		if (w.getMaterialID(c.p) != Material.MATERIAL_NONE)
+		if (!w.isEmpty((int)c.p.x, (int)c.p.y, (int)c.p.z))
 			return;
         w.creature.add(c);
         creature.add(c);
