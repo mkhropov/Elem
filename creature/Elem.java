@@ -27,7 +27,7 @@ public class Elem extends Creature implements Worker{
 @Override
     public boolean canWalk(Block b){
 		World w = World.getInstance();
-		return (b.z!=0) && (w.hasSolidFloor(b.x, b.y, b.z));
+		return (b.z!=0) && (w.hasSolidFloor(b.x, b.y, b.z)) && (w.isEmpty(b.x, b.y, b.z));
     }
 
     @Override
