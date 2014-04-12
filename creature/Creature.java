@@ -12,6 +12,8 @@ import stereometry.Point;
 import stereometry.Vector;
 
 import static creature.Action.*;
+import graphics.GSList;
+import graphics.ModelList;
 
 public class Creature extends Entity {
     Point np;
@@ -313,5 +315,15 @@ public class Creature extends Entity {
 
 	public void update(){
 		start_action(new Action(ACTION_FALL), true);
+	}
+	
+	@Override
+	public void draw(){
+		super.draw();
+		if (item != null){
+			ModelList.getInstance().get(item.mid).draw(
+			(float)(p.x+.5*Math.sin(a)), (float)(p.y+.5*Math.cos(a)), (float)(p.z+.3), a,
+			GSList.getInstance().get(item.gsid));
+		}
 	}
 }
