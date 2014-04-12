@@ -57,4 +57,8 @@ public class ModelList {
 	public Model get(int id){
 		return list.get(id);
 	}
+	
+	public Model get(String name){
+		return list.get(findId(name));
+	}
 }
