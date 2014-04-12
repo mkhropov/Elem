@@ -61,6 +61,7 @@ public class Elem extends Creature implements Worker{
         return true;
     }
 
+	@Override
     public boolean canReach(Block b1, Block b2){
 		if (b1.isSame(b2)) return false;
 		if (!canWalk(b1)) return false;

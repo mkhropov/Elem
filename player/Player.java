@@ -72,10 +72,7 @@ public class Player {
 		if (blockAlreadyRequested(b))
 			return;
 		ItemTemplate it = new ItemTemplate(Item.TYPE_BUILDABLE, m);
-		Order o = new Order(null, Order.ORDER_TAKE); o.it = it;
-	    order.add(o);
-	    o = new Order(b, Order.ORDER_BUILD); o.it = it; o.m = m;
-//        Order o = new Order(b, Order.ORDER_BUILD); o.it = it; o.m = m;
+	    Order o = new Order(b, Order.ORDER_BUILD); o.it = it; o.m = m;
         order.add(o);
 		Renderer.getInstance().addEntity(o.cube);
     }
@@ -115,8 +112,9 @@ public class Player {
 					continue;
 				}
 				t += path.size();
+
+				o.path.add(0, new Action(Action.ACTION_BUILD, b.x, b.y, b.z));
 				b = path.remove(0).b;
-				o.path.add(new Action(Action.ACTION_BUILD, b.x, b.y, b.z));
 				o.path.addAll(0, path);
 
 				c1 = new ConditionBeIn(b);
@@ -129,7 +127,7 @@ public class Player {
 				}
 				t += path.size();
 				candidates = World.getInstance().getCreature(path.remove(0).b);
-				o.path.add(new Action(Action.ACTION_TAKE, o.it));
+				o.path.add(0, new Action(Action.ACTION_TAKE, o.it));
 				o.path.addAll(0, path);
 				for (Creature c: candidates){
 					if (c.capableOf(o)) {
@@ -137,7 +135,7 @@ public class Player {
 						c.plans = o.path;
 						o.dumpPath();
 						o.taken = true;
-						continue;
+						break;
 					}
 				}
 				break;
@@ -153,7 +151,7 @@ public class Player {
 				}
 				t += path.size();
 				candidates = World.getInstance().getCreature(path.remove(0).b);
-				o.path.add(new Action(Action.ACTION_DIG, b.x, b.y, b.z));
+				o.path.add(0, new Action(Action.ACTION_DIG, b.x, b.y, b.z));
 				o.path.addAll(0, path);
 				for (Creature c: candidates){
 					if (c.capableOf(o)) {
@@ -162,7 +160,7 @@ public class Player {
 						c.plans = o.path;
 						o.dumpPath();
 						o.taken = true;
-						continue;
+						break;
 					}
 				}
 				break;
@@ -186,20 +184,21 @@ public class Player {
         order.remove(o);
         c.order = null;
 		for (int i=0; i<order.size(); ++i)
-			order.get(i).declined = order.get(i).is_accesible();
+			order.get(i).declined = !order.get(i).is_accesible();
         System.out.println(c+" succesfuly did order "+o);
     }
 
 	public void setOrderDeclined(Order o, Creature c){
 		c.order = null;
 		o.taken = false;
+		o.path.clear();
 	//	System.out.println(c+" declined  order "+o);
 	}
 
     public void setOrderCancelled(Order o, Creature c){
         o.taken = false;
-        c.order = null;
-		c.plans = null;
+        c.order = null;;
+		o.path.clear();
         System.out.println(c+" aborted order "+o);
     }
 }

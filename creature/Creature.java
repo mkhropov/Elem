@@ -1,6 +1,5 @@
 package creature;
 
-import java.util.ArrayList;
 import world.*;
 import player.*;
 import graphics.Renderer;
@@ -30,11 +29,11 @@ public class Creature extends Entity {
 	Action act;
 	long action_t;
 
-	public void start_action(Action a, boolean forced){
-		System.out.println("new action "+a.type+" for "+this);
+	public void start_action(Action action, boolean forced){
+		System.out.println("new action "+(int)action.type+" for "+this);
 		if (forced && act!=null)
 			plans.push(act);
-		act = a;
+		act = action;
 		action_t = 0;
 		switch(act.type){
 		case ACTION_MOVE:
@@ -118,7 +117,8 @@ public class Creature extends Entity {
 
 	boolean action_take(long dT){
 		long T = 100;
-		p.z -= .1f*((float)Math.sin(((double)action_t)*2*Math.PI/T));
+		a += Math.PI*2*dT/T;
+//		p.z -= .1f*((float)Math.sin(((double)action_t)*2*Math.PI/T));
 		return (action_t >= T);
 	}
 
@@ -215,13 +215,14 @@ public class Creature extends Entity {
 		for (k=0; k < w.item.size(); ++k){
 			i = w.item.get(k);
 			if (it.suits(i) && i.isIn(World.getInstance().getBlock(p))){
+				System.out.println("Item "+i+" found!");
 				item = i;
 				World.getInstance().item.remove(i);//EventHandler.getInstance().removeEntity(i);
 				Renderer.getInstance().removeEntity(i);
-				break;
+				return true;
 			}
 		}
-		return (k != w.item.size());
+		return false;
 	}
 
 	public boolean drop(){
@@ -274,17 +275,25 @@ public class Creature extends Entity {
 
     public void iterate(long dT){
 		if (act != null){
-			if (exec_action(dT))
-				if (!end_action() && order!=null){
-					owner.setOrderCancelled(order, this);
-					plans = null;
-				}
-		} else if (plans.size()!=0)
+			if (!exec_action(dT))
+				return;
+			if (!end_action() && order!=null){
+				plans.clear();
+				if (order.type == Order.ORDER_BUILD)
+					start_action(new Action(ACTION_DROP), false);
+				owner.setOrderCancelled(order, this);
+				return;
+			}
+		}
+
+		if (plans.size()!=0){
 			start_action(plans.remove(0), false);
-		else if (order != null)
+			return;
+		} else 
+			plans.clear();
+
+		if (order != null)
 			owner.setOrderDone(order, this);
-//		else
-//			start_action(new Action(Action.ACTION_NONE), false);
     }
 
 	public void update(){

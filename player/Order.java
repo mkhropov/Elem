@@ -71,7 +71,10 @@ public class Order {
 									   "ACTION_BUILD"};
 		for (int i=0; i<path.size(); ++i){
 			a = path.get(i);
-			System.out.println(acodes[a.type]+" to ("+a.b.x+", "+a.b.y+", "+a.b.z+")");
+			if (a.b != null)
+				System.out.println(acodes[a.type]+" to ("+a.b.x+", "+a.b.y+", "+a.b.z+")");
+			else
+				System.out.println(acodes[a.type]);
 		}
 	}
 }
