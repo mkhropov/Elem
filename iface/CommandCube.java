@@ -7,7 +7,7 @@ import stereometry.Point;
 
 public class CommandCube implements GraphicalEntity {
 
-	int channel_uniform;
+	int hue_uniform;
 
 	public int x, y, z;
 	public Point p;
@@ -19,8 +19,8 @@ public class CommandCube implements GraphicalEntity {
 		this.x = x; this.y = y; this.z = z;
 		this.p = new Point(x, y, z);
 		Renderer r = Renderer.getInstance();
-		channel_uniform = GL20.glGetUniformLocation(
-		            r.shaders[Renderer.SHADER_GHOST], "channel");
+		hue_uniform = GL20.glGetUniformLocation(
+		            r.shaders[Renderer.SHADER_GHOST], "hue");
 		model = ModelList.getInstance().get("cube");
 		int g;
 /*		if (command == Interface.COMMAND_MODE_BUILD)
@@ -41,7 +41,7 @@ public class CommandCube implements GraphicalEntity {
 	public void draw(){
 		Renderer r = Renderer.getInstance();
 		GL20.glUseProgram(r.shaders[Renderer.SHADER_GHOST]);
-		GL20.glUniform1i(channel_uniform, 2);
+		GL20.glUniform4f(hue_uniform, 0.f, 0.f, 1.f, .6f);
 		model.draw(x, y, z, 0.f, gs);
 		GL20.glUseProgram(r.shaders[Renderer.SHADER_FADE]);
 	}
