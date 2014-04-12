@@ -53,15 +53,16 @@ public class Pathfinder {
                          (b1.z-b2.z)*(b1.z-b2.z));
     }*/
 
-	public Block spreadPath(Creature c, Block b, Condition cond){
+	public ArrayList<Block> spreadPath(Creature c, ArrayList<Block> b, Condition cond){
+		ArrayList<Block> res = new ArrayList<>();
         ArrayList<Block> near;
         int i, j, l;
-        Block m, n, k = null;
+        Block m, n;
         float D, Dn, Dt;
 		boolean found = false;
-        nextLayer = new ArrayList<>(1);
-        nextLayer.add(b);
-        d[b.x][b.y][b.z] = 0.f;
+        nextLayer = b;
+		for (Block t: nextLayer)
+			d[t.x][t.y][t.z] = 0.f;
         while ((!found) && (t<1000) && (nextLayer.size()>0)){
             currLayer = nextLayer;
             nextLayer = new ArrayList<>();
@@ -70,7 +71,7 @@ public class Pathfinder {
                 m = currLayer.get(i);
 				if (cond.suits(m)){
 					found = true;
-					k = m;
+					res.add(m);
 				}
                 D = d[m.x][m.y][m.z];
                 near = m.nearest();
@@ -87,44 +88,41 @@ public class Pathfinder {
             }
             t++;
         }
-		if (found)
-			return k;
-		else
-			return null;
+		return res;
 	}
 
 
     public Stack<Action> getPath(Creature c, Block b, Condition c1, Condition c2) {
-        Block b1, b2 = null;
+        ArrayList<Block> b1, b2;
 
         clear();
 		//find c1-point around b
-		b1 = spreadPath(C, b, c1);
-		if (b1 == null){
+		b2 = new ArrayList<>(); b2.add(b);
+		b1 = spreadPath(C, b2, c1);
+		if (b1.isEmpty()){
 			System.out.println("Suitable c1-point not found");
 			return null;
 		} else {
-			 System.out.println("c1-point ("+b1.x+","+b1.y+","+b1.z+" found");
+			 System.out.println(b1.size()+" c1-points found");
 		}
 
 		clear();
 		//find c2-point around b1
 		b2 = spreadPath(c, b1, c2);
-		if (b2 == null){
+		if (b2.isEmpty()){
 			System.out.println("Suitable c2-point not found");
 			return null;
 		} else {
-			System.out.println("c2-point ("+b2.x+","+b2.y+","+b2.z+" found");
+			System.out.println(b2.size()+" c2-points found");
 		}
 
-		return backtrack(c, b2);
+		return backtrack(c, b2.get(0));
 	}
 
 	public Stack<Action> backtrack(Creature c, Block b){
         int i, j, l, t;
 		Block m, k, n; m = b;
         ArrayList<Block> near;
-		boolean found = false;
 		float D = d[b.x][b.y][b.z];
 		float Dn;
 		Stack<Action> q = new Stack<>();//(int)(D/2.f));
