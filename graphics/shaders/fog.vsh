@@ -1,6 +1,7 @@
 #version 120
 
-uniform mat4 MVP;
+uniform mat4 M;
+uniform mat4 VP;
 uniform float max_z;
 uniform float curr_z;
 
@@ -21,10 +22,12 @@ void main(){
 	const vec3 fog = vec3(.9, .9, 1.);
 	const float DEPTH = 10.;
 
-	gl_Position = MVP * vec4(position, 1.);
+        vec4 pos = M * vec4(position, 1.);
 
-	fog_color = ((position.z+DEPTH)/max_z)*fog;
-	fade = max((position.z+DEPTH-curr_z)/DEPTH, 0.);
+	fog_color = ((pos.z+DEPTH)/max_z)*fog;
+	fade = max((pos.z+DEPTH-curr_z)/DEPTH, 0.);
+
+        gl_Position = VP * pos;
 
 	uv = texture;
 	light = lcol*max(dot(normal, lvec), 0.) + amb;

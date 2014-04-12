@@ -17,6 +17,7 @@ import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import org.lwjgl.opengl.GL20;
 
 import world.Entity;
 
@@ -29,7 +30,7 @@ public class Renderer {
 	public int zdepth;
 	public int fdepth;
 	private int xChunkSize, yChunkSize;
-	private Sun sun;
+//	private Sun sun;
 	private ArrayList<GraphicalEntity> gEntities;
 
 	public final static int SHADER_NONE = 0;
@@ -102,11 +103,11 @@ public class Renderer {
 		shaders[SHADER_FADE] =
 			ShaderLoader.createShader("fog.vsh", "fadeout.fsh");
 
-		curr_z_attr = glGetUniformLocation(shaders[SHADER_FADE], "curr_z");
-		max_z_attr = glGetUniformLocation(shaders[SHADER_FADE], "max_z");
+		curr_z_attr = glGetUniformLocation(shaders[Renderer.SHADER_FADE], "curr_z");
+		max_z_attr = glGetUniformLocation(shaders[Renderer.SHADER_FADE], "max_z");
 		z_attr = glGetUniformLocation(shaders[SHADER_HIGHLIGHT_FLAT], "z");
 
-		gEntities = new ArrayList<GraphicalEntity>();
+		gEntities = new ArrayList<>();
 	}
 
 	public void updateBlock (int x, int y, int z) {
@@ -291,12 +292,8 @@ public class Renderer {
 			glUniform1f(max_z_attr, (float)world.zsize);
 			glUniform1f(curr_z_attr, (float)current_layer);
 			for (int i=0; i<gChunks_size; i++)
-				if (gChunks[i].used && (gChunks[i].z!=current_layer)){
-//					fade = (current_layer-gChunks[i].z) - zdepth;
-//					fade = (fade<0.f)?(1.f):(1.f-fade/fdepth);
-//					glUniform1f(fade_attr, fade);
+				if (gChunks[i].used && (gChunks[i].z!=current_layer))
 					gChunks[i].draw(false);
-				}
 //			 System.out.println("regular layers printed");
 		} else {
 			glUseProgram(shaders[SHADER_NONE]);
@@ -307,9 +304,7 @@ public class Renderer {
 			ManaField.getInstance().draw();
 			glDisable(GL_COLOR_MATERIAL);
 		}
-		glUseProgram(shaders[SHADER_FADE]);
-		glUniform1f(max_z_attr, (float)world.zsize);
-		glUniform1f(curr_z_attr, (float)current_layer);
+		GL20.glUseProgram(shaders[Renderer.SHADER_FADE]);
 		for (int i=0; i<gEntities.size(); i++){
 			if (gEntities.get(i).getP().z<=current_layer)
 				gEntities.get(i).draw();
