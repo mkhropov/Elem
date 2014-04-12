@@ -24,10 +24,8 @@ public class Input {
 		channel_uniform = GL20.glGetUniformLocation(
 		            r.shaders[Renderer.SHADER_GHOST], "channel");
 		iface = I;
-		int mid = ModelList.getInstance().findId("cube");
-		m = ModelList.getInstance().get(mid);
-		int gsid = GSList.getInstance().findId("IconDig");
-		gs = GSList.getInstance().get(gsid);
+		m = ModelList.getInstance().get("cube");
+		gs = GSList.getInstance().get("selection");
 	}
 
 	public void poll(long deltaT) {
