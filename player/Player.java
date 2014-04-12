@@ -27,11 +27,32 @@ public class Player {
 		World w = World.getInstance();
 		this.blockMeta = new char[w.xsize][w.ysize][w.zsize];
 		for (int i=0; i<w.xsize; i++)
+		for (int j=0; j<w.ysize; j++)
+		for (int k=w.zsize-1; k>=0; k--) {
+			blockMeta[i][j][k] |= META_FOW;
+					if (!w.isEmpty(i,j,k)) break;
+		}
+		boolean changed = true;
+		while (changed) {
+			changed = false;
+			for (int i=0; i<w.xsize; i++)
 			for (int j=0; j<w.ysize; j++)
-				for (int k=w.zsize-1; k>=0; k--) {
-					blockMeta[i][j][k] |= META_FOW;
-					if (!w.isAir(i,j,k)) break;
-				}
+			for (int k=w.zsize-1; k>=0; k--) {
+				if(!blockKnown(i,j,k)){
+					for (int dx=-1; dx<=1; dx++)
+					for (int dy=-1; dy<=1; dy++) 
+					if (blockKnown(i+dx, j+dy, k)&&w.isAir(i+dx, j+dy, k)) {
+						blockMeta[i][j][k] |= META_FOW;
+						changed = true;
+					}
+					if ((blockKnown(i, j, k-1) && w.isEmpty(i,j,k-1))
+							||(blockKnown(i, j, k+1) && w.isEmpty(i,j,k+1))){
+						blockMeta[i][j][k] |= META_FOW;
+						changed = true;
+					}
+				}			
+			}
+		}
 		spellbook.add(0, new SpellSummon(this));
 		this.mana = 0;
     }
