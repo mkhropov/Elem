@@ -15,6 +15,9 @@ import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
 
 import graphics.shaders.Matrix4;
+import iface.Interface;
+import org.lwjgl.opengl.GL20;
+import world.World;
 
 public class Model {
 
@@ -31,16 +34,17 @@ public class Model {
 	public int i_b;
 
 	public float a0, a1, a2;
-	public float d0, d1;
+	public float phi, theta;
 	public float scale;
 
-	public int v_attr; // corresponding shader attributes
+/*	public int v_attr; // corresponding shader attributes
 	public int t_attr;
-	public int n_attr;
+	public int n_attr;*/
 
-	public Texture texture;
-	FloatBuffer MVP;
-	int mvp_uniform;
+//	public Texture texture;
+	//FloatBuffer MVP;
+	/*int m_uniform;
+	int vp_uniform;*/
 
 	public int vao; // GL Vertex Array Object
 
@@ -50,6 +54,7 @@ public class Model {
 		vao = glGenVertexArrays();
 		scale = 1.f;
 		a0 = 0.f; a1 = 0.f; a2 = 0.f;
+		phi = 0.f; theta = 0.f;
 		initialized = false;
 	}
 
@@ -58,10 +63,8 @@ public class Model {
 		this.name = name;
 	}
 
-	public void prepare(int prog){
+	public void prepare(){
 		assert (initialized);
-
-		glUseProgram(prog);
 
 		v.rewind();
 		t.rewind();
@@ -87,65 +90,45 @@ public class Model {
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, i, GL_STATIC_DRAW);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-		v_attr = glGetAttribLocation(prog, "position");
-		t_attr = glGetAttribLocation(prog, "texture");
-		n_attr = glGetAttribLocation(prog, "normal");
-
-		int t_uniform = glGetUniformLocation(prog, "tex");
-//		System.out.print("Texture uniform found at "+t_uniform+"\n");
-		glUniform1i(t_uniform, 0);
-/*		try {
-			texture = TextureLoader.getTexture("PNG",
-				ResourceLoader.getResourceAsStream("res/IconSunstrike.png"));
-		} catch (IOException e){
-		}
-		System.out.print("Texture loaded to "+texture+"\n");
-		System.out.print("Width="+texture.getTextureWidth()+
-						", height="+texture.getTextureHeight()+"\n");
-*/
-		mvp_uniform = glGetUniformLocation(prog, "MVP");
-//		System.out.print("MVP uniform found at "+mvp_uniform+"\n");
-		a0 = 0.f; a1 = 0.f; a2 = 0.f; scale = 1.f;
-
 		glBindVertexArray(0);
-
-//		glUseProgram(0);
-
-	/*	System.out.print("\nIndex buffer\n");
-		for (int k=0; k<i.capacity(); ++k)
-			System.out.print(i.get(k)+" ");
-		System.out.print("\n\nVertex buffer\n");
-		for (int k=0; k<v.capacity()/3; ++k)
-			System.out.print(v.get(3*k)+" "+v.get(3*k+1)+" "+v.get(3*k+2)+"   ");
-		System.out.print("\n\nUV buffer\n");
-		for (int k=0; k<t.capacity()/3; ++k)
-			System.out.print(t.get(2*k)+" "+t.get(2*k+1)+"   ");
-		System.out.print("\n\nNormal buffer\n");
-		for (int k=0; k<n.capacity()/3; ++k)
-			System.out.print(n.get(3*k)+" "+n.get(3*k+1)+" "+n.get(3*k+2)+"   ");
-		System.out.print("\n");*/
 }
 
 	public void draw(float x, float y, float z, float a, GraphicalSurface gs) {
-		Renderer r = Renderer.getInstance();
 		glBindVertexArray(vao);
+
+		int prog = glGetInteger(GL_CURRENT_PROGRAM);
+	//	GL20.glUseProgram(prog);
+		if (prog == Renderer.getInstance().shaders[Renderer.SHADER_FADE]){
+			int curr_z_attr = glGetUniformLocation(prog, "curr_z");
+			int max_z_attr = glGetUniformLocation(prog, "max_z");
+			
+			glUniform1f(max_z_attr, (float)World.getInstance().zsize);
+			glUniform1f(curr_z_attr, (float)Interface.getInstance().current_layer);
+		}
+		int v_attr = glGetAttribLocation(prog, "position");
+		int t_attr = glGetAttribLocation(prog, "texture");
+		int n_attr = glGetAttribLocation(prog, "normal");
+		int t_uniform = glGetUniformLocation(prog, "tex");
+		int m_uniform = glGetUniformLocation(prog, "M");
+		int vp_uniform = glGetUniformLocation(prog, "VP");
+		
 		Matrix4 m = Matrix4.identity();
 		m = m.multR(Matrix4.scale(new float[]{scale, scale, scale}));
+		m = m.multR(Matrix4.rot(phi, 2));
+		m = m.multR(Matrix4.rot(theta, 0));
 		m = m.multR(Matrix4.rot(a, 2));
 		m = m.multR(Matrix4.shift(new float[]{a0, a1, a2}));
 		m = m.multR(Matrix4.shift(new float[]{x, y, z}));
 //		m = m.multR(Matrix4.rot((float)(Math.PI/4.), 2));
 //		m = m.multR(Matrix4.rot(a1, 1));
 //		m = m.multR(Matrix4.rot((float)(Math.PI/4.), 0));
-//		m = m.multR(Matrix4.shift(new float[]{d0, d1, 0.f}));
 //		m = m.multR(Matrix4.scale(new float[]{scale, scale, 1.f}));
 //		m = m.multR(Matrix4.lookAt(0.f, 0.f, -1.f, 0.5f, 0.5f, 0.f));
 //		m = m.multR(Matrix4.scale(new float[]{3.f/4.f, 1.f, .1f}));
+		glUniformMatrix4(m_uniform, false, m.fb());
+		glUniformMatrix4(vp_uniform, false, Renderer.getInstance().VP.fb());
 
-		MVP = m.multR(r.view).multR(r.proj).fb();
-//		System.out.println(MVP.toString());
-		glUniformMatrix4(mvp_uniform, false, MVP);
-
+		glUniform1i(t_uniform, 0);
 		glActiveTexture(GL_TEXTURE0+0);
 		gs.bind();
 

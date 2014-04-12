@@ -37,10 +37,12 @@ public class CommandCube implements GraphicalEntity {
 		gs = GSList.getInstance().get(g);
 	}
 
+	@Override
 	public Point getP(){
 		return p;
 	}
 
+	@Override
 	public void draw(){
 		Renderer r = Renderer.getInstance();
 		GL20.glUseProgram(r.shaders[Renderer.SHADER_GHOST]);

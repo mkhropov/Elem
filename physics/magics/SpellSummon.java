@@ -1,6 +1,6 @@
 package physics.magics;
 
-import creature.SmartWalkingElem;
+import creature.Elem;
 import player.Player;
 import world.Block;
 import world.World;
@@ -25,6 +25,6 @@ public class SpellSummon extends Spell{
 
 	@Override
 	public void cast(Block b){
-		owner.spawnCreature(new SmartWalkingElem(b));
+		owner.spawnCreature(new Elem(b));
 	}
 }

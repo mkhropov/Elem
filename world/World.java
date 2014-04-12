@@ -4,7 +4,6 @@ import generation.*;
 import physics.material.*;
 import item.*;
 import creature.*;
-import pathfind.Pathfinder;
 import graphics.Renderer;
 import iface.Interface;
 
@@ -12,13 +11,15 @@ import java.util.ArrayList;
 import stereometry.*;
 
 import physics.mana.*;
+import player.Order;
+import player.Player;
 
 public class World {
     public static int DEFAULT_XSIZE = 64;
     public static int DEFAULT_YSIZE = 64;
     public static int DEFAULT_ZSIZE = 32;
     public int xsize, ysize, zsize;
-    private int[][][] block;
+    private final int[][][] block;
 	
 	public static final int MATERIAL_MASK = 0x03ff;
 	public static final int FORM_MASK = 0x1c00;
@@ -90,6 +91,10 @@ public class World {
 		return block[x][y][z]&MATERIAL_MASK;
 	}
 	
+	public int getMaterialID (Point p) {
+		return block[(int)p.x][(int)p.y][(int)p.z]&MATERIAL_MASK;
+	}
+	
 	public void setMaterial (int x, int y, int z, int m) {
 		block[x][y][z] = (block[x][y][z]&~MATERIAL_MASK)|m;
 	}
@@ -154,6 +159,13 @@ public class World {
 		if ((y<0) || (y>=ysize)) return null;
 		if ((z<0) || (z>=zsize)) return null;
 		return (new Block(x, y, z));
+	}
+	
+	public Block getBlock(Point p){
+		if ((p.x<0) || (p.x > xsize-1)) return null;
+		if ((p.y<0) || (p.y > ysize-1)) return null;
+		if ((p.z<0) || (p.z > zsize-1)) return null;
+		return (new Block((int)p.x, (int)p.y, (int)p.z));
 	}
 
 	public ArrayList<Creature> getCreature(int x, int y, int z){
@@ -250,4 +262,16 @@ public class World {
 				&& (getForm(x, y, z) == FORM_BLOCK);
 	}
 
+	public Order getOrder(int x, int y, int z){
+		Order o;
+		Player p = Interface.getInstance().player; //FIXME
+		//in future we will need to access all players here
+		//or move this method somewhere else
+		for (int i=0; i<p.order.size(); ++i){
+			o = p.order.get(i);
+			if (o.b.x==x && o.b.y==y && o.b.z==z)
+				return o;
+		}
+		return null;
+	}
 }

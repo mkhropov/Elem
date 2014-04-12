@@ -1,5 +1,6 @@
 package graphics;
 
+import graphics.shaders.Matrix4;
 import world.*;
 import iface.Interface;
 import player.Player;
@@ -44,7 +45,8 @@ public class GraphicalChunk {
 	public int v_attr;
 	public int t_attr;
 	public int n_attr;
-	public int mvp_uniform;
+	public int m_uniform;
+	public int vp_uniform;
 	public int t_uniform;
 	static float[][][] vert = new float[][][]{{
 		{0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 1.f, 1.f, 0.f, 0.f, 1.f, 0.f},//~ z-1
@@ -236,7 +238,8 @@ public class GraphicalChunk {
 
 	public void draw(boolean showTop) {
 		int p = glGetInteger(GL_CURRENT_PROGRAM);
-		mvp_uniform = glGetUniformLocation(p, "MVP");
+		m_uniform = glGetUniformLocation(p, "M");
+		vp_uniform = glGetUniformLocation(p, "VP");
 		t_uniform = glGetUniformLocation(p, "tex");
 		v_attr = glGetAttribLocation(p, "position");
 		t_attr = glGetAttribLocation(p, "texture");
@@ -244,7 +247,8 @@ public class GraphicalChunk {
 
 		glBindVertexArray(vao);
 		// model matrix is identity(), because cubes are static in world
-		glUniformMatrix4(mvp_uniform, false, Renderer.getInstance().VP.fb());
+		glUniformMatrix4(m_uniform, false, Matrix4.identity().fb());
+		glUniformMatrix4(vp_uniform, false, Renderer.getInstance().VP.fb());
 
 		glUniform1i(t_uniform, 0);
 		glActiveTexture(GL_TEXTURE0+0);

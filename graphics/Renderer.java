@@ -1,11 +1,11 @@
 package graphics;
 
+
 import world.World;
 import world.Block;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 import iface.Interface;
-import iface.Cursor;
 import iface.Camera;
 
 import graphics.shaders.ShaderLoader;
@@ -17,8 +17,7 @@ import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-
-import world.Entity;
+import org.lwjgl.opengl.GL20;
 
 import physics.mana.ManaField;
 
@@ -29,7 +28,6 @@ public class Renderer {
 	public int zdepth;
 	public int fdepth;
 	private int xChunkSize, yChunkSize;
-	private Sun sun;
 	private ArrayList<GraphicalEntity> gEntities;
 
 	public final static int SHADER_NONE = 0;
@@ -48,7 +46,8 @@ public class Renderer {
 
 	public int[] shaders;
 
-	public int fade_attr;
+	public int curr_z_attr;
+	public int max_z_attr;
 	public int z_attr;
 
 	public Matrix4 view;
@@ -90,21 +89,20 @@ public class Renderer {
 		shaders[SHADER_NONE] = 0;
 		shaders[SHADER_BASIC] =
 			ShaderLoader.createShader("basic.vsh", "basic.fsh");
-//		System.out.println("[SHADER_BASIC]="+shaders[SHADER_BASIC]);
 		shaders[SHADER_HIGHLIGHT] =
 			ShaderLoader.createShader("highlight.vsh", "basic.fsh");
-//		System.out.println("[SHADER_HIGHLIGHT]="+shaders[SHADER_HIGHLIGHT]);
-		shaders[SHADER_HIGHLIGHT_FLAT] = 
+		shaders[SHADER_HIGHLIGHT_FLAT] =
 			ShaderLoader.createShader("highlight_flat.vsh", "basic.fsh");
 		shaders[SHADER_GHOST] =
 			ShaderLoader.createShader("basic.vsh", "ghost.fsh");
 		shaders[SHADER_FADE] =
-			ShaderLoader.createShader("basic.vsh", "fadeout.fsh");
+			ShaderLoader.createShader("fog.vsh", "fadeout.fsh");
 
-		fade_attr = glGetUniformLocation(shaders[SHADER_FADE], "fade");
+		curr_z_attr = glGetUniformLocation(shaders[Renderer.SHADER_FADE], "curr_z");
+		max_z_attr = glGetUniformLocation(shaders[Renderer.SHADER_FADE], "max_z");
 		z_attr = glGetUniformLocation(shaders[SHADER_HIGHLIGHT_FLAT], "z");
 
-		gEntities = new ArrayList<GraphicalEntity>();
+		gEntities = new ArrayList<>();
 	}
 
 	public void updateBlock (int x, int y, int z) {
@@ -129,11 +127,6 @@ public class Renderer {
 				gChunks[I].needs_update = true;
 			}
 		}
-/*		int chunkX = x/GraphicalChunk.CHUNK_SIZE;
-		int chunkY = y/GraphicalChunk.CHUNK_SIZE;
-		gChunks[chunkX][chunkY][z].rebuild();
-		if (z>0)
-			gChunks[chunkX][chunkY][z-1].rebuild(); */
 	}
 
 	public void addEntity(GraphicalEntity e) {
@@ -253,19 +246,16 @@ public class Renderer {
 						gc.rebuild();
 					}
 				}
-
-/*		for (int k=0; k<gChunks_size; ++k)
-			if (gChunks[k].used)
-				System.out.println(gChunks[k].x+" "+
-						gChunks[k].y+" "+gChunks[k].z);
-			else
-				System.out.println("Not used");*/
 	}
 
 
 	public void draw () {
 		int current_layer = Interface.getInstance().current_layer;
-		float fade, z;
+		float z;
+		glClearColor(.9f*(current_layer-2.f)/world.zsize,
+					 .9f*(current_layer-2.f)/world.zsize,
+					 1.f*(current_layer-2.f)/world.zsize,
+					 1.f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		for (int i=0; i<gChunks_size; ++i)
 			if ((gChunks[i] != null) && (gChunks[i].needs_update)) {
@@ -289,13 +279,11 @@ public class Renderer {
 				}
 //			System.out.println("higlight layer printed");
 			glUseProgram(shaders[SHADER_FADE]);
+			glUniform1f(max_z_attr, (float)world.zsize);
+			glUniform1f(curr_z_attr, (float)current_layer);
 			for (int i=0; i<gChunks_size; i++)
-				if (gChunks[i].used && (gChunks[i].z!=current_layer)){
-					fade = (current_layer-gChunks[i].z) - zdepth;
-					fade = (fade<0.f)?(1.f):(1.f-fade/fdepth);
-					glUniform1f(fade_attr, fade);
+				if (gChunks[i].used && (gChunks[i].z!=current_layer))
 					gChunks[i].draw(false);
-				}
 //			 System.out.println("regular layers printed");
 		} else {
 			glUseProgram(shaders[SHADER_NONE]);
@@ -306,7 +294,7 @@ public class Renderer {
 			ManaField.getInstance().draw();
 			glDisable(GL_COLOR_MATERIAL);
 		}
-		glUseProgram(shaders[SHADER_BASIC]);
+		GL20.glUseProgram(shaders[Renderer.SHADER_FADE]);
 		for (int i=0; i<gEntities.size(); i++){
 			if (gEntities.get(i).getP().z<=current_layer)
 				gEntities.get(i).draw();

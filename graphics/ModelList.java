@@ -19,22 +19,22 @@ public class ModelList {
 		list = new ArrayList<Model>();
 
 		m = ModelLoader.getInstance().load("res/wisp.obj", "elem");
-		m.prepare(r.shaders[Renderer.SHADER_BASIC]);
+		m.prepare();
 		m.scale = 0.5f; m.a0 = .5f; m.a1 = .5f; m.a2 = .5f;
 		add(m);
 
 		m = ModelLoader.getInstance().load("res/box.obj", "boulder");
-		m.prepare(r.shaders[Renderer.SHADER_BASIC]);
+		m.prepare();
 		m.scale = .2f; m.a0 = .5f; m.a1 = .5f; m.a2 = .2f;
 		add(m);
 
 		m = ModelLoader.getInstance().load("res/box.obj", "cursor");
-		m.prepare(r.shaders[Renderer.SHADER_GHOST]);
+		m.prepare();
 		m.scale = .6f; m.a0 = .55f; m.a1 = .55f; m.a2 = .55f;
 		add(m);
 
 		m = ModelLoader.getInstance().load("res/box.obj", "cube");
-		m.prepare(r.shaders[Renderer.SHADER_GHOST]);
+		m.prepare();
 		m.scale = .51f; m.a0 = .505f; m.a1 = .505f; m.a2 = .505f;
 		add(m);
 

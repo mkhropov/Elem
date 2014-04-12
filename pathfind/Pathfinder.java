@@ -9,6 +9,8 @@ public class Pathfinder {
     int ysize;
     int zsize;
     float[][][] d;
+	int t; //search depth
+	Creature C; //virtual creature which can go anywhere
     ArrayList<Block> currLayer;
     ArrayList<Block> nextLayer;
     static float dist[] = new float[]
@@ -33,6 +35,8 @@ public class Pathfinder {
         this.zsize = World.DEFAULT_ZSIZE;
 
         d = new float[xsize][ysize][zsize];
+		C = new Creature();
+		t = 0;
     }
 
     public void clear(){
@@ -40,6 +44,7 @@ public class Pathfinder {
             for (int j=0; j<ysize; ++j)
                 for (int k=0; k<zsize; ++k)
                     d[i][j][k] = -1.f;
+		t = 0;
     }
 
    /* double dist(Block b1, Block b2){
@@ -48,20 +53,15 @@ public class Pathfinder {
                          (b1.z-b2.z)*(b1.z-b2.z));
     }*/
 
-    public Stack<Block> getPath(Creature c, Block b, Condition cond) {
+	public Block spreadPath(Creature c, Block b, Condition cond){
         ArrayList<Block> near;
-        int i, j, l, t;
+        int i, j, l;
         Block m, n, k = null;
-        Stack<Block> q = new Stack<>();
         float D, Dn, Dt;
 		boolean found = false;
-
-        clear();
         nextLayer = new ArrayList<>(1);
         nextLayer.add(b);
         d[b.x][b.y][b.z] = 0.f;
-        t = 0;
-
         while ((!found) && (t<1000)){
             currLayer = nextLayer;
             nextLayer = new ArrayList<>(currLayer.size());
@@ -87,12 +87,48 @@ public class Pathfinder {
             }
             t++;
         }
-        if (k == null) {
-            return null;
-        } else
-			 m = k;
-        q.push(m);
-        D = d[m.x][m.y][m.z];
+		if (found)
+			return k;
+		else
+			return null;
+	}
+
+
+    public Stack<Action> getPath(Creature c, Block b, Condition c1, Condition c2) {
+        Block b1, b2 = null;
+
+        clear();
+		//find c1-point around b
+		b1 = spreadPath(C, b, c1);
+		if (b1 == null){
+			System.out.println("Suitable c1-point not found");
+			return null;
+		} else {
+			 System.out.println("c1-point ("+b1.x+","+b1.y+","+b1.z+" found");
+		}
+
+		clear();
+		//find c2-point around b1
+		b2 = spreadPath(c, b1, c2);
+		if (b2 == null){
+			System.out.println("Suitable c2-point not found");
+			return null;
+		} else {
+			System.out.println("c2-point ("+b2.x+","+b2.y+","+b2.z+" found");
+		}
+
+		return backtrack(c, b2);
+	}
+
+	public Stack<Action> backtrack(Creature c, Block b){
+        int i, j, l, t;
+		Block m, k, n; m = b;
+        ArrayList<Block> near;
+		boolean found = false;
+		float D = d[b.x][b.y][b.z];
+		float Dn;
+		Stack<Action> q = new Stack<>();//(int)(D/2.f));
+        q.push(new Action(Action.ACTION_MOVE, m.x, m.y, m.z));
         while(D>0.5f){
             near = m.nearest();
             k = m;
@@ -106,7 +142,7 @@ public class Pathfinder {
                 }
             }
             m = k;
-            q.push(m);
+            q.push(new Action(Action.ACTION_MOVE, m.x, m.y, m.z));
             D = d[m.x][m.y][m.z];
         }
         return q;

@@ -1,10 +1,9 @@
 package creature;
 
-import world.*;
-import physics.material.*;
 import player.Order;
 
 public interface Worker {
-    boolean digBlock(Order o);
-    boolean placeBlock(Order o);
+    boolean dig(Order o);
+    boolean build(Order o);
+	boolean capableOf(Order o);
 }

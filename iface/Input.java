@@ -4,7 +4,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import world.Block;
-import creature.SmartWalkingElem;
+import creature.Elem;
 import graphics.*;
 import org.lwjgl.opengl.GL20;
 import physics.material.Material;
@@ -78,8 +78,7 @@ public class Input {
 								switch (iface.getCommandMode()){
 								case Interface.COMMAND_MODE_SPAWN:
 									iface.player.spawnCreature(
-											new SmartWalkingElem(
-													World.getInstance().getBlock(i, j, iface.current_layer)));
+											new Elem(World.getInstance().getBlock(i, j, iface.current_layer)));
 									break;
 								case Interface.COMMAND_MODE_DIG:
 									if (iface.getDigForm()==World.FORM_BLOCK){
