@@ -21,7 +21,8 @@ public class Cursor {
 	public int x, y, z;  //3D
 	public int X, Y;     //2D
 
-	int channel_uniform; //shader uniform location
+	int hue_uniform; //shader uniform location
+	float[] hue;
 	Model model;
 	GraphicalSurface gs;
 
@@ -35,14 +36,15 @@ public class Cursor {
 			 System.exit(0);
 		}
 		Renderer r = Renderer.getInstance();
-		channel_uniform = GL20.glGetUniformLocation(
-			r.shaders[Renderer.SHADER_GHOST], "channel");
+		hue_uniform = GL20.glGetUniformLocation(
+			r.shaders[Renderer.SHADER_GHOST], "hue");
+		hue = new float[]{0.f, 0.f, 0.f, .6f};
 		int m = ModelList.getInstance().findId("cursor");
 		model = ModelList.getInstance().get(m);
 		int g = graphics.GSList.getInstance().findId("marble");
 		gs = GSList.getInstance().get(g);
 
-		state = STATE_IFACE;
+		state = STATE_ENABLED;
 	}
 
 	public void reposition (int x, int y, int z, int X, int Y) {
@@ -67,6 +69,16 @@ public class Cursor {
 				state = (!isAir)?(STATE_ENABLED):(STATE_DISABLED);
 				break;
 			default: break;
+		}
+		switch(state){
+		case STATE_ENABLED:
+			hue[0]=0.f; hue[1]=1.f;
+			break;
+		case STATE_DISABLED:
+			hue[0]=1.f; hue[1]=0.f;
+			break;
+		default:
+			break;
 		}
 	}
 
@@ -101,8 +113,8 @@ public class Cursor {
 	public void draw3d(){
 		if (state == STATE_IFACE)
 			return; //or exception
-
-		GL20.glUniform1i(channel_uniform, ((state == STATE_ENABLED)?(1):(0)));
+		
+		GL20.glUniform4f(hue_uniform, hue[0], hue[1], hue[2], hue[3]);
 		model.draw(x, y, z, 0.f, gs);
 	}
 }
