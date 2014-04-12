@@ -85,7 +85,7 @@ public class Player {
         c.owner = this;
 
 		for (int i=0; i<order.size(); ++i)
-			order.get(i).declined = order.get(i).is_accesible();
+			order.get(i).declined = !order.get(i).isAccesible();
 	}
 
     public void placeMoveOrder(Block b){
@@ -218,7 +218,7 @@ public class Player {
 			Renderer.getInstance().removeEntity(o.cube);
         order.remove(o);
 		for (int i=0; i<order.size(); ++i)
-			order.get(i).declined = !order.get(i).is_accesible();
+			order.get(i).declined = !order.get(i).isAccesible();
 	}
 	
     public void setOrderDone(Order o, Creature c){
@@ -228,7 +228,7 @@ public class Player {
         order.remove(o);
         c.order = null;
 		for (int i=0; i<order.size(); ++i)
-			order.get(i).declined = !order.get(i).is_accesible();
+			order.get(i).declined = !order.get(i).isAccesible();
         System.out.println(c+" succesfuly did order "+o);
     }
 

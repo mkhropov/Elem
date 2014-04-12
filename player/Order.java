@@ -38,21 +38,19 @@ public class Order {
 		this.f = (type == ORDER_DIG)?(Interface.getInstance().getDigForm()):
 				(Interface.getInstance().getBuildForm());
 		this.d = Interface.getInstance().getDirection();
-        this.declined = !is_accesible();
+        this.declined = !isAccesible();
 		this.path = new Stack<>();
 		System.out.println("New order "+this+", "+this.declined+" @("+b.x+","+b.y+","+b.z+")");
 		if ((type == ORDER_DIG) || (type == ORDER_BUILD))
 			this.cube = new CommandCube(type, b.x, b.y, b.z);
     }
 
-	public boolean is_accesible(){
-		Block t;
+	public boolean isAccesible(){
 		for (int i=0; i<18; ++i){
-			t = World.getInstance().getBlock(
+			if (World.getInstance().isEmpty(
 						b.x+Block.nearInd[i][0],
 						b.y+Block.nearInd[i][1],
-						b.z+Block.nearInd[i][2]);
-			if (t!=null && t.m == Material.MATERIAL_NONE)
+						b.z+Block.nearInd[i][2]))
 				return true;
 		}
 		return false;

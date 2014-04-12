@@ -62,9 +62,9 @@ public class Pathfinder {
         nextLayer = new ArrayList<>(1);
         nextLayer.add(b);
         d[b.x][b.y][b.z] = 0.f;
-        while ((!found) && (t<1000)){
+        while ((!found) && (t<1000) && (nextLayer.size()>0)){
             currLayer = nextLayer;
-            nextLayer = new ArrayList<>(currLayer.size());
+            nextLayer = new ArrayList<>();
             l = currLayer.size();
             for (i=0; i<l; ++i){
                 m = currLayer.get(i);
