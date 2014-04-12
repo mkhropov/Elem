@@ -1,7 +1,5 @@
 package pathfind;
 
-import java.util.ArrayList;
-
 import world.World;
 import world.Block;
 import creature.Creature;

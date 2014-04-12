@@ -33,7 +33,7 @@ public class Elem extends Creature implements Worker{
     @Override
     public boolean canMove(Block b1, Block b2){
 		World w = World.getInstance();
-        if (!canWalk(b2)) return false;
+        if (!canWalk(b2) || !canWalk(b1)) return false;
         int dx = b2.x-b1.x;
         int dy = b2.y-b1.y;
         int dz = b2.z-b1.z;
