@@ -142,7 +142,6 @@ public class Player {
 	}
 
 	public void iterate(){ //give orders to elems
-		int t = 0;
 		int i = -1;
 		Order o;
 		Condition c1, c2;
@@ -150,9 +149,10 @@ public class Player {
 		Stack<Action> path;
 		ArrayList<Creature> candidates;
 		Pathfinder p = Pathfinder.getInstance();
+		p.resetDepth();
 		Elem e = new Elem();
 //		System.out.println("Iterating player...");
-		while((t<100) && (++i<order.size())){
+		while((p.getDepth()<500) && (++i<order.size())){
 //			System.out.println("Order #"+i);
 			o = order.get(i);
 			if (o.taken || o.declined)
@@ -168,7 +168,6 @@ public class Player {
 					System.out.println("Build order "+o+" declined at buildable search");
 					continue;
 				}
-				t += path.size();
 
 				o.path.add(0, new Action(Action.ACTION_BUILD, b.x, b.y, b.z));
 				b = path.remove(0).b;
@@ -182,7 +181,6 @@ public class Player {
 					System.out.println("Build order "+o+" declined at worker search");
 					continue;
 				}
-				t += path.size();
 				candidates = World.getInstance().getCreature(path.remove(0).b);
 				o.path.add(0, new Action(Action.ACTION_TAKE, o.it));
 				o.path.addAll(0, path);
@@ -206,7 +204,6 @@ public class Player {
 					System.out.println("Dig order "+o+" declined at worker search");
 					continue;
 				}
-				t += path.size();
 				candidates = World.getInstance().getCreature(path.remove(0).b);
 				o.path.add(0, new Action(Action.ACTION_DIG, b.x, b.y, b.z));
 				o.path.addAll(0, path);
