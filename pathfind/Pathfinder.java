@@ -39,12 +39,19 @@ public class Pathfinder {
 		t = 0;
     }
 
+	public void resetDepth(){
+		t = 0;
+	}
+	
+	public int getDepth(){
+		return t;
+	}
+
     public void clear(){
         for (int i=0; i<xsize; ++i)
             for (int j=0; j<ysize; ++j)
                 for (int k=0; k<zsize; ++k)
                     d[i][j][k] = -1.f;
-		t = 0;
     }
 
    /* double dist(Block b1, Block b2){
@@ -58,11 +65,11 @@ public class Pathfinder {
         ArrayList<Block> near;
 		Block m, n;
 		int i, j, l;
-		t = 0;
+		int tmp = 0;
 		boolean found = false;
         nextLayer = start;
 
-		while (!found && t < 2) {
+		while (!found && tmp < 2) {
 			currLayer = nextLayer;
 			nextLayer = new ArrayList<>();
 			l = currLayer.size();
@@ -83,7 +90,7 @@ public class Pathfinder {
 					}
 				}
 			}
-			t++;
+			t++; tmp++;
 		}
 		return res;
 	}
@@ -94,11 +101,12 @@ public class Pathfinder {
         int i, j, l;
         Block m, n;
         float D, Dn, Dt;
+        int tmp = 0;
 		boolean found = false;
         nextLayer = start;
 		for (Block b: nextLayer)
 			d[b.x][b.y][b.z] = 0.f;
-        while ((!found) && (t<1000) && (nextLayer.size()>0)){
+        while ((!found) && (tmp<100) && (nextLayer.size()>0)){
             currLayer = nextLayer;
             nextLayer = new ArrayList<>();
             l = currLayer.size();
@@ -121,7 +129,7 @@ public class Pathfinder {
                     }
                 }
             }
-            t++;
+            t++; tmp++;
         }
 		return res;
 	}
