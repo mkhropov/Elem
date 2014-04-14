@@ -280,13 +280,13 @@ public class Creature extends Entity {
 	}
 
 	public void turn(Point np){
-		if (!(new Vector(p, np)).isZero())
+		if (p.distProj(np)>.1)
 			a = (float)(Math.signum(np.x-p.x)*Math.acos((np.y-p.y)/Math.sqrt((np.x-p.x)*(np.x-p.x)+(np.y-p.y)*(np.y-p.y))));
 	}
 
 	public void turn(double x, double y, double z){
 		Point np = new Point(x, y, z);
-		if (!(new Vector(p, np)).isZero())
+		if (p.distProj(np)>.1)
 			a = (float)(Math.signum(np.x-p.x)*Math.acos((np.y-p.y)/Math.sqrt((np.x-p.x)*(np.x-p.x)+(np.y-p.y)*(np.y-p.y))));
 	}
 
