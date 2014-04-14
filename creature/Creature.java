@@ -5,6 +5,7 @@ import player.*;
 import graphics.Renderer;
 import physics.material.Material;
 import item.Item;
+import item.ItemBoulder;
 import item.ItemTemplate;
 
 import java.util.Stack;
@@ -243,13 +244,21 @@ public class Creature extends Entity {
             return false;
         else {
 			if (canDig(b)){
-				int m = World.getInstance().getMaterialID(b.x, b.y, b.z);
-				World.getInstance().destroyBlock(b);
+				World w = World.getInstance();
+				int m = w.getMaterialID(b.x, b.y, b.z);
+				if (w.getForm(b.x, b.y, b.z) != World.FORM_FLOOR)
+					w.item.add(new ItemBoulder(b.x, b.y, b.z, 1., m));
+				owner.addBlockKnown(b.x, b.y, b.z);
 				if (o.f!=World.FORM_BLOCK){
-					World.getInstance().setMaterial(b.x, b.y, b.z, m);
-					World.getInstance().setForm(b.x, b.y, b.z, o.f);
-					World.getInstance().setDirection(b.x, b.y, b.z, o.d);
+					w.setMaterial(b.x, b.y, b.z, m);
+					w.setForm(b.x, b.y, b.z, o.f);
+					w.setDirection(b.x, b.y, b.z, o.d);
+				} else {
+					w.setMaterial(b.x, b.y, b.z, Material.MATERIAL_NONE);
+					w.setForm(b.x, b.y, b.z, World.FORM_BLOCK);
+					w.setDirection(b.x, b.y, b.z, 0);
 				}
+				w.updateBlock(b.x, b.y, b.z+1);
 				return true;
 			}
 			return false;
@@ -307,7 +316,7 @@ public class Creature extends Entity {
 		if (plans.size()!=0){
 			start_action(plans.remove(0), false);
 			return;
-		} else 
+		} else
 			plans.clear();
 
 		if (order != null)
@@ -317,7 +326,7 @@ public class Creature extends Entity {
 	public void update(){
 		start_action(new Action(ACTION_FALL), true);
 	}
-	
+
 	@Override
 	public void draw(){
 		super.draw();
