@@ -15,6 +15,7 @@ public class Camera {
 	float x, y, z;
 	float targetAngleZ;
 	float currentAngleZ;
+	public final float horizontalSpeed = 20f;
 	final float cameraAngleSpeed = (float)Math.toRadians(90.0f);
 
 	public Camera (float x, float y, float z) {

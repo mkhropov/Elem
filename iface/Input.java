@@ -86,7 +86,7 @@ public class Input {
 										iface.setDigForm(World.FORM_FLOOR);
 										iface.player.placeDigOrder(
 												World.getInstance().getBlock(i, j, iface.current_layer-1));
-										iface.setDigForm(World.FORM_BLOCK);										
+										iface.setDigForm(World.FORM_BLOCK);
 									}
 									iface.player.placeDigOrder(
 											World.getInstance().getBlock(i, j, iface.current_layer));
@@ -112,6 +112,19 @@ public class Input {
 			}
 		}
 
+		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
+			iface.camera.repositionDelta(0.f, -iface.camera.horizontalSpeed*deltaT/1000, 0.f);
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
+			iface.camera.repositionDelta(iface.camera.horizontalSpeed*deltaT/1000, 0.f, 0.f);
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
+			iface.camera.repositionDelta(0.f, iface.camera.horizontalSpeed*deltaT/1000, 0.f);
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
+			iface.camera.repositionDelta(-iface.camera.horizontalSpeed*deltaT/1000, 0.f, 0.f);
+		}
+
 		while (Keyboard.next()) {
 			if (Keyboard.getEventKeyState()) {
 				// Key pressed
@@ -127,18 +140,6 @@ public class Input {
 						iface.current_layer++;
 						iface.camera.repositionDelta(0.0f, 0.0f, 1.0f);
 					};
-					break;
-				case 'w':
-					iface.camera.repositionDelta(0.f, -1.f, 0.f);
-					break;
-				case 'a':
-					iface.camera.repositionDelta(1.f, 0.f, 0.f);
-					break;
-				case 's':
-					iface.camera.repositionDelta(0.f, 1.f, 0.f);
-					break;
-				case 'd':
-					iface.camera.repositionDelta(-1.f, 0.f, 0.f);
 					break;
 				case 'q':
 					iface.camera.rotateLeft();
