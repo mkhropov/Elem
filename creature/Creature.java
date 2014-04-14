@@ -187,7 +187,10 @@ public class Creature extends Entity {
 	}
 
 	public boolean capableOf(Order o){
-		return ((order == null) && (capable[o.type]));
+		if ((order != null) || (!capable[o.type]))
+			return false;
+		return (o.type != Order.ORDER_DIG) ||
+			(digStrength>World.getInstance().getMaterial(o.b).hardness);
 	}
 
 	public boolean isIn(int x, int y, int z){

@@ -87,6 +87,10 @@ public class World {
 		return material[block[x][y][z]&MATERIAL_MASK];
 	}
 
+	public Material getMaterial (Block b) {
+		return material[block[b.x][b.y][b.z]&MATERIAL_MASK];
+	}
+	
 	public int getMaterialID (int x, int y, int z) {
 		return block[x][y][z]&MATERIAL_MASK;
 	}
