@@ -259,7 +259,8 @@ public class Creature extends Entity {
     public final boolean build(Order o){
 		Block b = o.b;
 		int m = o.m;
-        if ((!canReach(b)) || (b.m != Material.MATERIAL_NONE) ||
+        if ((!canReach(b)) || ((b.m != Material.MATERIAL_NONE) &&
+			!((m==b.m) && (World.getInstance().getForm(b.x, b.y, b.z)==World.FORM_FLOOR))) ||
 			!((item.type == Item.TYPE_BUILDABLE) && (item.m == o.m)))
             return false;
         else {

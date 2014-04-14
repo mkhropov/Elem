@@ -125,7 +125,8 @@ public class Player {
     }
 
     public void placeBuildOrder(Block b, int m){
-		if (b.m != Material.MATERIAL_NONE)
+		if ((b.m != Material.MATERIAL_NONE)&&
+				!((m==b.m) && (World.getInstance().getForm(b.x, b.y, b.z)==World.FORM_FLOOR)))
 			return;
 		if (blockAlreadyRequested(b))
 			return;
