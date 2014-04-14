@@ -71,7 +71,6 @@ public class Input {
 				} else { //button released
 					if (where != null) {
 						draw = false;
-		//				iface.player.order.clear();
 						int i, j;
 						i = startX;
 						do {
@@ -107,10 +106,7 @@ public class Input {
 							} while(j != where.y+Math.signum(endY - startY));
 							i+=Math.signum(where.x-startX);
 						} while(i != where.x+Math.signum(where.x-startX));
-	//					System.out.println("Click at "+where.x+" "+where.y+" "+where.z);
-					}// else {
-		//				System.out.println("Click at void");
-	//				}
+					}
 				}
 			}
 		}
@@ -131,36 +127,26 @@ public class Input {
 		while (Keyboard.next()) {
 			if (Keyboard.getEventKeyState()) {
 				// Key pressed
-				switch(Keyboard.getEventCharacter()){
-				case 'z':
+				switch(Keyboard.getEventKey()){
+				case Keyboard.KEY_Z:
 					if (iface.current_layer>0) {
 						 iface.current_layer--;
 						 iface.camera.repositionDelta(0.0f, 0.0f, -1.0f);
 					};
 					break;
-				case 'x':
+				case Keyboard.KEY_X:
 					if (iface.current_layer<iface.world.zsize-1) {
 						iface.current_layer++;
 						iface.camera.repositionDelta(0.0f, 0.0f, 1.0f);
 					};
 					break;
-				case 'q':
+				case Keyboard.KEY_Q:
 					iface.camera.rotateLeft();
 					break;
-				case 'e':
+				case Keyboard.KEY_E:
 					iface.camera.rotateRight();
 					break;
-				case 'b':
-					if (where != null)
-						iface.player.cast(0, where);
-					break;
-				case 'n':
-					if (where != null)
-						iface.player.cast(1, where);
-					break;
-				case 'm':
-//					Renderer.getInstance().draw_mana =
-//						 !Renderer.getInstance().draw_mana;
+				case Keyboard.KEY_M:
 					if ((iface.viewMode&Renderer.VIEW_MODE_MASK) != Renderer.VIEW_MODE_FULL) {
 						iface.viewMode = Renderer.VIEW_MODE_FULL | (iface.viewMode&(~Renderer.VIEW_MODE_MASK));
 					} else {
@@ -168,19 +154,19 @@ public class Input {
 					}
 					Renderer.getInstance().reset();
 					break;
-                case '1':
+                case Keyboard.KEY_1:
 					iface.setCommandMode(Interface.COMMAND_MODE_SPAWN);
 					break;
-                case '2':
+                case Keyboard.KEY_2:
 					iface.setCommandMode(Interface.COMMAND_MODE_DIG);
 					break;
-	            case '3':
+	            case Keyboard.KEY_3:
 					iface.setCommandMode(Interface.COMMAND_MODE_BUILD);
 					break;
-	            case '4':
+	            case Keyboard.KEY_4:
 					iface.setCommandMode(Interface.COMMAND_MODE_CANCEL);
 					break;
-				case ' ':
+				case Keyboard.KEY_SPACE:
 					iface.viewMode |= Renderer.VIEW_MODE_FLAT;
 					break;
 				default:
