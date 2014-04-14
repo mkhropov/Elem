@@ -168,7 +168,7 @@ public class Pathfinder {
 		float D = d[b.x][b.y][b.z];
 		float Dn;
 		Stack<Action> q = new Stack<>();//(int)(D/2.f));
-        q.push(new Action(Action.ACTION_MOVE, m.x, m.y, m.z));
+        q.push(new Action(Action.ACTION_MOVE, (double)m.x, (double)m.y, (double)m.z));
         while(D>0.5f){
             near = m.nearest();
             k = m;

@@ -106,6 +106,9 @@ public class Creature extends Entity {
 			res = build(action);
 			break;
 		case ACTION_FALL:
+			owner.updateOrders();
+			res = true;
+			break;
 		case ACTION_MOVE:
 		case ACTION_NONE:
 		default:

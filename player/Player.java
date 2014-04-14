@@ -20,6 +20,7 @@ public class Player {
 	public char[][][] blockMeta; //For now FOW only, 7 bits free
 	public final static char META_FOW = 1;
 	public int mana;
+	int free_workers;
 
     public Player(){
         this.order = new ArrayList<>();
@@ -28,11 +29,12 @@ public class Player {
 		World w = World.getInstance();
 		this.blockMeta = new char[w.xsize][w.ysize][w.zsize];
 		for (int i=0; i<w.xsize; i++)
-		for (int j=0; j<w.ysize; j++)
-		for (int k=w.zsize-1; k>=0; k--) {
-			blockMeta[i][j][k] |= META_FOW;
-					if (!w.isEmpty(i,j,k)) break;
-		}
+			for (int j=0; j<w.ysize; j++)
+				for (int k=w.zsize-1; k>=0; k--) {
+					blockMeta[i][j][k] |= META_FOW;
+					if (!w.isEmpty(i,j,k))
+						break;
+				}
 		boolean changed = true;
 		while (changed) {
 			changed = false;
@@ -56,6 +58,7 @@ public class Player {
 		}
 		spellbook.add(0, new SpellSummon(this));
 		this.mana = 0;
+		this.free_workers = 0;
     }
 
 	public boolean blockKnown(int x, int y, int z) {
@@ -105,7 +108,12 @@ public class Player {
         w.creature.add(c);
         creature.add(c);
         c.owner = this;
+		free_workers++;
 
+		updateOrders();
+	}
+
+	public void updateOrders(){
 		for (int i=0; i<order.size(); ++i)
 			order.get(i).declined = !order.get(i).isAccesible();
 	}
@@ -143,6 +151,14 @@ public class Player {
 		return false;
 	}
 
+	public void assignOrder(Order o, Creature c){
+		c.order = o;
+		c.plans = o.path;
+		o.dumpPath();
+		o.taken = true;
+		free_workers--;
+	}
+
 	public void iterate(){ //give orders to elems
 		int i = -1;
 		Order o;
@@ -154,7 +170,7 @@ public class Player {
 		p.resetDepth();
 		Elem e = new Elem();
 //		System.out.println("Iterating player...");
-		while((p.getDepth()<500) && (++i<order.size())){
+		while((free_workers>0) && (p.getDepth()<500) && (++i<order.size())){
 //			System.out.println("Order #"+i);
 			o = order.get(i);
 			if (o.taken || o.declined)
@@ -188,10 +204,7 @@ public class Player {
 				o.path.addAll(0, path);
 				for (Creature c: candidates){
 					if (c.capableOf(o)) {
-						c.order = o;
-						c.plans = o.path;
-						o.dumpPath();
-						o.taken = true;
+						assignOrder(o, c);
 						break;
 					}
 				}
@@ -211,11 +224,7 @@ public class Player {
 				o.path.addAll(0, path);
 				for (Creature c: candidates){
 					if (c.capableOf(o)) {
-						System.out.println("Assigned to elem @("+c.p.x+","+c.p.y+","+c.p.z+")");
-						c.order = o;
-						c.plans = o.path;
-						o.dumpPath();
-						o.taken = true;
+						assignOrder(o, c);
 						break;
 					}
 				}
@@ -226,19 +235,12 @@ public class Player {
 		}
 	}
 
-    public void setOrderTaken(Order o, Creature c){
-        c.order = o;
-        o.taken = true;
-  //      System.out.println(c+" took order "+o);
-    }
-
 	public void destroyOrder(Order o) {
 		if ((o.type == Order.ORDER_BUILD) ||
 			(o.type == Order.ORDER_DIG))
 			Renderer.getInstance().removeEntity(o.cube);
-        order.remove(o);
-		for (int i=0; i<order.size(); ++i)
-			order.get(i).declined = !order.get(i).isAccesible();
+		order.remove(o);
+		updateOrders();
 	}
 
     public void setOrderDone(Order o, Creature c){
@@ -247,8 +249,8 @@ public class Player {
 			Renderer.getInstance().removeEntity(o.cube);
         order.remove(o);
         c.order = null;
-		for (int i=0; i<order.size(); ++i)
-			order.get(i).declined = !order.get(i).isAccesible();
+		updateOrders();
+		free_workers++;
         System.out.println(c+" succesfuly did order "+o);
     }
 
@@ -256,13 +258,15 @@ public class Player {
 		c.order = null;
 		o.taken = false;
 		o.path.clear();
+		free_workers++;
 	//	System.out.println(c+" declined  order "+o);
 	}
 
     public void setOrderCancelled(Order o, Creature c){
         o.taken = false;
-        c.order = null;;
+        c.order = null;
 		o.path.clear();
+		free_workers++;
         System.out.println(c+" aborted order "+o);
     }
 
