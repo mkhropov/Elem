@@ -146,20 +146,45 @@ public class GraphicalChunk {
 				for (int j=ry; j<ry+ysize; j++){
 					if (world.isAir(i,j,z)) continue;
 					if (!player.blockKnown(i,j,z)) continue;
-					addFace(i, j, z, 4, false);
-					addFace(i, j, z, 5, false);
-					addFace(i, j, z, 2, false);
-					addFace(i, j, z, 3, false);
-					addFace(i, j, z, 1, false);
+					if (!world.isFull(i-1,j,z))
+						addFace(i, j, z, 4, false);
+					if (!world.isFull(i+1,j,z))
+						addFace(i, j, z, 5, false);
+					if (!world.isFull(i,j-1,z))
+						addFace(i, j, z, 2, false);
+					if (!world.isFull(i,j+1,z))
+						addFace(i, j, z, 3, false);
+					if (!world.isFull(i,j,z+1))
+						addFace(i, j, z, 1, false);
 				}
 
 			//Second pass - unknown stuff
-			tailSize = 0;
 			for (int i=rx; i<rx+xsize; i++)
 				for (int j=ry; j<ry+ysize; j++){
 					if (player.blockKnown(i,j,z)) continue;
-					addFace(i, j, z, 1, true);
-					tailSize += 6;
+					if (i==0)
+						addFace(i, j, z, 4, true);
+					if (i==world.xsize-1)
+						addFace(i, j, z, 5, true);
+					if (j==0)
+						addFace(i, j, z, 2, true);
+					if (j==world.ysize-1)
+						addFace(i, j, z, 3, true);
+				}
+
+			//Third pass - top of unknown blocks
+			tailSize = 0;
+			for (int i=rx; i<rx+xsize; i++)
+				for (int j=ry; j<ry+ysize; j++){
+					if (player.blockKnown(i,j,z)){
+						if (!world.isAir(i,j,z)){
+							addFace(i, j, z, 1, false);
+							tailSize += 6;
+						}
+					} else {
+						addFace(i, j, z, 1, true);
+						tailSize += 6;
+					}
 				}
 		} else {
 			for (int i=rx; i<rx+xsize; i++)
