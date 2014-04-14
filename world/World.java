@@ -20,14 +20,14 @@ public class World {
     public static int DEFAULT_ZSIZE = 32;
     public int xsize, ysize, zsize;
     private final int[][][] block;
-	
+
 	public static final int MATERIAL_MASK = 0x03ff;
 	public static final int FORM_MASK = 0x1c00;
 	public static final int DIRECTION_MASK = 0xe000;
-	
+
 	public static final int FORM_BLOCK = 0x0000;
 	public static final int FORM_FLOOR = 0x0400;
-	
+
 	public static final int DIRECTION_DOWN = 0x2000;
 	public static final int DIRECTION_UP = 0x4000;
 	public static final int DIRECTION_X_PLUS = 0x6000;
@@ -38,7 +38,7 @@ public class World {
 	public static final int DIRECTION_NORTH = 0xa000;
 	public static final int DIRECTION_Y_MINUS = 0xc000;
 	public static final int DIRECTION_SOUTH = 0xc000;
-	
+
     public Material[] material;
     public ArrayList<Creature> creature;
 	public ArrayList<Item> item;
@@ -82,39 +82,39 @@ public class World {
         this.creature = new ArrayList<>();
 		this.item = new ArrayList<>();
     }
-	
+
 	public Material getMaterial (int x, int y, int z) {
 		return material[block[x][y][z]&MATERIAL_MASK];
 	}
-	
+
 	public int getMaterialID (int x, int y, int z) {
 		return block[x][y][z]&MATERIAL_MASK;
 	}
-	
+
 	public int getMaterialID (Point p) {
 		return block[(int)p.x][(int)p.y][(int)p.z]&MATERIAL_MASK;
 	}
-	
+
 	public void setMaterial (int x, int y, int z, int m) {
 		block[x][y][z] = (block[x][y][z]&~MATERIAL_MASK)|m;
 	}
-	
+
 	public int getForm (int x, int y, int z) {
 		return block[x][y][z]&FORM_MASK;
 	}
-	
+
 	public void setForm (int x, int y, int z, int f) {
 		block[x][y][z] = (block[x][y][z]&~FORM_MASK)|f;
 	}
-	
+
 	public int getDirection( int x, int y, int z) {
 		return block[x][y][z]&DIRECTION_MASK;
 	}
-	
+
 	public void setDirection (int x, int y, int z, int d) {
 		block[x][y][z] = (block[x][y][z]&~DIRECTION_MASK)|d;
 	}
-	
+
 	public boolean hasSolidBorder(int x, int y, int z, int d) {
 		if (getMaterialID(x,y,z) == Material.MATERIAL_NONE) {
 			return false;
@@ -126,7 +126,7 @@ public class World {
 			}
 		}
 	}
-	
+
 	public boolean hasSolidFloor(int x, int y, int z){
 		return hasSolidBorder(x, y, z, DIRECTION_DOWN)
 				|| hasSolidBorder(x, y, z-1, DIRECTION_UP);
@@ -160,7 +160,7 @@ public class World {
 		if ((z<0) || (z>=zsize)) return null;
 		return (new Block(x, y, z));
 	}
-	
+
 	public Block getBlock(Point p){
 		if ((p.x<0) || (p.x > xsize-1)) return null;
 		if ((p.y<0) || (p.y > ysize-1)) return null;
@@ -197,11 +197,8 @@ public class World {
 		setMaterial(x, y, z, Material.MATERIAL_NONE);
 		setForm(x, y, z, FORM_BLOCK);
 		setDirection(x, y, z, DIRECTION_UP);
-		Interface.getInstance().player.addBlockKnown(x, y, z);
-		// FIXME!!! DIRTY HACK HERE
 		Renderer.getInstance().updateBlock(x, y, z);
-		if ((z+1) < zsize)
-			updateBlock(x, y, z+1);
+		updateBlock(x, y, z+1);
 	}
 
 	public void destroyBlock(Block b){
@@ -209,7 +206,8 @@ public class World {
 	}
 
 	public void updateBlock(int x, int y, int z){
-		System.out.println("Updating ("+x+","+y+","+z+")");
+		if(!isIn(x, y, z)) return;
+		Renderer.getInstance().updateBlock(x, y, z);
 		for (Creature c: getCreature(x, y, z))
 			c.update();
 		for (Item i: getItem(x, y, z))
@@ -245,14 +243,14 @@ public class World {
 		return (getMaterialID(x, y, z) == Material.MATERIAL_NONE)
 				|| (getForm(x, y, z) == FORM_FLOOR);
 	}
-	
+
 	public boolean isAir(int x, int y, int z){
 		if ((x<0) || (x>=xsize)) return true;
 		if ((y<0) || (y>=ysize)) return true;
 		if ((z<0) || (z>=zsize)) return true;
 		return (getMaterialID(x, y, z) == Material.MATERIAL_NONE);
 	}
-	
+
 	public boolean isFull(int x, int y, int z){
 		if ((x<0) || (x>=xsize)) return false;
 		if ((y<0) || (y>=ysize)) return false;

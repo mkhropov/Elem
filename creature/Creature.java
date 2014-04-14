@@ -5,6 +5,7 @@ import player.*;
 import graphics.Renderer;
 import physics.material.Material;
 import item.Item;
+import item.ItemBoulder;
 import item.ItemTemplate;
 
 import java.util.Stack;
@@ -244,13 +245,21 @@ public class Creature extends Entity {
             return false;
         else {
 			if (canDig(b)){
-				int m = World.getInstance().getMaterialID(b.x, b.y, b.z);
-				World.getInstance().destroyBlock(b);
+				World w = World.getInstance();
+				int m = w.getMaterialID(b.x, b.y, b.z);
+				if (w.getForm(b.x, b.y, b.z) != World.FORM_FLOOR)
+					w.item.add(new ItemBoulder(b.x, b.y, b.z, 1., m));
+				owner.addBlockKnown(b.x, b.y, b.z);
 				if (action.f!=World.FORM_BLOCK){
-					World.getInstance().setMaterial(b.x, b.y, b.z, m);
-					World.getInstance().setForm(b.x, b.y, b.z, action.f);
-					World.getInstance().setDirection(b.x, b.y, b.z, action.d);
+					w.setMaterial(b.x, b.y, b.z, m);
+					w.setForm(b.x, b.y, b.z, action.f);
+					w.setDirection(b.x, b.y, b.z, action.d);
+				} else {
+					w.setMaterial(b.x, b.y, b.z, Material.MATERIAL_NONE);
+					w.setForm(b.x, b.y, b.z, World.FORM_BLOCK);
+					w.setDirection(b.x, b.y, b.z, 0);
 				}
+				w.updateBlock(b.x, b.y, b.z+1);
 				return true;
 			}
 			return false;
@@ -260,7 +269,8 @@ public class Creature extends Entity {
     public final boolean build(Action action){
 		Block b = action.b;
 		int m = action.m;
-        if ((!canReach(b)) || (b.m != Material.MATERIAL_NONE) ||
+        if ((!canReach(b)) || ((b.m != Material.MATERIAL_NONE) &&
+			!((m==b.m) && (World.getInstance().getForm(b.x, b.y, b.z)==World.FORM_FLOOR))) ||
 			!((item.type == Item.TYPE_BUILDABLE) && (item.m == m)))
             return false;
         else {

@@ -9,6 +9,7 @@ import physics.material.*;
 import item.Item;
 import item.ItemTemplate;
 import physics.magics.*;
+import iface.Interface;
 
 import pathfind.*;
 
@@ -40,7 +41,7 @@ public class Player {
 			for (int k=w.zsize-1; k>=0; k--) {
 				if(!blockKnown(i,j,k)){
 					for (int dx=-1; dx<=1; dx++)
-					for (int dy=-1; dy<=1; dy++) 
+					for (int dy=-1; dy<=1; dy++)
 					if (blockKnown(i+dx, j+dy, k)&&w.isAir(i+dx, j+dy, k)) {
 						blockMeta[i][j][k] |= META_FOW;
 						changed = true;
@@ -50,7 +51,7 @@ public class Player {
 						blockMeta[i][j][k] |= META_FOW;
 						changed = true;
 					}
-				}			
+				}
 			}
 		}
 		spellbook.add(0, new SpellSummon(this));
@@ -124,7 +125,8 @@ public class Player {
     }
 
     public void placeBuildOrder(Block b, int m){
-		if (b.m != Material.MATERIAL_NONE)
+		if ((b.m != Material.MATERIAL_NONE)&&
+				!((m==b.m) && (World.getInstance().getForm(b.x, b.y, b.z)==World.FORM_FLOOR)))
 			return;
 		if (blockAlreadyRequested(b))
 			return;
@@ -223,7 +225,7 @@ public class Player {
 			}
 		}
 	}
-	
+
     public void setOrderTaken(Order o, Creature c){
         c.order = o;
         o.taken = true;
@@ -238,7 +240,7 @@ public class Player {
 		for (int i=0; i<order.size(); ++i)
 			order.get(i).declined = !order.get(i).isAccesible();
 	}
-	
+
     public void setOrderDone(Order o, Creature c){
 		if ((o.type == Order.ORDER_BUILD) ||
 			(o.type == Order.ORDER_DIG))
@@ -263,7 +265,7 @@ public class Player {
 		o.path.clear();
         System.out.println(c+" aborted order "+o);
     }
-	
+
 	public void cancelOrders(Block b){
 		Order o;
 		for (int i=0; i<order.size(); ++i) {

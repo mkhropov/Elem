@@ -53,21 +53,16 @@ public class Cursor {
 		this.z = z;
 		boolean isAir;
 		if (World.getInstance().isIn(x, y, z))
-			isAir = World.getInstance().isAir(x, y, z);
+			if (Interface.getInstance().canPlaceCommand(x, y, z)) {
+				state = STATE_ENABLED;
+			} else {
+				state = STATE_DISABLED;
+			}
 		else {
 			state = STATE_DISABLED;
 			return;
 		}
-		switch(Interface.getInstance().getCommandMode()){
-			case Interface.COMMAND_MODE_BUILD:
-			case Interface.COMMAND_MODE_SPAWN:
-				state = (isAir)?(STATE_ENABLED):(STATE_DISABLED);
-				break;
-			case Interface.COMMAND_MODE_DIG:
-				state = (!isAir)?(STATE_ENABLED):(STATE_DISABLED);
-				break;
-			default: break;
-		}
+
 		switch(state){
 		case STATE_ENABLED:
 			hue[0]=0.f; hue[1]=1.f;
@@ -111,7 +106,7 @@ public class Cursor {
 	public void draw3d(){
 		if (state == STATE_IFACE)
 			return; //or exception
-		
+
 		GL20.glUniform4f(hue_uniform, hue[0], hue[1], hue[2], hue[3]);
 		model.draw(x, y, z, 0.f, gs);
 	}
