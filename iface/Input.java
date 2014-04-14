@@ -9,22 +9,23 @@ import graphics.*;
 import org.lwjgl.opengl.GL20;
 import physics.material.Material;
 import world.World;
+import player.Order;
 
 public class Input {
 	Interface iface;
 	int startX, startY;
 	int endX, endY;
-	Model m;
+	Model model;
 	GraphicalSurface gs;
-	int channel_uniform;
+	int hue_uniform;
 	boolean draw = false;
 
 	public Input (Interface I){
 		Renderer r = Renderer.getInstance();
-		channel_uniform = GL20.glGetUniformLocation(
-		            r.shaders[Renderer.SHADER_GHOST], "channel");
+		hue_uniform = GL20.glGetUniformLocation(
+		            r.shaders[Renderer.SHADER_GHOST], "hue");
 		iface = I;
-		m = ModelList.getInstance().get("cube");
+		model = ModelList.getInstance().get("cube");
 		gs = GSList.getInstance().get("selection");
 	}
 
@@ -76,29 +77,31 @@ public class Input {
 						do {
 							j = startY;
 							do {
-								switch (iface.getCommandMode()){
-								case Interface.COMMAND_MODE_SPAWN:
-									iface.player.spawnCreature(
-											new Elem(World.getInstance().getBlock(i, j, iface.current_layer)));
-									break;
-								case Interface.COMMAND_MODE_DIG:
-									if (iface.getDigForm()==World.FORM_BLOCK){
-										iface.setDigForm(World.FORM_FLOOR);
+								if (iface.canPlaceCommand(i, j, iface.current_layer)){
+									switch (iface.getCommandMode()){
+									case Interface.COMMAND_MODE_SPAWN:
+										iface.player.spawnCreature(
+												new Elem(World.getInstance().getBlock(i, j, iface.current_layer)));
+										break;
+									case Interface.COMMAND_MODE_DIG:
+										if (iface.getDigForm()==World.FORM_BLOCK){
+											iface.setDigForm(World.FORM_FLOOR);
+											iface.player.placeDigOrder(
+													World.getInstance().getBlock(i, j, iface.current_layer-1));
+											iface.setDigForm(World.FORM_BLOCK);
+										}
 										iface.player.placeDigOrder(
-												World.getInstance().getBlock(i, j, iface.current_layer-1));
-										iface.setDigForm(World.FORM_BLOCK);
+												World.getInstance().getBlock(i, j, iface.current_layer));
+										break;
+									case Interface.COMMAND_MODE_BUILD:
+										iface.player.placeBuildOrder(
+												World.getInstance().getBlock(i, j, iface.current_layer),
+												iface.getBuildMaterial());
+										break;
+									case Interface.COMMAND_MODE_CANCEL:
+										iface.player.cancelOrders(World.getInstance().getBlock(i, j, iface.current_layer));
+										break;
 									}
-									iface.player.placeDigOrder(
-											World.getInstance().getBlock(i, j, iface.current_layer));
-									break;
-								case Interface.COMMAND_MODE_BUILD:
-									iface.player.placeBuildOrder(
-											World.getInstance().getBlock(i, j, iface.current_layer),
-											iface.getBuildMaterial());
-									break;
-								case Interface.COMMAND_MODE_CANCEL:
-									iface.player.cancelOrders(World.getInstance().getBlock(i, j, iface.current_layer));
-									break;
 								}
 								j+=Math.signum(where.y-startY);
 							} while(j != where.y+Math.signum(endY - startY));
@@ -203,13 +206,18 @@ public class Input {
 		if (! draw)
 			return;
 		GL20.glUseProgram(Renderer.getInstance().shaders[Renderer.SHADER_GHOST]);
-		GL20.glUniform1i(channel_uniform, 2);
+		GL20.glUniform4f(hue_uniform, 1f, 0f, 0f, 0.6f);
 		int i, j;
 		i = startX;
 		do {
 			j = startY;
 			do {
-				m.draw(i, j, iface.current_layer, 0.f, gs);
+				if (iface.canPlaceCommand(i, j, iface.current_layer)){
+					GL20.glUniform4f(hue_uniform, 0f, 1f, 0f, 0.6f);
+				} else {
+					GL20.glUniform4f(hue_uniform, 1f, 0f, 0f, 0.6f);
+				}
+				model.draw(i, j, iface.current_layer, 0.f, gs);
 				j += Math.signum(endY - startY);
 			} while (j != endY+Math.signum(endY - startY));
 			i += Math.signum(endX - startX);

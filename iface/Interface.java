@@ -31,7 +31,7 @@ public class Interface {
 	TrueTypeFont serif;
 
 	public boolean debug = false;
-	
+
 	public static final int COMMAND_MODE_SPAWN = 0;
 	public static final int COMMAND_MODE_DIG = 1;
 	public static final int COMMAND_MODE_BUILD = 2;
@@ -90,26 +90,26 @@ public class Interface {
 		SelectorMenu t = (SelectorMenu)menus[MENU_BUILD_FORM];
 		t.setState(form);
 	}
-	
+
 	public int getBuildForm(){
 		SelectorMenu t = (SelectorMenu)menus[MENU_BUILD_FORM];
 		return t.getState();
 	}
-	
+
 	public void setDigForm(int form){
 		SelectorMenu t = (SelectorMenu)menus[MENU_DIG_FORM];
 		t.setState(form);
 	}
-	
+
 	public int getDigForm(){
 		SelectorMenu t = (SelectorMenu)menus[MENU_DIG_FORM];
 		return t.getState();
 	}
-	
+
 	public int getDirection(){
 		return World.DIRECTION_UP;
 	}
-	
+
 	private Interface() {
 		world = World.getInstance();
 		current_layer = world.zsize-1;
@@ -180,7 +180,7 @@ public class Interface {
 
 		for (int i=0; i<MENU_COUNT; ++i)
 			menus[i].draw();
-		
+
 		if (debug){
 			int x = Mouse.getEventX();
 			int y = Mouse.getEventY();
@@ -204,4 +204,23 @@ public class Interface {
 		GL11.glLoadIdentity();
 		camera.forceUpdate(0);
 	}
+
+	public boolean canPlaceCommand(int x, int y, int z) {
+		World w = World.getInstance();
+		switch (getCommandMode()) {
+			case Interface.COMMAND_MODE_SPAWN: return w.isEmpty(x, y, z);
+			case Interface.COMMAND_MODE_DIG: return (w.isFull(x, y, z) || (getDigForm() == World.FORM_BLOCK))
+						&& (w.getMaterialID(x, y, z) != Material.MATERIAL_BEDROCK)
+						&& !player.blockAlreadyRequested(w.getBlock(x, y, z));
+			case Interface.COMMAND_MODE_BUILD: return (w.isAir(x, y, z) ||
+						((w.getForm(x, y, z) == World.FORM_FLOOR)
+						&& (getBuildMaterial() == w.getMaterialID(x, y, z))))
+						&& !player.blockAlreadyRequested(w.getBlock(x, y, z));
+			case Interface.COMMAND_MODE_CANCEL: return player.blockAlreadyRequested(w.getBlock(x, y, z));
+			default:
+					System.out.println("Player.canPlaceOrder: weird request");
+			return false;
+		}
+	}
+
 }
