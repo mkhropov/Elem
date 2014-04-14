@@ -20,12 +20,12 @@ void main(){
 	const vec3 lcol = vec3(.7, .7, .7);
 	const vec3 amb = vec3(.5, .5, .5);
 	const vec3 fog = vec3(.9, .9, 1.);
-	const float DEPTH = 10.;
+	const float DEPTH = 13.;
 
         vec4 pos = M * vec4(position, 1.);
 
-	fog_color = ((pos.z+DEPTH)/max_z)*fog;
-	fade = max((pos.z+DEPTH-curr_z)/DEPTH, 0.);
+	fog_color = (pos.z)/(max_z-DEPTH)*fog;
+	fade = (pos.z-curr_z+DEPTH)/DEPTH;
 
         gl_Position = VP * pos;
 

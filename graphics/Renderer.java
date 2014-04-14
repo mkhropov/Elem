@@ -25,7 +25,6 @@ public class Renderer {
 	private World world;
 	public int gChunks_size;
 	private GraphicalChunk[] gChunks;
-	public int zdepth;
 	public int fdepth;
 	private int xChunkSize, yChunkSize;
 	private ArrayList<GraphicalEntity> gEntities;
@@ -68,15 +67,14 @@ public class Renderer {
 	private Renderer () {
 		this.world = World.getInstance();
 		this.draw_mana = false; //cubes only
-		this.zdepth = 1;
-		this.fdepth = 12;
+		this.fdepth = 13;  //FIXME this exact value should present in fog.vsh
 
 		xChunkSize = world.xsize/GraphicalChunk.CHUNK_SIZE;
 		if (world.xsize%GraphicalChunk.CHUNK_SIZE!=0) xChunkSize++;
 		yChunkSize = world.ysize/GraphicalChunk.CHUNK_SIZE;
 		if (world.ysize%GraphicalChunk.CHUNK_SIZE!=0) yChunkSize++;
 
-		gChunks_size = (zdepth+fdepth)*50; //FIXME
+		gChunks_size = fdepth*50; //FIXME
 		gChunks = new GraphicalChunk[gChunks_size];
 		for (int i=0; i<gChunks_size; i++)
 			gChunks[i] = new GraphicalChunk(world, 0, 0, 0);
@@ -205,7 +203,7 @@ public class Renderer {
 		GraphicalChunk gc;
 		Camera c = Interface.getInstance().camera;
 		int top = Interface.getInstance().current_layer;
-		int bot = Math.max(0, top - zdepth - fdepth);
+		int bot = Math.max(0, top - fdepth);
 		int startX, endX, startY, endY;
 		int pos[][] = new int[8][2];
 		pos[0] = c.resolvePixel(0, 0, bot);
@@ -222,8 +220,7 @@ public class Renderer {
 		Arrays.sort(pos, COMPARE_1);
 		startY = Math.max(pos[0][1],0)/GraphicalChunk.CHUNK_SIZE;
 		endY = Math.min(pos[7][1]/GraphicalChunk.CHUNK_SIZE+1,yChunkSize);
-//		if(zdepth*(startX-endX)*(startY-endY) > gChunks_size)
-//			System.out.println(zdepth*(startX-endX)*(startY-endY)+">"+gChunks_size);
+
 		for (int k=0; k<gChunks_size; ++k)
 			gChunks[k].used = false;
 		for (int k = top; k >= bot; --k)
@@ -252,9 +249,9 @@ public class Renderer {
 	public void draw () {
 		int current_layer = Interface.getInstance().current_layer;
 		float z;
-		glClearColor(.9f*(current_layer-2.f)/world.zsize,
-					 .9f*(current_layer-2.f)/world.zsize,
-					 1.f*(current_layer-2.f)/world.zsize,
+		glClearColor(.9f*(current_layer-fdepth)/(world.zsize-fdepth),
+					 .9f*(current_layer-fdepth)/(world.zsize-fdepth),
+					 1.f*(current_layer-fdepth)/(world.zsize-fdepth),
 					 1.f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		for (int i=0; i<gChunks_size; ++i)
