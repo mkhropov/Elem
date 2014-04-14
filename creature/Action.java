@@ -17,6 +17,7 @@ public class Action {
 	public char type;
 
 	public ItemTemplate it;
+	public int f, d, m;
 //	public CreatureTemplate ct;
 	public double xd, yd, zd;
 	public int x, y, z;
@@ -41,9 +42,22 @@ public class Action {
 		this.b = World.getInstance().getBlock(this.x, this.y, this.z);
 	}
 
-	public Action(char type, int x, int y, int z){
-		assert((type==ACTION_DIG) || (type==ACTION_BUILD));
+	public Action(char type, int x, int y, int z, int form, int direction){
+		assert(type==ACTION_DIG);
 		this.type = type;
+		this.f = form;
+		this.d = direction;
+		this.x = x; this.y = y; this.z = z;
+		this.xd = x; this.yd = y; this.zd = z;
+		this.b = World.getInstance().getBlock(this.x, this.y, this.z);
+	}
+
+	public Action(char type, int x, int y, int z, int form, int direction, int matID){
+		assert(type==ACTION_BUILD);
+		this.type = type;
+		this.f = form;
+		this.d = direction;
+		this.m = matID;
 		this.x = x; this.y = y; this.z = z;
 		this.xd = x; this.yd = y; this.zd = z;
 		this.b = World.getInstance().getBlock(this.x, this.y, this.z);

@@ -169,7 +169,7 @@ public class Player {
 					continue;
 				}
 
-				o.path.add(0, new Action(Action.ACTION_BUILD, b.x, b.y, b.z));
+				o.path.add(0, new Action(Action.ACTION_BUILD, b.x, b.y, b.z, o.f, o.d, o.m));
 				b = path.remove(0).b;
 				o.path.addAll(0, path);
 
@@ -205,7 +205,7 @@ public class Player {
 					continue;
 				}
 				candidates = World.getInstance().getCreature(path.remove(0).b);
-				o.path.add(0, new Action(Action.ACTION_DIG, b.x, b.y, b.z));
+				o.path.add(0, new Action(Action.ACTION_DIG, b.x, b.y, b.z, o.f, o.d));
 				o.path.addAll(0, path);
 				for (Creature c: candidates){
 					if (c.capableOf(o)) {

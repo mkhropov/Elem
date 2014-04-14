@@ -89,18 +89,20 @@ public class Creature extends Entity {
 
 	public boolean end_action(){
 		boolean res;
-		switch(act.type){
+		Action action = act;
+		act = null;
+		switch(action.type){
 		case ACTION_TAKE:
-			res = take(act.it);
+			res = take(action);
 			break;
 		case ACTION_DROP:
 			res = drop();
 			break;
 		case ACTION_DIG:
-			res = dig(order);
+			res = dig(action);
 			break;
 		case ACTION_BUILD:
-			res = build(order);
+			res = build(action);
 			break;
 		case ACTION_FALL:
 		case ACTION_MOVE:
@@ -109,7 +111,6 @@ public class Creature extends Entity {
 			res = true;
 			break;
 		}
-		act = null;
 		return res;
 	}
 
@@ -211,13 +212,13 @@ public class Creature extends Entity {
 			(World.getInstance().material[b.m].digTime(digStrength) > 0.);
 	}
 
-	public boolean take(ItemTemplate it){
+	public boolean take(Action action){
 		Item i;
 		World w = World.getInstance();
 		int k;
 		for (k=0; k < w.item.size(); ++k){
 			i = w.item.get(k);
-			if (it.suits(i) && i.isIn(World.getInstance().getBlock(p))){
+			if (action.it.suits(i) && i.isIn(World.getInstance().getBlock(p))){
 				System.out.println("Item "+i+" found!");
 				item = i;
 				World.getInstance().item.remove(i);//EventHandler.getInstance().removeEntity(i);
@@ -237,18 +238,18 @@ public class Creature extends Entity {
 		return true;
 	}
 
-    public boolean dig(Order o){
-		Block b = o.b;
+    public boolean dig(Action action){
+		Block b = action.b;
         if (!canReach(b))
             return false;
         else {
 			if (canDig(b)){
 				int m = World.getInstance().getMaterialID(b.x, b.y, b.z);
 				World.getInstance().destroyBlock(b);
-				if (o.f!=World.FORM_BLOCK){
+				if (action.f!=World.FORM_BLOCK){
 					World.getInstance().setMaterial(b.x, b.y, b.z, m);
-					World.getInstance().setForm(b.x, b.y, b.z, o.f);
-					World.getInstance().setDirection(b.x, b.y, b.z, o.d);
+					World.getInstance().setForm(b.x, b.y, b.z, action.f);
+					World.getInstance().setDirection(b.x, b.y, b.z, action.d);
 				}
 				return true;
 			}
@@ -256,16 +257,16 @@ public class Creature extends Entity {
         }
     }
 
-    public final boolean build(Order o){
-		Block b = o.b;
-		int m = o.m;
+    public final boolean build(Action action){
+		Block b = action.b;
+		int m = action.m;
         if ((!canReach(b)) || (b.m != Material.MATERIAL_NONE) ||
-			!((item.type == Item.TYPE_BUILDABLE) && (item.m == o.m)))
+			!((item.type == Item.TYPE_BUILDABLE) && (item.m == m)))
             return false;
         else {
-            World.getInstance().setMaterial(b.x, b.y, b.z, o.m);
-            World.getInstance().setForm(b.x, b.y, b.z, o.f);
-            World.getInstance().setDirection(b.x, b.y, b.z, o.d);
+            World.getInstance().setMaterial(b.x, b.y, b.z, m);
+            World.getInstance().setForm(b.x, b.y, b.z, action.f);
+            World.getInstance().setDirection(b.x, b.y, b.z, action.d);
 			item = null;
             Renderer.getInstance().updateBlock(b.x, b.y, b.z);
             return true;
@@ -297,17 +298,16 @@ public class Creature extends Entity {
 			if (!end_action() && order!=null){
 				plans.clear();
 				if (order.type == Order.ORDER_BUILD)
-					start_action(new Action(ACTION_DROP), false);
+					plans.add(new Action(ACTION_DROP));
 				owner.setOrderCancelled(order, this);
 				return;
 			}
 		}
 
-		if (plans.size()!=0){
+		if (!plans.empty()){
 			start_action(plans.remove(0), false);
 			return;
-		} else 
-			plans.clear();
+		}
 
 		if (order != null)
 			owner.setOrderDone(order, this);
@@ -316,7 +316,7 @@ public class Creature extends Entity {
 	public void update(){
 		start_action(new Action(ACTION_FALL), true);
 	}
-	
+
 	@Override
 	public void draw(){
 		super.draw();
