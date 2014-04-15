@@ -2,7 +2,6 @@ package item;
 
 import world.*;
 import creature.Creature;
-import physics.material.Material;
 
 public class Item extends Entity{
 	Block b;

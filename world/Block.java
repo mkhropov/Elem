@@ -6,12 +6,6 @@ import org.lwjgl.opengl.GL11;
 import java.util.Random;
 import java.util.ArrayList;
 
-import physics.material.*;
-import creature.*;
-import item.*;
-import graphics.Renderer;
-
-
 public class Block {
 	public int x, y, z; //in a chunk
 	public int m; //material code from Material

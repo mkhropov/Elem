@@ -1,7 +1,7 @@
 package generation;
 
 import world.World;
-import physics.material.Material;
+import physics.Material;
 import stereometry.Point;
 import stereometry.BoundBox;
 

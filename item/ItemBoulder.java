@@ -1,6 +1,6 @@
 package item;
 
-import physics.material.Material;
+import physics.Material;
 import world.Block;
 import creature.Creature;
 import graphics.Renderer;
@@ -39,7 +39,7 @@ public class ItemBoulder extends Item{
 		Renderer.getInstance().addEntity(this);
 	}
 
-	public ItemBoulder(Creature c, double w, char m){
+	public ItemBoulder(Creature c, double w, int m){
 		super(c, w);
 		this.type = Item.TYPE_BUILDABLE;
 		this.m = m;

@@ -3,7 +3,7 @@ package iface;
 import world.World;
 import player.Player;
 import player.Order;
-import physics.material.Material;
+import physics.Material;
 
 import graphics.*;
 

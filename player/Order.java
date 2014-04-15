@@ -5,7 +5,7 @@ import java.util.Stack;
 import world.World;
 import world.Block;
 import world.World;
-import physics.material.*;
+import physics.Material;
 import creature.*;
 import item.ItemTemplate;
 import iface.CommandCube;

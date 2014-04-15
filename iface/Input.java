@@ -7,7 +7,6 @@ import world.Block;
 import creature.Elem;
 import graphics.*;
 import org.lwjgl.opengl.GL20;
-import physics.material.Material;
 import world.World;
 import player.Order;
 

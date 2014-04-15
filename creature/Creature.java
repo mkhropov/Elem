@@ -3,7 +3,7 @@ package creature;
 import world.*;
 import player.*;
 import graphics.Renderer;
-import physics.material.Material;
+import physics.Material;
 import item.Item;
 import item.ItemBoulder;
 import item.ItemTemplate;
@@ -192,7 +192,7 @@ public class Creature extends Entity {
 		this.np = p;
 		this.mv = new Vector(p, np);
 		this.plans = new Stack<>();
-		this.digStrength = Material.HARD_STEEL;
+		this.digStrength = 400.;
         this.capable = new boolean[]{false, false, false, false};
 		Renderer.getInstance().addEntity(this);
 		if (!World.getInstance().hasSolidFloor((int)p.x, (int)p.y, (int)p.z))
@@ -208,7 +208,7 @@ public class Creature extends Entity {
 		if ((order != null) || (!capable[o.type]))
 			return false;
 		return (o.type != Order.ORDER_DIG) ||
-			(digStrength>World.getInstance().getMaterial(o.b).hardness);
+				canDig(o.b);
 	}
 
 	public boolean isIn(int x, int y, int z){
@@ -234,7 +234,7 @@ public class Creature extends Entity {
 
 	public boolean canDig(Block b){
 		return (b.m != Material.MATERIAL_NONE) &&
-			(World.getInstance().material[b.m].digTime(digStrength) > 0.);
+			(Material.digTime(digStrength, b.m) > 0.);
 	}
 
 	public boolean take(Action action){

@@ -5,7 +5,7 @@ import java.util.Stack;
 import graphics.Renderer;
 import world.*;
 import creature.*;
-import physics.material.*;
+import physics.Material;
 import item.Item;
 import item.ItemTemplate;
 import physics.magics.*;

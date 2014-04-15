@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import generation.morphs.Morph;
-import physics.material.Material;
+import physics.Material;
 import world.World;
 
 public class Plains extends Biome {

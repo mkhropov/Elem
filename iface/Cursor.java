@@ -7,7 +7,6 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 
 import graphics.*;
-import physics.material.Material;
 import world.World;
 
 public class Cursor {

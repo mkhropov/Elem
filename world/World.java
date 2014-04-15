@@ -1,7 +1,7 @@
 package world;
 
 import generation.*;
-import physics.material.*;
+import physics.Material;
 import item.*;
 import creature.*;
 import graphics.Renderer;
@@ -39,7 +39,6 @@ public class World {
 	public static final int DIRECTION_Y_MINUS = 0xc000;
 	public static final int DIRECTION_SOUTH = 0xc000;
 
-    public Material[] material;
     public ArrayList<Creature> creature;
 	public ArrayList<Item> item;
 	public ArrayList<int[]> needsUpdate;
@@ -72,27 +71,11 @@ public class World {
                     block[i][j][k] = Material.MATERIAL_NONE;
 		System.out.print(" done\n");
 
-        this.material = new Material[Material.MATERIAL_MAX];
-        material[Material.MATERIAL_STONE] = new Stone();
-        material[Material.MATERIAL_EARTH] = new Earth();
-        material[Material.MATERIAL_NONE] = new Material();
-		material[Material.MATERIAL_BEDROCK] = new Bedrock();
-		material[Material.MATERIAL_MARBLE] = new Marble();
-		material[Material.MATERIAL_GRANITE] = new Granite();
-
-        this.creature = new ArrayList<>();
+		this.creature = new ArrayList<>();
 		this.item = new ArrayList<>();
 
 		this.needsUpdate = new ArrayList<>();
     }
-
-	public Material getMaterial (int x, int y, int z) {
-		return material[block[x][y][z]&MATERIAL_MASK];
-	}
-
-	public Material getMaterial (Block b) {
-		return material[block[b.x][b.y][b.z]&MATERIAL_MASK];
-	}
 
 	public int getMaterialID (int x, int y, int z) {
 		return block[x][y][z]&MATERIAL_MASK;

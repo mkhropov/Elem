@@ -7,7 +7,7 @@ import stereometry.BoundBox;
 import stereometry.Point;
 import world.Block;
 import world.World;
-import physics.material.Material;
+import physics.Material;
 
 public class SpellSunstrike extends Spell{
 
