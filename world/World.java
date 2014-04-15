@@ -217,6 +217,32 @@ public class World {
 		updateBlock(b.x, b.y, b.z);
 	}
 
+	public boolean hasSupport(int x, int y, int z){
+		int[] s = new int[]{1, 1, 0, 2, 1, 1};
+		int tx, ty, tz;
+		int m1, f1, m2, f2, bform, bmat;
+		int support = 0;
+		bform = getForm(x, y, z);
+		bmat = getMaterialID(x, y, z);
+		for (int i=0; i<6; ++i){
+			tx = x+Block.nearInd[i][0];
+			ty = y+Block.nearInd[i][1];
+			tz = z+Block.nearInd[i][2];
+			m1 = getMaterialID(tx, ty, tz);
+			f1 = getForm(tx, ty, tz);
+			if (bform==FORM_FLOOR && tz==z){
+				m2 = getMaterialID(tx, ty, tz-1);
+				f2 = getForm(tx, ty, tz-1);
+			} else {
+				m2 = m1; f2 = f1;
+			}
+			support += Math.max(
+				Material.support[f1/0x400][s[i]][m1],
+				Material.support[f2/0x400][s[i]][m2]);
+		}
+		return (Material.weight[bform/0x400][bmat] <= support);
+	}
+
 	public boolean isIn(int x, int y, int z){
 	    if ((x < 0) || (x >= xsize)) return false;
 		if ((y < 0) || (y >= ysize)) return false;

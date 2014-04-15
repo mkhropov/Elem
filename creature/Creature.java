@@ -244,7 +244,7 @@ public class Creature extends Entity {
 		for (k=0; k < w.item.size(); ++k){
 			i = w.item.get(k);
 			if (action.it.suits(i) && i.isIn(World.getInstance().getBlock(p))){
-				System.out.println("Item "+i+" found!");
+//				System.out.println("Item "+i+" found!");
 				item = i;
 				World.getInstance().item.remove(i);//EventHandler.getInstance().removeEntity(i);
 				Renderer.getInstance().removeEntity(i);
