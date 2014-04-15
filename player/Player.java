@@ -72,6 +72,15 @@ public class Player {
 	public void addBlockKnownSingle(int x, int y, int z) {
 		if (!World.getInstance().isIn(x,y,z)) return;
 		blockMeta[x][y][z] |= META_FOW;
+		if (!World.getInstance().isFull(x, y, z))
+			for (Order o: order)
+				if (o.b.x==x &&
+					o.b.y==y &&
+					o.b.z==z &&
+					o.type==Order.ORDER_DIG &&
+					(World.getInstance().isAir(x, y, z) ||
+						o.f==World.FORM_FLOOR))
+					destroyOrder(o);
 		Renderer.getInstance().updateBlock(x,y,z);
 	}
 

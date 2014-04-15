@@ -214,14 +214,20 @@ public class Interface {
 	public boolean canPlaceCommand(int x, int y, int z) {
 		World w = World.getInstance();
 		switch (getCommandMode()) {
-			case Interface.COMMAND_MODE_SPAWN: return w.isEmpty(x, y, z);
-			case Interface.COMMAND_MODE_DIG: return (w.isFull(x, y, z) || (getDigForm() == World.FORM_BLOCK))
-						&& (w.getMaterialID(x, y, z) != Material.MATERIAL_BEDROCK)
+			case Interface.COMMAND_MODE_SPAWN:
+				return (player. blockKnown(x, y, z)
+						&& w.isEmpty(x, y, z));
+			case Interface.COMMAND_MODE_DIG:
+				return (!player. blockKnown(x, y, z) ||
+						w.isFull(x, y, z) ||
+						(getDigForm() == World.FORM_BLOCK))
 						&& !player.blockAlreadyRequested(w.getBlock(x, y, z));
-			case Interface.COMMAND_MODE_BUILD: return (w.isAir(x, y, z) ||
-						((w.getForm(x, y, z) == World.FORM_FLOOR)
-						&& (getBuildMaterial() == w.getMaterialID(x, y, z))))
-						&& !player.blockAlreadyRequested(w.getBlock(x, y, z));
+			case Interface.COMMAND_MODE_BUILD:
+				return (player. blockKnown(x, y, z) &&
+						(w.isAir(x, y, z) ||
+							((w.getForm(x, y, z) == World.FORM_FLOOR)
+							&& (getBuildMaterial() == w.getMaterialID(x, y, z))))
+						&& !player.blockAlreadyRequested(w.getBlock(x, y, z)));
 			case Interface.COMMAND_MODE_CANCEL: return player.blockAlreadyRequested(w.getBlock(x, y, z));
 			default:
 					System.out.println("Player.canPlaceOrder: weird request");
