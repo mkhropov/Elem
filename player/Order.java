@@ -5,7 +5,7 @@ import java.util.Stack;
 import world.World;
 import world.Block;
 import world.World;
-import physics.material.*;
+import physics.Material;
 import creature.*;
 import item.ItemTemplate;
 import iface.CommandCube;
@@ -40,7 +40,7 @@ public class Order {
 		this.d = Interface.getInstance().getDirection();
         this.declined = !isAccesible();
 		this.path = new Stack<>();
-		System.out.println("New order "+this+", "+this.declined+" @("+b.x+","+b.y+","+b.z+")");
+//		System.out.println("New order "+this+", "+this.declined+" @("+b.x+","+b.y+","+b.z+")");
 		if ((type == ORDER_DIG) || (type == ORDER_BUILD))
 			this.cube = new CommandCube(type, b.x, b.y, b.z);
     }

@@ -3,10 +3,12 @@ package creature;
 import world.*;
 import player.*;
 import graphics.Renderer;
-import physics.material.Material;
+import physics.Material;
 import item.Item;
 import item.ItemBoulder;
 import item.ItemTemplate;
+
+import iface.FloatingText;
 
 import java.util.Stack;
 import stereometry.Point;
@@ -24,6 +26,7 @@ public class Creature extends Entity {
 	public double digStrength;
 
 	public Item item; //hand-held
+	private FloatingText bubble;
 
     public Player owner;
     public Order order;
@@ -34,7 +37,7 @@ public class Creature extends Entity {
 
 	public boolean start_action(Action action, boolean forced){
 		boolean res = true;
-		System.out.println("new action "+(int)action.type+" for "+this);
+//		System.out.println("new action "+(int)action.type+" for "+this);
 		World w = World.getInstance();
 		if (forced && act!=null)
 			plans.push(act);
@@ -55,6 +58,9 @@ public class Creature extends Entity {
 					res = false;
 			break;
 		case ACTION_FALL:
+			bubble = new FloatingText("", this);
+			bubble.ttl = 10000;
+			Renderer.getInstance().addFT(bubble);
 			mv.toZero();
 			break;
 		case ACTION_NONE:
@@ -156,14 +162,25 @@ public class Creature extends Entity {
 	}
 
 	boolean action_fall(long dT){
+		if (bubble != null){
+			if ((action_t-dT % 100) != (action_t % 100))
+				bubble.s = bubble.s+"a";
+			bubble.ttl += dT;
+		}
 		World w = World.getInstance();
 		int i = (int)p.z;
 		while (!w.hasSolidFloor((int)p.x, (int)p.y, i))
 			i--;
 		p.add(mv, dT/1000.);
-//		System.out.println(p.z);
 		mv.add(World.getInstance().gravity, dT);
 		if (p.z<0. || p.z<i){
+			if (bubble != null){
+				if (mv.len()>300.)
+					bubble.s = bubble.s+"ARGH!";
+				else
+					bubble.s = bubble.s+"A!";
+				bubble.ttl = 1000;
+			}
 			mv.toZero();
 			p.z = Math.max(i, 1);
 			return true;
@@ -185,21 +202,23 @@ public class Creature extends Entity {
 		this.np = p;
 		this.mv = new Vector(p, np);
 		this.plans = new Stack<>();
-		this.digStrength = Material.HARD_STEEL;
+		this.digStrength = 400.;
         this.capable = new boolean[]{false, false, false, false};
 		Renderer.getInstance().addEntity(this);
-		start_action(new Action(ACTION_FALL), true);
+		if (!World.getInstance().hasSolidFloor((int)p.x, (int)p.y, (int)p.z))
+			start_action(new Action(ACTION_FALL), true);
     }
 
 	public Creature(){
 		this.capable = new boolean[]{false, false, false, false};
+		this.bubble = null;
 	}
 
 	public boolean capableOf(Order o){
 		if ((order != null) || (!capable[o.type]))
 			return false;
 		return (o.type != Order.ORDER_DIG) ||
-			(digStrength>World.getInstance().getMaterial(o.b).hardness);
+				canDig(o.b);
 	}
 
 	public boolean isIn(int x, int y, int z){
@@ -225,7 +244,7 @@ public class Creature extends Entity {
 
 	public boolean canDig(Block b){
 		return (b.m != Material.MATERIAL_NONE) &&
-			(World.getInstance().material[b.m].digTime(digStrength) > 0.);
+			(Material.digTime(digStrength, b.m) > 0.);
 	}
 
 	public boolean take(Action action){
@@ -235,7 +254,7 @@ public class Creature extends Entity {
 		for (k=0; k < w.item.size(); ++k){
 			i = w.item.get(k);
 			if (action.it.suits(i) && i.isIn(World.getInstance().getBlock(p))){
-				System.out.println("Item "+i+" found!");
+//				System.out.println("Item "+i+" found!");
 				item = i;
 				World.getInstance().item.remove(i);//EventHandler.getInstance().removeEntity(i);
 				Renderer.getInstance().removeEntity(i);
@@ -322,8 +341,16 @@ public class Creature extends Entity {
 			plans.add(new Action(ACTION_DROP));
 		owner.setOrderCancelled(order, this);
 	}
-	
-    public void iterate(long dT){
+
+	public void iterate(long dT){
+		if (bubble != null){
+			bubble.ttl -= dT;
+			if (bubble.ttl < 0){
+				Renderer.getInstance().removeFT(bubble);
+				bubble = null;
+			}
+		}
+
 		if (act != null){
 			if (!exec_action(dT))
 				return;
@@ -345,7 +372,8 @@ public class Creature extends Entity {
     }
 
 	public void update(){
-		start_action(new Action(ACTION_FALL), true);
+		if (!World.getInstance().hasSolidFloor((int)p.x, (int)p.y, (int)p.z))
+			start_action(new Action(ACTION_FALL), true);
 	}
 
 	@Override

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import world.Block;
 import static world.Block.nearInd;
 import world.World;
-import physics.material.Material;
+import physics.Material;
 import stereometry.Point;
 import generation.morphs.Morph;
 
@@ -139,7 +139,7 @@ public class Generator {
 			for (int i=0; i<w.xsize; ++i)
 				for (int j=0; j<w.ysize; ++j){
 					if ((17-blockCover(i, j, k, w))*power >
-						w.getMaterial(i,j,k).hardness)
+						Material.hardness[w.getMaterialID(i,j,k)])
 						w.setMaterial(i,j,k, Material.MATERIAL_NONE);
 				}
 		}

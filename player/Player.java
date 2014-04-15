@@ -5,7 +5,7 @@ import java.util.Stack;
 import graphics.Renderer;
 import world.*;
 import creature.*;
-import physics.material.*;
+import physics.Material;
 import item.Item;
 import item.ItemTemplate;
 import physics.magics.*;
@@ -72,6 +72,15 @@ public class Player {
 	public void addBlockKnownSingle(int x, int y, int z) {
 		if (!World.getInstance().isIn(x,y,z)) return;
 		blockMeta[x][y][z] |= META_FOW;
+		if (!World.getInstance().isFull(x, y, z))
+			for (Order o: order)
+				if (o.b.x==x &&
+					o.b.y==y &&
+					o.b.z==z &&
+					o.type==Order.ORDER_DIG &&
+					(World.getInstance().isAir(x, y, z) ||
+						o.f==World.FORM_FLOOR))
+					destroyOrder(o);
 		Renderer.getInstance().updateBlock(x,y,z);
 	}
 
@@ -154,7 +163,7 @@ public class Player {
 	public void assignOrder(Order o, Creature c){
 		c.order = o;
 		c.plans = o.path;
-		o.dumpPath();
+//		o.dumpPath();
 		o.taken = true;
 		free_workers--;
 	}
@@ -183,7 +192,7 @@ public class Player {
 				path = p.getPath(e, b, c1, c2);
 				if (path==null){
 					o.declined = true;
-					System.out.println("Build order "+o+" declined at buildable search");
+//					System.out.println("Build order "+o+" declined at buildable search");
 					continue;
 				}
 
@@ -196,7 +205,7 @@ public class Player {
 				path = p.getPath(e, b, c1, c2);
 				if (path==null){
 					o.declined = true;
-					System.out.println("Build order "+o+" declined at worker search");
+//					System.out.println("Build order "+o+" declined at worker search");
 					continue;
 				}
 				candidates = World.getInstance().getCreature(path.remove(0).b);
@@ -216,7 +225,7 @@ public class Player {
 				path = p.getPath(e, b, c1, c2);
 				if (path==null){
 					o.declined = true;
-					System.out.println("Dig order "+o+" declined at worker search");
+//					System.out.println("Dig order "+o+" declined at worker search");
 					continue;
 				}
 				candidates = World.getInstance().getCreature(path.remove(0).b);
@@ -251,7 +260,7 @@ public class Player {
         c.order = null;
 		updateOrders();
 		free_workers++;
-        System.out.println(c+" succesfuly did order "+o);
+//        System.out.println(c+" succesfuly did order "+o);
     }
 
 	public void setOrderDeclined(Order o, Creature c){
@@ -267,7 +276,7 @@ public class Player {
         c.order = null;
 		o.path.clear();
 		free_workers++;
-        System.out.println(c+" aborted order "+o);
+  //      System.out.println(c+" aborted order "+o);
     }
 
 	public void cancelOrders(Block b){
@@ -276,7 +285,7 @@ public class Player {
 			o = order.get(i);
 			if ((o.b != null) && (o.b.isSame(b))){
 				if (o.taken){
-					for (int j=0; j<creature.size(); ++j) 
+					for (int j=0; j<creature.size(); ++j)
 						if (creature.get(j).order==o){
 							setOrderDone(o, creature.get(j));
 							break;

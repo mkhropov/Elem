@@ -3,7 +3,7 @@ package iface;
 import world.World;
 import player.Player;
 import player.Order;
-import physics.material.Material;
+import physics.Material;
 
 import graphics.*;
 
@@ -181,14 +181,20 @@ public class Interface {
 		for (int i=0; i<MENU_COUNT; ++i)
 			menus[i].draw();
 
+		for (FloatingText ft: Renderer.getInstance().ftArray)
+			ft.draw();
+
 		if (debug){
 			int x = Mouse.getEventX();
 			int y = Mouse.getEventY();
 			Block where;
 			int[] pos = camera.resolvePixel(x, y, current_layer);
 			where = world.getBlock(pos[0], pos[1], current_layer);
+//			int[] pos2 = Renderer.getInstance().get2DCoord(new Point(where));
 			sansSerif.drawString(8, 2,
 					"Mouse coords:   x "+where.x+"   y "+where.y+"   z "+where.z);
+//			sansSerif.drawString(8, 14, pos[0]+"x   "+pos[1]+"y   "+current_layer+"z");
+//			sansSerif.drawString(8, 14, x+"="+pos2[0]+", "+(600-y)+"="+pos2[1]);
 		}
 
 		cursor.draw2d();
@@ -208,14 +214,20 @@ public class Interface {
 	public boolean canPlaceCommand(int x, int y, int z) {
 		World w = World.getInstance();
 		switch (getCommandMode()) {
-			case Interface.COMMAND_MODE_SPAWN: return w.isEmpty(x, y, z);
-			case Interface.COMMAND_MODE_DIG: return (w.isFull(x, y, z) || (getDigForm() == World.FORM_BLOCK))
-						&& (w.getMaterialID(x, y, z) != Material.MATERIAL_BEDROCK)
+			case Interface.COMMAND_MODE_SPAWN:
+				return (player. blockKnown(x, y, z)
+						&& w.isEmpty(x, y, z));
+			case Interface.COMMAND_MODE_DIG:
+				return (!player. blockKnown(x, y, z) ||
+						w.isFull(x, y, z) ||
+						(getDigForm() == World.FORM_BLOCK))
 						&& !player.blockAlreadyRequested(w.getBlock(x, y, z));
-			case Interface.COMMAND_MODE_BUILD: return (w.isAir(x, y, z) ||
-						((w.getForm(x, y, z) == World.FORM_FLOOR)
-						&& (getBuildMaterial() == w.getMaterialID(x, y, z))))
-						&& !player.blockAlreadyRequested(w.getBlock(x, y, z));
+			case Interface.COMMAND_MODE_BUILD:
+				return (player. blockKnown(x, y, z) &&
+						(w.isAir(x, y, z) ||
+							((w.getForm(x, y, z) == World.FORM_FLOOR)
+							&& (getBuildMaterial() == w.getMaterialID(x, y, z))))
+						&& !player.blockAlreadyRequested(w.getBlock(x, y, z)));
 			case Interface.COMMAND_MODE_CANCEL: return player.blockAlreadyRequested(w.getBlock(x, y, z));
 			default:
 					System.out.println("Player.canPlaceOrder: weird request");

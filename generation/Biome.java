@@ -2,7 +2,7 @@ package generation;
 
 import java.util.ArrayList;
 import generation.morphs.Morph;
-import physics.material.Material;
+import physics.Material;
 import world.World;
 
 public class Biome {

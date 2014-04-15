@@ -1,6 +1,6 @@
 package item;
 
-import physics.material.Material;
+import physics.Material;
 
 public class ItemTemplate{
 

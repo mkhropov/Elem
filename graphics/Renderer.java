@@ -7,6 +7,7 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 import iface.Interface;
 import iface.Camera;
+import iface.FloatingText;
 
 import graphics.shaders.ShaderLoader;
 import graphics.shaders.Matrix4;
@@ -28,6 +29,7 @@ public class Renderer {
 	public int fdepth;
 	private int xChunkSize, yChunkSize;
 	private ArrayList<GraphicalEntity> gEntities;
+	public ArrayList<FloatingText> ftArray; //FIXME public
 
 	public final static int SHADER_NONE = 0;
 	public final static int SHADER_BASIC = 1;
@@ -101,6 +103,7 @@ public class Renderer {
 		z_attr = glGetUniformLocation(shaders[SHADER_HIGHLIGHT_FLAT], "z");
 
 		gEntities = new ArrayList<>();
+		ftArray = new ArrayList<>();
 	}
 
 	public void updateBlock (int x, int y, int z) {
@@ -134,6 +137,23 @@ public class Renderer {
 	public void removeEntity(GraphicalEntity e) {
 		gEntities.remove(e);
 	}
+
+	public void addFT(FloatingText ft) {
+		for (FloatingText i: ftArray)
+			if (i.owner != null && i.owner.equals(ft.owner))
+				ftArray.remove(i);
+		ftArray.add(ft);
+	}
+
+	public void removeFT(FloatingText ft) {
+		ftArray.remove(ft);
+	}
+
+	public int[] get2DCoord(double x, double y, double z){
+		float[] pos = VP.multR(x, y, z);
+		return (new int[]{(int)(400*(pos[0]+1)), (int)(600-300*(pos[1]+1))});
+	}
+
 
 	public void resetMaterial() {
 		ByteBuffer temp = ByteBuffer.allocateDirect(4*4);
@@ -299,6 +319,8 @@ public class Renderer {
 		glUseProgram(shaders[SHADER_GHOST]);
 		Interface.getInstance().cursor.draw3d();
 		glUseProgram(shaders[SHADER_NONE]);
+		//ATTENTION
+		//ftArray is drawn in Interface.draw()
 		Interface.getInstance().draw();
 	}
 }

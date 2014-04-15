@@ -5,7 +5,7 @@ import java.util.Random;
 
 import generation.morphs.Morph;
 import generation.morphs.Pointfold;
-import physics.material.Material;
+import physics.Material;
 import stereometry.Point;
 import world.World;
 

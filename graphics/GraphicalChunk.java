@@ -4,7 +4,7 @@ import graphics.shaders.Matrix4;
 import world.*;
 import iface.Interface;
 import player.Player;
-import physics.material.Material;
+import physics.Material;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -109,7 +109,7 @@ public class GraphicalChunk {
 	}
 
 	void addFace(int X, int Y, int Z, int f, boolean fog){
-		Material m = World.getInstance().getMaterial(X, Y, Z);
+		int m = World.getInstance().getMaterialID(X, Y, Z);
 		int form = World.getInstance().getForm(X, Y, Z);
 		int ind = (ibuf.position()>0)?(ibuf.get(ibuf.position()-1)+1):0;
 		for (int i = 0; i<4; ++i){
@@ -120,12 +120,12 @@ public class GraphicalChunk {
 				tbuf.put(0.75f+0.5f*text[2*i+0]/8.f+0.5f*((float)Math.abs(Math.sin(1.9*X+Y+Z)))/4.f);
 				tbuf.put(0.75f+0.5f*text[2*i+1]/8.f+0.5f*((float)Math.abs(Math.sin(X-1.9*Y+Z)))/4.f);
 			} else {
-				tbuf.put(m.tex_u
-					+(1-m.rand)*text[2*i+0]/8.f
-					+m.rand*((float)Math.abs(Math.sin(1.9*X+Y+Z)))/4.f);//FIX textures
-				tbuf.put(m.tex_v
-					+(1-m.rand)*text[2*i+1]/8.f
-					+m.rand*((float)Math.abs(Math.sin(X-1.9*Y+Z)))/4.f);// offsets
+				tbuf.put(Material.tex_u[m]
+					+(1-Material.rand[m])*text[2*i+0]/8.f
+					+Material.rand[m]*((float)Math.abs(Math.sin(1.9*X+Y+Z)))/4.f);//FIX textures
+				tbuf.put(Material.tex_v[m]
+					+(1-Material.rand[m])*text[2*i+1]/8.f
+					+Material.rand[m]*((float)Math.abs(Math.sin(X-1.9*Y+Z)))/4.f);// offsets
 			}
 			nbuf.put(norm[f][3*i+0]);
 			nbuf.put(norm[f][3*i+1]);

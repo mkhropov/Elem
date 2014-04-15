@@ -1,7 +1,7 @@
 package world;
 
 import generation.*;
-import physics.material.*;
+import physics.Material;
 import item.*;
 import creature.*;
 import graphics.Renderer;
@@ -39,9 +39,9 @@ public class World {
 	public static final int DIRECTION_Y_MINUS = 0xc000;
 	public static final int DIRECTION_SOUTH = 0xc000;
 
-    public Material[] material;
     public ArrayList<Creature> creature;
 	public ArrayList<Item> item;
+	public ArrayList<int[]> needsUpdate;
 	public Vector gravity;
 	public BoundBox bb;
 
@@ -71,26 +71,12 @@ public class World {
                     block[i][j][k] = Material.MATERIAL_NONE;
 		System.out.print(" done\n");
 
-        this.material = new Material[Material.MATERIAL_MAX];
-        material[Material.MATERIAL_STONE] = new Stone();
-        material[Material.MATERIAL_EARTH] = new Earth();
-        material[Material.MATERIAL_NONE] = new Material();
-		material[Material.MATERIAL_BEDROCK] = new Bedrock();
-		material[Material.MATERIAL_MARBLE] = new Marble();
-		material[Material.MATERIAL_GRANITE] = new Granite();
-
-        this.creature = new ArrayList<>();
+		this.creature = new ArrayList<>();
 		this.item = new ArrayList<>();
+
+		this.needsUpdate = new ArrayList<>();
     }
 
-	public Material getMaterial (int x, int y, int z) {
-		return material[block[x][y][z]&MATERIAL_MASK];
-	}
-
-	public Material getMaterial (Block b) {
-		return material[block[b.x][b.y][b.z]&MATERIAL_MASK];
-	}
-	
 	public int getMaterialID (int x, int y, int z) {
 		return block[x][y][z]&MATERIAL_MASK;
 	}
@@ -153,6 +139,8 @@ public class World {
 		if (Renderer.getInstance().draw_mana)
 			ManaField.getInstance().iterate(dT);
 
+		updateAll();
+
         for (int i=0; i<creature.size(); ++i){
             creature.get(i).iterate(dT);
         }
@@ -212,14 +200,47 @@ public class World {
 	public void updateBlock(int x, int y, int z){
 		if(!isIn(x, y, z)) return;
 		Renderer.getInstance().updateBlock(x, y, z);
-		for (Creature c: getCreature(x, y, z))
-			c.update();
-		for (Item i: getItem(x, y, z))
-			i.update();
+		needsUpdate.add(new int[]{x, y, z});
+	}
+
+	public void updateAll(){
+		for (int[] p: needsUpdate){
+			for (Creature c: getCreature(p[0], p[1], p[2]))
+				c.update();
+			for (Item i: getItem(p[0], p[1], p[2]))
+				i.update();
+		}
+		needsUpdate.clear();
 	}
 
 	public void updateBlock(Block b){
 		updateBlock(b.x, b.y, b.z);
+	}
+
+	public boolean hasSupport(int x, int y, int z){
+		int[] s = new int[]{1, 1, 0, 2, 1, 1};
+		int tx, ty, tz;
+		int m1, f1, m2, f2, bform, bmat;
+		int support = 0;
+		bform = getForm(x, y, z);
+		bmat = getMaterialID(x, y, z);
+		for (int i=0; i<6; ++i){
+			tx = x+Block.nearInd[i][0];
+			ty = y+Block.nearInd[i][1];
+			tz = z+Block.nearInd[i][2];
+			m1 = getMaterialID(tx, ty, tz);
+			f1 = getForm(tx, ty, tz);
+			if (bform==FORM_FLOOR && tz==z){
+				m2 = getMaterialID(tx, ty, tz-1);
+				f2 = getForm(tx, ty, tz-1);
+			} else {
+				m2 = m1; f2 = f1;
+			}
+			support += Math.max(
+				Material.support[f1/0x400][s[i]][m1],
+				Material.support[f2/0x400][s[i]][m2]);
+		}
+		return (Material.weight[bform/0x400][bmat] <= support);
 	}
 
 	public boolean isIn(int x, int y, int z){
