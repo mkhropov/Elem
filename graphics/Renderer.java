@@ -149,11 +149,6 @@ public class Renderer {
 		ftArray.remove(ft);
 	}
 
-	public int[] get2DCoord(Point p){
-		float[] pos = VP.multR(p);
-		return (new int[]{(int)(400*(pos[0]+1)), (int)(600-300*(pos[1]+1))});
-	}
-
 	public int[] get2DCoord(double x, double y, double z){
 		float[] pos = VP.multR(x, y, z);
 		return (new int[]{(int)(400*(pos[0]+1)), (int)(600-300*(pos[1]+1))});

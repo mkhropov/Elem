@@ -19,8 +19,6 @@ import java.util.concurrent.Callable;
 import org.lwjgl.input.Mouse;
 import world.Block;
 
-import stereometry.Point;
-
 
 public class Interface {
 	public Camera camera;
