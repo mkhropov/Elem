@@ -32,18 +32,27 @@ public class Creature extends Entity {
 	Action act;
 	long action_t;
 
-	public void start_action(Action action, boolean forced){
+	public boolean start_action(Action action, boolean forced){
+		boolean res = true;
 		System.out.println("new action "+(int)action.type+" for "+this);
+		World w = World.getInstance();
 		if (forced && act!=null)
 			plans.push(act);
 		act = action;
 		action_t = 0;
 		switch(act.type){
 		case ACTION_MOVE:
+			np = new Point(act.xd, act.yd, act.zd);
+			setDest(np);
+			if (!this.canMove(w.getBlock(p), w.getBlock(act.x, act.y, act.z)))
+					res = false;
+			break;
 		case ACTION_DIG:
 		case ACTION_BUILD:
 			np = new Point(act.xd, act.yd, act.zd);
 			setDest(np);
+			if (!this.canReach(w.getBlock(p), w.getBlock(act.x, act.y, act.z)))
+					res = false;
 			break;
 		case ACTION_FALL:
 			mv.toZero();
@@ -54,6 +63,7 @@ public class Creature extends Entity {
 		default:
 			break;
 		}
+		return res;
 	}
 
 	public boolean exec_action(long dT){
@@ -148,9 +158,8 @@ public class Creature extends Entity {
 	boolean action_fall(long dT){
 		World w = World.getInstance();
 		int i = (int)p.z;
-		while (w.isEmpty((int)p.x, (int)p.y, i))
+		while (!w.hasSolidFloor((int)p.x, (int)p.y, i))
 			i--;
-		i++;
 		p.add(mv, dT/1000.);
 //		System.out.println(p.z);
 		mv.add(World.getInstance().gravity, dT);
@@ -307,21 +316,27 @@ public class Creature extends Entity {
 			a = (float)(Math.signum(np.x-p.x)*Math.acos((np.y-p.y)/Math.sqrt((np.x-p.x)*(np.x-p.x)+(np.y-p.y)*(np.y-p.y))));
 	}
 
+	public void cancelOrder(){
+		plans.clear();
+		if (order.type == Order.ORDER_BUILD)
+			plans.add(new Action(ACTION_DROP));
+		owner.setOrderCancelled(order, this);
+	}
+	
     public void iterate(long dT){
 		if (act != null){
 			if (!exec_action(dT))
 				return;
 			if (!end_action() && order!=null){
-				plans.clear();
-				if (order.type == Order.ORDER_BUILD)
-					plans.add(new Action(ACTION_DROP));
-				owner.setOrderCancelled(order, this);
+				cancelOrder();
 				return;
 			}
 		}
 
 		if (!plans.empty()){
-			start_action(plans.remove(0), false);
+			if (!start_action(plans.remove(0), false)
+					&& order!=null)
+				cancelOrder();
 			return;
 		}
 
