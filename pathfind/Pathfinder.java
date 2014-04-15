@@ -42,7 +42,7 @@ public class Pathfinder {
 	public void resetDepth(){
 		t = 0;
 	}
-	
+
 	public int getDepth(){
 		return t;
 	}
@@ -94,7 +94,7 @@ public class Pathfinder {
 		}
 		return res;
 	}
-	
+
 	public ArrayList<Block> spreadMove(Creature c, ArrayList<Block> start, Condition cond){
 		ArrayList<Block> res = new ArrayList<>();
         ArrayList<Block> near;
@@ -142,20 +142,20 @@ public class Pathfinder {
 		b2 = new ArrayList<>(); b2.add(b);
 		b1 = spreadReach(C, b2, c1);
 		if (b1.isEmpty()){
-			System.out.println("Suitable c1-point not found");
+			//System.out.println("Suitable c1-point not found");
 			return null;
 		} else {
-			 System.out.println(b1.size()+" c1-points found");
+			 //System.out.println(b1.size()+" c1-points found");
 		}
 
 		clear();
 		//find c2-point around b1
 		b2 = spreadMove(c, b1, c2);
 		if (b2.isEmpty()){
-			System.out.println("Suitable c2-point not found");
+			//System.out.println("Suitable c2-point not found");
 			return null;
 		} else {
-			System.out.println(b2.size()+" c2-points found");
+			//System.out.println(b2.size()+" c2-points found");
 		}
 
 		return backtrack(c, b2.get(0));

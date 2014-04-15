@@ -8,6 +8,8 @@ import item.Item;
 import item.ItemBoulder;
 import item.ItemTemplate;
 
+import iface.FloatingText;
+
 import java.util.Stack;
 import stereometry.Point;
 import stereometry.Vector;
@@ -24,6 +26,7 @@ public class Creature extends Entity {
 	public double digStrength;
 
 	public Item item; //hand-held
+	private FloatingText bubble;
 
     public Player owner;
     public Order order;
@@ -33,7 +36,7 @@ public class Creature extends Entity {
 	long action_t;
 
 	public void start_action(Action action, boolean forced){
-		System.out.println("new action "+(int)action.type+" for "+this);
+//		System.out.println("new action "+(int)action.type+" for "+this);
 		if (forced && act!=null)
 			plans.push(act);
 		act = action;
@@ -46,6 +49,9 @@ public class Creature extends Entity {
 			setDest(np);
 			break;
 		case ACTION_FALL:
+			bubble = new FloatingText("", this);
+			bubble.ttl = 10000;
+			Renderer.getInstance().addFT(bubble);
 			mv.toZero();
 			break;
 		case ACTION_NONE:
@@ -146,15 +152,25 @@ public class Creature extends Entity {
 	}
 
 	boolean action_fall(long dT){
+		if (bubble != null){
+			if ((action_t-dT % 100) != (action_t % 100))
+				bubble.s = bubble.s+"a";
+			bubble.ttl += dT;
+		}
 		World w = World.getInstance();
 		int i = (int)p.z;
-		while (w.isEmpty((int)p.x, (int)p.y, i))
+		while (!w.hasSolidFloor((int)p.x, (int)p.y, i))
 			i--;
-		i++;
 		p.add(mv, dT/1000.);
-//		System.out.println(p.z);
 		mv.add(World.getInstance().gravity, dT);
 		if (p.z<0. || p.z<i){
+			if (bubble != null){
+				if (mv.len()>300.)
+					bubble.s = bubble.s+"ARGH!";
+				else
+					bubble.s = bubble.s+"A!";
+				bubble.ttl = 1000;
+			}
 			mv.toZero();
 			p.z = Math.max(i, 1);
 			return true;
@@ -179,11 +195,13 @@ public class Creature extends Entity {
 		this.digStrength = Material.HARD_STEEL;
         this.capable = new boolean[]{false, false, false, false};
 		Renderer.getInstance().addEntity(this);
-		start_action(new Action(ACTION_FALL), true);
+		if (!World.getInstance().hasSolidFloor((int)p.x, (int)p.y, (int)p.z))
+			start_action(new Action(ACTION_FALL), true);
     }
 
 	public Creature(){
 		this.capable = new boolean[]{false, false, false, false};
+		this.bubble = null;
 	}
 
 	public boolean capableOf(Order o){
@@ -308,6 +326,14 @@ public class Creature extends Entity {
 	}
 
     public void iterate(long dT){
+		if (bubble != null){
+			bubble.ttl -= dT;
+			if (bubble.ttl < 0){
+				Renderer.getInstance().removeFT(bubble);
+				bubble = null;
+			}
+		}
+
 		if (act != null){
 			if (!exec_action(dT))
 				return;
@@ -330,7 +356,8 @@ public class Creature extends Entity {
     }
 
 	public void update(){
-		start_action(new Action(ACTION_FALL), true);
+		if (!World.getInstance().hasSolidFloor((int)p.x, (int)p.y, (int)p.z))
+			start_action(new Action(ACTION_FALL), true);
 	}
 
 	@Override

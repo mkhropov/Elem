@@ -5,31 +5,41 @@ import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.TrueTypeFont;
 
+import graphics.Renderer;
+import world.Entity;
+
 public class FloatingText {
 	static TrueTypeFont font;
 	static Color textColor;
-	
-	String s;
+
+	public String s;
+	public long ttl;
 	int xsize;
 	int ysize;
 	int width, height;
-	
+	public Entity owner;
+
 	static {
 		Font awtFont = new Font("Helvetica", Font.BOLD, 10);
 		font = new TrueTypeFont(awtFont, true);
 		textColor = new Color(.1f, .1f, 1.f);
 	}
-	
-	public FloatingText(String s){
+
+	public FloatingText(String s, Entity owner){
 		this.s = s;
-		this.width = font.getWidth(s);
-		this.height = font.getHeight(s);
-		this.xsize = width/2+2;
-		this.ysize = height/2+1;
+		this.owner = owner;
+		this.ttl = 0;
 	}
-	
-	public void draw(int x, int y){
-		int X = x; int Y = 600-y;
+
+	public void draw(){
+		if (s.isEmpty())
+			return;
+		width = font.getWidth(s);
+		height = font.getHeight(s);
+		xsize = width/2+2;
+		ysize = height/2+1;
+		int[] pos = Renderer.getInstance().get2DCoord(owner.p.x+.5, owner.p.y+.5, owner.p.z+1.);
+		int X = pos[0]; int Y = pos[1];
 		//draw background
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 		GL11.glEnable(GL11.GL_COLOR_MATERIAL);
@@ -59,6 +69,6 @@ public class FloatingText {
 		GL11.glEnd();
 		GL11.glDisable(GL11.GL_COLOR_MATERIAL);
 		//print the message
-		font.drawString(X-xsize+2, Y-ysize-5-height/2, s, textColor);	
+		font.drawString(X-xsize+2, Y-ysize-5-height/2, s, textColor);
 	}
 }

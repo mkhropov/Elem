@@ -19,6 +19,8 @@ import java.util.concurrent.Callable;
 import org.lwjgl.input.Mouse;
 import world.Block;
 
+import stereometry.Point;
+
 
 public class Interface {
 	public Camera camera;
@@ -181,14 +183,20 @@ public class Interface {
 		for (int i=0; i<MENU_COUNT; ++i)
 			menus[i].draw();
 
+		for (FloatingText ft: Renderer.getInstance().ftArray)
+			ft.draw();
+
 		if (debug){
 			int x = Mouse.getEventX();
 			int y = Mouse.getEventY();
 			Block where;
 			int[] pos = camera.resolvePixel(x, y, current_layer);
 			where = world.getBlock(pos[0], pos[1], current_layer);
+//			int[] pos2 = Renderer.getInstance().get2DCoord(new Point(where));
 			sansSerif.drawString(8, 2,
 					"Mouse coords:   x "+where.x+"   y "+where.y+"   z "+where.z);
+//			sansSerif.drawString(8, 14, pos[0]+"x   "+pos[1]+"y   "+current_layer+"z");
+//			sansSerif.drawString(8, 14, x+"="+pos2[0]+", "+(600-y)+"="+pos2[1]);
 		}
 
 		cursor.draw2d();

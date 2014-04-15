@@ -3,6 +3,8 @@ package graphics.shaders;
 import java.nio.FloatBuffer;
 import org.lwjgl.BufferUtils;
 
+import stereometry.Point;
+
 public class Matrix4 {
 	public float[] val;
 	public static final int SIZE = 4;
@@ -85,6 +87,26 @@ public class Matrix4 {
 			for (int j=0; j<SIZE; ++j)
 				for (int k=0; k<SIZE; ++k)
 					res.val[SIZE*i+j] += this.val[SIZE*i+k]*m.val[SIZE*k+j];
+		return res;
+	}
+
+	public float[] multR(Point p){
+		float[] res = new float[3];
+		for (int i=0; i<3; ++i)
+			res[i] = (float)(p.x*val[SIZE*0+i]+
+							 p.y*val[SIZE*1+i]+
+							 p.z*val[SIZE*2+i]+
+							 val[SIZE*3+i]);
+		return res;
+	}
+
+	public float[] multR(double x, double y, double z){
+		float[] res = new float[3];
+		for (int i=0; i<3; ++i)
+			res[i] = (float)(x*val[SIZE*0+i]+
+							 y*val[SIZE*1+i]+
+							 z*val[SIZE*2+i]+
+							 val[SIZE*3+i]);
 		return res;
 	}
 
