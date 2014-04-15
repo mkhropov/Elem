@@ -1,22 +1,27 @@
 package creature;
 
-import world.*;
-import player.*;
-import graphics.Renderer;
-import physics.Material;
-import item.Item;
-import item.ItemBoulder;
-import item.ItemTemplate;
-
-import iface.FloatingText;
-
-import java.util.Stack;
-import stereometry.Point;
-import stereometry.Vector;
-
-import static creature.Action.*;
+import static creature.Action.ACTION_BUILD;
+import static creature.Action.ACTION_DIG;
+import static creature.Action.ACTION_DROP;
+import static creature.Action.ACTION_FALL;
+import static creature.Action.ACTION_MOVE;
+import static creature.Action.ACTION_NONE;
+import static creature.Action.ACTION_TAKE;
 import graphics.GSList;
 import graphics.ModelList;
+import graphics.Renderer;
+import iface.FloatingText;
+import item.Item;
+import item.ItemBoulder;
+import java.util.Stack;
+import physics.Material;
+import player.Order;
+import player.Player;
+import stereometry.Point;
+import stereometry.Vector;
+import world.Block;
+import world.Entity;
+import world.World;
 
 public class Creature extends Entity {
     Point np;

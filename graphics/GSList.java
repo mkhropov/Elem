@@ -14,7 +14,7 @@ public class GSList {
 	}
 
 	private GSList() {
-		list = new ArrayList<GraphicalSurface>();
+		list = new ArrayList<>();
 		add("void", 0.5);
 		add("stone", 0.5);
 		add("earth", 0.5);
@@ -37,14 +37,14 @@ public class GSList {
 	public int findId(String name) {
 		int res = 0;
 		for (int i=0; i<list.size(); i++){
-			if (list.get(i).name == name){
+			if (list.get(i).name.equalsIgnoreCase(name)){
 				res = i;
 			}
 		}
 		return res;
 	}
 
-	public void add(String Name, double Rand) {
+	public final void add(String Name, double Rand) {
 		this.add(new GraphicalSurface(Name, Rand));
 	}
 

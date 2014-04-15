@@ -1,6 +1,9 @@
 package generation.morphs;
 
-import stereometry.*;
+import stereometry.BoundBox;
+import stereometry.Front;
+import stereometry.Point;
+import stereometry.Vector;
 import world.World;
 /* Slipfault is a fault-type extension geomorphing, when the fault angle
  * is less more then 45' and the stratums are slipping down the fault

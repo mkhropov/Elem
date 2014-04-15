@@ -1,13 +1,12 @@
 package pathfind;
 
-import world.World;
-import world.Block;
 import creature.Creature;
 import creature.Worker;
 import player.Order;
+import world.Block;
+import world.World;
 
 public class ConditionWorker implements Condition {
-
 	@Override
 	public boolean suits(Block b){
 		for (Creature c: World.getInstance().getCreature(b))

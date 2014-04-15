@@ -1,8 +1,12 @@
 package iface;
 
+import graphics.GSList;
+import graphics.GraphicalEntity;
+import graphics.GraphicalSurface;
+import graphics.Model;
+import graphics.ModelList;
+import graphics.Renderer;
 import org.lwjgl.opengl.GL20;
-
-import graphics.*;
 import stereometry.Point;
 
 public class CommandCube implements GraphicalEntity {

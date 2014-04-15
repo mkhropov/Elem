@@ -2,7 +2,6 @@ package graphics.shaders;
 
 import java.nio.FloatBuffer;
 import org.lwjgl.BufferUtils;
-
 import stereometry.Point;
 
 public class Matrix4 {

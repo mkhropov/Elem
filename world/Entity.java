@@ -1,7 +1,11 @@
 package world;
 
+import graphics.GSList;
+import graphics.GraphicalEntity;
+import graphics.GraphicalSurface;
+import graphics.Model;
+import graphics.ModelList;
 import stereometry.Point;
-import graphics.*;
 
 public class Entity implements GraphicalEntity {
 	public Point p;

@@ -1,7 +1,9 @@
 package item;
 
-import world.*;
 import creature.Creature;
+import world.Block;
+import world.Entity;
+import world.World;
 
 public class Item extends Entity{
 	Block b;

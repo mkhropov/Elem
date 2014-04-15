@@ -1,15 +1,12 @@
 package iface;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.glu.GLU;
-import org.lwjgl.BufferUtils;
-import java.lang.Math;
+import graphics.Renderer;
+import graphics.shaders.Matrix4;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import world.*;
-
-import graphics.shaders.Matrix4;
-import graphics.Renderer;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.glu.GLU;
 
 public class Camera {
 	float x, y, z;

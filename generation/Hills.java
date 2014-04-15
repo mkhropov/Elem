@@ -1,13 +1,10 @@
 package generation;
 
-import java.util.ArrayList;
-import java.util.Random;
-
 import generation.morphs.Morph;
 import generation.morphs.Pointfold;
+import java.util.Random;
 import physics.Material;
 import stereometry.Point;
-import world.World;
 
 public class Hills extends Biome {
 

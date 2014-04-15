@@ -9,8 +9,6 @@ import physics.Material;
 import item.Item;
 import item.ItemTemplate;
 import physics.magics.*;
-import iface.Interface;
-
 import pathfind.*;
 
 public class Player {

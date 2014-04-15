@@ -1,9 +1,8 @@
 package generation;
 
-import java.util.ArrayList;
 import generation.morphs.Morph;
+import java.util.ArrayList;
 import physics.Material;
-import world.World;
 
 public class Biome {
 

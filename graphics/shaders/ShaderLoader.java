@@ -3,7 +3,6 @@ package graphics.shaders;
 import java.io.FileReader;
 import java.io.BufferedReader;
 
-import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.opengl.GL20.*;
 import org.lwjgl.opengl.ARBShaderObjects;
 

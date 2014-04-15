@@ -1,6 +1,7 @@
 package generation.morphs;
 
-import stereometry.*;
+import stereometry.BoundBox;
+import stereometry.Point;
 import world.World;
 /* Pointfold is a fold-type geomorphing, when the fold
  * is located circulary around it's peak/valley

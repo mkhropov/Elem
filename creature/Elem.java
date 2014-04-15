@@ -1,9 +1,9 @@
 package creature;
 
 import java.util.Random;
-
-import world.*;
 import stereometry.Vector;
+import world.Block;
+import world.World;
 
 public class Elem extends Creature implements Worker{
     public static double size = 0.5;

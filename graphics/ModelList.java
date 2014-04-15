@@ -16,7 +16,7 @@ public class ModelList {
 	private ModelList() {
 		Model m;
 		Renderer r = Renderer.getInstance();
-		list = new ArrayList<Model>();
+		list = new ArrayList<>();
 
 		m = ModelLoader.getInstance().load("res/wisp.obj", "elem");
 		m.prepare();
@@ -43,14 +43,14 @@ public class ModelList {
 	public int findId(String name) {
 		int res = 0;
 		for (int i=0; i<list.size(); i++){
-			if (list.get(i).name == name){
+			if (list.get(i).name.equalsIgnoreCase(name)){
 				res = i;
 			}
 		}
 		return res;
 	}
 
-	public void add(Model m){
+	public final void add(Model m){
 		list.add(m);
 	}
 

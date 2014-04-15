@@ -1,8 +1,8 @@
 package creature;
 
-import world.World;
-import world.Block;
 import item.ItemTemplate;
+import world.Block;
+import world.World;
 
 public class Action {
 	public static final char ACTION_NONE = 0;

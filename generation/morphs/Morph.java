@@ -1,6 +1,7 @@
 package generation.morphs;
 
-import stereometry.*;
+import stereometry.BoundBox;
+import stereometry.Point;
 
 abstract public class Morph {
 

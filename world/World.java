@@ -1,18 +1,19 @@
 package world;
 
-import generation.*;
-import physics.Material;
-import item.*;
-import creature.*;
+import creature.Creature;
+import generation.Generator;
 import graphics.Renderer;
 import iface.Interface;
-
+import item.Item;
+import item.ItemBoulder;
 import java.util.ArrayList;
-import stereometry.*;
-
-import physics.mana.*;
+import physics.Material;
+import physics.mana.ManaField;
 import player.Order;
 import player.Player;
+import stereometry.BoundBox;
+import stereometry.Point;
+import stereometry.Vector;
 
 public class World {
     public static int DEFAULT_XSIZE = 64;

@@ -1,15 +1,13 @@
 package player;
 
-import java.util.Stack;
-
-import world.World;
-import world.Block;
-import world.World;
-import physics.Material;
-import creature.*;
-import item.ItemTemplate;
+import creature.Action;
+import creature.Creature;
 import iface.CommandCube;
 import iface.Interface;
+import item.ItemTemplate;
+import java.util.Stack;
+import world.Block;
+import world.World;
 
 public class Order {
     public boolean taken;

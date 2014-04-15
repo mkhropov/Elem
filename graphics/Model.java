@@ -1,6 +1,5 @@
 package graphics;
 
-import java.io.IOException;
 import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL15.*;
@@ -9,14 +8,9 @@ import static org.lwjgl.opengl.GL11.*;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import org.lwjgl.BufferUtils;
-import org.newdawn.slick.opengl.Texture;
-import org.newdawn.slick.opengl.TextureLoader;
-import org.newdawn.slick.util.ResourceLoader;
 
 import graphics.shaders.Matrix4;
 import iface.Interface;
-import org.lwjgl.opengl.GL20;
 import world.World;
 
 public class Model {

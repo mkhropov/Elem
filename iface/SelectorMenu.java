@@ -1,6 +1,7 @@
 package iface;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class SelectorMenu extends Menu {
 	private int state=-1;

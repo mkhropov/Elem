@@ -1,9 +1,8 @@
 package generation;
 
-import world.World;
-import physics.Material;
-import stereometry.Point;
 import stereometry.BoundBox;
+import stereometry.Point;
+import world.World;
 
 public class Stratum {
     public int x;

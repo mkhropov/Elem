@@ -1,15 +1,13 @@
 package generation;
 
-import java.util.Random;
-import java.util.Date;
+import generation.morphs.Morph;
 import java.util.ArrayList;
-
-import world.Block;
-import static world.Block.nearInd;
-import world.World;
+import java.util.Date;
+import java.util.Random;
 import physics.Material;
 import stereometry.Point;
-import generation.morphs.Morph;
+import static world.Block.nearInd;
+import world.World;
 
 public class Generator {
 

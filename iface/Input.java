@@ -1,14 +1,16 @@
 package iface;
 
+import creature.Elem;
+import graphics.GSList;
+import graphics.GraphicalSurface;
+import graphics.Model;
+import graphics.ModelList;
+import graphics.Renderer;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
-
-import world.Block;
-import creature.Elem;
-import graphics.*;
 import org.lwjgl.opengl.GL20;
+import world.Block;
 import world.World;
-import player.Order;
 
 public class Input {
 	Interface iface;

@@ -1,6 +1,9 @@
 package generation.morphs;
 
-import stereometry.*;
+import stereometry.BoundBox;
+import stereometry.Front;
+import stereometry.Point;
+import stereometry.Vector;
 import world.World;
 /* Wavefold is a fold-type geomorphing, when the fold
  * is linear and vertically directed, and goes both up and down

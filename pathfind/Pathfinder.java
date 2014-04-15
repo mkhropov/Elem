@@ -1,8 +1,11 @@
 package pathfind;
+
+import creature.Action;
+import creature.Creature;
 import java.util.ArrayList;
 import java.util.Stack;
-import world.*;
-import creature.*;
+import world.Block;
+import world.World;
 
 public class Pathfinder {
     int xsize;

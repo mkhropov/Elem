@@ -18,7 +18,6 @@ import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import org.lwjgl.opengl.GL20;
 
 import physics.mana.ManaField;
 
@@ -311,7 +310,7 @@ public class Renderer {
 			ManaField.getInstance().draw();
 			glDisable(GL_COLOR_MATERIAL);
 		}
-		GL20.glUseProgram(shaders[Renderer.SHADER_FADE]);
+		glUseProgram(shaders[Renderer.SHADER_FADE]);
 		for (int i=0; i<gEntities.size(); i++){
 			if (gEntities.get(i).getP().z<=current_layer)
 				gEntities.get(i).draw();

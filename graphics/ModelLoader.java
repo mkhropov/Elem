@@ -3,11 +3,6 @@ package graphics;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.concurrent.ConcurrentSkipListMap;
-
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-
 import org.lwjgl.BufferUtils;
 
 public class ModelLoader {

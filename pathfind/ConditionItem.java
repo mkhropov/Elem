@@ -1,11 +1,10 @@
 package pathfind;
 
+import item.Item;
+import item.ItemTemplate;
 import java.util.ArrayList;
-
 import world.Block;
 import world.World;
-import item.ItemTemplate;
-import item.Item;
 
 public class ConditionItem implements Condition {
 

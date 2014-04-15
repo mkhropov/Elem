@@ -1,22 +1,15 @@
-import world.*;
-
+import generation.Generator;
+import graphics.Renderer;
+import iface.Interface;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-
-import java.nio.FloatBuffer;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-
-import iface.Interface;
-import graphics.Renderer;
-
-import generation.Generator;
-
-import player.*;
+import player.Player;
+import world.World;
 
 public class Game {
 	World world;

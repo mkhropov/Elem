@@ -1,12 +1,15 @@
 package iface;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.input.Mouse;
+import graphics.GSList;
+import graphics.GraphicalSurface;
+import graphics.Model;
+import graphics.ModelList;
+import graphics.Renderer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
-
-import graphics.*;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
 import world.World;
 
 public class Cursor {

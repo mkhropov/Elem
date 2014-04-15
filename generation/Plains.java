@@ -1,11 +1,7 @@
 package generation;
 
-import java.util.ArrayList;
 import java.util.Random;
-
-import generation.morphs.Morph;
 import physics.Material;
-import world.World;
 
 public class Plains extends Biome {
 

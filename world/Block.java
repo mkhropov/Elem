@@ -2,8 +2,6 @@ package world;
 /**
  * Block is a class describing utility for a minimal single 3D voxel
 */
-import org.lwjgl.opengl.GL11;
-import java.util.Random;
 import java.util.ArrayList;
 
 public class Block {

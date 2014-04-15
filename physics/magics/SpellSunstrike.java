@@ -2,12 +2,12 @@ package physics.magics;
 
 import generation.morphs.Pointfold;
 import graphics.Renderer;
+import physics.Material;
 import player.Player;
 import stereometry.BoundBox;
 import stereometry.Point;
 import world.Block;
 import world.World;
-import physics.Material;
 
 public class SpellSunstrike extends Spell{
 

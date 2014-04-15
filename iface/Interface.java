@@ -1,23 +1,15 @@
 package iface;
 
-import world.World;
-import player.Player;
-import player.Order;
-import physics.Material;
-
-import graphics.*;
-
+import graphics.Renderer;
+import java.awt.Font;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
-
-import java.awt.Font;
 import org.newdawn.slick.TrueTypeFont;
-import org.newdawn.slick.util.ResourceLoader;
-
-import java.util.ArrayList;
-import java.util.concurrent.Callable;
-import org.lwjgl.input.Mouse;
+import physics.Material;
+import player.Player;
 import world.Block;
+import world.World;
 
 
 public class Interface {

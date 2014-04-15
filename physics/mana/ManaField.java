@@ -1,11 +1,11 @@
 package physics.mana;
 
-import org.lwjgl.opengl.GL11;
-
 import java.util.ArrayList;
-import stereometry.*;
-import world.*;
 import java.util.Random;
+import org.lwjgl.opengl.GL11;
+import stereometry.Point;
+import stereometry.Vector;
+import world.World;
 
 public class ManaField {
 	public ArrayList<ManaSource> sources;

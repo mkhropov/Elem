@@ -1,11 +1,10 @@
 package iface;
 
+import graphics.Renderer;
 import java.awt.Font;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.TrueTypeFont;
-
-import graphics.Renderer;
 import world.Entity;
 
 public class FloatingText {

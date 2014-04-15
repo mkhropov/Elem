@@ -1,7 +1,5 @@
 package stereometry;
 
-//import Math.*;
-
 public class Vector {
 // NOTE: it's an oriented vector in 3D space
     public Point p1;

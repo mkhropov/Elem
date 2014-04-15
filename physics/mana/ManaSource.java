@@ -1,8 +1,8 @@
 package physics.mana;
 
-import stereometry.*;
+import stereometry.Point;
+import stereometry.Vector;
 import world.Block;
-
 
 public class ManaSource extends Vector {
 

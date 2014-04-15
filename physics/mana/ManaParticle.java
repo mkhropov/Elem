@@ -1,12 +1,11 @@
 package physics.mana;
 
-import stereometry.*;
-
+import iface.Interface;
 import org.lwjgl.opengl.GL11;
-
+import stereometry.Point;
+import stereometry.Vector;
 import world.Entity;
 import world.World;
-import iface.Interface;
 
 public class ManaParticle extends Entity {
 

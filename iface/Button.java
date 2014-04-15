@@ -1,9 +1,8 @@
 package iface;
 
 import graphics.GSList;
-
-import org.lwjgl.opengl.GL11;
 import graphics.GraphicalSurface;
+import org.lwjgl.opengl.GL11;
 
 public class Button extends Element {
 	private int x;

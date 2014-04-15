@@ -1,10 +1,10 @@
 package pathfind;
 
-import world.Block;
 import creature.Creature;
+import world.Block;
 
 public class ConditionReach implements Condition {
-
+	@Override
 	public boolean suits(Block b){
 		return this.c.canReach(b, this.b);
 	}

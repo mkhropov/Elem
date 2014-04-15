@@ -1,7 +1,6 @@
 package graphics;
 
 import java.io.IOException;
-
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;

@@ -1,10 +1,9 @@
 package item;
 
-import physics.Material;
-import world.Block;
 import creature.Creature;
 import graphics.Renderer;
-import world.EventHandler;
+import physics.Material;
+import world.Block;
 
 public class ItemBoulder extends Item{
 	double scale;

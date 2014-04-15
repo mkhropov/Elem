@@ -1,8 +1,8 @@
 package iface;
-import graphics.GSList;
 
-import org.lwjgl.opengl.GL11;
+import graphics.GSList;
 import graphics.GraphicalSurface;
+import org.lwjgl.opengl.GL11;
 
 public class ButtonFaceIcon extends ButtonFace {
 	private GraphicalSurface icon;

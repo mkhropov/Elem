@@ -3,8 +3,9 @@ package pathfind;
 import world.Block;
 
 public class ConditionMetaobject implements Condition {
-        @Override
+
+	@Override
 	public boolean suits(Block b){
-            return false;
-        }
+		return false;
+	}
 }
