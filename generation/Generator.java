@@ -87,7 +87,7 @@ public class Generator {
 				if (i>=w.xsize || j>=w.ysize)
 					continue;
 				for (int k=0; k<w.zsize; ++k)
-					w.setMaterial(i,j,k,getMaterial(i, j, k, gc));
+					w.setMaterialID(i,j,k,getMaterial(i, j, k, gc));
 			}
 		}
 		System.out.print(" done\n");
@@ -138,7 +138,7 @@ public class Generator {
 				for (int j=0; j<w.ysize; ++j){
 					if ((17-blockCover(i, j, k, w))*power >
 						Material.hardness[w.getMaterialID(i,j,k)])
-						w.setMaterial(i,j,k, Material.MATERIAL_NONE);
+						w.setMaterialID(i,j,k, Material.MATERIAL_NONE);
 				}
 		}
 		System.out.print(" done\nFilling gaps ");
@@ -149,7 +149,7 @@ public class Generator {
 				for (int j=0; j<w.ysize; ++j)
 					if ((w.isAir(i, j, k)) &&
 							(blockCover(i, j, k, w)>= 17))
-						w.setMaterial(i, j, k, erodemat);
+						w.setMaterialID(i, j, k, erodemat);
 		}
 		System.out.print(" done\n");
 	}

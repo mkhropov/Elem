@@ -69,6 +69,7 @@ public class Player {
 
 	public void addBlockKnownSingle(int x, int y, int z) {
 		if (!World.getInstance().isIn(x,y,z)) return;
+		ArrayList<Order> toDestroy = new ArrayList<>();
 		blockMeta[x][y][z] |= META_FOW;
 		if (!World.getInstance().isFull(x, y, z))
 			for (Order o: order)
@@ -78,7 +79,9 @@ public class Player {
 					o.type==Order.ORDER_DIG &&
 					(World.getInstance().isAir(x, y, z) ||
 						o.f==World.FORM_FLOOR))
-					destroyOrder(o);
+					toDestroy.add(o);
+		for (Order o: toDestroy)
+			destroyOrder(o);
 		Renderer.getInstance().updateBlock(x,y,z);
 	}
 

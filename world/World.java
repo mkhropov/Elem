@@ -4,8 +4,7 @@ import creature.Creature;
 import generation.Generator;
 import graphics.Renderer;
 import iface.Interface;
-import item.Item;
-import item.ItemBoulder;
+import item.*;
 import java.util.ArrayList;
 import physics.Material;
 import physics.mana.ManaField;
@@ -42,7 +41,8 @@ public class World {
 
     public ArrayList<Creature> creature;
 	public ArrayList<Item> item;
-	public ArrayList<int[]> needsUpdate;
+	public ArrayList<int[]> updateBlocks;
+	public ArrayList<int[]> updateEntities;
 	public Vector gravity;
 	public BoundBox bb;
 
@@ -75,7 +75,8 @@ public class World {
 		this.creature = new ArrayList<>();
 		this.item = new ArrayList<>();
 
-		this.needsUpdate = new ArrayList<>();
+		this.updateBlocks = new ArrayList<>();
+		this.updateEntities = new ArrayList<>();
     }
 
 	public int getMaterialID (int x, int y, int z) {
@@ -86,7 +87,7 @@ public class World {
 		return block[(int)p.x][(int)p.y][(int)p.z]&MATERIAL_MASK;
 	}
 
-	public void setMaterial (int x, int y, int z, int m) {
+	public void setMaterialID (int x, int y, int z, int m) {
 		block[x][y][z] = (block[x][y][z]&~MATERIAL_MASK)|m;
 	}
 
@@ -185,6 +186,7 @@ public class World {
 		return getItem(b.x, b.y, b.z);
 	}
 
+/*
 	public void destroyBlock(int x, int y, int z){
 		item.add(new ItemBoulder(x, y, z, 1., getMaterialID(x, y, z)));
 		setMaterial(x, y, z, Material.MATERIAL_NONE);
@@ -197,31 +199,70 @@ public class World {
 	public void destroyBlock(Block b){
 		destroyBlock(b.x, b.y, b.z);
 	}
-
+*/
 	public void updateBlock(int x, int y, int z){
 		if(!isIn(x, y, z)) return;
 		Renderer.getInstance().updateBlock(x, y, z);
-		needsUpdate.add(new int[]{x, y, z});
+		updateBlocks.add(new int[]{x, y, z});
+		for (int i=0; i<6; ++i)
+			updateBlocks.add(new int[]{
+						x+Block.nearInd[i][0],
+			            y+Block.nearInd[i][1],
+						z+Block.nearInd[i][2]});
+		}
+
+
+	public void updateEntities(int x, int y, int z){
+		if(!isIn(x, y, z)) return;
+		updateEntities.add(new int[]{x, y, z});
 	}
 
 	public void updateAll(){
-		for (int[] p: needsUpdate){
+		ArrayList<int[]> toRemove = new ArrayList<>();
+		ArrayList<int[]> toAdd = new ArrayList<>();
+		for (int[] p: updateBlocks){
+			toRemove.add(p);
+//			System.out.println("Checking updated block "+p[0]+" "+p[1]+" "+p[2]);
+			if (!hasSupport(p[0], p[1], p[2])){
+				item.add(new FallingBlock(p));
+//				System.out.println("A falling block was added");
+				setMaterialID(p[0], p[1], p[2], Material.MATERIAL_NONE);
+				setForm(p[0], p[1], p[2], FORM_BLOCK);
+				Renderer.getInstance().updateBlock(p[0], p[1], p[2]);
+				for (int i=0; i<6; ++i)
+					toAdd.add(new int[]{
+								p[0]+Block.nearInd[i][0],
+								p[1]+Block.nearInd[i][1],
+								p[2]+Block.nearInd[i][2]});
+				updateEntities(p[0], p[1], p[2]);
+				updateEntities(p[0], p[1], p[2]+1);
+			}
+		}
+		updateBlocks.removeAll(toRemove);
+		updateBlocks.addAll(toAdd);
+		toRemove.clear();
+		for (int[] p: updateEntities){
+			toRemove.add(p);
 			for (Creature c: getCreature(p[0], p[1], p[2]))
 				c.update();
 			for (Item i: getItem(p[0], p[1], p[2]))
 				i.update();
 		}
-		needsUpdate.clear();
+		updateEntities.removeAll(toRemove);
 	}
-
+/*
 	public void updateBlock(Block b){
 		updateBlock(b.x, b.y, b.z);
+		for (int i=0; i<6; ++i)
+			updateBlock(p[0]+Block.nearInd[i][0],
+			            p[1]+Block.nearInd[i][1],
+						p[2]+Block.nearInd[i][2]);
 	}
-
+*/
 	public boolean hasSupport(int x, int y, int z){
-		int[] s = new int[]{1, 1, 0, 2, 1, 1};
+		int[] s = new int[]{1, 1, 2, 0, 1, 1};
 		int tx, ty, tz;
-		int m1, f1, m2, f2, bform, bmat;
+		int m1, f1, s1, m2, f2, s2, bform, bmat;
 		int support = 0;
 		bform = getForm(x, y, z);
 		bmat = getMaterialID(x, y, z);
@@ -231,16 +272,19 @@ public class World {
 			tz = z+Block.nearInd[i][2];
 			m1 = getMaterialID(tx, ty, tz);
 			f1 = getForm(tx, ty, tz);
+			s1 = s[i];
 			if (bform==FORM_FLOOR && tz==z){
 				m2 = getMaterialID(tx, ty, tz-1);
 				f2 = getForm(tx, ty, tz-1);
+				s2 = Material.UP;
 			} else {
-				m2 = m1; f2 = f1;
+				m2 = m1; f2 = f1; s2 = s1;
 			}
 			support += Math.max(
-				Material.support[f1/0x400][s[i]][m1],
-				Material.support[f2/0x400][s[i]][m2]);
+				Material.support[f1/0x400][s1][m1],
+				Material.support[f2/0x400][s2][m2]);
 		}
+//		System.out.println("Support is "+support+", weight "+(Material.weight[bform/0x400][bmat]));
 		return (Material.weight[bform/0x400][bmat] <= support);
 	}
 

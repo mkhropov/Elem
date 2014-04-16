@@ -38,8 +38,20 @@ public class ModelList {
 
 		m = ModelLoader.getInstance().load("res/box.obj", "cube");
 		m.prepare();
-		m.s0 = .51f; m.s1 = .51f; m.s2 = .51f;
-		m.a0 = .505f; m.a1 = .505f; m.a2 = .505f;
+		m.s0 = .501f; m.s1 = .501f; m.s2 = .501f;
+		m.a0 = .5005f; m.a1 = .5005f; m.a2 = .5005f;
+		add(m);
+
+		m = ModelLoader.getInstance().load("res/box.obj", "block");
+		m.prepare();
+		m.s0 = .5f; m.s1 = .5f; m.s2 = .5f;
+		m.a0 = .5f; m.a1 = .5f; m.a2 = .5f;
+		add(m);
+
+		m = ModelLoader.getInstance().load("res/box.obj", "floor");
+		m.prepare();
+		m.s0 = .5f; m.s1 = .5f; m.s2 = .305f;
+		m.a0 = .5f; m.a1 = .5f; m.a2 = -.1f;
 		add(m);
 	}
 
@@ -60,7 +72,7 @@ public class ModelList {
 	public Model get(int id){
 		return list.get(id);
 	}
-	
+
 	public Model get(String name){
 		return list.get(findId(name));
 	}

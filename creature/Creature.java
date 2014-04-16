@@ -280,30 +280,33 @@ public class Creature extends Entity {
 
     public boolean dig(Action action){
 		Block b = action.b;
-        if (!canReach(b))
-            return false;
-        else {
-			if (canDig(b)){
-				World w = World.getInstance();
-				int m = w.getMaterialID(b.x, b.y, b.z);
-				if (w.getForm(b.x, b.y, b.z) != World.FORM_FLOOR)
-					w.item.add(new ItemBoulder(b.x, b.y, b.z, 1., m));
-				owner.addBlockKnown(b.x, b.y, b.z);
-				if (action.f!=World.FORM_BLOCK){
-					w.setMaterial(b.x, b.y, b.z, m);
-					w.setForm(b.x, b.y, b.z, action.f);
-					w.setDirection(b.x, b.y, b.z, action.d);
-				} else {
-					w.setMaterial(b.x, b.y, b.z, Material.MATERIAL_NONE);
+        if (canReach(b) && canDig(b)){
+			World w = World.getInstance();
+			owner.addBlockKnown(b.x, b.y, b.z);
+			int m = w.getMaterialID(b.x, b.y, b.z);
+			switch(w.getForm(b.x, b.y, b.z)){
+			case World.FORM_FLOOR:
+				if (action.f == World.FORM_BLOCK){
+					w.setMaterialID(b.x, b.y, b.z, Material.MATERIAL_NONE);
 					w.setForm(b.x, b.y, b.z, World.FORM_BLOCK);
 					w.setDirection(b.x, b.y, b.z, 0);
+					w.updateEntities(b.x, b.y, b.z);
 				}
-				w.updateBlock(b.x, b.y, b.z);
-				w.updateBlock(b.x, b.y, b.z+1);
-				return true;
+				break;
+			case World.FORM_BLOCK:
+				w.item.add(new ItemBoulder(b.x, b.y, b.z, 1., m));
+				w.setMaterialID(b.x, b.y, b.z, m);
+				w.setForm(b.x, b.y, b.z, action.f);
+				w.setDirection(b.x, b.y, b.z, action.d);
+				w.updateEntities(b.x, b.y, b.z+1);
+				break;
+			default:
+				break;
 			}
-			return false;
+			w.updateBlock(b.x, b.y, b.z);
+			return true;
         }
+		return false;
     }
 
     public final boolean build(Action action){
@@ -314,7 +317,7 @@ public class Creature extends Entity {
 			!((item.type == Item.TYPE_BUILDABLE) && (item.m == m)))
             return false;
         else {
-            World.getInstance().setMaterial(b.x, b.y, b.z, m);
+            World.getInstance().setMaterialID(b.x, b.y, b.z, m);
             World.getInstance().setForm(b.x, b.y, b.z, action.f);
             World.getInstance().setDirection(b.x, b.y, b.z, action.d);
 			item = null;

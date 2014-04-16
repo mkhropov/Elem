@@ -138,9 +138,11 @@ public class Renderer {
 	}
 
 	public void addFT(FloatingText ft) {
+		ArrayList<FloatingText> toRemove = new ArrayList<>();
 		for (FloatingText i: ftArray)
 			if (i.owner != null && i.owner.equals(ft.owner))
-				ftArray.remove(i);
+				toRemove.add(i);
+		ftArray.removeAll(toRemove);
 		ftArray.add(ft);
 	}
 
