@@ -47,12 +47,11 @@ public class Item extends Entity{
 		World w = World.getInstance();
 		if (b!=null){
 			int i = b.z;
-			while (i > 0)
-				if (w.hasSolidBorder(b.x, b.y, --i, World.DIRECTION_UP)
-						|| w.hasSolidBorder(b.x, b.y, i, World.DIRECTION_DOWN))
-					break;
-			if (i!=(b.z-1)){
-				b = w.getBlock(b.x, b.y, i+1);
+			while (i > 0 && !w.hasSolidFloor(b.x, b.y, i)){
+				--i;
+			}
+			if (i!=b.z){
+				b = w.getBlock(b.x, b.y, i);
 				setP(b);
 			}
 		}
