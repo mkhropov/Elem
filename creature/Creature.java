@@ -298,6 +298,7 @@ public class Creature extends Entity {
 					w.setForm(b.x, b.y, b.z, World.FORM_BLOCK);
 					w.setDirection(b.x, b.y, b.z, 0);
 				}
+				w.updateBlock(b.x, b.y, b.z);
 				w.updateBlock(b.x, b.y, b.z+1);
 				return true;
 			}
