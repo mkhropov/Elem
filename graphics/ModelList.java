@@ -20,24 +20,27 @@ public class ModelList {
 
 		m = ModelLoader.getInstance().load("res/wisp.obj", "elem");
 		m.prepare();
-		m.scale = 0.5f; m.a0 = .5f; m.a1 = .5f; m.a2 = .5f;
+		m.s0 = .5f; m.s1 = .5f; m.s2 = .5f;
+		m.a0 = .5f; m.a1 = .5f; m.a2 = .5f;
 		add(m);
 
 		m = ModelLoader.getInstance().load("res/box.obj", "boulder");
 		m.prepare();
-		m.scale = .2f; m.a0 = .5f; m.a1 = .5f; m.a2 = .2f;
+		m.s0 = .2f; m.s1 = .2f; m.s2 = .2f;
+		m.a0 = .5f; m.a1 = .5f; m.a2 = .2f;
 		add(m);
 
 		m = ModelLoader.getInstance().load("res/box.obj", "cursor");
 		m.prepare();
-		m.scale = .6f; m.a0 = .55f; m.a1 = .55f; m.a2 = .55f;
+		m.s0 = .6f; m.s1 = .6f; m.s2 = .6f;
+		m.a0 = .55f; m.a1 = .55f; m.a2 = .55f;
 		add(m);
 
 		m = ModelLoader.getInstance().load("res/box.obj", "cube");
 		m.prepare();
-		m.scale = .51f; m.a0 = .505f; m.a1 = .505f; m.a2 = .505f;
+		m.s0 = .51f; m.s1 = .51f; m.s2 = .51f;
+		m.a0 = .505f; m.a1 = .505f; m.a2 = .505f;
 		add(m);
-
 	}
 
 	public int findId(String name) {

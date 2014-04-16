@@ -29,7 +29,7 @@ public class Model {
 
 	public float a0, a1, a2;
 	public float phi, theta;
-	public float scale;
+	public float s0, s1, s2;
 
 /*	public int v_attr; // corresponding shader attributes
 	public int t_attr;
@@ -46,7 +46,7 @@ public class Model {
 
 	public Model(){
 		vao = glGenVertexArrays();
-		scale = 1.f;
+		s0 = 1.f; s1 = 1.f; s2 = 1.f;
 		a0 = 0.f; a1 = 0.f; a2 = 0.f;
 		phi = 0.f; theta = 0.f;
 		initialized = false;
@@ -95,7 +95,6 @@ public class Model {
 		if (prog == Renderer.getInstance().shaders[Renderer.SHADER_FADE]){
 			int curr_z_attr = glGetUniformLocation(prog, "curr_z");
 			int max_z_attr = glGetUniformLocation(prog, "max_z");
-			
 			glUniform1f(max_z_attr, (float)World.getInstance().zsize);
 			glUniform1f(curr_z_attr, (float)Interface.getInstance().current_layer);
 		}
@@ -105,9 +104,9 @@ public class Model {
 		int t_uniform = glGetUniformLocation(prog, "tex");
 		int m_uniform = glGetUniformLocation(prog, "M");
 		int vp_uniform = glGetUniformLocation(prog, "VP");
-		
+
 		Matrix4 m = Matrix4.identity();
-		m = m.multR(Matrix4.scale(new float[]{scale, scale, scale}));
+		m = m.multR(Matrix4.scale(new float[]{s0, s1, s2}));
 		m = m.multR(Matrix4.rot(phi, 2));
 		m = m.multR(Matrix4.rot(theta, 0));
 		m = m.multR(Matrix4.rot(a, 2));
