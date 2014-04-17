@@ -68,8 +68,11 @@ public class Creature extends Entity {
 			Renderer.getInstance().addFT(bubble);
 			mv.toZero();
 			break;
-		case ACTION_NONE:
 		case ACTION_TAKE:
+			if (item!=null)
+				start_action(new Action(ACTION_DROP), true);
+			break;
+		case ACTION_NONE:
 		case ACTION_DROP:
 		default:
 			break;
