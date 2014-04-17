@@ -32,4 +32,27 @@ public class FallingBlock extends Item{
 		this.gsid = graphics.GSList.getInstance().findId(assoc[m]);
 		Renderer.getInstance().addEntity(this);
 	}
+
+	@Override
+	public void update(){
+		World W = World.getInstance();
+		int i = (int)b.z;
+		while (i>0 && !W.hasSolidFloor(b.x, b.y, i))
+			--i;
+		int mat = W.getMaterialID(b.x, b.y, i);
+		int form = W.getForm(b.x, b.y, i);
+		if (Material.hardness[mat] < Material.hardness[m]){
+			W.setMaterialID(b.x, b.y, i, m);
+			W.setForm(b.x, b.y, i, f);
+			//spawn drop from mat, form
+		} else if (mat == m) {
+			W.setForm(b.x, b.y, i, (int)Math.min(form, f));
+			//spawn drop from m,max(f,form)
+		} else {
+			//spawn drop from m,f
+		}
+		W.item.remove(this);
+		Renderer.getInstance().removeEntity(this);
+	}
+
 }
