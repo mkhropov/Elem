@@ -53,7 +53,7 @@ public class Stratum {
 
 	public double w(Point p) { //assuming isIn(p)==true NO MORE
 		double r = O.distProj(p);
-		double phi = Math.acos((p.x-x)/r)*Math.signum(p.y-y);
+		double phi = Math.atan2(p.x-x, p.y-y);
 		if (r < 0.1)
 			return width;
 		else

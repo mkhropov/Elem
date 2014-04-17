@@ -74,7 +74,7 @@ public class Matrix4 {
 		Matrix4 m = identity();
 		m = m.multR(shift(new float[]{-tx, -ty, -tz}));
 		if (!((tx==x)&&(ty==y))){
-			m = m.multR(rot((float)(Math.signum(tx-x)*Math.acos((ty-y)/Math.sqrt((tx-x)*(tx-x)+(ty-y)*(ty-y)))), 2));
+			m = m.multR(rot((float)Math.atan2(tx-x, ty-y), 2));
 		}
 		m = m.multR(rot((float)(Math.acos((tz-z)/Math.sqrt(((tx-x)*(tx-x)+(ty-y)*(ty-y)+(tz-z)*(tz-z))))), 0));
 		return m;
