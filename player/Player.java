@@ -259,6 +259,9 @@ public class Player {
 			Renderer.getInstance().removeEntity(o.cube);
         order.remove(o);
         c.order = null;
+		c.plans.clear();
+		if (c.item != null)
+			c.start_action(new Action(Action.ACTION_DROP), false);
 		updateOrders();
 		free_workers++;
 //        System.out.println(c+" succesfuly did order "+o);
@@ -286,9 +289,10 @@ public class Player {
 			o = order.get(i);
 			if ((o.b != null) && (o.b.isSame(b))){
 				if (o.taken){
-					for (int j=0; j<creature.size(); ++j)
-						if (creature.get(j).order==o){
-							setOrderDone(o, creature.get(j));
+					for (Creature c: creature)
+						if (c.order==o){
+							c.plans.clear();
+							setOrderDone(o, c);
 							break;
 						}
 				} else {
