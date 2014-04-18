@@ -205,6 +205,8 @@ public class Interface {
 
 	public boolean canPlaceCommand(int x, int y, int z) {
 		World w = World.getInstance();
+		if (!w.isIn(x,y,z))
+			return false;
 		switch (getCommandMode()) {
 			case Interface.COMMAND_MODE_SPAWN:
 				return (player. blockKnown(x, y, z)

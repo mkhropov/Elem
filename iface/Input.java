@@ -33,26 +33,16 @@ public class Input {
 	public void poll(long deltaT) {
 		int x = Mouse.getEventX();
 		int y = Mouse.getEventY();
-		Block where;
 		int[] pos = iface.camera.resolvePixel(x, y, iface.current_layer);
-		where = iface.world.getBlock(pos[0], pos[1], iface.current_layer);
 
 		boolean onMenu = false;
-		for (int i=0; i<Interface.MENU_COUNT; ++i){
-			if (iface.menus[i].hover(x, 600-y)){
-				where = null;
+		for (int i=0; i<Interface.MENU_COUNT; ++i)
+			if (iface.menus[i].hover(x, 600-y))
 				onMenu = true;
-			}
-		}
 
-		if (where != null) {
-			iface.cursor.state = Cursor.STATE_ENABLED;
-			iface.cursor.reposition(where.x, where.y, where.z, x, y);
-		} else {
-			iface.cursor.state = Cursor.STATE_DISABLED;
-			iface.cursor.reposition(pos[0], pos[1], iface.current_layer, x, y);
-		}
-		if (onMenu) iface.cursor.state = Cursor.STATE_IFACE;
+		iface.cursor.reposition(pos[0], pos[1], iface.current_layer, x, y);
+		if (onMenu)
+			iface.cursor.state = Cursor.STATE_IFACE;
 		endX = iface.cursor.x;
 		endY = iface.cursor.y;
 
@@ -62,52 +52,48 @@ public class Input {
 					iface.menus[i].click(x, 600-y, Mouse.getEventButton());
 				}
 			}
-			if (Mouse.getEventButton() == 0) {
-				if (Mouse.getEventButtonState()) {
-					if (where != null){
-						startX = endX;
-						startY = endY;
-						draw = true;
-					}
+			if (Mouse.getEventButton() == 0 && !(iface.cursor.state==Cursor.STATE_IFACE)) {
+				if (Mouse.getEventButtonState()) { //button pressed
+					startX = endX;
+					startY = endY;
+					draw = true;
 				} else { //button released
-					if (where != null) {
-						draw = false;
-						int i, j;
-						i = startX;
+					draw = false;
+					int i, j;
+					i = startX;
+					do {
+						j = startY;
 						do {
-							j = startY;
-							do {
-								if (iface.canPlaceCommand(i, j, iface.current_layer)){
-									switch (iface.getCommandMode()){
-									case Interface.COMMAND_MODE_SPAWN:
-										iface.player.spawnCreature(
-												new Elem(World.getInstance().getBlock(i, j, iface.current_layer)));
-										break;
-									case Interface.COMMAND_MODE_DIG:
-										if (iface.getDigForm()==World.FORM_BLOCK){
-											iface.setDigForm(World.FORM_FLOOR);
-											iface.player.placeDigOrder(
-													World.getInstance().getBlock(i, j, iface.current_layer-1));
-											iface.setDigForm(World.FORM_BLOCK);
-										}
+							if (iface.canPlaceCommand(i, j, iface.current_layer)){
+								switch (iface.getCommandMode()){
+								case Interface.COMMAND_MODE_SPAWN:
+									iface.player.spawnCreature(
+											new Elem(World.getInstance().getBlock(i, j, iface.current_layer)));
+									break;
+								case Interface.COMMAND_MODE_DIG:
+									if (iface.getDigForm()==World.FORM_BLOCK){
+										iface.setDigForm(World.FORM_FLOOR);
 										iface.player.placeDigOrder(
-												World.getInstance().getBlock(i, j, iface.current_layer));
-										break;
-									case Interface.COMMAND_MODE_BUILD:
-										iface.player.placeBuildOrder(
-												World.getInstance().getBlock(i, j, iface.current_layer),
-												iface.getBuildMaterial());
-										break;
-									case Interface.COMMAND_MODE_CANCEL:
-										iface.player.cancelOrders(World.getInstance().getBlock(i, j, iface.current_layer));
-										break;
+												World.getInstance().getBlock(i, j, iface.current_layer-1));
+										iface.setDigForm(World.FORM_BLOCK);
 									}
+									iface.player.placeDigOrder(
+											World.getInstance().getBlock(i, j, iface.current_layer));
+									break;
+								case Interface.COMMAND_MODE_BUILD:
+									iface.player.placeBuildOrder(
+											World.getInstance().getBlock(i, j, iface.current_layer),
+											iface.getBuildMaterial());
+									break;
+								case Interface.COMMAND_MODE_CANCEL:
+									iface.player.cancelOrders(World.getInstance().getBlock(i, j, iface.current_layer));
+									break;
 								}
-								j+=Math.signum(where.y-startY);
-							} while(j != where.y+Math.signum(endY - startY));
-							i+=Math.signum(where.x-startX);
-						} while(i != where.x+Math.signum(where.x-startX));
-					}
+							}
+							j+=Math.signum(endY-startY);
+						} while(j != endY+Math.signum(endY - startY));
+						i+=Math.signum(endX-startX);
+					} while(i != endX+Math.signum(endX-startX));
 				}
 			}
 		}

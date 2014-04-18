@@ -80,10 +80,14 @@ public class World {
     }
 
 	public int getMaterialID (int x, int y, int z) {
+		if (!isIn(x, y, z))
+			return Material.MATERIAL_BEDROCK;
 		return block[x][y][z]&MATERIAL_MASK;
 	}
 
 	public int getMaterialID (Point p) {
+		if (!isIn(p.x, p.y, p.z))
+			return Material.MATERIAL_BEDROCK;
 		return block[(int)p.x][(int)p.y][(int)p.z]&MATERIAL_MASK;
 	}
 
@@ -92,6 +96,8 @@ public class World {
 	}
 
 	public int getForm (int x, int y, int z) {
+		if (!isIn(x, y, z))
+			return FORM_BLOCK;
 		return block[x][y][z]&FORM_MASK;
 	}
 
@@ -100,6 +106,8 @@ public class World {
 	}
 
 	public int getDirection( int x, int y, int z) {
+		if (!isIn(x, y, z))
+			return 0;
 		return block[x][y][z]&DIRECTION_MASK;
 	}
 

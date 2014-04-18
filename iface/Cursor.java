@@ -62,7 +62,6 @@ public class Cursor {
 			}
 		else {
 			state = STATE_DISABLED;
-			return;
 		}
 
 		switch(state){
