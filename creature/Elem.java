@@ -23,7 +23,7 @@ public class Elem extends Creature implements Worker{
 		super();
 		this.capable = new boolean[]{true, true, true, true};
 	}
-	
+
 @Override
     public boolean canWalk(Block b){
 		World w = World.getInstance();

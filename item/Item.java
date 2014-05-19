@@ -4,6 +4,7 @@ import creature.Creature;
 import world.Block;
 import world.Entity;
 import world.World;
+import stereometry.Point;
 
 public class Item extends Entity{
 	Block b;
@@ -33,6 +34,11 @@ public class Item extends Entity{
 		this.c = c;
 		this.w = w;
 		this.type = TYPE_NONE;
+	}
+
+	public void setP(Point np){
+		this.b = World.getInstance().getBlock(np);
+		this.p = new Point(np);
 	}
 
 	public boolean isIn(int x, int y, int z){

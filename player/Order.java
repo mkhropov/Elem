@@ -11,6 +11,7 @@ import world.World;
 
 public class Order {
     public boolean taken;
+	public Creature worker;
     public Block b;
 	public CommandCube cube;
     public ItemTemplate it;

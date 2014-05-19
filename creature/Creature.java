@@ -275,6 +275,7 @@ public class Creature extends Entity {
 	public boolean drop(){
 		if (item == null)
 			return false;
+		item.setP(this.p);
 		World.getInstance().item.add(item);
 		Renderer.getInstance().addEntity(item);
 		item = null;
@@ -352,9 +353,11 @@ public class Creature extends Entity {
 
 	public void cancelOrder(){
 		plans.clear();
-		if (order.type == Order.ORDER_BUILD)
-			plans.add(new Action(ACTION_DROP));
-		owner.setOrderCancelled(order, this);
+		if (order != null) {
+			if (order.type == Order.ORDER_BUILD)
+				plans.add(new Action(ACTION_DROP));
+			owner.setOrderCancelled(order, this);
+		}
 	}
 
 	public void iterate(long dT){

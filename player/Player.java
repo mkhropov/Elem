@@ -82,6 +82,8 @@ public class Player {
 					toDestroy.add(o);
 		for (Order o: toDestroy)
 			destroyOrder(o);
+		if (!toDestroy.isEmpty())
+			updateOrders();
 		Renderer.getInstance().updateBlock(x,y,z);
 	}
 
@@ -161,14 +163,6 @@ public class Player {
 		return false;
 	}
 
-	public void assignOrder(Order o, Creature c){
-		c.order = o;
-		c.plans = o.path;
-//		o.dumpPath();
-		o.taken = true;
-		free_workers--;
-	}
-
 	public void iterate(){ //give orders to elems
 		int i = -1;
 		Order o;
@@ -185,6 +179,7 @@ public class Player {
 			o = order.get(i);
 			if (o.taken || o.declined)
 				continue;
+			o.path.clear();
 			switch (o.type) {
 			case (Order.ORDER_BUILD):
 				b = o.b;
@@ -214,7 +209,7 @@ public class Player {
 				o.path.addAll(0, path);
 				for (Creature c: candidates){
 					if (c.capableOf(o)) {
-						assignOrder(o, c);
+						setOrderAssigned(o, c);
 						break;
 					}
 				}
@@ -234,7 +229,7 @@ public class Player {
 				o.path.addAll(0, path);
 				for (Creature c: candidates){
 					if (c.capableOf(o)) {
-						assignOrder(o, c);
+						setOrderAssigned(o, c);
 						break;
 					}
 				}
@@ -245,60 +240,57 @@ public class Player {
 		}
 	}
 
-	public void destroyOrder(Order o) {
-		if ((o.type == Order.ORDER_BUILD) ||
-			(o.type == Order.ORDER_DIG))
-			Renderer.getInstance().removeEntity(o.cube);
-		order.remove(o);
-		updateOrders();
+
+/* order-creature interaction */
+
+	public void setOrderAssigned(Order o, Creature c){
+		c.order = o;
+		c.plans = o.path;
+
+		o.taken = true;
+		o.worker = c;
+
+		free_workers--;
 	}
 
     public void setOrderDone(Order o, Creature c){
-		if ((o.type == Order.ORDER_BUILD) ||
-			(o.type == Order.ORDER_DIG))
-			Renderer.getInstance().removeEntity(o.cube);
-        order.remove(o);
+		destroyOrder(o);
+
         c.order = null;
-		c.plans.clear();
-		if (c.item != null)
-			c.start_action(new Action(Action.ACTION_DROP), false);
+
 		updateOrders();
 		free_workers++;
 //        System.out.println(c+" succesfuly did order "+o);
     }
 
-	public void setOrderDeclined(Order o, Creature c){
-		c.order = null;
-		o.taken = false;
-		o.path.clear();
-		free_workers++;
-	//	System.out.println(c+" declined  order "+o);
-	}
-
     public void setOrderCancelled(Order o, Creature c){
-        o.taken = false;
         c.order = null;
-		o.path.clear();
+
+        o.taken = false;
+		o.worker = null;
+
 		free_workers++;
   //      System.out.println(c+" aborted order "+o);
     }
+
+
+	public void destroyOrder(Order o) {
+		if ((o.type == Order.ORDER_BUILD) ||
+			(o.type == Order.ORDER_DIG))
+			Renderer.getInstance().removeEntity(o.cube);
+		order.remove(o);
+	}
 
 	public void cancelOrders(Block b){
 		Order o;
 		for (int i=0; i<order.size(); ++i) {
 			o = order.get(i);
 			if ((o.b != null) && (o.b.isSame(b))){
-				if (o.taken){
-					for (Creature c: creature)
-						if (c.order==o){
-							c.plans.clear();
-							setOrderDone(o, c);
-							break;
-						}
-				} else {
-					destroyOrder(o);
-				}
+				if (o.taken)
+					o.worker.cancelOrder();
+				destroyOrder(o);
 			}
 		}
+		updateOrders();
 	}
 }
