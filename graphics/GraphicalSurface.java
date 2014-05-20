@@ -5,7 +5,7 @@ import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
 
-public class GraphicalSurface {
+public class GraphicalSurface extends GS {
 	private Texture texture;
 	public double rand;
 	public String name;
@@ -15,12 +15,16 @@ public class GraphicalSurface {
 	}
 
 	public GraphicalSurface(String Name, double Rand) {
+		name = Name;
+		rand = Rand;
+	}
+	
+	@Override
+	public void init() {
 		try {
-			texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/"+Name+".png"));
+			texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/"+name+".png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		name = Name;
-		rand = Rand;
 	}
 }

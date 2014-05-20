@@ -32,6 +32,7 @@ public class GSList {
 		add("IconCancel", 0.0);
 		add("IconActive", 0.0);
 		add("IconInactive", 0.0);
+		for (int i=0; i<list.size(); i++) list.get(i).init();
 	}
 
 	public int findId(String name) {
