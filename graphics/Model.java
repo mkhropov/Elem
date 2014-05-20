@@ -16,6 +16,7 @@ import world.World;
 public class Model {
 
 	public String name;
+	public String fname;
 
 	public FloatBuffer v; // vertices - 3 floats for a vertex
 	public FloatBuffer t; // UV texture coordinates - 2 floats for a uv
@@ -46,15 +47,7 @@ public class Model {
 
 	public Model(){
 		vao = glGenVertexArrays();
-		s0 = 1.f; s1 = 1.f; s2 = 1.f;
-		a0 = 0.f; a1 = 0.f; a2 = 0.f;
-		phi = 0.f; theta = 0.f;
 		initialized = false;
-	}
-
-	public Model(String name){
-		this();
-		this.name = name;
 	}
 
 	public void prepare(){

@@ -18,8 +18,7 @@ public class ModelLoader {
 	private ModelLoader(){
 	}
 
-	public Model load(String fname, String name)/* throws IOException*/ {
-		Model m = new Model(name);
+	public void load(Model m)/* throws IOException*/ {
 		ArrayList<Float> t_v = new ArrayList<>(0);
 		ArrayList<Float> t_t = new ArrayList<>(0);
 		ArrayList<Float> t_n = new ArrayList<>(0);
@@ -28,16 +27,16 @@ public class ModelLoader {
 		ArrayList<Integer> i_n = new ArrayList<>(0);
 		BufferedReader f;
 		try {
-			f = new BufferedReader(new FileReader(fname));
+			f = new BufferedReader(new FileReader(m.fname));
 		} catch (java.io.FileNotFoundException e) {
-			return null;
+			return;
 		}
 		String s=""; String[] w;
 		while (s != null){
             try {
                 s = f.readLine();
             } catch (java.io.IOException e){
-                return null;
+                return;
             }
 			if ((s == null)||(s==""))
 				continue;
@@ -124,6 +123,5 @@ public class ModelLoader {
 		}
 
 		m.initialized = true;
-		return m;
 	}
 }

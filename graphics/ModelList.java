@@ -1,6 +1,10 @@
 package graphics;
 
 import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.File;
+import com.google.gson.Gson;
 
 public class ModelList {
 	private ArrayList<Model> list;
@@ -14,45 +18,32 @@ public class ModelList {
 	}
 
 	private ModelList() {
+		Gson gson = new Gson();
 		Model m;
 		Renderer r = Renderer.getInstance();
 		list = new ArrayList<>();
-
-		m = ModelLoader.getInstance().load("res/wisp.obj", "elem");
-		m.prepare();
-		m.s0 = .5f; m.s1 = .5f; m.s2 = .5f;
-		m.a0 = .5f; m.a1 = .5f; m.a2 = .5f;
-		add(m);
-
-		m = ModelLoader.getInstance().load("res/box.obj", "boulder");
-		m.prepare();
-		m.s0 = .2f; m.s1 = .2f; m.s2 = .2f;
-		m.a0 = .5f; m.a1 = .5f; m.a2 = .2f;
-		add(m);
-
-		m = ModelLoader.getInstance().load("res/box.obj", "cursor");
-		m.prepare();
-		m.s0 = .6f; m.s1 = .6f; m.s2 = .6f;
-		m.a0 = .55f; m.a1 = .55f; m.a2 = .55f;
-		add(m);
-
-		m = ModelLoader.getInstance().load("res/box.obj", "cube");
-		m.prepare();
-		m.s0 = .501f; m.s1 = .501f; m.s2 = .501f;
-		m.a0 = .5005f; m.a1 = .5005f; m.a2 = .5005f;
-		add(m);
-
-		m = ModelLoader.getInstance().load("res/box.obj", "block");
-		m.prepare();
-		m.s0 = .5f; m.s1 = .5f; m.s2 = .5f;
-		m.a0 = .5f; m.a1 = .5f; m.a2 = .5f;
-		add(m);
-
-		m = ModelLoader.getInstance().load("res/box.obj", "floor");
-		m.prepare();
-		m.s0 = .5f; m.s1 = .5f; m.s2 = .305f;
-		m.a0 = .5f; m.a1 = .5f; m.a2 = -.1f;
-		add(m);
+		File modelFolder = new File("res/models/");
+		for (File f: modelFolder.listFiles())
+			if (f.isFile() && f.getName().matches(".*\\.json")) {
+				BufferedReader br;
+				try {
+					br = new BufferedReader(new FileReader(f));
+				} catch (java.io.FileNotFoundException e) {
+					return;
+				}
+				String s, text = "";
+				try {
+					while ((s = br.readLine()) != null)
+						text += s+"\n";
+				} catch (java.io.IOException e) {
+					return;
+				}
+				/* FIXME br.close()? */
+				m = gson.fromJson(text, Model.class);
+				ModelLoader.getInstance().load(m);
+				m.prepare();
+				add(m);
+			}
 	}
 
 	public int findId(String name) {
