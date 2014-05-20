@@ -1,6 +1,6 @@
 {
 	"name": "cursor",
-	"fname": "res/box.obj",
+	"fname": "box.obj",
 
 	"s0": .6, "s1": .6, "s2": .6,
 	"a0": .55, "a1": .55, "a2": .55,

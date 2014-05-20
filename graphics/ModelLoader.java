@@ -27,7 +27,7 @@ public class ModelLoader {
 		ArrayList<Integer> i_n = new ArrayList<>(0);
 		BufferedReader f;
 		try {
-			f = new BufferedReader(new FileReader(m.fname));
+			f = new BufferedReader(new FileReader("res/models/"+m.fname));
 		} catch (java.io.FileNotFoundException e) {
 			return;
 		}

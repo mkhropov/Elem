@@ -1,6 +1,6 @@
 {
 	"name": "elem",
-	"fname": "res/wisp.obj",
+	"fname": "wisp.obj",
 
 	"s0": .5, "s1": .5, "s2": .5,
 	"a0": .5, "a1": .5, "a2": .5,
