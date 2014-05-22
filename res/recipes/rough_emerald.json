@@ -1,0 +1,9 @@
+{
+	"name" : "rough emerald",
+	"title" : "clean raw emerald",
+	"result" : "rough emerald",
+	"resources" : ["raw emerald"],
+	"quantities" : [1],
+	"time" : 5000,
+	"workplace" : "roughjewel"
+}

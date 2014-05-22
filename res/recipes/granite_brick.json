@@ -1,0 +1,9 @@
+{
+	"name" : "granite brick",
+	"title" : "make granite brick",
+	"result" : "granite brick",
+	"resources" : ["granite boulder"],
+	"quantities" : [1],
+	"time" : 1000,
+	"workplace" : "mason"
+}

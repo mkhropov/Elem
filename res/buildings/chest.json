@@ -1,0 +1,10 @@
+{
+	"name": "chest",
+	"title" : "Chest",
+	"description" : "A basic wooden chest, for storing stuff.",
+	"needsZone" : "",
+	"createsZone" : "stockpile",
+	"buildResources" : ["wooden plank"],
+	"buildQuantities" : [30],
+	"containerCapacity" : 200
+}

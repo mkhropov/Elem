@@ -1,0 +1,9 @@
+{
+	"name" : "faceted emerald",
+	"title" : "facet rough emerald",
+	"result" : "faceted emerald",
+	"resources" : ["rough emerald"],
+	"quantities" : [1],
+	"time" : 5000,
+	"workplace" : "precisejewel"
+}

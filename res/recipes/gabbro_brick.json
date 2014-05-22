@@ -1,0 +1,9 @@
+{
+	"name" : "gabbro brick",
+	"title" : "make gabbro brick",
+	"result" : "gabbro brick",
+	"resources" : ["gabbro boulder"],
+	"quantities" : [1],
+	"time" : 1000,
+	"workplace" : "mason"
+}

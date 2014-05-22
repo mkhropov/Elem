@@ -1,0 +1,9 @@
+{
+	"name" : "cut emerald",
+	"title" : "polish faceted emerald",
+	"result" : "cut emerald",
+	"resources" : ["faceted emerald"],
+	"quantities" : [1],
+	"time" : 5000,
+	"workplace" : "jewelfinish"
+}

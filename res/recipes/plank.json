@@ -1,0 +1,9 @@
+{
+	"name" : "plank",
+	"title" : "make wooden plank",
+	"result" : "wooden plank",
+	"resources" : ["dirt chunk"],
+	"quantities" : [1],
+	"time" : 1000,
+	"workplace" : "carpenter"
+}
