@@ -1,0 +1,10 @@
+{
+	"name": "mason",
+	"title" : "Mason's Workbench",
+	"description" : "A basic workplace for making stone bricks. Scary stuff included.",
+	"needsZone" : "mason",
+	"createsZone" : "mason",
+	"buildResources" : ["<boulder>"],
+	"buildQuantities" : [40],
+	"workplaceProductivity" : 1000
+}

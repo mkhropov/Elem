@@ -1,0 +1,10 @@
+{
+	"name": "carpenter",
+	"title" : "Carpenter's Workbench",
+	"description" : "A basic workplace for making wooden planks. Out of fucking dirt, yes. Why do you ask?",
+	"needsZone" : "lumber",
+	"createsZone" : "lumber",
+	"buildResources" : ["<boulder>"],
+	"buildQuantities" : [40],
+	"workplaceProductivity" : 1000
+}

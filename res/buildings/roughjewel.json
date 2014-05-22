@@ -1,0 +1,10 @@
+{
+	"name": "roughjewel",
+	"title" : "Rough Jewel Cutter",
+	"description" : "A basic workplace for cleaning those pesky stone bits of that shiny gem you found.",
+	"needsZone" : "jewel",
+	"createsZone" : "jewel",
+	"buildResources" : ["wooden plank", "<brick>"],
+	"buildQuantities" : [20, 20],
+	"workplaceProductivity" : 1000
+}

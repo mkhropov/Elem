@@ -1,0 +1,10 @@
+{
+	"name": "jewelfinisher",
+	"title" : "Jewel Polisher's Workplace",
+	"description" : "An advanced workplace for polishing faceted gems and making them shine.",
+	"needsZone" : "jewel",
+	"createsZone" : "jewel",
+	"buildResources" : ["wooden plank", "<brick>"],
+	"buildQuantities" : [20, 20],
+	"workplaceProductivity" : 1000
+}

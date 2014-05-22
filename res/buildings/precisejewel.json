@@ -1,0 +1,10 @@
+{
+	"name": "precisejewel",
+	"title" : "Precise Jewel Cutter",
+	"description" : "An advanced workplace for making facets on rough gems.",
+	"needsZone" : "jewel",
+	"createsZone" : "jewel",
+	"buildResources" : ["wooden plank", "<brick>"],
+	"buildQuantities" : [20, 20],
+	"workplaceProductivity" : 1000
+}
