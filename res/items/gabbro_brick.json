@@ -1,0 +1,9 @@
+{
+	"name" : "gabbro brick",
+	"title" : "Gabbro brick",
+	"description" : "A brick made of gabbro stone",
+	"model" : "brick",
+	"texture" : "gabbro",
+	"weight" : 1,
+	"type" : "brick"
+}

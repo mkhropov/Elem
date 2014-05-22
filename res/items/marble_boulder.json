@@ -1,0 +1,9 @@
+{
+	"name" : "marble boulder",
+	"title" : "Marble boulder",
+	"description" : "A boulder of marble",
+	"model" : "boulder",
+	"texture" : "marble",
+	"weight" : 1,
+	"type" : "boulder"
+}

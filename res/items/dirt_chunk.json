@@ -1,0 +1,8 @@
+{
+	"name" : "dirt chunk",
+	"title" : "Dirt chunk",
+	"description" : "A chunk of dirt",
+	"model" : "boulder",
+	"texture" : "dirt",
+	"weight" : 1,
+}

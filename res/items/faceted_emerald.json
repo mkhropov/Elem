@@ -1,0 +1,8 @@
+{
+	"name" : "faceted emerald",
+	"title" : "Faceted emerald",
+	"description" : "An emerald, with all facets in place. Still needs some polishing",
+	"model" : "gem",
+	"texture" : "emerald",
+	"weight" : 1
+}

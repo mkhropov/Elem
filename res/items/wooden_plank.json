@@ -1,0 +1,8 @@
+{
+	"name" : "wooden plank",
+	"title" : "Wooden plank",
+	"description" : "A plank made of dir.... I mean wood. Definitely wood.",
+	"model" : "plank",
+	"texture" : "wood",
+	"weight" : 1,
+}

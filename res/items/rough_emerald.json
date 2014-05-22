@@ -1,0 +1,8 @@
+{
+	"name" : "rough emerald",
+	"title" : "Rough emerald",
+	"description" : "An uncut emerald",
+	"model" : "gem",
+	"texture" : "emerald",
+	"weight" : 1
+}

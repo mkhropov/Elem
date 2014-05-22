@@ -1,0 +1,9 @@
+{
+	"name" : "gabbro boulder",
+	"title" : "Gabbro boulder",
+	"description" : "A boulder of gabbro stone",
+	"model" : "boulder",
+	"texture" : "gabbro",
+	"weight" : 1,
+	"type" : "boulder"
+}

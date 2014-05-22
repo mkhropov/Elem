@@ -1,0 +1,9 @@
+{
+	"name" : "granite brick",
+	"title" : "Granite brick",
+	"description" : "A brick made of granite",
+	"model" : "brick",
+	"texture" : "granite",
+	"weight" : 1,
+	"type" : "brick"
+}

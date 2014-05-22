@@ -1,0 +1,9 @@
+{
+	"name" : "marble brick",
+	"title" : "Marble brick",
+	"description" : "A brick made of marble",
+	"model" : "brick",
+	"texture" : "marble",
+	"weight" : 1,
+	"type" : "brick"
+}

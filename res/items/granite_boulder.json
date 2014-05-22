@@ -1,0 +1,9 @@
+{
+	"name" : "granite boulder",
+	"title" : "Granite boulder",
+	"description" : "A boulder of granite",
+	"model" : "boulder",
+	"texture" : "granite",
+	"weight" : 1,
+	"type" : "boulder"
+}
