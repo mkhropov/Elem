@@ -145,7 +145,7 @@ public class Interface {
 		t.show();
 		t.addButton(new Button(410, 480, 40, 40, "marble"), Data.Materials.getId("marble"));
 		t.addButton(new Button(460, 480, 40, 40, "earth"), Data.Materials.getId("earth"));
-		t.addButton(new Button(510, 480, 40, 40, "stone"), Data.Materials.getId("gabbro"));
+		t.addButton(new Button(510, 480, 40, 40, "gabbro"), Data.Materials.getId("gabbro"));
 		t.addButton(new Button(560, 480, 40, 40, "granite"), Data.Materials.getId("granite"));
 		menus[MENU_BUILD_MATERIAL] = t;
 

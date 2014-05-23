@@ -1,5 +1,6 @@
 package creature;
 
+import core.Data;
 import java.util.Random;
 import stereometry.Vector;
 import world.Block;
@@ -16,7 +17,7 @@ public class Elem extends Creature implements Worker{
         speed = 0.001d;
 		this.capable = new boolean[]{true, true, true, true};
 		mid = core.Data.Models.getId("elem");
-		gsid = graphics.GSList.getInstance().findId("elem");
+		gsid = Data.Textures.getId("elem");
     }
 
 	public Elem(){

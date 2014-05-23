@@ -1,6 +1,9 @@
 {
 	"name" : "bedrock",
+	"fname": "textures.png",
 	"tex_u" : 0.75,
 	"tex_v" : 0.25,
+	"u_size" : 0.25,
+	"v_size" : 0.25,
 	"rand" : 0.5
 }

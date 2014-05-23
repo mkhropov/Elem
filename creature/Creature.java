@@ -8,13 +8,11 @@ import static creature.Action.ACTION_MOVE;
 import static creature.Action.ACTION_NONE;
 import static creature.Action.ACTION_TAKE;
 import core.Data;
-import graphics.GSList;
 import graphics.Renderer;
 import iface.FloatingText;
 import item.Item;
 import item.ItemBoulder;
 import java.util.Stack;
-import physics.Material;
 import player.Order;
 import player.Player;
 import stereometry.Point;
@@ -400,7 +398,7 @@ public class Creature extends Entity {
 		if (item != null){
 			Data.Models.get(item.mid).draw(
 			(float)(p.x+.5*Math.sin(a)), (float)(p.y+.5*Math.cos(a)), (float)(p.z+.3), a,
-			GSList.getInstance().get(item.gsid));
+			Data.Textures.get(item.gsid));
 		}
 	}
 }

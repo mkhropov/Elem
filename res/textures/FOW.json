@@ -1,8 +1,8 @@
 {
-	"name" : "earth",
+	"name" : "fog of war",
 	"fname": "textures.png",
-	"tex_u" : 0.25,
-	"tex_v" : 0.0,
+	"tex_u" : 0.75,
+	"tex_v" : 0.75,
 	"u_size" : 0.25,
 	"v_size" : 0.25,
 	"rand" : 0.5

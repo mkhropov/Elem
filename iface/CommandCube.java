@@ -1,9 +1,8 @@
 package iface;
 
-import graphics.GSList;
 import graphics.GraphicalEntity;
-import graphics.GraphicalSurface;
 import graphics.Model;
+import graphics.Texture;
 import graphics.Renderer;
 import core.Data;
 import org.lwjgl.opengl.GL20;
@@ -17,7 +16,7 @@ public class CommandCube implements GraphicalEntity {
 	public Point p;
 
 	Model model;
-	GraphicalSurface gs;
+	Texture gs;
 
 	public CommandCube(int command, int x, int y, int z){
 		this.x = x; this.y = y; this.z = z;
@@ -33,7 +32,7 @@ public class CommandCube implements GraphicalEntity {
 			g = graphics.GSList.getInstance().findId("IconDig");
 		else
 			g = graphics.GSList.getInstance().findId("IconNotFound");*/
-		gs = GSList.getInstance().get("selection");
+		gs = Data.Textures.get("selection");
 	}
 
 	@Override

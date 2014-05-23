@@ -15,7 +15,7 @@ public class ItemBoulder extends Item{
 		this.m = m;
 		this.scale = Math.cbrt(w);
 		this.mid = Data.Models.getId("boulder");
-		this.gsid = graphics.GSList.getInstance().findId(Data.Materials.get(m).texture);
+		this.gsid = Data.Textures.getId(Data.Materials.get(m).texture);
 		Renderer.getInstance().addEntity(this);
 	}
 
@@ -24,8 +24,8 @@ public class ItemBoulder extends Item{
 		this.m = m;
 		this.type = Item.TYPE_BUILDABLE;
 		this.scale = Math.cbrt(w);
-		this.mid = core.Data.Models.getId("boulder");
-		this.gsid = graphics.GSList.getInstance().findId(Data.Materials.get(m).texture);
+		this.mid = Data.Models.getId("boulder");
+		this.gsid = Data.Textures.getId(Data.Materials.get(m).texture);
 		Renderer.getInstance().addEntity(this);
 	}
 
@@ -34,8 +34,8 @@ public class ItemBoulder extends Item{
 		this.type = Item.TYPE_BUILDABLE;
 		this.m = m;
 		this.scale = Math.cbrt(w);
-		this.mid = core.Data.Models.getId("boulder");
-		this.gsid = graphics.GSList.getInstance().findId(Data.Materials.get(m).texture);
+		this.mid = Data.Models.getId("boulder");
+		this.gsid = Data.Textures.getId(Data.Materials.get(m).texture);
 	//	Renderer.getInstance().addEntity(this);
 	}
 }

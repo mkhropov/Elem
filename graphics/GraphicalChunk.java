@@ -5,7 +5,6 @@ import graphics.shaders.Matrix4;
 import world.*;
 import iface.Interface;
 import player.Player;
-import physics.Material;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -117,18 +116,14 @@ public class GraphicalChunk {
 			vbuf.put(vert[form>>10][f][3*i+0]+X);
 			vbuf.put(vert[form>>10][f][3*i+1]+Y);
 			vbuf.put(vert[form>>10][f][3*i+2]+Z);
+			Texture t;
 			if (fog) {
-				tbuf.put(0.75f+0.5f*text[2*i+0]/8.f+0.5f*((float)Math.abs(Math.sin(1.9*X+Y+Z)))/4.f);
-				tbuf.put(0.75f+0.5f*text[2*i+1]/8.f+0.5f*((float)Math.abs(Math.sin(X-1.9*Y+Z)))/4.f);
+				t = Data.Textures.get("fog of war");
 			} else {
-				Texture t = Data.Textures.get(Data.Materials.get(m).texture);
-				tbuf.put(t.tex_u
-					+(1-t.rand)*text[2*i+0]/8.f
-					+t.rand*((float)Math.abs(Math.sin(1.9*X+Y+Z)))/4.f);//FIX textures
-				tbuf.put(t.tex_v
-					+(1-t.rand)*text[2*i+1]/8.f
-					+t.rand*((float)Math.abs(Math.sin(X-1.9*Y+Z)))/4.f);// offsets
+				t = Data.Textures.get(Data.Materials.get(m).texture);
 			}
+			tbuf.put(t.resolveU(text[2*i+0],X,Y,Z));
+			tbuf.put(t.resolveV(text[2*i+1],X,Y,Z));
 			nbuf.put(norm[f][3*i+0]);
 			nbuf.put(norm[f][3*i+1]);
 			nbuf.put(norm[f][3*i+2]);
@@ -279,7 +274,7 @@ public class GraphicalChunk {
 
 		glUniform1i(t_uniform, 0);
 		glActiveTexture(GL_TEXTURE0+0);
-		GSList.getInstance().get("textures").bind();
+		Data.Textures.get("earth").bind();
 
 		glEnableVertexAttribArray(v_attr);
 		glBindBuffer(GL_ARRAY_BUFFER, v_b);

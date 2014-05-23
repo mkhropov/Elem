@@ -1,8 +1,7 @@
 package iface;
 
 import creature.Elem;
-import graphics.GSList;
-import graphics.GraphicalSurface;
+import graphics.Texture;
 import graphics.Model;
 import graphics.Renderer;
 import core.Data;
@@ -17,7 +16,7 @@ public class Input {
 	int startX, startY;
 	int endX, endY;
 	Model model;
-	GraphicalSurface gs;
+	Texture gs;
 	int hue_uniform;
 	boolean draw = false;
 
@@ -27,7 +26,7 @@ public class Input {
 		            r.shaders[Renderer.SHADER_GHOST], "hue");
 		iface = I;
 		model = Data.Models.get("cube");
-		gs = GSList.getInstance().get("selection");
+		gs = Data.Textures.get("selection");
 	}
 
 	public void poll(long deltaT) {

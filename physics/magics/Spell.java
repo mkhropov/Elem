@@ -1,12 +1,13 @@
 package physics.magics;
 
-import graphics.GraphicalSurface;
+import core.Data;
+import graphics.Texture;
 import player.Player;
 import world.Block;
 
 public class Spell {
 	public Player owner;
-	public GraphicalSurface icon;
+	public Texture icon;
 	static public String iconName;
 	
 	static{
@@ -15,7 +16,7 @@ public class Spell {
 	
 	public Spell(Player p){
 		this.owner = p;
-		this.icon = new GraphicalSurface(iconName, 0.3);
+		this.icon = Data.Textures.get(iconName);
 	};
 	
 	public int cost(){return 0;};

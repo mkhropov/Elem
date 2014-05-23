@@ -1,7 +1,7 @@
 package iface;
 
-import graphics.GSList;
-import graphics.GraphicalSurface;
+import core.Data;
+import graphics.Texture;
 import org.lwjgl.opengl.GL11;
 
 public class Button extends Element {
@@ -10,8 +10,8 @@ public class Button extends Element {
 	private int dx;
 	private int dy;
 
-	private static GraphicalSurface activeIcon;
-	private static GraphicalSurface inactiveIcon;
+	private static Texture activeIcon;
+	private static Texture inactiveIcon;
 	ButtonFace face;
 
 	private Runnable c;
@@ -19,8 +19,8 @@ public class Button extends Element {
 
 	private static boolean initialized = false;
 	private void classInit() {
-		activeIcon = GSList.getInstance().get("IconActive");
-		inactiveIcon = GSList.getInstance().get("IconInactive");
+		activeIcon = Data.Textures.get("IconActive");
+		inactiveIcon = Data.Textures.get("IconInactive");
 	}
 
 	public Button(int x, int y, int dx, int dy, String iconName){

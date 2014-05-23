@@ -18,7 +18,7 @@ public class FallingBlock extends Item{
 			this.mid = core.Data.Models.getId("block");
 		else
 			this.mid = core.Data.Models.getId("floor");
-		this.gsid = graphics.GSList.getInstance().findId(Data.Materials.get(m).texture);
+		this.gsid = Data.Textures.getId(Data.Materials.get(m).texture);
 		Renderer.getInstance().addEntity(this);
 	}
 

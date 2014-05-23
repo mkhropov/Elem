@@ -1,6 +1,9 @@
 {
 	"name" : "gabbro",
+	"fname": "textures.png",
 	"tex_u" : 0.5,
 	"tex_v" : 0.5,
+	"u_size" : 0.25,
+	"v_size" : 0.25,
 	"rand" : 0.6
 }

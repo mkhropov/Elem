@@ -1,8 +1,7 @@
 package world;
 
-import graphics.GSList;
+import graphics.Texture;
 import graphics.GraphicalEntity;
-import graphics.GraphicalSurface;
 import graphics.Model;
 import core.Data;
 import stereometry.Point;
@@ -13,7 +12,7 @@ public class Entity implements GraphicalEntity {
 	public int mid;
 	public int gsid;
 	Model model;
-	GraphicalSurface gs;
+	Texture gs;
 
 	public Entity(Block b, int mid, int gsid) {
 		this.p = new Point(b);
@@ -33,12 +32,12 @@ public class Entity implements GraphicalEntity {
 	public Entity(Block b) {
 		p = new Point(b);
 		mid = Data.Models.getId("box");
-		gsid = graphics.GSList.getInstance().findId("marble");
+		gsid = Data.Textures.getId("marble");
 	}
 
 	public Entity() {
 		mid = Data.Models.getId("box");
-		gsid = graphics.GSList.getInstance().findId("stone");
+		gsid = Data.Textures.getId("stone");
 	}
 
 	public void setModel(int mid) {
@@ -48,7 +47,7 @@ public class Entity implements GraphicalEntity {
 
 	public void setGS(int gsid) {
 		this.gsid = gsid;
-		gs = GSList.getInstance().get(gsid);
+		gs = Data.Textures.get(gsid);
 	}
 
 	public void draw(){
@@ -56,6 +55,6 @@ public class Entity implements GraphicalEntity {
 //FIXME
 		Data.Models.get(mid).draw(
 			(float)p.x, (float)p.y, (float)p.z, a,
-			GSList.getInstance().get(gsid));
+			Data.Textures.get(gsid));
 	}
 }

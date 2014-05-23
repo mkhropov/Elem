@@ -107,7 +107,7 @@ public class Generator {
 					if (s.getVeinPower(i, j) > 0) {
 						Item node = new Item(i, j, k, 1.);
 						node.mid = Data.Models.getId("gem patch");
-						node.gsid = graphics.GSList.getInstance().findId("elem");
+						node.gsid = Data.Textures.getId("elem");
 						Renderer.getInstance().addEntity(node);
 						w.item.add(node);
 					}

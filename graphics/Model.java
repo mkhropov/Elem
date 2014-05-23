@@ -191,7 +191,7 @@ public class Model implements Initializable, Named{
 		this.initialized = true;
 	}
 
-	public void draw(float x, float y, float z, float a, GraphicalSurface gs) {
+	public void draw(float x, float y, float z, float a, Texture gs) {
 		glBindVertexArray(vao);
 
 		int prog = glGetInteger(GL_CURRENT_PROGRAM);

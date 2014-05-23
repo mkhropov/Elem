@@ -1,10 +1,9 @@
 package iface;
 
-import graphics.GSList;
-import graphics.GraphicalSurface;
 import graphics.Model;
 import graphics.Renderer;
 import core.Data;
+import graphics.Texture;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Mouse;
@@ -26,7 +25,7 @@ public class Cursor {
 	int hue_uniform; //shader uniform location
 	float[] hue;
 	Model model;
-	GraphicalSurface gs;
+	Texture gs;
 
 	public Cursor(){
 	//	GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -42,7 +41,7 @@ public class Cursor {
 			r.shaders[Renderer.SHADER_GHOST], "hue");
 		hue = new float[]{0.f, 0.f, 0.f, .6f};
 		model = Data.Models.get("cursor");
-		gs = GSList.getInstance().get("selection");
+		gs = Data.Textures.get("selection");
 
 		state = STATE_IFACE;
 	}
