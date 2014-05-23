@@ -12,7 +12,7 @@ public class JSONList <E extends Initializable & Named> implements Initializable
 	final private Gson gson;
 	boolean initialized;
 	private int defaultId;
-	
+
 	public JSONList(E sample){
 		list = new ArrayList<>();
 		this.sample = sample;
@@ -20,11 +20,11 @@ public class JSONList <E extends Initializable & Named> implements Initializable
 		initialized = true;
 		defaultId = 0;
 	}
-	
+
 	private void loadSingle(File f){
 		initialized = false;
 		if (f.isFile() && f.getName().matches(".*\\.json")) {
-			System.out.println("Loading "+f.getName());
+			//System.out.println("Loading "+f.getName());
 			BufferedReader br;
 			try {
 				br = new BufferedReader(new FileReader(f));
@@ -49,19 +49,19 @@ public class JSONList <E extends Initializable & Named> implements Initializable
 			}
 		}
 	}
-	
+
 	public void loadSingle(String FileName){
 		File f = new File(FileName);
 		loadSingle(f);
 	}
-	
+
 	public void load(String FolderName){
 		File jsonFolder = new File(FolderName);
 		for (File f: jsonFolder.listFiles()){
 			this.loadSingle(f);
 		}
 	}
-	
+
 	@Override
 	public void initialize(){
 		if (initialized) return;
@@ -69,7 +69,7 @@ public class JSONList <E extends Initializable & Named> implements Initializable
 			list.get(i).initialize();
 		}
 	}
-	
+
 	public boolean contains(String name){
 		for (int i=0; i<list.size(); i++){
 			if (list.get(i).getName().equalsIgnoreCase(name)){
@@ -78,11 +78,11 @@ public class JSONList <E extends Initializable & Named> implements Initializable
 		}
 		return false;
 	}
-	
+
 	public boolean contains(E item){
 		return contains(item.getName());
 	}
-	
+
 	public int getId(String name) {
 		int res = defaultId;
 		for (int i=0; i<list.size(); i++){
@@ -102,7 +102,6 @@ public class JSONList <E extends Initializable & Named> implements Initializable
 			System.out.println("WARNING: Trying to add duplicate object : "+item.getName());
 			return;
 		}
-		System.out.println("Adding "+item.getName());
 		list.add(item);
 	}
 
@@ -114,13 +113,13 @@ public class JSONList <E extends Initializable & Named> implements Initializable
 	}
 
 	public E get(String name){
-		return list.get(getId(name));
+		return get(getId(name));
 	}
-	
+
 	public void setDefault(int Id){
 		defaultId = Id;
 	}
-	
+
 	public void setDefault(String name) {
 		if (!contains(name)) {
 			System.out.println("WARNING: Trying to set default list item that is not on the list : "+name);
@@ -128,7 +127,7 @@ public class JSONList <E extends Initializable & Named> implements Initializable
 		}
 		defaultId = getId(name);
 	}
-	
+
 	public void setDefault(E item) {
 		if (!contains(item)) add(item);
 		setDefault(item.getName());

@@ -20,6 +20,7 @@ public class ModelList extends JSONList<Model>{
 			instance = new ModelList(new Model());
 			instance.load("res/models/");
 			instance.initialize();
+			instance.setDefault("cube");
 		}
 		return instance;
 	}
