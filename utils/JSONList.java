@@ -21,6 +21,7 @@ public class JSONList <E extends Initializable & Named> implements Initializable
 		defaultId = 0;
 	}
 
+	@SuppressWarnings("unchecked")
 	private void loadSingle(File f){
 		initialized = false;
 		if (f.isFile() && f.getName().matches(".*\\.json")) {
