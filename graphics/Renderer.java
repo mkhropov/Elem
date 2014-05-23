@@ -269,6 +269,7 @@ public class Renderer {
 
 
 	public void draw () {
+		Texture.reset();
 		int current_layer = Interface.getInstance().current_layer;
 		float z;
 		glClearColor(.9f*(current_layer-fdepth)/(world.zsize-fdepth),
