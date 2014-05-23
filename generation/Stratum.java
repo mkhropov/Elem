@@ -17,6 +17,7 @@ public class Stratum {
 	public int coef[];
 	public double offset[];
 	public BoundBox bb;
+	public Vein vein;
 
     public Stratum(int x, int y, double rmin, double rmax, double width, int m) {
         this.x = x;
@@ -33,6 +34,7 @@ public class Stratum {
 		for (int i=0; i<C_NUM; i++)
 			offset[i] = Generator.getInstance().rnd.nextDouble()*2*Math.PI;
 		this.bb = new BoundBox(x-rmax, y-rmax, 0, x+rmax, y+rmax, World.getInstance().zsize);
+		this.vein = null;
 	}
 
 	public double R(double phi) { // border
@@ -58,5 +60,14 @@ public class Stratum {
 			return width;
 		else
 			return width*w(Math.min(r/R(phi), 1.));
+	}
+
+	public int getVeinPower(int i, int j) {
+		if (vein == null)
+			return 0;
+		for (VeinNode n: vein.nodes)
+			if (i<=n.x && n.x<i+1 && j<=n.y && n.y<j+1)
+				return 1;
+		return 0;
 	}
 }

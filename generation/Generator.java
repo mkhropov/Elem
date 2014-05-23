@@ -9,6 +9,8 @@ import physics.Material;
 import stereometry.Point;
 import static world.Block.nearInd;
 import world.World;
+import item.Item;
+import graphics.Renderer;
 
 public class Generator {
 
@@ -24,6 +26,8 @@ public class Generator {
 	public Random rnd;
 
 	public boolean generated = false;
+
+	Stratum bedrock, air; //virtual stratums
 
 	private static Generator instance = null;
 
@@ -52,6 +56,9 @@ public class Generator {
 	public void generate(){
 		World w = World.getInstance();
 		System.out.print("Generating biomes ...");
+		this.bedrock = new Stratum(0, 0, 0, 0, 0, Data.Materials.getId("bedrock"));
+		this.air = new Stratum(0, 0, 0, 0, 0, Data.Materials.getId("air"));
+
 		biomes.add(new Hills(w.xsize/2, w.ysize/2, 2*w.xsize, 15));
 		for (Biome b : biomes){
 			b.generate();
@@ -69,6 +76,12 @@ public class Generator {
 						gc.addStratum(s);
 			}
 		}
+		for (int i=0; i<stratums.size(); i+=2){
+			Stratum s = stratums.get(stratums.size()/2);
+			Vein v = new Vein(s.O, 0., 25.);
+			v.grow(s);
+			s.vein = v;
+		}
 		System.out.print(" "+biomes.size()+" biomes, "+morphs.size()+" morphs, "+
 						stratums.size()+" stratums\n");
 		generated = true;
@@ -77,43 +90,53 @@ public class Generator {
 	public void apply(){
 		World w = World.getInstance();
 		GenerationChunk gc;
+		Stratum s;
 		System.out.print("Filling blocks ");
-		for (int t=0; t<x; ++t)
-		for (int s=0; s<y; ++s){
-			gc = genChunks[t][s];
+		for (int u=0; u<x; ++u)
+		for (int v=0; v<y; ++v){
+			gc = genChunks[u][v];
 			for (int i=gc.x; i<gc.x+GenerationChunk.GEN_CHUNK_XSIZE; ++i)
 //			if (i%(w.xsize/30) == 0)
 //				System.out.print(".");
 			for (int j=gc.y; j<gc.y+GenerationChunk.GEN_CHUNK_YSIZE; ++j){
 				if (i>=w.xsize || j>=w.ysize)
 					continue;
-				for (int k=0; k<w.zsize; ++k)
-					w.setMaterialID(i,j,k,getMaterial(i, j, k, gc));
+				for (int k=0; k<w.zsize; ++k) {
+					s = getStratum(i, j, k, gc);
+					w.setMaterialID(i, j, k, s.m);
+					if (s.getVeinPower(i, j) > 0) {
+						Item node = new Item(i, j, k, 1.);
+						node.mid = Data.Models.getId("gem patch");
+						node.gsid = graphics.GSList.getInstance().findId("elem");
+						Renderer.getInstance().addEntity(node);
+						w.item.add(node);
+					}
+				}
 			}
 		}
 		System.out.print(" done\n");
 		erosion(w, 2000., Data.Materials.getId("earth"));
 	}
 
-	public int getMaterial(int x, int y, int z, GenerationChunk gc) {
+	public Stratum getStratum(int x, int y, int z, GenerationChunk gc) {
 		if (!generated)
 			generate();
 		if (z == 0)
-			return Data.Materials.getId("bedrock");
+			return bedrock;
 		Point p = new Point(x, y, z);
 		int i;
 		for (i=0; i<gc.morphs.size(); i++)
 			gc.morphs.get(i).preimage(p);
 		if (p.z < 1.)
-			return Data.Materials.getId("bedrock");
+			return bedrock;
 		double dz = 1.;
 		for (i=0; i < gc.stratums.size(); ++i){
 			if (gc.stratums.get(i).isIn(p))
 				dz += gc.stratums.get(i).w(p);
 			if (dz > p.z)
-				return gc.stratums.get(i).m;
+				return gc.stratums.get(i);
 		}
-		return Data.Materials.getId("air");
+		return air;
 	}
 
 
@@ -121,7 +144,7 @@ public class Generator {
 		int t = 0;
 		for (int i=0; i<nearInd.length; ++i)
 			if (w.isIn(x, y, z, nearInd[i]))
-				t += (w.isAir(x+nearInd[i][0], 
+				t += (w.isAir(x+nearInd[i][0],
 						 y+nearInd[i][1],
 						 z+nearInd[i][2]))?
 						(0):(1);
