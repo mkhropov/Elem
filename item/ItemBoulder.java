@@ -23,7 +23,7 @@ public class ItemBoulder extends Item{
 		this.type = Item.TYPE_BUILDABLE;
 		this.m = m;
 		this.scale = Math.cbrt(w);
-		this.mid = graphics.ModelList.getInstance().findId("boulder");
+		this.mid = graphics.ModelList.getInstance().getId("boulder");
 		this.gsid = graphics.GSList.getInstance().findId(assoc[m]);
 		Renderer.getInstance().addEntity(this);
 	}
@@ -33,7 +33,7 @@ public class ItemBoulder extends Item{
 		this.m = m;
 		this.type = Item.TYPE_BUILDABLE;
 		this.scale = Math.cbrt(w);
-		this.mid = graphics.ModelList.getInstance().findId("boulder");
+		this.mid = graphics.ModelList.getInstance().getId("boulder");
 		this.gsid = graphics.GSList.getInstance().findId(assoc[m]);
 		Renderer.getInstance().addEntity(this);
 	}
@@ -43,7 +43,7 @@ public class ItemBoulder extends Item{
 		this.type = Item.TYPE_BUILDABLE;
 		this.m = m;
 		this.scale = Math.cbrt(w);
-		this.mid = graphics.ModelList.getInstance().findId("boulder");
+		this.mid = graphics.ModelList.getInstance().getId("boulder");
 		this.gsid = graphics.GSList.getInstance().findId(assoc[m]);
 	//	Renderer.getInstance().addEntity(this);
 	}
