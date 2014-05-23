@@ -49,6 +49,7 @@ public class Game {
 			System.exit(0);
 		}
 		System.out.println("Display created. OpenGL version: " + GL11.glGetString(GL11.GL_VERSION));
+		core.Data.getInstance();
 		world = World.getInstance();
 		world.init();
 		newTime = getTime();

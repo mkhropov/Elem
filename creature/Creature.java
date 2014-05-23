@@ -7,8 +7,8 @@ import static creature.Action.ACTION_FALL;
 import static creature.Action.ACTION_MOVE;
 import static creature.Action.ACTION_NONE;
 import static creature.Action.ACTION_TAKE;
+import core.Data;
 import graphics.GSList;
-import graphics.ModelList;
 import graphics.Renderer;
 import iface.FloatingText;
 import item.Item;
@@ -398,7 +398,7 @@ public class Creature extends Entity {
 	public void draw(){
 		super.draw();
 		if (item != null){
-			ModelList.getInstance().get(item.mid).draw(
+			Data.Models.get(item.mid).draw(
 			(float)(p.x+.5*Math.sin(a)), (float)(p.y+.5*Math.cos(a)), (float)(p.z+.3), a,
 			GSList.getInstance().get(item.gsid));
 		}

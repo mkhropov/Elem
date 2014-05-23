@@ -4,8 +4,8 @@ import graphics.GSList;
 import graphics.GraphicalEntity;
 import graphics.GraphicalSurface;
 import graphics.Model;
-import graphics.ModelList;
 import graphics.Renderer;
+import core.Data;
 import org.lwjgl.opengl.GL20;
 import stereometry.Point;
 
@@ -25,7 +25,7 @@ public class CommandCube implements GraphicalEntity {
 		Renderer r = Renderer.getInstance();
 		hue_uniform = GL20.glGetUniformLocation(
 		            r.shaders[Renderer.SHADER_GHOST], "hue");
-		model = ModelList.getInstance().get("cube");
+		model = Data.Models.get("cube");
 		int g;
 /*		if (command == Interface.COMMAND_MODE_BUILD)
 			g = graphics.GSList.getInstance().findId("IconBuild");

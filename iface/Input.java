@@ -4,8 +4,8 @@ import creature.Elem;
 import graphics.GSList;
 import graphics.GraphicalSurface;
 import graphics.Model;
-import graphics.ModelList;
 import graphics.Renderer;
+import core.Data;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL20;
@@ -26,7 +26,7 @@ public class Input {
 		hue_uniform = GL20.glGetUniformLocation(
 		            r.shaders[Renderer.SHADER_GHOST], "hue");
 		iface = I;
-		model = ModelList.getInstance().get("cube");
+		model = Data.Models.get("cube");
 		gs = GSList.getInstance().get("selection");
 	}
 

@@ -4,7 +4,7 @@ import graphics.GSList;
 import graphics.GraphicalEntity;
 import graphics.GraphicalSurface;
 import graphics.Model;
-import graphics.ModelList;
+import core.Data;
 import stereometry.Point;
 
 public class Entity implements GraphicalEntity {
@@ -32,18 +32,18 @@ public class Entity implements GraphicalEntity {
 
 	public Entity(Block b) {
 		p = new Point(b);
-		mid = graphics.ModelList.getInstance().getId("box");
+		mid = Data.Models.getId("box");
 		gsid = graphics.GSList.getInstance().findId("marble");
 	}
 
 	public Entity() {
-		mid = graphics.ModelList.getInstance().getId("box");
+		mid = Data.Models.getId("box");
 		gsid = graphics.GSList.getInstance().findId("stone");
 	}
 
 	public void setModel(int mid) {
 		this.mid = mid;
-		model = ModelList.getInstance().get(mid);
+		model = Data.Models.get(mid);
 	}
 
 	public void setGS(int gsid) {
@@ -54,7 +54,7 @@ public class Entity implements GraphicalEntity {
 	public void draw(){
 //		m.draw((float)p.x, (float)p.y, (float)p.z, a, gs);
 //FIXME
-		ModelList.getInstance().get(mid).draw(
+		Data.Models.get(mid).draw(
 			(float)p.x, (float)p.y, (float)p.z, a,
 			GSList.getInstance().get(gsid));
 	}

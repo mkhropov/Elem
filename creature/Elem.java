@@ -15,7 +15,7 @@ public class Elem extends Creature implements Worker{
         mv = new Vector(0., 0., 0.);
         speed = 0.001d;
 		this.capable = new boolean[]{true, true, true, true};
-		mid = graphics.ModelList.getInstance().getId("elem");
+		mid = core.Data.Models.getId("elem");
 		gsid = graphics.GSList.getInstance().findId("elem");
     }
 

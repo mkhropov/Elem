@@ -26,9 +26,9 @@ public class FallingBlock extends Item{
 		this.m = W.getMaterialID(coord[0], coord[1], coord[2]);
 		this.f = W.getForm(coord[0], coord[1], coord[2]);
 		if (f == World.FORM_BLOCK)
-			this.mid = graphics.ModelList.getInstance().getId("block");
+			this.mid = core.Data.Models.getId("block");
 		else
-			this.mid = graphics.ModelList.getInstance().getId("floor");
+			this.mid = core.Data.Models.getId("floor");
 		this.gsid = graphics.GSList.getInstance().findId(assoc[m]);
 		Renderer.getInstance().addEntity(this);
 	}

@@ -3,8 +3,8 @@ package iface;
 import graphics.GSList;
 import graphics.GraphicalSurface;
 import graphics.Model;
-import graphics.ModelList;
 import graphics.Renderer;
+import core.Data;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Mouse;
@@ -41,7 +41,7 @@ public class Cursor {
 		hue_uniform = GL20.glGetUniformLocation(
 			r.shaders[Renderer.SHADER_GHOST], "hue");
 		hue = new float[]{0.f, 0.f, 0.f, .6f};
-		model = ModelList.getInstance().get("cursor");
+		model = Data.Models.get("cursor");
 		gs = GSList.getInstance().get("selection");
 
 		state = STATE_IFACE;
