@@ -4,5 +4,5 @@
 	"description" : "A chunk of dirt",
 	"model" : "boulder",
 	"texture" : "dirt",
-	"weight" : 1,
+	"weight" : 1
 }
