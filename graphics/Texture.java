@@ -60,4 +60,8 @@ public class Texture implements Initializable, Named{
 	public float resolveV(float v) {
 		return tex_v+v*v_size;
 	}
+	
+	public static void reset() {
+		bound = "";
+	}
 }
