@@ -2,8 +2,6 @@ package generation;
 
 import java.util.ArrayList;
 
-import org.lwjgl.opengl.GL11;
-
 import stereometry.Point;
 import generation.morphs.Morph;
 

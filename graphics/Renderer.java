@@ -42,6 +42,7 @@ public class Renderer {
 	public final static int VIEW_MODE_FULL=1;      //Show all blocks, debug only
 	public final static int VIEW_MODE_FOW=2;       //Show only known blocks
 	public final static int VIEW_MODE_FOW_OCD=3;   //Show only known blocks open to air
+	public final static int VIEW_MODE_NOBLOCK = 4;
 	public final static int VIEW_MODE_FLAT=64; //Should top layer be flat
 
 	public int[] shaders;
@@ -283,7 +284,7 @@ public class Renderer {
 
 		recalc_chunks();
 
-		if (!draw_mana){
+		if ((Interface.getInstance().viewMode & VIEW_MODE_NOBLOCK) == 0){
 			if ((Interface.getInstance().viewMode & VIEW_MODE_FLAT)!=0) {
 				z = current_layer + 0.5f;
 				glUseProgram(shaders[SHADER_HIGHLIGHT_FLAT]);
@@ -303,14 +304,14 @@ public class Renderer {
 				if (gChunks[i].used && (gChunks[i].z!=current_layer))
 					gChunks[i].draw(false);
 //			 System.out.println("regular layers printed");
-		} else {
+		} else {/*
 			glUseProgram(shaders[SHADER_NONE]);
 			glBindTexture(GL_TEXTURE_2D, 0);
 			glEnable(GL_COLOR_MATERIAL);
 			glLineWidth(1);
 			glColor3d(1., 1., .8);
 			ManaField.getInstance().draw();
-			glDisable(GL_COLOR_MATERIAL);
+			glDisable(GL_COLOR_MATERIAL);*/
 		}
 		glUseProgram(shaders[Renderer.SHADER_FADE]);
 		for (int i=0; i<gEntities.size(); i++){

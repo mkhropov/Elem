@@ -152,6 +152,9 @@ public class Input {
 	            case Keyboard.KEY_4:
 					iface.setCommandMode(Interface.COMMAND_MODE_CANCEL);
 					break;
+				case Keyboard.KEY_H:
+					iface.viewMode |= Renderer.VIEW_MODE_NOBLOCK;
+					break;
 				case Keyboard.KEY_SPACE:
 					iface.viewMode |= Renderer.VIEW_MODE_FLAT;
 					break;
@@ -163,6 +166,9 @@ public class Input {
 			switch(Keyboard.getEventKey()){
 				case Keyboard.KEY_SPACE:
 					iface.viewMode = iface.viewMode & ~Renderer.VIEW_MODE_FLAT;
+					break;
+				case Keyboard.KEY_H:
+					iface.viewMode = iface.viewMode & ~Renderer.VIEW_MODE_NOBLOCK;
 					break;
 				case Keyboard.KEY_F3:
 					iface.debug=!iface.debug;

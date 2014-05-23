@@ -76,9 +76,12 @@ public class Generator {
 						gc.addStratum(s);
 			}
 		}
-		for (int i=0; i<stratums.size(); i+=2){
-			Stratum s = stratums.get(stratums.size()/2);
-			Vein v = new Vein(s.O, 0., 25.);
+		int earthID = Data.Materials.getId("earth");
+		for (int i=0; i<stratums.size(); i++){
+			Stratum s = stratums.get(i);
+			if (s.m == earthID)
+				continue;
+			Vein v = new Vein(s.O, 0., 20.);
 			v.grow(s);
 			s.vein = v;
 		}
