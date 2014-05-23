@@ -34,7 +34,7 @@ public class ShaderLoader {
 		glCompileShader(vsh);
 		l = ARBShaderObjects.glGetObjectParameteriARB(vsh,
 			ARBShaderObjects.GL_OBJECT_INFO_LOG_LENGTH_ARB);
-		if (l > 1){
+		if ((l > 1) && (!ARBShaderObjects.glGetInfoLogARB(vsh, l).contains("successfully compiled"))){
 			System.out.println("Errors at compiling vertex shader "+
 				vertexShaderFname+":");
 			System.out.print(ARBShaderObjects.glGetInfoLogARB(vsh, l));
@@ -59,7 +59,7 @@ public class ShaderLoader {
 		glCompileShader(fsh);
 		l = ARBShaderObjects.glGetObjectParameteriARB(fsh,
 			ARBShaderObjects.GL_OBJECT_INFO_LOG_LENGTH_ARB);
-		if (l > 1){
+		if ((l > 1) && (!ARBShaderObjects.glGetInfoLogARB(fsh, l).contains("successfully compiled"))){
 			System.out.println("Errors at compiling fragment shader "+
 				fragmentShaderFname+":");
 			System.out.print(ARBShaderObjects.glGetInfoLogARB(fsh, l));
@@ -71,7 +71,7 @@ public class ShaderLoader {
 		glLinkProgram(p);
 		l = ARBShaderObjects.glGetObjectParameteriARB(p,
 			ARBShaderObjects.GL_OBJECT_INFO_LOG_LENGTH_ARB);
-		System.out.print(ARBShaderObjects.glGetInfoLogARB(p, l));
+		//System.out.print(ARBShaderObjects.glGetInfoLogARB(p, l));
 		glDetachShader(p, fsh);
 		glDetachShader(p, vsh);
 
