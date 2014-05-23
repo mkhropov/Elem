@@ -1,5 +1,6 @@
 package generation;
 
+import core.Data;
 import java.util.Random;
 import physics.Material;
 
@@ -21,18 +22,18 @@ public class Plains extends Biome {
 		double dR;
 		int hn = 0;
 		int w;
-		char m;
+		int m;
 		while (hn < 4*h/5.-2){
 			switch (rnd.nextInt(3)){
 				case 0:
-					m = Material.MATERIAL_STONE;
+					m = Data.Materials.getId("stone");
 					break;
 				case 1:
-					m = Material.MATERIAL_MARBLE;
+					m = Data.Materials.getId("marble");
 					break;
 				case 2:
 				default:
-					m = Material.MATERIAL_GRANITE;
+					m = Data.Materials.getId("granite");
 					break;
 			}
 			w = rnd.nextInt(3)+1;
@@ -42,7 +43,7 @@ public class Plains extends Biome {
 		}
 		double V = R*R*(h-hn); // volume/PI
 		double v = 0;
-		m = Material.MATERIAL_EARTH;
+		m = Data.Materials.getId("earth");
 		while (v < V){
 			dR = rnd.nextDouble();
 			s = new Stratum(x+rnd.nextInt(2*R)-R, y+rnd.nextInt(2*R)-R, stratumR*(1+dR/5-.25)*.9, stratumR*(1+dR/5-.25)*1.1, 1, m);

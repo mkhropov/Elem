@@ -1,5 +1,6 @@
 package world;
 
+import core.Data;
 import creature.Creature;
 import generation.Generator;
 import graphics.Renderer;
@@ -69,7 +70,7 @@ public class World {
         for (int i=0; i<xsize; i++)
             for (int j=0; j<ysize; j++)
                 for (int k=0; k<zsize; k++)
-                    block[i][j][k] = Material.MATERIAL_NONE;
+                    block[i][j][k] = Data.Materials.getId("air");
 		System.out.print(" done\n");
 
 		this.creature = new ArrayList<>();
@@ -81,13 +82,13 @@ public class World {
 
 	public int getMaterialID (int x, int y, int z) {
 		if (!isIn(x, y, z))
-			return Material.MATERIAL_BEDROCK;
+			return Data.Materials.getId("bedrock");
 		return block[x][y][z]&MATERIAL_MASK;
 	}
 
 	public int getMaterialID (Point p) {
 		if (!isIn(p.x, p.y, p.z))
-			return Material.MATERIAL_BEDROCK;
+			return Data.Materials.getId("bedrock");
 		return block[(int)p.x][(int)p.y][(int)p.z]&MATERIAL_MASK;
 	}
 
@@ -116,7 +117,7 @@ public class World {
 	}
 
 	public boolean hasSolidBorder(int x, int y, int z, int d) {
-		if (getMaterialID(x,y,z) == Material.MATERIAL_NONE) {
+		if (getMaterialID(x,y,z) == Data.Materials.getId("air")) {
 			return false;
 		} else {
 			switch (getForm(x,y,z)) {
@@ -234,7 +235,7 @@ public class World {
 			if (!hasSupport(p[0], p[1], p[2])){
 				item.add(new FallingBlock(p));
 //				System.out.println("A falling block was added");
-				setMaterialID(p[0], p[1], p[2], Material.MATERIAL_NONE);
+				setMaterialID(p[0], p[1], p[2], Data.Materials.getId("air"));
 				setForm(p[0], p[1], p[2], FORM_BLOCK);
 				Renderer.getInstance().updateBlock(p[0], p[1], p[2]);
 				for (int i=0; i<6; ++i)
@@ -289,11 +290,11 @@ public class World {
 				m2 = m1; f2 = f1; s2 = s1;
 			}
 			support += Math.max(
-				Material.support[f1/0x400][s1][m1],
-				Material.support[f2/0x400][s2][m2]);
+				Data.Materials.get(m1).support[f1/0x400][s1],
+				Data.Materials.get(m2).support[f2/0x400][s2]);
 		}
 //		System.out.println("Support is "+support+", weight "+(Material.weight[bform/0x400][bmat]));
-		return (Material.weight[bform/0x400][bmat] <= support);
+		return (Data.Materials.get(bmat).weight[bform/0x400] <= support);
 	}
 
 	public boolean isIn(int x, int y, int z){
@@ -318,7 +319,7 @@ public class World {
 		if ((x<0) || (x>=xsize)) return true;
 		if ((y<0) || (y>=ysize)) return true;
 		if ((z<0) || (z>=zsize)) return true;
-		return (getMaterialID(x, y, z) == Material.MATERIAL_NONE)
+		return (getMaterialID(x, y, z) == Data.Materials.getId("air"))
 				|| (getForm(x, y, z) == FORM_FLOOR);
 	}
 
@@ -326,14 +327,14 @@ public class World {
 		if ((x<0) || (x>=xsize)) return true;
 		if ((y<0) || (y>=ysize)) return true;
 		if ((z<0) || (z>=zsize)) return true;
-		return (getMaterialID(x, y, z) == Material.MATERIAL_NONE);
+		return (getMaterialID(x, y, z) == Data.Materials.getId("air"));
 	}
 
 	public boolean isFull(int x, int y, int z){
 		if ((x<0) || (x>=xsize)) return false;
 		if ((y<0) || (y>=ysize)) return false;
 		if ((z<0) || (z>=zsize)) return false;
-		return (getMaterialID(x, y, z) != Material.MATERIAL_NONE)
+		return (getMaterialID(x, y, z) != Data.Materials.getId("air"))
 				&& (getForm(x, y, z) == FORM_BLOCK);
 	}
 

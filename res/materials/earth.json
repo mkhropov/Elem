@@ -1,0 +1,8 @@
+{
+	"name" : "earth",
+	"texture" : "earth",
+	"tex_u" : 0.25,
+	"tex_v" : 0.0,
+	"rand" : 0.5,
+	"hardness" : 50
+}

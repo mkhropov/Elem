@@ -1,0 +1,8 @@
+{
+	"name" : "bedrock",
+	"texture" : "bedrock",
+	"tex_u" : 0.75,
+	"tex_v" : 0.25,
+	"rand" : 0.5,
+	"hardness" : 10000
+}

@@ -1,23 +1,12 @@
 package item;
 
+import core.Data;
 import graphics.Renderer;
 import physics.Material;
 import world.World;
 
 public class FallingBlock extends Item{
-
-	static final String[] assoc;
-
 	int m, f;
-
-	static {
-		assoc = new String[Material.MATERIAL_MAX];
-		assoc[Material.MATERIAL_STONE] = "stone";
-		assoc[Material.MATERIAL_MARBLE] = "marble";
-		assoc[Material.MATERIAL_GRANITE] = "granite";
-		assoc[Material.MATERIAL_EARTH] = "earth";
-		assoc[Material.MATERIAL_BEDROCK] = "bedrock";
-	}
 
 	public FallingBlock(int[] coord){
 		super(coord[0], coord[1], coord[2], 0.);
@@ -29,7 +18,7 @@ public class FallingBlock extends Item{
 			this.mid = core.Data.Models.getId("block");
 		else
 			this.mid = core.Data.Models.getId("floor");
-		this.gsid = graphics.GSList.getInstance().findId(assoc[m]);
+		this.gsid = graphics.GSList.getInstance().findId(Data.Materials.get(m).texture);
 		Renderer.getInstance().addEntity(this);
 	}
 
@@ -41,7 +30,7 @@ public class FallingBlock extends Item{
 			--i;
 		int mat = W.getMaterialID(b.x, b.y, i);
 		int form = W.getForm(b.x, b.y, i);
-		if (Material.hardness[mat] < Material.hardness[m]){
+		if (Data.Materials.get(mat).hardness < Data.Materials.get(m).hardness){
 			W.setMaterialID(b.x, b.y, i, m);
 			W.setForm(b.x, b.y, i, f);
 			//spawn drop from mat, form

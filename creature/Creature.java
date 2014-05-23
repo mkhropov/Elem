@@ -251,8 +251,8 @@ public class Creature extends Entity {
 	}
 
 	public boolean canDig(Block b){
-		return (b.m != Material.MATERIAL_NONE) &&
-			(Material.digTime(digStrength, b.m) > 0.);
+		return (b.m != Data.Materials.getId("air")) &&
+			(Data.Materials.get(b.m).digTime(digStrength) > 0.);
 	}
 
 	public boolean take(Action action){
@@ -291,7 +291,7 @@ public class Creature extends Entity {
 			switch(w.getForm(b.x, b.y, b.z)){
 			case World.FORM_FLOOR:
 				if (action.f == World.FORM_BLOCK){
-					w.setMaterialID(b.x, b.y, b.z, Material.MATERIAL_NONE);
+					w.setMaterialID(b.x, b.y, b.z, Data.Materials.getId("air"));
 					w.setForm(b.x, b.y, b.z, World.FORM_BLOCK);
 					w.setDirection(b.x, b.y, b.z, 0);
 					w.updateEntities(b.x, b.y, b.z);
@@ -302,7 +302,7 @@ public class Creature extends Entity {
 				if (action.f == World.FORM_FLOOR)
 					w.setMaterialID(b.x, b.y, b.z, m);
 				else
-					w.setMaterialID(b.x, b.y, b.z, Material.MATERIAL_NONE);
+					w.setMaterialID(b.x, b.y, b.z, Data.Materials.getId("air"));
 				w.setForm(b.x, b.y, b.z, action.f);
 				w.setDirection(b.x, b.y, b.z, action.d);
 				w.updateEntities(b.x, b.y, b.z+1);
@@ -319,7 +319,7 @@ public class Creature extends Entity {
     public final boolean build(Action action){
 		Block b = action.b;
 		int m = action.m;
-        if ((!canReach(b)) || ((b.m != Material.MATERIAL_NONE) &&
+        if ((!canReach(b)) || ((b.m != Data.Materials.getId("air")) &&
 			!((m==b.m) && (World.getInstance().getForm(b.x, b.y, b.z)==World.FORM_FLOOR))) ||
 			!((item.type == Item.TYPE_BUILDABLE) && (item.m == m)))
             return false;

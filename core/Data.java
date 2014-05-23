@@ -1,16 +1,16 @@
 package core;
 
-import java.util.ArrayList;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.File;
-import com.google.gson.Gson;
 import graphics.Model;
+import graphics.Texture;
+import java.util.Arrays;
+import physics.Material;
 
 import utils.JSONList;
 
 public class Data{
 	public static JSONList<Model> Models;
+	public static JSONList<Material> Materials;
+	public static JSONList<Texture> Textures;
 	static Data instance = null;
 	
 	private Data(){
@@ -18,6 +18,20 @@ public class Data{
 		Models.load("res/models/");
 		Models.initialize();
 		Models.setDefault("cube");
+		Materials = new JSONList<Material>(new Material());
+		Material air = new Material();
+		air.setName("air");
+		Arrays.fill(air.weight, 0);
+		Arrays.fill(air.support[0], 0);
+		Arrays.fill(air.support[1], 0);
+		Materials.add(air);
+		Materials.setDefault("air");
+		Materials.load("res/materials");
+		Materials.initialize();
+		Textures = new JSONList<Texture>(new Texture());
+		Textures.load("res/textures/");
+		Textures.initialize();
+		Textures.setDefault("void");
 	}
 	
 	public static Data getInstance() {

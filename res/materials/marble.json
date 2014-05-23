@@ -1,0 +1,8 @@
+{
+	"name" : "marble",
+	"texture" : "marble",
+	"tex_u" : 0.0,
+	"tex_v" : 0.5,
+	"rand" : 0.3,
+	"hardness" : 150
+}

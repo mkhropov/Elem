@@ -1,5 +1,6 @@
 package iface;
 
+import core.Data;
 import graphics.Renderer;
 import java.awt.Font;
 import org.lwjgl.input.Mouse;
@@ -68,7 +69,7 @@ public class Interface {
 		return t.getState();
 	}
 
-	public void setBuildMaterial(char material){
+	public void setBuildMaterial(int material){
 		SelectorMenu t = (SelectorMenu)menus[MENU_BUILD_MATERIAL];
 		t.setState(material);
 	}
@@ -142,15 +143,15 @@ public class Interface {
 		bBuild.setFace(t);
 		t = new SelectorMenu(bBuild);
 		t.show();
-		t.addButton(new Button(410, 480, 40, 40, "marble"), Material.MATERIAL_MARBLE);
-		t.addButton(new Button(460, 480, 40, 40, "earth"), Material.MATERIAL_EARTH);
-		t.addButton(new Button(510, 480, 40, 40, "stone"), Material.MATERIAL_STONE);
-		t.addButton(new Button(560, 480, 40, 40, "granite"), Material.MATERIAL_GRANITE);
+		t.addButton(new Button(410, 480, 40, 40, "marble"), Data.Materials.getId("marble"));
+		t.addButton(new Button(460, 480, 40, 40, "earth"), Data.Materials.getId("earth"));
+		t.addButton(new Button(510, 480, 40, 40, "stone"), Data.Materials.getId("gabbro"));
+		t.addButton(new Button(560, 480, 40, 40, "granite"), Data.Materials.getId("granite"));
 		menus[MENU_BUILD_MATERIAL] = t;
 
 		viewMode = Renderer.VIEW_MODE_FOW;
 		this.setCommandMode(COMMAND_MODE_SPAWN);
-		this.setBuildMaterial(Material.MATERIAL_MARBLE);
+		this.setBuildMaterial(Data.Materials.getId("marble"));
 }
 
 	public void draw(){

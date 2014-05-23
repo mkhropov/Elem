@@ -1,5 +1,6 @@
 package item;
 
+import core.Data;
 import physics.Material;
 
 public class ItemTemplate{
@@ -18,6 +19,6 @@ public class ItemTemplate{
 		return (((i.type == type) ||
 				 (type == Item.TYPE_NONE)) &&
 				((i.m == m) ||
-				 (m == Material.MATERIAL_NONE)));
+				 (m == Data.Materials.getId("air"))));
 	}
 }

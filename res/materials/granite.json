@@ -1,0 +1,8 @@
+{
+	"name" : "granite",
+	"texture" : "granite",
+	"tex_u" : 0.5,
+	"tex_v" : 0.0,
+	"rand" : 0.5,
+	"hardness" : 200
+}

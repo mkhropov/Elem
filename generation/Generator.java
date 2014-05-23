@@ -1,5 +1,6 @@
 package generation;
 
+import core.Data;
 import generation.morphs.Morph;
 import java.util.ArrayList;
 import java.util.Date;
@@ -91,20 +92,20 @@ public class Generator {
 			}
 		}
 		System.out.print(" done\n");
-		erosion(w, 2000., Material.MATERIAL_EARTH);
+		erosion(w, 2000., Data.Materials.getId("earth"));
 	}
 
 	public int getMaterial(int x, int y, int z, GenerationChunk gc) {
 		if (!generated)
 			generate();
 		if (z == 0)
-			return Material.MATERIAL_BEDROCK;
+			return Data.Materials.getId("bedrock");
 		Point p = new Point(x, y, z);
 		int i;
 		for (i=0; i<gc.morphs.size(); i++)
 			gc.morphs.get(i).preimage(p);
 		if (p.z < 1.)
-			return Material.MATERIAL_BEDROCK;
+			return Data.Materials.getId("bedrock");
 		double dz = 1.;
 		for (i=0; i < gc.stratums.size(); ++i){
 			if (gc.stratums.get(i).isIn(p))
@@ -112,7 +113,7 @@ public class Generator {
 			if (dz > p.z)
 				return gc.stratums.get(i).m;
 		}
-		return Material.MATERIAL_NONE;
+		return Data.Materials.getId("air");
 	}
 
 
@@ -137,8 +138,8 @@ public class Generator {
 			for (int i=0; i<w.xsize; ++i)
 				for (int j=0; j<w.ysize; ++j){
 					if ((17-blockCover(i, j, k, w))*power >
-						Material.hardness[w.getMaterialID(i,j,k)])
-						w.setMaterialID(i,j,k, Material.MATERIAL_NONE);
+						Data.Materials.get(w.getMaterialID(i,j,k)).hardness)
+						w.setMaterialID(i,j,k, Data.Materials.getId("air"));
 				}
 		}
 		System.out.print(" done\nFilling gaps ");

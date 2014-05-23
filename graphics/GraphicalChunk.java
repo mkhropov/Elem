@@ -1,5 +1,6 @@
 package graphics;
 
+import core.Data;
 import graphics.shaders.Matrix4;
 import world.*;
 import iface.Interface;
@@ -120,12 +121,13 @@ public class GraphicalChunk {
 				tbuf.put(0.75f+0.5f*text[2*i+0]/8.f+0.5f*((float)Math.abs(Math.sin(1.9*X+Y+Z)))/4.f);
 				tbuf.put(0.75f+0.5f*text[2*i+1]/8.f+0.5f*((float)Math.abs(Math.sin(X-1.9*Y+Z)))/4.f);
 			} else {
-				tbuf.put(Material.tex_u[m]
-					+(1-Material.rand[m])*text[2*i+0]/8.f
-					+Material.rand[m]*((float)Math.abs(Math.sin(1.9*X+Y+Z)))/4.f);//FIX textures
-				tbuf.put(Material.tex_v[m]
-					+(1-Material.rand[m])*text[2*i+1]/8.f
-					+Material.rand[m]*((float)Math.abs(Math.sin(X-1.9*Y+Z)))/4.f);// offsets
+				Texture t = Data.Textures.get(Data.Materials.get(m).texture);
+				tbuf.put(t.tex_u
+					+(1-t.rand)*text[2*i+0]/8.f
+					+t.rand*((float)Math.abs(Math.sin(1.9*X+Y+Z)))/4.f);//FIX textures
+				tbuf.put(t.tex_v
+					+(1-t.rand)*text[2*i+1]/8.f
+					+t.rand*((float)Math.abs(Math.sin(X-1.9*Y+Z)))/4.f);// offsets
 			}
 			nbuf.put(norm[f][3*i+0]);
 			nbuf.put(norm[f][3*i+1]);
