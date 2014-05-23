@@ -14,7 +14,7 @@ public class Data{
 	static Data instance = null;
 	
 	private Data(){
-		Models = new JSONList(new Model());
+		Models = new JSONList<Model>(new Model());
 		Models.load("res/models/");
 		Models.initialize();
 		Models.setDefault("cube");
