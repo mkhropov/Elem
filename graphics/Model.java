@@ -208,6 +208,11 @@ public class Model implements Initializable, Named{
 		int t_uniform = glGetUniformLocation(prog, "tex");
 		int m_uniform = glGetUniformLocation(prog, "M");
 		int vp_uniform = glGetUniformLocation(prog, "VP");
+		
+		int tex_size = glGetUniformLocation(prog, "size");
+		int tex_start = glGetUniformLocation(prog, "start");
+		glUniform2f(tex_size, gs.u_size, gs.v_size);
+		glUniform2f(tex_start, gs.tex_u, gs.tex_v);
 
 		Matrix4 m = Matrix4.identity();
 		m = m.multR(Matrix4.scale(new float[]{s0, s1, s2}));

@@ -50,6 +50,14 @@ public class Renderer {
 	public int curr_z_attr;
 	public int max_z_attr;
 	public int z_attr;
+	public int fadeout_tex_start;
+	public int fadeout_tex_size;
+	public int bbasic_tex_start;
+	public int bbasic_tex_size;
+	public int hbasic_tex_start;
+	public int hbasic_tex_size;
+	public int hfbasic_tex_start;
+	public int hfbasic_tex_size;
 
 	public Matrix4 view;
 	public Matrix4 proj;
@@ -100,6 +108,14 @@ public class Renderer {
 
 		curr_z_attr = glGetUniformLocation(shaders[Renderer.SHADER_FADE], "curr_z");
 		max_z_attr = glGetUniformLocation(shaders[Renderer.SHADER_FADE], "max_z");
+		fadeout_tex_start = glGetUniformLocation(shaders[Renderer.SHADER_FADE], "start");
+		fadeout_tex_size = glGetUniformLocation(shaders[Renderer.SHADER_FADE], "size");
+		bbasic_tex_start = glGetUniformLocation(shaders[Renderer.SHADER_BASIC], "start");
+		bbasic_tex_size = glGetUniformLocation(shaders[Renderer.SHADER_BASIC], "size");
+		hbasic_tex_start = glGetUniformLocation(shaders[Renderer.SHADER_HIGHLIGHT], "start");
+		hbasic_tex_size = glGetUniformLocation(shaders[Renderer.SHADER_HIGHLIGHT], "size");
+		hfbasic_tex_start = glGetUniformLocation(shaders[Renderer.SHADER_HIGHLIGHT_FLAT], "start");
+		hfbasic_tex_size = glGetUniformLocation(shaders[Renderer.SHADER_HIGHLIGHT_FLAT], "size");
 		z_attr = glGetUniformLocation(shaders[SHADER_HIGHLIGHT_FLAT], "z");
 
 		gEntities = new ArrayList<>();
@@ -290,8 +306,12 @@ public class Renderer {
 				z = current_layer + 0.5f;
 				glUseProgram(shaders[SHADER_HIGHLIGHT_FLAT]);
 				glUniform1f(z_attr, z);
+				glUniform2f(hfbasic_tex_start, 0.f, 0.f);
+				glUniform2f(hfbasic_tex_size, 1.f, 1.f);
 			} else {
 				glUseProgram(shaders[SHADER_HIGHLIGHT]);
+				glUniform2f(hbasic_tex_start, 0.f, 0.f);
+				glUniform2f(hbasic_tex_size, 1.f, 1.f);
 			}
 			for (int i=0; i<gChunks_size; i++)
 				if (gChunks[i].used && (gChunks[i].z==current_layer)) {
@@ -299,6 +319,8 @@ public class Renderer {
 				}
 //			System.out.println("higlight layer printed");
 			glUseProgram(shaders[SHADER_FADE]);
+			glUniform2f(fadeout_tex_start, 0.f, 0.f);
+			glUniform2f(fadeout_tex_size, 1.f, 1.f);
 			glUniform1f(max_z_attr, (float)world.zsize);
 			glUniform1f(curr_z_attr, (float)current_layer);
 			for (int i=0; i<gChunks_size; i++)
