@@ -16,6 +16,7 @@ public class Player {
     public ArrayList<Order> order;
     public ArrayList<Creature> creature;
 	public ArrayList<Spell> spellbook;
+	public ArrayList<Zone> zones;
 	public char[][][] blockMeta; //For now FOW only, 7 bits free
 	public final static char META_FOW = 1;
 	public int mana;
@@ -25,6 +26,7 @@ public class Player {
         this.order = new ArrayList<>();
         this.creature = new ArrayList<>();
 		this.spellbook = new ArrayList<>();
+		this.zones = new ArrayList<>();
 		World w = World.getInstance();
 		this.blockMeta = new char[w.xsize][w.ysize][w.zsize];
 		for (int i=0; i<w.xsize; i++)

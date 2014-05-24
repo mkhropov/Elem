@@ -8,6 +8,7 @@ import core.Data;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL20;
+import player.Zone;
 import world.Block;
 import world.World;
 
@@ -57,6 +58,10 @@ public class Input {
 					startY = endY;
 					draw = true;
 				} else { //button released
+					Zone z = null;
+					if (iface.getCommandMode()==Interface.COMMAND_MODE_ZONE) {
+						z = new Zone(Data.Zones.get(iface.getZoneType()));
+					}
 					draw = false;
 					int i, j;
 					i = startX;
@@ -84,6 +89,9 @@ public class Input {
 											World.getInstance().getBlock(i, j, iface.current_layer),
 											iface.getBuildMaterial());
 									break;
+								case Interface.COMMAND_MODE_ZONE:
+									z.add(World.getInstance().getBlock(i, j, iface.current_layer));
+									break;
 								case Interface.COMMAND_MODE_CANCEL:
 									iface.player.cancelOrders(World.getInstance().getBlock(i, j, iface.current_layer));
 									break;
@@ -93,6 +101,9 @@ public class Input {
 						} while(j != endY+Math.signum(endY - startY));
 						i+=Math.signum(endX-startX);
 					} while(i != endX+Math.signum(endX-startX));
+					if (iface.getCommandMode()==Interface.COMMAND_MODE_ZONE) {
+						iface.player.zones.add(z);
+					}
 				}
 			}
 		}
@@ -150,6 +161,9 @@ public class Input {
 					iface.setCommandMode(Interface.COMMAND_MODE_BUILD);
 					break;
 	            case Keyboard.KEY_4:
+					iface.setCommandMode(Interface.COMMAND_MODE_ZONE);
+					break;
+	            case Keyboard.KEY_5:
 					iface.setCommandMode(Interface.COMMAND_MODE_CANCEL);
 					break;
 				case Keyboard.KEY_H:
@@ -183,6 +197,11 @@ public class Input {
 	public void draw(){
 		if (! draw)
 			return;
+		if (iface.getCommandMode()==Interface.COMMAND_MODE_ZONE) {
+			model = Data.Models.get("floor");
+		} else {
+			model = Data.Models.get("cube");
+		}
 		GL20.glUseProgram(Renderer.getInstance().shaders[Renderer.SHADER_GHOST]);
 		GL20.glUniform4f(hue_uniform, 1f, 0f, 0f, 0.6f);
 		int i, j;

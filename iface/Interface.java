@@ -3,12 +3,15 @@ package iface;
 import core.Data;
 import graphics.Renderer;
 import java.awt.Font;
+import java.util.Iterator;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
 import org.lwjgl.util.glu.GLU;
 import org.newdawn.slick.TrueTypeFont;
 import physics.Material;
 import player.Player;
+import player.Zone;
 import world.Block;
 import world.World;
 
@@ -28,14 +31,16 @@ public class Interface {
 	public static final int COMMAND_MODE_SPAWN = 0;
 	public static final int COMMAND_MODE_DIG = 1;
 	public static final int COMMAND_MODE_BUILD = 2;
-	public static final int COMMAND_MODE_CANCEL = 3;
+	public static final int COMMAND_MODE_ZONE = 3;
+	public static final int COMMAND_MODE_CANCEL = 4;
 
 
 	public static final int MENU_TOOLBAR = 0;
 	public static final int MENU_DIG_FORM = 1;
 	public static final int MENU_BUILD_FORM = 2;
 	public static final int MENU_BUILD_MATERIAL = 3;
-	public static final int MENU_COUNT = 4;
+	public static final int MENU_ZONE_TYPE = 4;
+	public static final int MENU_COUNT = 5;
 
 
 	public Menu[] menus;
@@ -88,6 +93,16 @@ public class Interface {
 		SelectorMenu t = (SelectorMenu)menus[MENU_BUILD_FORM];
 		return t.getState();
 	}
+	
+	public void setZoneType(int type){
+		SelectorMenu t = (SelectorMenu)menus[MENU_ZONE_TYPE];
+		t.setState(type);
+	}
+
+	public int getZoneType(){
+		SelectorMenu t = (SelectorMenu)menus[MENU_ZONE_TYPE];
+		return t.getState();
+	}
 
 	public void setDigForm(int form){
 		SelectorMenu t = (SelectorMenu)menus[MENU_DIG_FORM];
@@ -115,17 +130,21 @@ public class Interface {
 		awtFont = new Font("Helvetica", Font.BOLD, 12);
 		sansSerif = new TrueTypeFont(awtFont, true);
 		SelectorMenu t = new SelectorMenu(new Element());
-		t.addButton(new Button(265, 530, 60, 60, "IconSummon"), COMMAND_MODE_SPAWN);
-		Button bDig = new Button(335, 530, 60, 60, "IconDig");
+		t.addButton(new Button(235, 530, 60, 60, "IconSummon"), COMMAND_MODE_SPAWN);
+		Button bDig = new Button(305, 530, 60, 60, "IconDig");
 		bDig.bindAction(new Runnable() { @Override public void run() {
 				Interface.getInstance().menus[Interface.MENU_DIG_FORM].toggle();}}, 1);
 		t.addButton(bDig, COMMAND_MODE_DIG);
-		Button bBuild = new Button(405, 530, 60, 60, "IconBuild");
+		Button bBuild = new Button(375, 530, 60, 60, "IconBuild");
 		bBuild.bindAction(new Runnable() { @Override public void run() {
 				Interface.getInstance().menus[Interface.MENU_BUILD_FORM].toggle();
 				Interface.getInstance().menus[Interface.MENU_BUILD_MATERIAL].toggle();}}, 1);
 		t.addButton(bBuild, COMMAND_MODE_BUILD);
-		t.addButton(new Button(475, 530, 60, 60, "IconCancel"), COMMAND_MODE_CANCEL);
+		t.addButton(new Button(515, 530, 60, 60, "IconCancel"), COMMAND_MODE_CANCEL);
+		Button bZone = new Button(445, 530, 60, 60, "IconZone");
+		bZone.bindAction(new Runnable() { @Override public void run() {
+				Interface.getInstance().menus[Interface.MENU_ZONE_TYPE].toggle();}}, 1);
+		t.addButton(bZone, COMMAND_MODE_ZONE);
 		menus[MENU_TOOLBAR] = t;
 		menus[MENU_TOOLBAR].show();
 		t = new SelectorMenu(bDig);
@@ -148,6 +167,13 @@ public class Interface {
 		t.addButton(new Button(510, 480, 40, 40, "gabbro"), Data.Materials.getId("gabbro"));
 		t.addButton(new Button(560, 480, 40, 40, "granite"), Data.Materials.getId("granite"));
 		menus[MENU_BUILD_MATERIAL] = t;
+		t = new SelectorMenu(bZone);
+		t.show();
+		t.addButton(new Button(410, 480, 40, 40, ""), Data.Zones.getId("stockpile"));
+		t.addButton(new Button(460, 480, 40, 40, ""), Data.Zones.getId("lumber"));
+		t.addButton(new Button(510, 480, 40, 40, ""), Data.Zones.getId("mason"));
+		t.addButton(new Button(560, 480, 40, 40, ""), Data.Zones.getId("jewel"));
+		menus[MENU_ZONE_TYPE] = t;
 
 		viewMode = Renderer.VIEW_MODE_FOW;
 		this.setCommandMode(COMMAND_MODE_SPAWN);
@@ -155,6 +181,21 @@ public class Interface {
 }
 
 	public void draw(){
+		if (this.getCommandMode() == Interface.COMMAND_MODE_ZONE) {
+			int hue_uniform =GL20.glGetUniformLocation(Renderer.getInstance().shaders[Renderer.SHADER_GHOST], "hue");;
+			for (int i = 0; i < player.zones.size(); ++i){
+				Zone z = player.zones.get(i);
+				GL20.glUseProgram(Renderer.getInstance().shaders[Renderer.SHADER_GHOST]);
+				GL20.glUniform4f(hue_uniform, z.type.color[0], z.type.color[1], z.type.color[2], 0.6f);
+				Iterator<Block> it = z.iterator();
+				Block b;
+				while (it.hasNext()) {
+					b = it.next();
+					Data.Models.get("floor").draw(b.x, b.y, b.z, 0.f, Data.Textures.get("selection"));
+				}
+				GL20.glUseProgram(Renderer.getInstance().shaders[Renderer.SHADER_NONE]);
+			}
+		}
 		input.draw();
 // entering 2d drawing mode
 		GL11.glViewport(0,0,800,600);
@@ -223,9 +264,12 @@ public class Interface {
 							((w.getForm(x, y, z) == World.FORM_FLOOR)
 							&& (getBuildMaterial() == w.getMaterialID(x, y, z))))
 						&& !player.blockAlreadyRequested(w.getBlock(x, y, z)));
+			case Interface.COMMAND_MODE_ZONE: 
+				return (player. blockKnown(x, y, z)
+						&& w.isEmpty(x, y, z) && w.hasSolidFloor(x, y, z));				
 			case Interface.COMMAND_MODE_CANCEL: return player.blockAlreadyRequested(w.getBlock(x, y, z));
 			default:
-					System.out.println("Player.canPlaceOrder: weird request");
+					System.out.println("Interface.canPlaceCommand: weird request");
 			return false;
 		}
 	}

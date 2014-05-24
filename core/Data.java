@@ -4,6 +4,7 @@ import graphics.Model;
 import graphics.Texture;
 import java.util.Arrays;
 import physics.Material;
+import player.ZoneTemplate;
 
 import utils.JSONList;
 
@@ -11,6 +12,7 @@ public class Data{
 	public static JSONList<Model> Models;
 	public static JSONList<Material> Materials;
 	public static JSONList<Texture> Textures;
+	public static JSONList<ZoneTemplate> Zones;
 	static Data instance = null;
 	
 	private Data(){
@@ -32,6 +34,10 @@ public class Data{
 		Textures.load("res/textures/");
 		Textures.initialize();
 		Textures.setDefault("void");
+		Zones = new JSONList<ZoneTemplate>(new ZoneTemplate());
+		Zones.load("res/zones/");
+		Zones.initialize();
+		Zones.setDefault("stockpile");
 	}
 	
 	public static Data getInstance() {
