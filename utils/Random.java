@@ -36,6 +36,7 @@ public class Random extends java.util.Random {
 		i = 0; S = 0.;
 		while (S < t && i < N)
 			S += w[i++];
+		i--;
 		assert(i < N);
 		return i;
 	}

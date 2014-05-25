@@ -9,6 +9,12 @@ public class Front extends Vector {
         // because it should be in a horizontal plane!
         this.a = a;
     }
+	
+	public Front(Point p, double phi, double w, double a) { //center, angle and width
+		super(new Point(p.x+w*Math.cos(phi)/2, p.y+w*Math.sin(phi)/2, p.z),
+				new Point(p.x-w*Math.cos(phi)/2, p.y-w*Math.sin(phi)/2, p.z));
+		this.a = a;
+	}
 
     public Plane plane(){
         Vector hv = new Vector(-y, x, z);

@@ -3,9 +3,7 @@ package generation;
 import core.Data;
 import generation.morphs.Morph;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Random;
-import physics.Material;
+import utils.Random;
 import stereometry.Point;
 import static world.Block.nearInd;
 import world.World;
@@ -23,9 +21,7 @@ public class Generator {
 	public int y;
 	public GenerationChunk[][]	genChunks;
 
-	public Random rnd;
-
-	public boolean generated = false;
+	public static boolean generated = false;
 
 	Stratum bedrock, air; //virtual stratums
 
@@ -42,7 +38,6 @@ public class Generator {
 		this.biomes = new ArrayList<>();
 		this.morphs = new ArrayList<>();
 		this.stratums = new ArrayList<>();
-		this.rnd = new Random((new Date()).getTime());
 		this.x = World.getInstance().xsize/GenerationChunk.GEN_CHUNK_XSIZE + 1;
 		this.y = World.getInstance().ysize/GenerationChunk.GEN_CHUNK_YSIZE + 1;
 		this.genChunks = new GenerationChunk[x][y];
@@ -53,37 +48,56 @@ public class Generator {
 					j*GenerationChunk.GEN_CHUNK_YSIZE);
 	}
 
+	public void addStratum(Stratum s) {
+		stratums.add(s);
+		for (GenerationChunk[] gca : genChunks)
+			for (GenerationChunk gc : gca)
+				gc.addStratum(s);
+	}
+	
+	public void addMorph(Morph m){
+		morphs.add(m);
+		for (GenerationChunk[] gca : genChunks)
+			for (GenerationChunk gc : gca)
+				gc.addMorph(m);
+	}
+	
 	public void generate(){
 		World w = World.getInstance();
+		GenerationChunk gc;
+		Biome b;
+		Stratum s;
+		Morph m;
+		Random rnd = Random.getInstance();
+		int X = GenerationChunk.GEN_CHUNK_XSIZE;
+		int Y = GenerationChunk.GEN_CHUNK_YSIZE;
 		System.out.print("Generating biomes ...");
 		this.bedrock = new Stratum(0, 0, 0, 0, 0, Data.Materials.getId("bedrock"));
 		this.air = new Stratum(0, 0, 0, 0, 0, Data.Materials.getId("air"));
 
-		biomes.add(new Hills(w.xsize/2, w.ysize/2, 2*w.xsize, 15));
-		for (Biome b : biomes){
-			b.generate();
-
-			for (Morph m : b.morphs){
-				morphs.add(m);
-				for (GenerationChunk[] gca : genChunks)
-					for (GenerationChunk gc : gca)
-						gc.addMorph(m);
+		biomes.add(Data.Biomes.get("hills"));
+		for (int u = 0; u < x; ++u) {
+			for (int v = 0; v < y; ++v) {
+				gc = genChunks[u][v];
+				/* 
+				 *FIXME needs weighted approach
+				 *	this is but a dummy code
+				 */
+				b = biomes.get(0);
+				double tV = X * Y * (b.height - b.erodeWidth);
+				while ((gc.V < tV) && ((tV - gc.V) > 0.2 * tV)) {
+					addStratum(b.genStratum(gc.x + rnd.nextInt(X),
+											gc.y + rnd.nextInt(Y)));
+				}
+				double morphsNum = X * Y * b.morphDensity;
+				morphsNum = Math.floor(morphsNum)
+						+ ((rnd.nextDouble() > morphsNum - Math.floor(morphsNum)) ? 0 : 1);
+				while (morphsNum-- > 0) {
+					addMorph(b.genMorph(gc.x + rnd.nextInt(X),
+										gc.y + rnd.nextInt(Y),
+										b.height));
+				}
 			}
-			for (Stratum s : b.stratums){
-				stratums.add(s);
-				for (GenerationChunk[] gca : genChunks)
-					for (GenerationChunk gc : gca)
-						gc.addStratum(s);
-			}
-		}
-		int earthID = Data.Materials.getId("earth");
-		for (int i=0; i<stratums.size(); i++){
-			Stratum s = stratums.get(i);
-			if (s.m == earthID)
-				continue;
-			Vein v = new Vein(s.O, 0., 20.);
-			v.grow(s);
-			s.vein = v;
 		}
 		System.out.print(" "+biomes.size()+" biomes, "+morphs.size()+" morphs, "+
 						stratums.size()+" stratums\n");

@@ -2,6 +2,7 @@ package generation;
 
 import stereometry.BoundBox;
 import stereometry.Point;
+import utils.Random;
 import world.World;
 
 public class Stratum {
@@ -29,10 +30,10 @@ public class Stratum {
 		this.width = width;
 		this.coef = new int[C_NUM];
 		for (int i=0; i<C_NUM; i++)
-			coef[i] = Generator.getInstance().rnd.nextInt(C_MAX);
+			coef[i] = Random.getInstance().nextInt(C_MAX);
 		this.offset = new double[C_NUM];
 		for (int i=0; i<C_NUM; i++)
-			offset[i] = Generator.getInstance().rnd.nextDouble()*2*Math.PI;
+			offset[i] = Random.getInstance().nextDouble()*2*Math.PI;
 		this.bb = new BoundBox(x-rmax, y-rmax, 0, x+rmax, y+rmax, World.getInstance().zsize);
 		this.vein = null;
 	}

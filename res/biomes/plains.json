@@ -1,0 +1,22 @@
+{
+	"name": "plains",
+	"title": "Plains",
+	"description": "Wide and vast plains, smooth and dirty.",
+
+	"height": 20,
+	"stratumMat": ["gabbro", "earth", "gabbro", "granite"],
+	"stratumChance": [5, 1, 2, 1],
+	"stratumHeight": [[2,5], [1,1], [1,1], [1,3]],
+	"stratumMinR": [[20,20], [20,20], [20,20], [30,30]],
+	"stratumMaxR": [[35,35], [40,40], [30,30], [45,45]],
+
+	"vein": ["", "", "emerald", ""],
+	"veinChance": [0., 0., 1., 0.],
+
+	"morphDensity": 0.,
+	"morph": [],
+	"morphParam": [],
+	"morphChance": [],
+
+	"erodeMat": "earth"
+}

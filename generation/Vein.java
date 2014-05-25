@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import stereometry.Point;
 import generation.morphs.Morph;
+import utils.Random;
 
 public class Vein {
 
@@ -42,13 +43,13 @@ public class Vein {
 
 	private void grow(Stratum s, VeinNode n){
 		double phi = n.phi1 - n.phi0;
-		if ((Generator.getInstance().rnd.nextDouble() < SPLIT_CHANCE) &&
+		if ((Random.getInstance().nextDouble() < SPLIT_CHANCE) &&
 			(phi > Math.PI/4.)                              ){
 			VeinNode rn = new VeinNode(n, true);
 			VeinNode ln = new VeinNode(n, false);
 			addNode(s, rn); addNode(s, ln);
 		} else {
-			phi *= Generator.getInstance().rnd.nextDouble();
+			phi *= Random.getInstance().nextDouble();
 			phi += n.phi0;
 			VeinNode nn = new VeinNode(n, phi);
 			addNode(s, nn);

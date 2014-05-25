@@ -1,0 +1,22 @@
+{
+	"name": "hills",
+	"title": "Hills",
+	"description": "Large hills and valleys. What kind of alv could live in those?..",
+
+	"height": 30,
+	"stratumMat": ["gabbro", "marble", "gabbro", "granite"],
+	"stratumChance": [3, 1, 1, 2],
+	"stratumHeight": [[2,4], [1,2], [1,2], [2,3]],
+	"stratumMinR": [[30,30], [20,20], [20,20], [30,30]],
+	"stratumMaxR": [[40,40], [40,40], [30,30], [45,45]],
+
+	"vein": ["", "", "emerald", ""],
+	"veinChance": [0., 0., 1., 0.],
+
+	"morphDensity": 0.025,
+	"morph": [0],
+	"morphParam": [[[10,20], [30,30], [1,4]]],
+	"morphChance": [1.],
+
+	"erodeMat": "earth"
+}
