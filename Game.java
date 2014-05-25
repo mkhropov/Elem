@@ -42,7 +42,9 @@ public class Game {
 
 	public void start() {
 		try {
-			Display.setDisplayMode(new DisplayMode(800,600));
+			Display.setDisplayMode(
+					new DisplayMode(Renderer.DISPLAY_WIDTH,
+									Renderer.DISPLAY_HEIGHT));
 			Display.create();
 		} catch (LWJGLException e) {
 			e.printStackTrace();

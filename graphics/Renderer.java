@@ -29,6 +29,10 @@ public class Renderer {
 	private int xChunkSize, yChunkSize;
 	private ArrayList<GraphicalEntity> gEntities;
 	public ArrayList<FloatingText> ftArray; //FIXME public
+	
+	public static final int DISPLAY_WIDTH = 800;
+	public static final int DISPLAY_HEIGHT = 600;
+	public static final float ratio = (1.f*DISPLAY_HEIGHT)/DISPLAY_WIDTH;
 
 	public final static int SHADER_NONE = 0;
 	public final static int SHADER_BASIC = 1;
@@ -90,7 +94,8 @@ public class Renderer {
 			gChunks[i] = new GraphicalChunk(world, 0, 0, 0);
 
 		this.view = Matrix4.lookAt(-.25f, -.25f, -2.f, .5f, .5f, 0.f);
-		this.proj = Matrix4.scale(new float[]{.3f/4.f, -.1f, .001f});
+		// FIXME depth-scale is MAGIC
+		this.proj = Matrix4.scale(new float[]{.1f*ratio, -.1f, .001f});
 		this.VP = view.multR(proj);
 
 		shaders = new int[SHADER_MAX];
