@@ -23,7 +23,7 @@ public class Generator {
 
 	public static boolean generated = false;
 
-	Stratum bedrock, air; //virtual stratums
+	Stratum bedrock, air, erode; //virtual stratums
 
 	private static Generator instance = null;
 
@@ -79,15 +79,17 @@ public class Generator {
 		for (int u = 0; u < x; ++u) {
 			for (int v = 0; v < y; ++v) {
 				gc = genChunks[u][v];
-				/* 
+				/*
 				 *FIXME needs weighted approach
 				 *	this is but a dummy code
 				 */
 				b = biomes.get(0);
 				double tV = X * Y * (b.height - b.erodeWidth);
 				while ((gc.V < tV) && ((tV - gc.V) > 0.2 * tV)) {
-					addStratum(b.genStratum(gc.x + rnd.nextInt(X),
-											gc.y + rnd.nextInt(Y)));
+					s = b.genStratum(gc.x + rnd.nextInt(X),
+					                 gc.y + rnd.nextInt(Y));
+					addStratum(s);
+					gc.V += s.width*Math.PI*s.rmin*s.rmax;
 				}
 				double morphsNum = X * Y * b.morphDensity;
 				morphsNum = Math.floor(morphsNum)
@@ -102,6 +104,8 @@ public class Generator {
 		System.out.print(" "+biomes.size()+" biomes, "+morphs.size()+" morphs, "+
 						stratums.size()+" stratums\n");
 		generated = true;
+		this.erode = new Stratum(0, 0, 0, 0, 0,
+			Data.Materials.getId(biomes.get(0).erodeMat));
 	}
 
 	public void apply(){
@@ -132,7 +136,8 @@ public class Generator {
 			}
 		}
 		System.out.print(" done\n");
-		erosion(w, 2000., Data.Materials.getId("earth"));
+		Biome b = biomes.get(0);
+		erosion(w, b.erodeStrength, Data.Materials.getId(b.erodeMat));
 	}
 
 	public Stratum getStratum(int x, int y, int z, GenerationChunk gc) {
@@ -153,6 +158,8 @@ public class Generator {
 			if (dz > p.z)
 				return gc.stratums.get(i);
 		}
+		if (p.z < dz+biomes.get(0).erodeWidth)
+			return erode;
 		return air;
 	}
 

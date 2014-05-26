@@ -8,12 +8,12 @@ import stereometry.Point;
 import utils.Initializable;
 import utils.Named;
 
-public class Biome implements Named, Initializable {	
+public class Biome implements Named, Initializable {
 
 	public String name;
 	public String title;
 	public String description;
-	
+
 	public int height;
 	public String stratumMat[];
 	public double stratumChance[];
@@ -28,11 +28,11 @@ public class Biome implements Named, Initializable {
 	public int morph[];
 	public double morphParam[][][];
 	public double morphChance[];
-	
+
 	public String erodeMat;
 	public int erodeWidth;
 	public int erodeStrength;
-	
+
 	public Biome() {
 	}
 
@@ -40,11 +40,11 @@ public class Biome implements Named, Initializable {
 	public String getName() {
 		return name;
 	}
-	
+
 	@Override
 	public void initialize() {
 	}
-	
+
 	public Stratum genStratum(int x, int y) {
 		int m;
 		double rmin;
@@ -64,7 +64,7 @@ public class Biome implements Named, Initializable {
 		}
 		return s;
 	}
-	
+
 	public Morph genMorph(int x, int y, int z) {
 		Morph m;
 		Random rnd = Random.getInstance();
@@ -76,6 +76,7 @@ public class Biome implements Named, Initializable {
 								rnd.avg(morphParam[i][0]), // l
 								rnd.avg(morphParam[i][1]), // h
 								rnd.avg(morphParam[i][2])); // d
+//			System.out.printf("Morph params %f %f %f\n", pf.l, pf.h, pf.d);
 			m = pf;
 			break;
 		case 1: /* Linefold */

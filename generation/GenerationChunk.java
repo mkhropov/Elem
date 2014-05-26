@@ -38,7 +38,7 @@ public class GenerationChunk {
 		if (s.bb.intersects(bb)) {
 			stratums.add(s);
 			// FIXME we should add only the volume that is inside chunk
-			V += s.width*Math.PI*(s.rmax+s.rmin)*(s.rmax+s.rmin)/4;
+//			V += s.width*GEN_CHUNK_XSIZE*GEN_CHUNK_YSIZE;
 		}
 	}
 
