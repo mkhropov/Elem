@@ -133,4 +133,8 @@ public class JSONList <E extends Initializable & Named> implements Initializable
 		if (!contains(item)) add(item);
 		setDefault(item.getName());
 	}
+	
+	public ArrayList<E> asList() {
+		return list;
+	}
 }
