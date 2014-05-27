@@ -50,16 +50,18 @@ public class Data{
 		Biomes = new JSONList<>(new Biome());
 		Biomes.load("res/biomes/");
 		Biomes.initialize();
-		
-		/* now to check the data integrity... 
+
+		/* now to check the data integrity...
 		 * list is not complete yet, can check even
 		 * ranges and such, but I'm lazy atm
 		 */
 		for (Material m: Materials.asList()) {
 			checkName(m.texture, Textures);
+//			checkName(m.drop, Items);
 			assert(m.hardness >= 0);
+			assert(m.dropAmount >= 0);
 		}
-		
+
 		for (Biome b: Biomes.asList()) {
 			for (String s: b.stratumMat)
 				checkName(s, Materials);
@@ -70,7 +72,7 @@ public class Data{
 			checkName(b.erodeMat, Materials);
 		}
 	}
-	
+
 	public static Data getInstance() {
 		if (instance == null){
 			instance = new Data();

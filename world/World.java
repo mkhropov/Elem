@@ -171,6 +171,15 @@ public class World {
 		return (new Block((int)p.x, (int)p.y, (int)p.z));
 	}
 
+	public void disassembleBlock(int x, int y, int z) {
+		Material m = Data.Materials.get(getMaterialID(x,y,z));
+		if (m.dropAmount > 0)
+			for (int i=0; i<m.dropAmount; ++i)
+				item.add(new ItemBoulder(x, y, z, 1.,
+//					Data.Material.getId(m.drop)));
+					getMaterialID(x,y,z)));
+	}
+
 	public ArrayList<Creature> getCreature(int x, int y, int z){
 		ArrayList<Creature> res = new ArrayList<>(0);
 		for (int i=0; i<creature.size(); ++i)

@@ -2,25 +2,27 @@ package utils;
 
 import java.util.Date;
 
+
+@SuppressWarnings("serial")
 public class Random extends java.util.Random {
-	
+
 	private static Random instance = null;
-	
+
 	private Random() {
 		super((new Date()).getTime());
 	}
-	
+
 	public static Random getInstance() {
 		if (instance ==null) {
 			instance = new Random();
 		}
 		return instance;
 	}
-	
+
 	public double avg(double val[]) {
 		return val[0]+nextDouble()*(val[1]-val[0]);
 	}
-	
+
 	public double avg(int val[]) {
 		return val[0]+nextDouble()*(val[1]-val[0]);
 	}

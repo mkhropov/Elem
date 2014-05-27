@@ -1,5 +1,7 @@
 {
 	"name" : "bedrock",
 	"texture" : "bedrock",
-	"hardness" : 10000
+	"hardness" : 10000,
+	"drop": "dirt chunk",
+	"dropAmount": 0
 }

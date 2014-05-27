@@ -1,5 +1,7 @@
 {
 	"name" : "marble",
 	"texture" : "marble",
-	"hardness" : 150
+	"hardness" : 150,
+	"drop": "marble boulder",
+	"dropAmount": 8
 }

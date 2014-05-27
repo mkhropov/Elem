@@ -1,5 +1,7 @@
 {
 	"name" : "earth",
 	"texture" : "earth",
-	"hardness" : 50
+	"hardness" : 50,
+	"drop": "dirt chunk",
+	"dropAmount": 8
 }

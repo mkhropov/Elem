@@ -1,5 +1,7 @@
 {
 	"name" : "gabbro",
 	"texture" : "gabbro",
-	"hardness" : 100
+	"hardness" : 100,
+	"drop": "gabbro boulder",
+	"dropAmount": 8
 }

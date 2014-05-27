@@ -10,6 +10,9 @@ public class Material implements Initializable, Named {
 	public int[] weight;
 	public int[][] support;
 
+	public String drop;
+	public int dropAmount;
+
 	public static final int BLOCK = 0;
 	public static final int FLOOR = 1;
 	public static final int UP = 0;

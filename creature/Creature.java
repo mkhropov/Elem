@@ -296,7 +296,7 @@ public class Creature extends Entity {
 				}
 				break;
 			case World.FORM_BLOCK:
-				w.item.add(new ItemBoulder(b.x, b.y, b.z, 1., m));
+				w.disassembleBlock(b.x, b.y, b.z);
 				if (action.f == World.FORM_FLOOR)
 					w.setMaterialID(b.x, b.y, b.z, m);
 				else

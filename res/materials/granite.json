@@ -1,5 +1,7 @@
 {
 	"name" : "granite",
 	"texture" : "granite",
-	"hardness" : 200
+	"hardness" : 200,
+	"drop": "granite boulder",
+	"dropAmount": 8
 }
