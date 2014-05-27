@@ -12,6 +12,7 @@ public class Item extends Entity{
 	double w;
 	public int m; //maybe a list in future?..
 	public int type;
+	public boolean marked;
 
 	public static final int TYPE_NONE = 0;
 	public static final int TYPE_BUILDABLE = 1;
@@ -22,6 +23,7 @@ public class Item extends Entity{
 		this.c = null;
 		this.w = w;
 		this.type = TYPE_NONE;
+		this.marked = false;
 	}
 
 	public Item(int x, int y, int z, double w){
@@ -34,6 +36,15 @@ public class Item extends Entity{
 		this.c = c;
 		this.w = w;
 		this.type = TYPE_NONE;
+		this.marked = false;
+	}
+
+	public void mark() {
+		marked = true;
+	}
+
+	public void unmark() {
+		marked = false;
 	}
 
 	public void setP(Point np){

@@ -166,6 +166,11 @@ public class Player {
 		return false;
 	}
 
+	public void unmark(ArrayList<Item> list) {
+		for (Item i: list)
+			i.unmark();
+	}
+
 	public void iterate(){ //give orders to elems
 		int i = -1;
 		Order o;
@@ -198,6 +203,29 @@ public class Player {
 				o.path.add(0, new Action(Action.ACTION_BUILD, b.x, b.y, b.z, o.f, o.d, o.m));
 				b = path.remove(0).b;
 				o.path.addAll(0, path);
+				int n = b.amount(o.it); //how many it-suitable objects did we find?
+				System.out.println("found "+n+" items out of "+o.N);
+				o.marked.addAll(b.markItems(o.N, o.it));
+				for (int t=0; t<Math.min(n, o.N); ++t)
+					o.path.add(0, new Action(Action.ACTION_TAKE, o.it));
+				while (n < o.N) {
+					c1 = new ConditionBeIn(b);
+					c2 = new ConditionItem(o.it);
+
+					path = p.getPath(e, b, c1, c2);
+					if (path==null) {
+						o.declined = true;
+						unmark(o.marked);
+						continue;
+					}
+					b = path.remove(0).b;
+					o.path.addAll(0, path);
+					for (int t=0; t<Math.min(b.amount(o.it), o.N-n); ++t)
+						o.path.add(0, new Action(Action.ACTION_TAKE, o.it));
+					n += b.amount(o.it);
+					System.out.println("found "+n+" items out of "+o.N);
+					o.marked.addAll(b.markItems(o.N-n, o.it));
+				}
 
 				c1 = new ConditionBeIn(b);
 				c2 = new ConditionWorker(o);
@@ -205,10 +233,10 @@ public class Player {
 				if (path==null){
 					o.declined = true;
 //					System.out.println("Build order "+o+" declined at worker search");
+					unmark(o.marked);
 					continue;
 				}
 				candidates = World.getInstance().getCreature(path.remove(0).b);
-				o.path.add(0, new Action(Action.ACTION_TAKE, o.it));
 				o.path.addAll(0, path);
 				for (Creature c: candidates){
 					if (c.capableOf(o)) {
@@ -263,7 +291,7 @@ public class Player {
 
 		updateOrders();
 		free_workers++;
-//        System.out.println(c+" succesfuly did order "+o);
+        System.out.println(c+" succesfuly did order "+o);
     }
 
     public void setOrderCancelled(Order o, Creature c){
@@ -271,9 +299,10 @@ public class Player {
 
         o.taken = false;
 		o.worker = null;
+		unmark(o.marked);
 
 		free_workers++;
-  //      System.out.println(c+" aborted order "+o);
+	    System.out.println(c+" aborted order "+o);
     }
 
 

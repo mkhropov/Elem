@@ -20,6 +20,7 @@ import stereometry.Vector;
 import world.Block;
 import world.Entity;
 import world.World;
+import java.util.ArrayList;
 
 public class Creature extends Entity {
     Point np;
@@ -28,7 +29,8 @@ public class Creature extends Entity {
 
 	public double digStrength;
 
-	public Item item; //hand-held
+	public ArrayList<Item> item; //hand-held
+	public int capacity = 20;
 	private FloatingText bubble;
 
     public Player owner;
@@ -210,6 +212,7 @@ public class Creature extends Entity {
 		this.plans = new Stack<>();
 		this.digStrength = 400.;
         this.capable = new boolean[]{false, false, false, false};
+		this.item = new ArrayList<>();
 		Renderer.getInstance().addEntity(this);
 		if (!World.getInstance().hasSolidFloor((int)p.x, (int)p.y, (int)p.z))
 			start_action(new Action(ACTION_FALL), true);
@@ -254,14 +257,16 @@ public class Creature extends Entity {
 	}
 
 	public boolean take(Action action){
+		System.out.println("Trying to take something...");
 		Item i;
 		World w = World.getInstance();
 		int k;
 		for (k=0; k < w.item.size(); ++k){
 			i = w.item.get(k);
-			if (action.it.suits(i) && i.isIn(World.getInstance().getBlock(p))){
-//				System.out.println("Item "+i+" found!");
-				item = i;
+			if (action.it.suitsMarked(i) && i.isIn(World.getInstance().getBlock(p))){
+				System.out.println("Item "+i+" found!");
+				i.unmark();
+				item.add(i);
 				World.getInstance().item.remove(i);//EventHandler.getInstance().removeEntity(i);
 				Renderer.getInstance().removeEntity(i);
 				return true;
@@ -271,12 +276,14 @@ public class Creature extends Entity {
 	}
 
 	public boolean drop(){
-		if (item == null)
+		if (item.size() == 0)
 			return false;
-		item.setP(this.p);
-		World.getInstance().item.add(item);
-		Renderer.getInstance().addEntity(item);
-		item = null;
+		for (Item i: item) {
+			i.setP(this.p);
+			World.getInstance().item.add(i);
+			Renderer.getInstance().addEntity(i);
+		}
+		item.clear();
 		return true;
 	}
 
@@ -319,13 +326,14 @@ public class Creature extends Entity {
 		int m = action.m;
         if ((!canReach(b)) || ((b.m != Data.Materials.getId("air")) &&
 			!((m==b.m) && (World.getInstance().getForm(b.x, b.y, b.z)==World.FORM_FLOOR))) ||
-			!((item.type == Item.TYPE_BUILDABLE) && (item.m == m)))
+			!((item.get(0).type == Item.TYPE_BUILDABLE) && (item.get(0).m == m) && item.size()>=8))
             return false;
         else {
             World.getInstance().setMaterialID(b.x, b.y, b.z, m);
             World.getInstance().setForm(b.x, b.y, b.z, action.f);
             World.getInstance().setDirection(b.x, b.y, b.z, action.d);
-			item = null;
+			for (int i=0; i<8; ++i)
+				item.remove(0);
             Renderer.getInstance().updateBlock(b.x, b.y, b.z);
             return true;
         }
@@ -395,10 +403,10 @@ public class Creature extends Entity {
 	@Override
 	public void draw(){
 		super.draw();
-		if (item != null){
-			Data.Models.get(item.mid).draw(
+		if (item.size() > 0){
+			Data.Models.get(item.get(0).mid).draw(
 			(float)(p.x+.5*Math.sin(a)), (float)(p.y+.5*Math.cos(a)), (float)(p.z+.3), a,
-			Data.Textures.get(item.gsid));
+			Data.Textures.get(item.get(0).gsid));
 		}
 	}
 }

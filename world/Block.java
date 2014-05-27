@@ -3,6 +3,8 @@ package world;
  * Block is a class describing utility for a minimal single 3D voxel
 */
 import java.util.ArrayList;
+import item.Item;
+import item.ItemTemplate;
 
 public class Block {
 	public int x, y, z; //in a chunk
@@ -41,6 +43,31 @@ public class Block {
 			else
 				l.add(null);
 		return l;
+	}
+
+	public ArrayList<Item> markItems(int N, ItemTemplate it) {
+		ArrayList<Item> res = new ArrayList<>();
+		int k = 0;
+		for (Item i: World.getInstance().getItem(this)) {
+			if (it.suits(i)) {
+				res.add(i);
+				i.mark();
+				k++;
+			}
+			if (k >= N)
+				break;
+		}
+		return res;
+	}
+
+	public int amount(ItemTemplate it) {
+		int res = 0;
+		for (Item i: World.getInstance().getItem(this)) {
+			if (it.suits(i)) {
+				res++;
+			}
+		}
+		return res;
 	}
 
 	public boolean isSame(Block b){

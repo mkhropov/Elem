@@ -4,8 +4,10 @@ import creature.Action;
 import creature.Creature;
 import iface.CommandCube;
 import iface.Interface;
+import item.Item;
 import item.ItemTemplate;
 import java.util.Stack;
+import java.util.ArrayList;
 import world.Block;
 import world.World;
 
@@ -18,6 +20,8 @@ public class Order {
 	public int m; //material code
 	public int f; //form code
 	public int d; //direction code
+	public int N; //amount of needed items
+	public ArrayList<Item> marked; //for this order
 //	public CreatureTemplate ct;
 	public static final int ORDER_MOVE  = 0;
 	public static final int ORDER_DIG   = 1;
@@ -39,9 +43,11 @@ public class Order {
 		this.d = Interface.getInstance().getDirection();
         this.declined = !isAccesible();
 		this.path = new Stack<>();
+		this.marked = new ArrayList<>();
 //		System.out.println("New order "+this+", "+this.declined+" @("+b.x+","+b.y+","+b.z+")");
 		if ((type == ORDER_DIG) || (type == ORDER_BUILD))
 			this.cube = new CommandCube(type, b.x, b.y, b.z);
+		this.N = 8;
     }
 
 	public boolean isAccesible(){
@@ -55,6 +61,7 @@ public class Order {
 		return false;
 	}
 
+// XXX UNUSED XXX
     public boolean capable(Creature c){
 //		System.out.println(it);
         if (c.capable.length < ORDER_MAX){
@@ -62,7 +69,7 @@ public class Order {
             return false;
         }
 		if (type == ORDER_BUILD)
-			return it.suits(c.item) && c.capable[ORDER_BUILD];
+			return it.suits(c.item.get(0)) && c.capable[ORDER_BUILD];
         return c.capable[type];
     }
 

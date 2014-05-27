@@ -19,6 +19,17 @@ public class ItemTemplate{
 		return (((i.type == type) ||
 				 (type == Item.TYPE_NONE)) &&
 				((i.m == m) ||
-				 (m == Data.Materials.getId("air"))));
+				 (m == Data.Materials.getId("air"))) &&
+				(!i.marked));
+	}
+
+	public boolean suitsMarked(Item i) {
+		if (i==null)
+			return false;
+		return (((i.type == type) ||
+				 (type == Item.TYPE_NONE)) &&
+				((i.m == m) ||
+				 (m == Data.Materials.getId("air"))) &&
+				(i.marked));
 	}
 }
