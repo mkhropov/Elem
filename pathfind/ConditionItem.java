@@ -8,9 +8,9 @@ import world.World;
 
 public class ConditionItem implements Condition {
 
-	public ItemTemplate t;
+	public String t;
 
-	public ConditionItem(ItemTemplate t){
+	public ConditionItem(String t){
 		this.t = t;
 	}
 
@@ -18,7 +18,7 @@ public class ConditionItem implements Condition {
 	public boolean suits(Block b){
 		ArrayList<Item> l = World.getInstance().getItem(b);
 		for (int i=0; i<l.size(); ++i)
-			if (t.suits(l.get(i)))
+			if (l.get(i).type.suitsCondition(t))
 				return true;
 		return false;
 	}

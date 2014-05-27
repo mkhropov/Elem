@@ -3,6 +3,6 @@
 	"title" : "Dirt chunk",
 	"description" : "A chunk of dirt",
 	"model" : "boulder",
-	"texture" : "dirt",
+	"texture" : "earth",
 	"weight" : 1
 }

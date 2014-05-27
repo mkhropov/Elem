@@ -1,17 +1,23 @@
 package item;
 
 import core.Data;
+import graphics.GraphicalEntity;
 import graphics.Renderer;
 import physics.Material;
+import world.Block;
+import world.Entity;
 import world.World;
 
-public class FallingBlock extends Item{
+public class FallingBlock extends Entity implements GraphicalEntity{
 	int m, f;
+	int mid;
+	int gsid;
+	Block b;
 
 	public FallingBlock(int[] coord){
-		super(coord[0], coord[1], coord[2], 0.);
+	//	super(coord[0], coord[1], coord[2], null);
+		b = new Block(coord[0], coord[1], coord[2]);
 		World W = World.getInstance();
-		this.type = Item.TYPE_NONE;
 		this.m = W.getMaterialID(coord[0], coord[1], coord[2]);
 		this.f = W.getForm(coord[0], coord[1], coord[2]);
 		if (f == World.FORM_BLOCK)
@@ -22,7 +28,6 @@ public class FallingBlock extends Item{
 		Renderer.getInstance().addEntity(this);
 	}
 
-	@Override
 	public void update(){
 		World W = World.getInstance();
 		int i = b.z;
@@ -40,7 +45,6 @@ public class FallingBlock extends Item{
 		} else {
 			//spawn drop from m,f
 		}
-		W.item.remove(this);
 		Renderer.getInstance().removeEntity(this);
 	}
 

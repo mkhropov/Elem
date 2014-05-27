@@ -3,6 +3,7 @@ package core;
 import generation.Biome;
 import graphics.Model;
 import graphics.Texture;
+import item.ItemTemplate;
 import java.util.Arrays;
 import physics.Material;
 import player.ZoneTemplate;
@@ -17,6 +18,7 @@ public class Data{
 	public static JSONList<Texture> Textures;
 	public static JSONList<ZoneTemplate> Zones;
 	public static JSONList<Biome> Biomes;
+	public static JSONList<ItemTemplate> Items;
 
 	private static Data instance = null;
 
@@ -50,6 +52,11 @@ public class Data{
 		Biomes = new JSONList<>(new Biome());
 		Biomes.load("res/biomes/");
 		Biomes.initialize();
+		
+		Items = new JSONList<>(new ItemTemplate());
+		Items.load("res/items/");
+		Items.initialize();
+		Items.setDefault("dirt chunk");
 
 		/* now to check the data integrity...
 		 * list is not complete yet, can check even

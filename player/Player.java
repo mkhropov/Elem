@@ -153,8 +153,8 @@ public class Player {
 			return;
 		if (blockAlreadyRequested(b))
 			return;
-		ItemTemplate it = new ItemTemplate(Item.TYPE_BUILDABLE, m);
-	    Order o = new Order(b, Order.ORDER_BUILD); o.it = it; o.m = m;
+	    Order o = new Order(b, Order.ORDER_BUILD); o.m = m;
+		o.itemCondition = Data.Materials.get(m).drop;
         order.add(o);
 		Renderer.getInstance().addEntity(o.cube);
     }
@@ -192,7 +192,7 @@ public class Player {
 			case (Order.ORDER_BUILD):
 				b = o.b;
 				c1 = new ConditionReach(b, e);
-				c2 = new ConditionItem(o.it);
+				c2 = new ConditionItem(o.itemCondition);
 				path = p.getPath(e, b, c1, c2);
 				if (path==null){
 					o.declined = true;
@@ -203,14 +203,14 @@ public class Player {
 				o.path.add(0, new Action(Action.ACTION_BUILD, b.x, b.y, b.z, o.f, o.d, o.m));
 				b = path.remove(0).b;
 				o.path.addAll(0, path);
-				int n = b.amount(o.it); //how many it-suitable objects did we find?
+				int n = b.amount(o.itemCondition); //how many it-suitable objects did we find?
 				System.out.println("found "+n+" items out of "+o.N);
-				o.marked.addAll(b.markItems(o.N, o.it));
+				o.marked.addAll(b.markItems(o.N, o.itemCondition));
 				for (int t=0; t<Math.min(n, o.N); ++t)
-					o.path.add(0, new Action(Action.ACTION_TAKE, o.it));
+					o.path.add(0, new Action(Action.ACTION_TAKE, o.itemCondition));
 				while (n < o.N) {
 					c1 = new ConditionBeIn(b);
-					c2 = new ConditionItem(o.it);
+					c2 = new ConditionItem(o.itemCondition);
 
 					path = p.getPath(e, b, c1, c2);
 					if (path==null) {
@@ -220,11 +220,11 @@ public class Player {
 					}
 					b = path.remove(0).b;
 					o.path.addAll(0, path);
-					for (int t=0; t<Math.min(b.amount(o.it), o.N-n); ++t)
-						o.path.add(0, new Action(Action.ACTION_TAKE, o.it));
-					n += b.amount(o.it);
+					for (int t=0; t<Math.min(b.amount(o.itemCondition), o.N-n); ++t)
+						o.path.add(0, new Action(Action.ACTION_TAKE, o.itemCondition));
+					n += b.amount(o.itemCondition);
 					System.out.println("found "+n+" items out of "+o.N);
-					o.marked.addAll(b.markItems(o.N-n, o.it));
+					o.marked.addAll(b.markItems(o.N-n, o.itemCondition));
 				}
 
 				c1 = new ConditionBeIn(b);

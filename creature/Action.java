@@ -16,7 +16,7 @@ public class Action {
 
 	public char type;
 
-	public ItemTemplate it;
+	public String itemCondition;
 	public int f, d, m;
 //	public CreatureTemplate ct;
 	public double xd, yd, zd;
@@ -28,10 +28,10 @@ public class Action {
 		this.type = type;
 	}
 
-	public Action(char type, ItemTemplate it){
+	public Action(char type, String itemCondition){
 		assert(type == ACTION_TAKE);
 		this.type = type;
-		this.it = it;
+		this.itemCondition = itemCondition;
 	}
 
 	public Action(char type, double x, double y, double z){
