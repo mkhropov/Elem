@@ -18,7 +18,7 @@ public class ConditionItem implements Condition {
 	public boolean suits(Block b){
 		ArrayList<Item> l = World.getInstance().getItem(b);
 		for (int i=0; i<l.size(); ++i)
-			if (l.get(i).type.suitsCondition(t))
+			if (l.get(i).suitsConditionFree(t))
 				return true;
 		return false;
 	}

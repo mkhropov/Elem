@@ -4,7 +4,6 @@ package world;
 */
 import java.util.ArrayList;
 import item.Item;
-import item.ItemTemplate;
 
 public class Block {
 	public int x, y, z; //in a chunk
@@ -49,7 +48,7 @@ public class Block {
 		ArrayList<Item> res = new ArrayList<>();
 		int k = 0;
 		for (Item i: World.getInstance().getItem(this)) {
-			if (i.type.suitsCondition(Condition)) {
+			if (i.suitsConditionFree(Condition)) {
 				res.add(i);
 				i.mark();
 				k++;
@@ -63,7 +62,7 @@ public class Block {
 	public int amount(String Condition) {
 		int res = 0;
 		for (Item i: World.getInstance().getItem(this)) {
-			if (i.type.suitsCondition(Condition)) {
+			if (i.suitsConditionFree(Condition)) {
 				res++;
 			}
 		}

@@ -39,11 +39,21 @@ public class Item extends Entity{
 		this.gsid = Data.Textures.getId(type.texture);
 	}
 
+	public boolean suitsConditionFree(String itemCondition){
+		return type.suitsCondition(itemCondition)&&!marked;
+	}
+	
+	public boolean suitsConditionMarked(String itemCondition){
+		return type.suitsCondition(itemCondition)&&marked;
+	}
+	
 	public void mark() {
+		System.out.println("MARKED");
 		marked = true;
 	}
 
 	public void unmark() {
+		System.out.println("UN");
 		marked = false;
 	}
 
