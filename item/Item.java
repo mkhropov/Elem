@@ -48,12 +48,12 @@ public class Item extends Entity{
 	}
 	
 	public void mark() {
-		System.out.println("MARKED");
+		if (!marked) System.out.println("MARKED");
 		marked = true;
 	}
 
 	public void unmark() {
-		System.out.println("UN");
+		if (marked) System.out.println("UN");
 		marked = false;
 	}
 

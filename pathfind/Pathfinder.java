@@ -99,9 +99,9 @@ public class Pathfinder {
 			o.path.addAll(0, path);
 			for (int t=0; t<Math.min(b.amount(o.itemCondition), o.N-n); ++t)
 				o.path.add(0, new Action(Action.ACTION_TAKE, o.itemCondition));
-				n += b.amount(o.itemCondition);
-				System.out.println("found "+n+" items out of "+o.N);
 				o.marked.addAll(b.markItems(o.N-n, o.itemCondition));
+				n = o.marked.size(); //FIXME IF ITEM QUANTITIES
+				System.out.println("found "+n+" items out of "+o.N);
 			}
 
 			c1 = new ConditionBeIn(b);
