@@ -77,4 +77,9 @@ public class Order {
 				System.out.println(acodes[a.type]);
 		}
 	}
+	
+	public void unmarkAll(){
+		for (Item i: marked)
+			i.unmark();
+	}
 }

@@ -166,111 +166,18 @@ public class Player {
 		return false;
 	}
 
-	public void unmark(ArrayList<Item> list) {
-		for (Item i: list)
-			i.unmark();
-	}
-
 	public void iterate(){ //give orders to elems
 		int i = -1;
 		Order o;
-		Condition c1, c2;
-		Block b;
-		Stack<Action> path;
-		ArrayList<Creature> candidates;
 		Pathfinder p = Pathfinder.getInstance();
 		p.resetDepth();
-		Elem e = new Elem();
 //		System.out.println("Iterating player...");
 		while((free_workers>0) && (p.getDepth()<500) && (++i<order.size())){
 //			System.out.println("Order #"+i);
 			o = order.get(i);
-			if (o.taken || o.declined)
-				continue;
-			o.path.clear();
-			switch (o.type) {
-			case (Order.ORDER_BUILD):
-				b = o.b;
-				c1 = new ConditionReach(b, e);
-				c2 = new ConditionItem(o.itemCondition);
-				path = p.getPath(e, b, c1, c2);
-				if (path==null){
-					o.declined = true;
-//					System.out.println("Build order "+o+" declined at buildable search");
-					continue;
-				}
-
-				o.path.add(0, new Action(Action.ACTION_BUILD, b.x, b.y, b.z, o.f, o.d, o.m));
-				b = path.remove(0).b;
-				o.path.addAll(0, path);
-				int n = b.amount(o.itemCondition); //how many it-suitable objects did we find?
-				System.out.println("found "+n+" items out of "+o.N);
-				o.marked.addAll(b.markItems(o.N, o.itemCondition));
-				for (int t=0; t<Math.min(n, o.N); ++t)
-					o.path.add(0, new Action(Action.ACTION_TAKE, o.itemCondition));
-				while (n < o.N) {
-					c1 = new ConditionBeIn(b);
-					c2 = new ConditionItem(o.itemCondition);
-
-					path = p.getPath(e, b, c1, c2);
-					if (path==null) {
-						o.declined = true;
-						unmark(o.marked);
-						continue;
-					}
-					b = path.remove(0).b;
-					o.path.addAll(0, path);
-					for (int t=0; t<Math.min(b.amount(o.itemCondition), o.N-n); ++t)
-						o.path.add(0, new Action(Action.ACTION_TAKE, o.itemCondition));
-					n += b.amount(o.itemCondition);
-					System.out.println("found "+n+" items out of "+o.N);
-					o.marked.addAll(b.markItems(o.N-n, o.itemCondition));
-				}
-
-				c1 = new ConditionBeIn(b);
-				c2 = new ConditionWorker(o);
-				path = p.getPath(e, b, c1, c2);
-				if (path==null){
-					o.declined = true;
-//					System.out.println("Build order "+o+" declined at worker search");
-					unmark(o.marked);
-					continue;
-				}
-				candidates = World.getInstance().getCreature(path.remove(0).b);
-				o.path.addAll(0, path);
-				for (Creature c: candidates){
-					if (c.capableOf(o)) {
-						setOrderAssigned(o, c);
-						break;
-					}
-				}
-				break;
-			case (Order.ORDER_DIG):
-				b = o.b;
-				c1 = new ConditionReach(b, e);
-				c2 = new ConditionWorker(o);
-				path = p.getPath(e, b, c1, c2);
-				if (path==null){
-					o.declined = true;
-//					System.out.println("Dig order "+o+" declined at worker search");
-					continue;
-				}
-				candidates = World.getInstance().getCreature(path.remove(0).b);
-				o.path.add(0, new Action(Action.ACTION_DIG, b.x, b.y, b.z, o.f, o.d));
-				o.path.addAll(0, path);
-				for (Creature c: candidates){
-					if (c.capableOf(o)) {
-						setOrderAssigned(o, c);
-						break;
-					}
-				}
-				break;
-			default:
-				break;
-			}
+			p.processOrder(o);
 		}
 	}
-
 
 /* order-creature interaction */
 
@@ -299,7 +206,7 @@ public class Player {
 
         o.taken = false;
 		o.worker = null;
-		unmark(o.marked);
+		o.unmarkAll();
 
 		free_workers++;
 	    System.out.println(c+" aborted order "+o);

@@ -2,8 +2,10 @@ package pathfind;
 
 import creature.Action;
 import creature.Creature;
+import creature.Elem;
 import java.util.ArrayList;
 import java.util.Stack;
+import player.Order;
 import world.Block;
 import world.World;
 
@@ -62,7 +64,103 @@ public class Pathfinder {
                          (b1.y-b2.y)*(b1.y-b2.y)+
                          (b1.z-b2.z)*(b1.z-b2.z));
     }*/
+	
+	public boolean processBuildOrder(Order o){
+		Elem e = new Elem();
+		Block b = o.b;
+		Condition c1 = new ConditionReach(b, e);
+		Condition c2 = new ConditionItem(o.itemCondition);
+		Stack<Action> path = getPath(e, b, c1, c2);
+		if (path==null){
+			o.declined = true;
+//			System.out.println("Build order "+o+" declined at buildable search");
+			return false;
+		}
 
+		o.path.add(0, new Action(Action.ACTION_BUILD, b.x, b.y, b.z, o.f, o.d, o.m));
+		b = path.remove(0).b;
+		o.path.addAll(0, path);
+		int n = b.amount(o.itemCondition); //how many it-suitable objects did we find?
+		System.out.println("found "+n+" items out of "+o.N);
+		o.marked.addAll(b.markItems(o.N, o.itemCondition));
+		for (int t=0; t<Math.min(n, o.N); ++t)
+			o.path.add(0, new Action(Action.ACTION_TAKE, o.itemCondition));
+		while (n < o.N) {
+			c1 = new ConditionBeIn(b);
+			c2 = new ConditionItem(o.itemCondition);
+
+			path = getPath(e, b, c1, c2);
+			if (path==null) {
+				o.declined = true;
+				o.unmarkAll();
+				return false;
+			}
+			b = path.remove(0).b;
+			o.path.addAll(0, path);
+			for (int t=0; t<Math.min(b.amount(o.itemCondition), o.N-n); ++t)
+				o.path.add(0, new Action(Action.ACTION_TAKE, o.itemCondition));
+				n += b.amount(o.itemCondition);
+				System.out.println("found "+n+" items out of "+o.N);
+				o.marked.addAll(b.markItems(o.N-n, o.itemCondition));
+			}
+
+			c1 = new ConditionBeIn(b);
+			c2 = new ConditionWorker(o);
+			path = getPath(e, b, c1, c2);
+			if (path==null){
+				o.declined = true;
+//				System.out.println("Build order "+o+" declined at worker search");
+				o.unmarkAll();
+				return false;
+			}
+			ArrayList<Creature> candidates = World.getInstance().getCreature(path.remove(0).b);
+			o.path.addAll(0, path);
+			for (Creature c: candidates){
+				if (c.capableOf(o)) {
+					c.owner.setOrderAssigned(o, c);
+						return true;
+					}
+				}
+			return false;
+	}
+	
+	public boolean processDigOrder(Order o) {
+		Elem e = new Elem();
+		Block b = o.b;
+		Condition c1 = new ConditionReach(b, e);
+		Condition c2 = new ConditionWorker(o);
+		Stack<Action> path = getPath(e, b, c1, c2);
+		if (path==null){
+			o.declined = true;
+//			System.out.println("Dig order "+o+" declined at worker search");
+			return false;
+		}
+		ArrayList<Creature> candidates = World.getInstance().getCreature(path.remove(0).b);
+		o.path.add(0, new Action(Action.ACTION_DIG, b.x, b.y, b.z, o.f, o.d));
+		o.path.addAll(0, path);
+		for (Creature c: candidates){
+			if (c.capableOf(o)) {
+				c.owner.setOrderAssigned(o, c);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean processOrder(Order o){
+		if (o.taken || o.declined)
+			return false;
+		o.path.clear();
+		switch (o.type) {
+		case (Order.ORDER_BUILD):
+			return processBuildOrder(o);
+		case (Order.ORDER_DIG):
+			return processDigOrder(o);
+		default:
+			return false;
+		}
+	}
+	
 	public ArrayList<Block> spreadReach(Creature c, ArrayList<Block> start, Condition cond){
 		ArrayList<Block> res = new ArrayList<>();
         ArrayList<Block> near;
