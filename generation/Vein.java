@@ -8,6 +8,8 @@ import utils.Random;
 
 public class Vein {
 
+	public String name;
+
 	public static double SPLIT_CHANCE = .05;
 
 	public ArrayList<VeinNode> nodes;

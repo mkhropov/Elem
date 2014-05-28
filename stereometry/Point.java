@@ -48,4 +48,10 @@ public class Point {
 	public double distProj(Point p){
         return Math.sqrt((x-p.x)*(x-p.x)+ (y-p.y)*(y-p.y));
     }
+
+	public boolean sameBlock(Point p) {
+		return ((Math.floor(p.x) == Math.floor(x)) &&
+				(Math.floor(p.y) == Math.floor(y)) &&
+				(Math.floor(p.z) == Math.floor(z)));
+	}
 }

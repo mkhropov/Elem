@@ -1,0 +1,6 @@
+{
+	"name" : "emerald",
+	"model" : "gem patch",
+	"texture" : "emerald",
+	"drop": "raw emerald"
+}

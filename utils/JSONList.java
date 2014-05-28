@@ -74,9 +74,11 @@ public class JSONList <E extends Initializable & Named> implements Initializable
 	public boolean contains(String name){
 		for (int i=0; i<list.size(); i++){
 			if (list.get(i).getName().equalsIgnoreCase(name)){
+//				System.out.println(name+" found as "+list.get(i).getName());
 				return true;
 			}
 		}
+//		System.out.println(name+" not found");
 		return false;
 	}
 
@@ -133,7 +135,7 @@ public class JSONList <E extends Initializable & Named> implements Initializable
 		if (!contains(item)) add(item);
 		setDefault(item.getName());
 	}
-	
+
 	public ArrayList<E> asList() {
 		return list;
 	}

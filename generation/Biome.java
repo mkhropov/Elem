@@ -59,6 +59,7 @@ public class Biome implements Named, Initializable {
 		Stratum s = new Stratum(x, y, rmin, rmax, width, m);
 		if (rnd.nextDouble() < veinChance[i]) {
 			Vein v = new Vein(s.O, 2 * Math.PI * rnd.nextDouble(), rmax);
+			v.name = vein[i];
 			v.grow(s);
 			s.vein = v;
 		}

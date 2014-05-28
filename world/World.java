@@ -173,10 +173,16 @@ public class World {
 	}
 
 	public void disassembleBlock(int x, int y, int z) {
+		Point p = new Point(x, y, z);
 		Material m = Data.Materials.get(getMaterialID(x,y,z));
 		if (m.dropAmount > 0)
 			for (int i=0; i<m.dropAmount-4; ++i)
 				item.add(new Item(x, y, z, Data.Items.get(m.drop)));
+		for (VeinPatch vp: Data.Veins.asList()) {
+			if (vp.removePatch(p)) {
+				item.add(new Item(x, y, z, Data.Items.get(vp.drop)));
+			}
+		}
 	}
 
 	public ArrayList<Creature> getCreature(int x, int y, int z){

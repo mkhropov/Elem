@@ -11,7 +11,6 @@ import core.Data;
 import graphics.Renderer;
 import iface.FloatingText;
 import item.Item;
-import item.ItemBoulder;
 import java.util.Stack;
 import player.Order;
 import player.Player;

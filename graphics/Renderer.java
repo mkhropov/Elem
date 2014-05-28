@@ -3,6 +3,8 @@ package graphics;
 
 import world.World;
 import world.Block;
+import world.VeinPatch;
+import core.Data;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 import iface.Interface;
@@ -345,6 +347,9 @@ public class Renderer {
 		for (int i=0; i<gEntities.size(); i++){
 			if (gEntities.get(i).getP().z<=current_layer)
 				gEntities.get(i).draw();
+		}
+		for (VeinPatch vp: Data.Veins.asList()) {
+			vp.draw(current_layer, 0);
 		}
 		glUseProgram(shaders[SHADER_GHOST]);
 		Interface.getInstance().cursor.draw3d();
