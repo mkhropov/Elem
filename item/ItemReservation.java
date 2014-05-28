@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class ItemReservation {
 	Inventory inv;
-	ArrayList<Items> items;
+	ArrayList<Item> items;
 	ArrayList<Integer> amounts;
 
 	ItemReservation(Inventory inv){
@@ -24,6 +24,7 @@ public class ItemReservation {
 				res += a;
 			}
 		}
+		return res;
 	}
 
 	public int amount(){
@@ -32,5 +33,11 @@ public class ItemReservation {
 			res += a;
 		}
 		return res;
+	}
+	
+	public void release() {
+		for (int i=0; i<items.size(); i++){
+			items.get(i).release(amounts.get(i));
+		}
 	}
 }

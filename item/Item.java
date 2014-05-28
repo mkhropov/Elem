@@ -1,7 +1,5 @@
 package item;
 
-import core.Data;
-
 public class Item {
 	public int amount;
 	public int reservedAmount;
@@ -14,7 +12,7 @@ public class Item {
 	}
 
 	public boolean sameType(ItemTemplate type){
-		return this.type.getName().equalsIgnoreCase(type);
+		return this.type.getName().equalsIgnoreCase(type.name);
 	}
 
 	public boolean suitsConditionFree(String itemCondition){
@@ -30,10 +28,12 @@ public class Item {
 			int res = Math.min(n, amount - reservedAmount);
 			reservedAmount += res;
 			return res;
+		} else {
+			return 0;
 		}
 	}
 
-	public void free(int n) {
+	public void release(int n) {
 		reservedAmount -= n;
 		if (reservedAmount < 0) reservedAmount = 0;
 	}

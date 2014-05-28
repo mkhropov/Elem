@@ -10,8 +10,10 @@ import static creature.Action.ACTION_TAKE;
 import core.Data;
 import graphics.Renderer;
 import iface.FloatingText;
+import item.Inventory;
 import item.Item;
 import item.ItemBoulder;
+import item.ItemTemplate;
 import java.util.Stack;
 import player.Order;
 import player.Player;
@@ -29,8 +31,7 @@ public class Creature extends Entity {
 
 	public double digStrength;
 
-	public ArrayList<Item> item; //hand-held
-	public int capacity = 20;
+	public Inventory inventory; //hand-held
 	private FloatingText bubble;
 
     public Player owner;
@@ -212,7 +213,7 @@ public class Creature extends Entity {
 		this.plans = new Stack<>();
 		this.digStrength = 400.;
         this.capable = new boolean[]{false, false, false, false};
-		this.item = new ArrayList<>();
+		this.inventory = new Inventory(20);
 		Renderer.getInstance().addEntity(this);
 		if (!World.getInstance().hasSolidFloor((int)p.x, (int)p.y, (int)p.z))
 			start_action(new Action(ACTION_FALL), true);
@@ -258,33 +259,20 @@ public class Creature extends Entity {
 
 	public boolean take(Action action){
 		System.out.println("Trying to take something...");
-		Item i;
-		World w = World.getInstance();
-		int k;
-		for (k=0; k < w.item.size(); ++k){
-			i = w.item.get(k);
-			if (i.type.suitsCondition(action.itemCondition) &&
-					i.marked && i.isIn(World.getInstance().getBlock(p))){
-				System.out.println("Item "+i.type.getName()+" ("+i+") found!");
-				i.unmark();
-				item.add(i);
-				World.getInstance().item.remove(i);//EventHandler.getInstance().removeEntity(i);
-				Renderer.getInstance().removeEntity(i);
-				return true;
-			}
+		Inventory inv = World.getInstance().items.getInventory(World.getInstance().getBlock(p));
+		if (action.IR==null) {
+			return false;
 		}
-		return false;
+		inv.transferTo(inventory, action.IR);
+		return true;
 	}
 
 	public boolean drop(){
-		if (item.size() == 0)
+		if (!inventory.hasItems()) {
 			return false;
-		for (Item i: item) {
-			i.setP(this.p);
-			World.getInstance().item.add(i);
-			Renderer.getInstance().addEntity(i);
 		}
-		item.clear();
+		Inventory inv = World.getInstance().items.getInventory(World.getInstance().getBlock(p));
+		inv.transferAllFrom(inventory);
 		return true;
 	}
 
@@ -325,16 +313,16 @@ public class Creature extends Entity {
     public final boolean build(Action action){
 		Block b = action.b;
 		int m = action.m;
+		ItemTemplate it = Data.Items.get(Data.Materials.get(m).drop);
         if ((!canReach(b)) || ((b.m != Data.Materials.getId("air")) &&
 			!((m==b.m) && (World.getInstance().getForm(b.x, b.y, b.z)==World.FORM_FLOOR)))||
-			!(item.get(0).type.suitsCondition(Data.Materials.get(m).drop)&&(item.size()>=8)))
+			!(inventory.hasItems(it, Data.Materials.get(m).dropAmount)))
             return false;
         else {
             World.getInstance().setMaterialID(b.x, b.y, b.z, m);
             World.getInstance().setForm(b.x, b.y, b.z, action.f);
             World.getInstance().setDirection(b.x, b.y, b.z, action.d);
-			for (int i=0; i<8; ++i)
-				item.remove(0);
+			inventory.removeItem(it, Data.Materials.get(m).dropAmount);
             Renderer.getInstance().updateBlock(b.x, b.y, b.z);
             return true;
         }
@@ -404,10 +392,10 @@ public class Creature extends Entity {
 	@Override
 	public void draw(){
 		super.draw();
-		if (item.size() > 0){
-			Data.Models.get(item.get(0).mid).draw(
+		if (inventory.hasItems()){
+			Data.Models.get(inventory.get(0).type.model).draw(
 			(float)(p.x+.5*Math.sin(a)), (float)(p.y+.5*Math.cos(a)), (float)(p.z+.3), a,
-			Data.Textures.get(item.get(0).gsid));
+			Data.Textures.get(inventory.get(0).type.texture));
 		}
 	}
 }

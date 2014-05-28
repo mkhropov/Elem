@@ -5,6 +5,7 @@ import creature.Creature;
 import iface.CommandCube;
 import iface.Interface;
 import item.Item;
+import item.ItemReservation;
 import item.ItemTemplate;
 import java.util.Stack;
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class Order {
 	public int f; //form code
 	public int d; //direction code
 	public int N; //amount of needed items
-	public ArrayList<Item> marked; //for this order
+	public ArrayList<ItemReservation> reserved; //for this order
 //	public CreatureTemplate ct;
 	public static final int ORDER_MOVE  = 0;
 	public static final int ORDER_DIG   = 1;
@@ -43,7 +44,7 @@ public class Order {
 		this.d = Interface.getInstance().getDirection();
         this.declined = !isAccesible();
 		this.path = new Stack<>();
-		this.marked = new ArrayList<>();
+		this.reserved = new ArrayList<>();
 //		System.out.println("New order "+this+", "+this.declined+" @("+b.x+","+b.y+","+b.z+")");
 		if ((type == ORDER_DIG) || (type == ORDER_BUILD))
 			this.cube = new CommandCube(type, b.x, b.y, b.z);
@@ -79,7 +80,7 @@ public class Order {
 	}
 	
 	public void unmarkAll(){
-		for (Item i: marked)
-			i.unmark();
+		for (ItemReservation ir: reserved)
+			ir.release();
 	}
 }
