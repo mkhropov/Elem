@@ -1,6 +1,8 @@
 package item;
 
+import core.Data;
 import creature.Creature;
+import graphics.Renderer;
 import world.Block;
 import world.Entity;
 import world.World;
@@ -9,41 +11,49 @@ import stereometry.Point;
 public class Item extends Entity{
 	Block b;
 	Creature c;
-	double w;
-	public int m; //maybe a list in future?..
-	public int type;
 	public boolean marked;
+	public ItemTemplate type;
 
-	public static final int TYPE_NONE = 0;
-	public static final int TYPE_BUILDABLE = 1;
-
-	public Item(Block b, double w){
+	public Item(Block b, ItemTemplate type){
 		super(b);
 		this.b = b;
 		this.c = null;
-		this.w = w;
-		this.type = TYPE_NONE;
+		this.type = type;
 		this.marked = false;
+		this.mid = Data.Models.getId(type.model);
+		this.gsid = Data.Textures.getId(type.texture);
+		Renderer.getInstance().addEntity(this);
 	}
 
-	public Item(int x, int y, int z, double w){
-		this(World.getInstance().getBlock(x, y, z), w);
+	public Item(int x, int y, int z, ItemTemplate type){
+		this(World.getInstance().getBlock(x, y, z), type);
 	}
 
-	public Item(Creature c, double w){
+	public Item(Creature c, ItemTemplate type){
 		super();
 		this.b = null;
 		this.c = c;
-		this.w = w;
-		this.type = TYPE_NONE;
+		this.type = type;
 		this.marked = false;
+		this.mid = Data.Models.getId(type.model);
+		this.gsid = Data.Textures.getId(type.texture);
 	}
 
+	public boolean suitsConditionFree(String itemCondition){
+		return type.suitsCondition(itemCondition)&&!marked;
+	}
+	
+	public boolean suitsConditionMarked(String itemCondition){
+		return type.suitsCondition(itemCondition)&&marked;
+	}
+	
 	public void mark() {
+		if (!marked) System.out.println("MARKED");
 		marked = true;
 	}
 
 	public void unmark() {
+		if (marked) System.out.println("UN");
 		marked = false;
 	}
 

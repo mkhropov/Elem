@@ -1,35 +1,27 @@
 package item;
 
-import core.Data;
 import physics.Material;
+import utils.Initializable;
+import utils.Named;
 
-public class ItemTemplate{
-
-	public int type;
-	public int m; //material code
-
-	public ItemTemplate(int type, int m){
-		this.type = type;
-		this.m = m;
+public class ItemTemplate implements Initializable, Named{
+	public String name;
+	public String title;
+	public String description;
+	public String model;
+	public String texture;
+	public int weight;
+	
+	@Override
+	public void initialize() {
 	}
 
-	public boolean suits(Item i){
-		if (i==null)
-			return false;
-		return (((i.type == type) ||
-				 (type == Item.TYPE_NONE)) &&
-				((i.m == m) ||
-				 (m == Data.Materials.getId("air"))) &&
-				(!i.marked));
+	@Override
+	public String getName() {
+		return name;
 	}
-
-	public boolean suitsMarked(Item i) {
-		if (i==null)
-			return false;
-		return (((i.type == type) ||
-				 (type == Item.TYPE_NONE)) &&
-				((i.m == m) ||
-				 (m == Data.Materials.getId("air"))) &&
-				(i.marked));
+	
+	public boolean suitsCondition(String c) {
+		return name.equalsIgnoreCase(c); //For now
 	}
 }

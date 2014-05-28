@@ -5,7 +5,8 @@ import creature.Creature;
 import generation.Generator;
 import graphics.Renderer;
 import iface.Interface;
-import item.*;
+import item.Item;
+import item.FallingBlock;
 import java.util.ArrayList;
 import physics.Material;
 import physics.mana.ManaField;
@@ -174,10 +175,8 @@ public class World {
 	public void disassembleBlock(int x, int y, int z) {
 		Material m = Data.Materials.get(getMaterialID(x,y,z));
 		if (m.dropAmount > 0)
-			for (int i=0; i<m.dropAmount; ++i)
-				item.add(new ItemBoulder(x, y, z, 1.,
-//					Data.Material.getId(m.drop)));
-					getMaterialID(x,y,z)));
+			for (int i=0; i<m.dropAmount-4; ++i)
+				item.add(new Item(x, y, z, Data.Items.get(m.drop)));
 	}
 
 	public ArrayList<Creature> getCreature(int x, int y, int z){
@@ -241,8 +240,8 @@ public class World {
 		for (int[] p: updateBlocks){
 			toRemove.add(p);
 //			System.out.println("Checking updated block "+p[0]+" "+p[1]+" "+p[2]);
-			if (!hasSupport(p[0], p[1], p[2])){
-				item.add(new FallingBlock(p));
+/*			if (!hasSupport(p[0], p[1], p[2])){
+				new FallingBlock(p);
 //				System.out.println("A falling block was added");
 				setMaterialID(p[0], p[1], p[2], Data.Materials.getId("air"));
 				setForm(p[0], p[1], p[2], FORM_BLOCK);
@@ -254,7 +253,7 @@ public class World {
 								p[2]+Block.nearInd[i][2]});
 				updateEntities(p[0], p[1], p[2]);
 				updateEntities(p[0], p[1], p[2]+1);
-			}
+			}*/
 		}
 		updateBlocks.removeAll(toRemove);
 		updateBlocks.addAll(toAdd);

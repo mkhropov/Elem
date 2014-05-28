@@ -16,7 +16,7 @@ public class Order {
 	public Creature worker;
     public Block b;
 	public CommandCube cube;
-    public ItemTemplate it;
+    public String itemCondition;
 	public int m; //material code
 	public int f; //form code
 	public int d; //direction code
@@ -61,18 +61,6 @@ public class Order {
 		return false;
 	}
 
-// XXX UNUSED XXX
-    public boolean capable(Creature c){
-//		System.out.println(it);
-        if (c.capable.length < ORDER_MAX){
-            System.out.printf("Creature capablities not updated\n");
-            return false;
-        }
-		if (type == ORDER_BUILD)
-			return it.suits(c.item.get(0)) && c.capable[ORDER_BUILD];
-        return c.capable[type];
-    }
-
 	public void dumpPath(){
 		Action a;
 		String[] acodes = new String[]{"ACTION_NONE",
@@ -88,5 +76,10 @@ public class Order {
 			else
 				System.out.println(acodes[a.type]);
 		}
+	}
+	
+	public void unmarkAll(){
+		for (Item i: marked)
+			i.unmark();
 	}
 }

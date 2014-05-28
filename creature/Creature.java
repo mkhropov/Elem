@@ -42,7 +42,7 @@ public class Creature extends Entity {
 
 	public boolean start_action(Action action, boolean forced){
 		boolean res = true;
-//		System.out.println("new action "+(int)action.type+" for "+this);
+		System.out.println("new action "+(int)action.type+" for "+this);
 		World w = World.getInstance();
 		if (forced && act!=null)
 			plans.push(act);
@@ -69,8 +69,8 @@ public class Creature extends Entity {
 			mv.toZero();
 			break;
 		case ACTION_TAKE:
-			if (item!=null)
-				start_action(new Action(ACTION_DROP), true);
+		//	if (item!=null)
+		//		start_action(new Action(ACTION_DROP), true);
 			break;
 		case ACTION_NONE:
 		case ACTION_DROP:
@@ -263,8 +263,9 @@ public class Creature extends Entity {
 		int k;
 		for (k=0; k < w.item.size(); ++k){
 			i = w.item.get(k);
-			if (action.it.suitsMarked(i) && i.isIn(World.getInstance().getBlock(p))){
-				System.out.println("Item "+i+" found!");
+			if (i.type.suitsCondition(action.itemCondition) &&
+					i.marked && i.isIn(World.getInstance().getBlock(p))){
+				System.out.println("Item "+i.type.getName()+" ("+i+") found!");
 				i.unmark();
 				item.add(i);
 				World.getInstance().item.remove(i);//EventHandler.getInstance().removeEntity(i);
@@ -325,8 +326,8 @@ public class Creature extends Entity {
 		Block b = action.b;
 		int m = action.m;
         if ((!canReach(b)) || ((b.m != Data.Materials.getId("air")) &&
-			!((m==b.m) && (World.getInstance().getForm(b.x, b.y, b.z)==World.FORM_FLOOR))) ||
-			!((item.get(0).type == Item.TYPE_BUILDABLE) && (item.get(0).m == m) && item.size()>=8))
+			!((m==b.m) && (World.getInstance().getForm(b.x, b.y, b.z)==World.FORM_FLOOR)))||
+			!(item.get(0).type.suitsCondition(Data.Materials.get(m).drop)&&(item.size()>=8)))
             return false;
         else {
             World.getInstance().setMaterialID(b.x, b.y, b.z, m);

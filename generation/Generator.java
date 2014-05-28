@@ -126,7 +126,7 @@ public class Generator {
 					s = getStratum(i, j, k, gc);
 					w.setMaterialID(i, j, k, s.m);
 					if (s.getVeinPower(i, j) > 0) {
-						Item node = new Item(i, j, k, 1.);
+						Item node = new Item(i, j, k, Data.Items.get("raw emerald"));
 						node.mid = Data.Models.getId("gem patch");
 						node.gsid = Data.Textures.getId("elem");
 						Renderer.getInstance().addEntity(node);
