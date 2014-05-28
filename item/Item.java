@@ -1,86 +1,40 @@
 package item;
 
 import core.Data;
-import creature.Creature;
-import graphics.Renderer;
-import world.Block;
-import world.Entity;
-import world.World;
-import stereometry.Point;
 
-public class Item extends Entity{
-	Block b;
-	Creature c;
-	public boolean marked;
+public class Item {
+	public int amount;
+	public int reservedAmount;
 	public ItemTemplate type;
 
-	public Item(Block b, ItemTemplate type){
-		super(b);
-		this.b = b;
-		this.c = null;
+	public Item(ItemTemplate type, int amount){
 		this.type = type;
-		this.marked = false;
-		this.mid = Data.Models.getId(type.model);
-		this.gsid = Data.Textures.getId(type.texture);
-		Renderer.getInstance().addEntity(this);
+		this.reservedAmount = 0;
+		this.amount = amount;
 	}
 
-	public Item(int x, int y, int z, ItemTemplate type){
-		this(World.getInstance().getBlock(x, y, z), type);
-	}
-
-	public Item(Creature c, ItemTemplate type){
-		super();
-		this.b = null;
-		this.c = c;
-		this.type = type;
-		this.marked = false;
-		this.mid = Data.Models.getId(type.model);
-		this.gsid = Data.Textures.getId(type.texture);
+	public boolean sameType(ItemTemplate type){
+		return this.type.getName().equalsIgnoreCase(type);
 	}
 
 	public boolean suitsConditionFree(String itemCondition){
-		return type.suitsCondition(itemCondition)&&!marked;
-	}
-	
-	public boolean suitsConditionMarked(String itemCondition){
-		return type.suitsCondition(itemCondition)&&marked;
-	}
-	
-	public void mark() {
-		if (!marked) System.out.println("MARKED");
-		marked = true;
+		return type.suitsCondition(itemCondition)&&(reservedAmount < amount);
 	}
 
-	public void unmark() {
-		if (marked) System.out.println("UN");
-		marked = false;
+	public boolean suitsConditionReserved(String itemCondition){
+		return type.suitsCondition(itemCondition)&&(reservedAmount > 0);
 	}
 
-	public void setP(Point np){
-		this.b = World.getInstance().getBlock(np);
-		this.p = new Point(np);
-	}
-
-	public boolean isIn(int x, int y, int z){
-		return (b.x==x && b.y==y && b.z==z);
-	}
-
-	public boolean isIn(Block t){
-		return (b.x==t.x && b.y==t.y && b.z==t.z);
-	}
-
-	public void update(){
-		World w = World.getInstance();
-		if (b!=null){
-			int i = b.z;
-			while (i > 0 && !w.hasSolidFloor(b.x, b.y, i)){
-				--i;
-			}
-			if (i!=b.z){
-				b = w.getBlock(b.x, b.y, i);
-				setP(b);
-			}
+	public int reserve(int n) {
+		if (reservedAmount < amount) {
+			int res = Math.min(n, amount - reservedAmount);
+			reservedAmount += res;
+			return res;
 		}
+	}
+
+	public void free(int n) {
+		reservedAmount -= n;
+		if (reservedAmount < 0) reservedAmount = 0;
 	}
 }

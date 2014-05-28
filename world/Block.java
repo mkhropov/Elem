@@ -44,31 +44,6 @@ public class Block {
 		return l;
 	}
 
-	public ArrayList<Item> markItems(int N, String Condition) {
-		ArrayList<Item> res = new ArrayList<>();
-		int k = 0;
-		for (Item i: World.getInstance().getItem(this)) {
-			if (i.suitsConditionFree(Condition)) {
-				res.add(i);
-				i.mark();
-				k++;
-			}
-			if (k >= N)
-				break;
-		}
-		return res;
-	}
-
-	public int amount(String Condition) {
-		int res = 0;
-		for (Item i: World.getInstance().getItem(this)) {
-			if (i.suitsConditionFree(Condition)) {
-				res++;
-			}
-		}
-		return res;
-	}
-
 	public boolean isSame(Block b){
 		return (x==b.x && y==b.y && z==b.z);
 	}
