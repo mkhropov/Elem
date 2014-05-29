@@ -175,7 +175,7 @@ public class Player {
 		while((free_workers>0) && (p.getDepth()<500) && (++i<order.size())){
 //			System.out.println("Order #"+i);
 			o = order.get(i);
-			p.processOrder(o);
+			o.process();
 		}
 	}
 
