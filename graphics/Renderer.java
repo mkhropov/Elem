@@ -346,6 +346,7 @@ public class Renderer {
 			if (gEntities.get(i).getP().z<=current_layer)
 				gEntities.get(i).draw();
 		}
+		world.items.draw();
 		glUseProgram(shaders[SHADER_GHOST]);
 		Interface.getInstance().cursor.draw3d();
 		glUseProgram(shaders[SHADER_NONE]);

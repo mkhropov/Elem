@@ -38,19 +38,29 @@ public class ItemManager {
 		}
 	}
 
-	public void update() {
+	boolean removeEmpty(){
 		for (int i = 0; i < blocks.size(); i++) {
 			if (!invs.get(i).hasItems()) {
 				invs.remove(i);
 				blocks.remove(i);
-				break;
+				return true;
 			}
 		}
-	/*	for (int i = 0; i < blocks.size(); i++) {
-			Block p = blocks.get(i);
-			Data.Models.get(invs.get(i).get(0).type.model).draw(
-			(float)(p.x), (float)(p.y), (float)(p.z), 0.f,
-			Data.Textures.get(invs.get(i).get(0).type.texture));
-		}*/
+		return false;
+	}
+	
+	public void draw() {
+		for (int i = 0; i < blocks.size(); i++) {
+			if (invs.get(i).hasItems()){
+				Block p = blocks.get(i);
+				Data.Models.get(invs.get(i).get(0).type.model).draw(
+				(float)(p.x), (float)(p.y), (float)(p.z), 0.f,
+				Data.Textures.get(invs.get(i).get(0).type.texture));
+			}
+		}
+	}
+	
+	public void update() {
+		while (removeEmpty()) {}
 	}
 }
