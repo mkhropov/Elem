@@ -3,6 +3,8 @@ package item;
 import core.Data;
 import java.util.ArrayList;
 import world.Block;
+import utils.PseudoRandom;
+import stereometry.Point;
 
 public class ItemManager {
 	private ArrayList<Inventory> invs;
@@ -12,7 +14,7 @@ public class ItemManager {
 		invs = new ArrayList<>();
 		blocks = new ArrayList<>();
 	}
-	
+
 	public boolean hasItems(Block b) {
 		for (int i = 0; i < blocks.size(); i++) {
 			if (blocks.get(i).isSame(b)) {
@@ -48,18 +50,31 @@ public class ItemManager {
 		}
 		return false;
 	}
-	
+
 	public void draw() {
 		for (int i = 0; i < blocks.size(); i++) {
 			if (invs.get(i).hasItems()){
-				Block p = blocks.get(i);
-				Data.Models.get(invs.get(i).get(0).type.model).draw(
-				(float)(p.x), (float)(p.y), (float)(p.z), 0.f,
-				Data.Textures.get(invs.get(i).get(0).type.texture));
+				Inventory inv = invs.get(i);
+				int maxItems = inv.amount();
+//				System.out.print(maxItems+"  ->  ");
+				int drawItems = Math.min(maxItems, 5);
+				Block b = blocks.get(i);
+				for (int j = 0; j < drawItems; j++) {
+					Point p = PseudoRandom.position(b.x, b.y, b.z, j);
+				//	p.x+=Math.sin(j)/2;
+				//	p.y+=Math.cos(j)/2;
+				//	p.z+=(j==4)?(0.3):(0.0);
+					int pick = PseudoRandom.pick(maxItems, j);
+//					System.out.print(pick+" ");
+					Data.Models.get(inv.getSingleType(pick).model).draw(
+						(float)(p.x), (float)(p.y), (float)(p.z), (float)(1.9*p.x-0.5*p.y+j),
+						Data.Textures.get(inv.getSingleType(pick).texture));
+				}
+//				System.out.println();
 			}
 		}
 	}
-	
+
 	public void update() {
 		while (removeEmpty()) {}
 	}

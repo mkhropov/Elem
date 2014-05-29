@@ -19,17 +19,35 @@ public class Inventory {
 		IR.reserve(itemCondition, amount);
 		return IR;
 	}
-	
+
 	public Item get(int i){
 		if (i<0 || i>=items.size())
 			return null;
 		return items.get(i);
 	}
-	
+
+	public int amount(){
+		int res = 0;
+		for (Item i: items) {
+			res += i.amount;
+		}
+		return res;
+	}
+
+	public ItemTemplate getSingleType(int num) {
+		int res = 0;
+		for (Item i: items) {
+			res += i.amount;
+			if (res>num)
+				return i.type;
+		}
+		return items.get(0).type;
+	}
+
 	public boolean hasItems(){
 		return items.size()>0;
 	}
-	
+
 	public boolean hasItems(ItemTemplate it, int amount) {
 		for (Item i: items) {
 			if (i.sameType(it)&&(i.amount>=amount)) {
@@ -38,7 +56,7 @@ public class Inventory {
 		}
 		return false;
 	}
-	
+
 	public boolean hasItems(String itemCondition, int amount) {
 		for (Item i: items) {
 			if (i.suitsConditionFree(itemCondition)&&(i.amount>=amount)) {
@@ -47,7 +65,7 @@ public class Inventory {
 		}
 		return false;
 	}
-	
+
 	public boolean suitsConditionFree(String itemCondition) {
 		for (Item i: items) {
 			if (i.suitsConditionFree(itemCondition)) {
