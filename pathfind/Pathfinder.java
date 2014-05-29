@@ -3,6 +3,8 @@ package pathfind;
 import creature.Action;
 import creature.Creature;
 import creature.Elem;
+import item.Inventory;
+import item.ItemReservation;
 import java.util.ArrayList;
 import java.util.Stack;
 import player.Order;
@@ -80,11 +82,11 @@ public class Pathfinder {
 		o.path.add(0, new Action(Action.ACTION_BUILD, b.x, b.y, b.z, o.f, o.d, o.m));
 		b = path.remove(0).b;
 		o.path.addAll(0, path);
-		int n = b.amount(o.itemCondition); //how many it-suitable objects did we find?
-		System.out.println("found "+n+" items out of "+o.N);
-		o.marked.addAll(b.markItems(o.N, o.itemCondition));
-		for (int t=0; t<Math.min(n, o.N); ++t)
-			o.path.add(0, new Action(Action.ACTION_TAKE, o.itemCondition));
+		Inventory inv = World.getInstance().items.getInventory(b);
+		ItemReservation IR = inv.reserveItems(o.itemCondition, o.N);
+		int n = IR.amount();
+		o.reserved.add(IR);
+		o.path.add(0, new Action(Action.ACTION_TAKE, IR));
 		while (n < o.N) {
 			c1 = new ConditionBeIn(b);
 			c2 = new ConditionItem(o.itemCondition);
@@ -97,12 +99,12 @@ public class Pathfinder {
 			}
 			b = path.remove(0).b;
 			o.path.addAll(0, path);
-			for (int t=0; t<Math.min(b.amount(o.itemCondition), o.N-n); ++t)
-				o.path.add(0, new Action(Action.ACTION_TAKE, o.itemCondition));
-				o.marked.addAll(b.markItems(o.N-n, o.itemCondition));
-				n = o.marked.size(); //FIXME IF ITEM QUANTITIES
-				System.out.println("found "+n+" items out of "+o.N);
-			}
+			inv = World.getInstance().items.getInventory(b);
+			IR = inv.reserveItems(o.itemCondition, o.N-n);
+			n += IR.amount();
+			o.reserved.add(IR);
+			o.path.add(0, new Action(Action.ACTION_TAKE, IR));
+		}
 
 			c1 = new ConditionBeIn(b);
 			c2 = new ConditionWorker(o);

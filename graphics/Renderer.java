@@ -351,6 +351,7 @@ public class Renderer {
 		for (VeinPatch vp: Data.Veins.asList()) {
 			vp.draw(current_layer, 0);
 		}
+		world.items.draw();
 		glUseProgram(shaders[SHADER_GHOST]);
 		Interface.getInstance().cursor.draw3d();
 		glUseProgram(shaders[SHADER_NONE]);

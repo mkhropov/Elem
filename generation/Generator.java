@@ -127,11 +127,6 @@ public class Generator {
 					w.setMaterialID(i, j, k, s.m);
 					if (s.getVeinPower(i, j) > 0) {
 						Data.Veins.get(s.vein.name).addPatch(new Point(i, j, k));
-//						Item node = new Item(i, j, k, Data.Items.get("raw emerald"));
-//						node.mid = Data.Models.getId("gem patch");
-//						node.gsid = Data.Textures.getId("elem");
-//						Renderer.getInstance().addEntity(node);
-//						w.item.add(node);
 					}
 				}
 			}

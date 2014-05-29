@@ -5,8 +5,9 @@ import creature.Creature;
 import generation.Generator;
 import graphics.Renderer;
 import iface.Interface;
-import item.Item;
+import item.Inventory;
 import item.FallingBlock;
+import item.ItemManager;
 import java.util.ArrayList;
 import physics.Material;
 import physics.mana.ManaField;
@@ -42,7 +43,7 @@ public class World {
 	public static final int DIRECTION_SOUTH = 0xc000;
 
     public ArrayList<Creature> creature;
-	public ArrayList<Item> item;
+	public ItemManager items;
 	public ArrayList<int[]> updateBlocks;
 	public ArrayList<int[]> updateEntities;
 	public Vector gravity;
@@ -75,7 +76,7 @@ public class World {
 		System.out.print(" done\n");
 
 		this.creature = new ArrayList<>();
-		this.item = new ArrayList<>();
+		this.items = new ItemManager();
 
 		this.updateBlocks = new ArrayList<>();
 		this.updateEntities = new ArrayList<>();
@@ -175,12 +176,13 @@ public class World {
 	public void disassembleBlock(int x, int y, int z) {
 		Point p = new Point(x, y, z);
 		Material m = Data.Materials.get(getMaterialID(x,y,z));
-		if (m.dropAmount > 0)
-			for (int i=0; i<m.dropAmount-4; ++i)
-				item.add(new Item(x, y, z, Data.Items.get(m.drop)));
+		Inventory inv = items.getInventory(new Block(x,y,z));
+		if (m.dropAmount > 0) {
+			inv.addItem(Data.Items.get(m.drop), m.dropAmount);
+		}
 		for (VeinPatch vp: Data.Veins.asList()) {
 			if (vp.removePatch(p)) {
-				item.add(new Item(x, y, z, Data.Items.get(vp.drop)));
+				inv.addItem(Data.Items.get(vp.drop),1);
 			}
 		}
 	}
@@ -196,33 +198,7 @@ public class World {
 	public ArrayList<Creature> getCreature(Block b){
 		return getCreature(b.x, b.y, b.z);
 	}
-
-	public ArrayList<Item> getItem(int x, int y, int z){
-		ArrayList<Item> res = new ArrayList<>(0);
-		for (int i=0; i<item.size(); ++i)
-			if (item.get(i).isIn(x, y, z))
-				res.add(item.get(i));
-		return res;
-	}
-
-	public ArrayList<Item> getItem(Block b){
-		return getItem(b.x, b.y, b.z);
-	}
-
-/*
-	public void destroyBlock(int x, int y, int z){
-		item.add(new ItemBoulder(x, y, z, 1., getMaterialID(x, y, z)));
-		setMaterial(x, y, z, Material.MATERIAL_NONE);
-		setForm(x, y, z, FORM_BLOCK);
-		setDirection(x, y, z, DIRECTION_UP);
-		Renderer.getInstance().updateBlock(x, y, z);
-		updateBlock(x, y, z+1);
-	}
-
-	public void destroyBlock(Block b){
-		destroyBlock(b.x, b.y, b.z);
-	}
-*/
+	
 	public void updateBlock(int x, int y, int z){
 		if(!isIn(x, y, z)) return;
 		Renderer.getInstance().updateBlock(x, y, z);
@@ -243,6 +219,7 @@ public class World {
 	public void updateAll(){
 		ArrayList<int[]> toRemove = new ArrayList<>();
 		ArrayList<int[]> toAdd = new ArrayList<>();
+		items.update();
 		for (int[] p: updateBlocks){
 			toRemove.add(p);
 //			System.out.println("Checking updated block "+p[0]+" "+p[1]+" "+p[2]);
@@ -268,8 +245,6 @@ public class World {
 			toRemove.add(p);
 			for (Creature c: getCreature(p[0], p[1], p[2]))
 				c.update();
-			for (Item i: getItem(p[0], p[1], p[2]))
-				i.update();
 		}
 		updateEntities.removeAll(toRemove);
 	}

@@ -1,5 +1,6 @@
 package creature;
 
+import item.ItemReservation;
 import item.ItemTemplate;
 import world.Block;
 import world.World;
@@ -16,7 +17,8 @@ public class Action {
 
 	public char type;
 
-	public String itemCondition;
+	//public String itemCondition;
+	public ItemReservation IR;
 	public int f, d, m;
 //	public CreatureTemplate ct;
 	public double xd, yd, zd;
@@ -28,10 +30,11 @@ public class Action {
 		this.type = type;
 	}
 
-	public Action(char type, String itemCondition){
+	public Action(char type,  ItemReservation IR){
 		assert(type == ACTION_TAKE);
 		this.type = type;
-		this.itemCondition = itemCondition;
+		//this.itemCondition = itemCondition;
+		this.IR = IR;
 	}
 
 	public Action(char type, double x, double y, double z){
