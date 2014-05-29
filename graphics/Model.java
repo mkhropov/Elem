@@ -192,7 +192,7 @@ public class Model implements Initializable, Named{
 	}
 
 	public void draw(float x, float y, float z, float a, Texture gs) {
-		if (z>Interface.getInstance().current_layer) return;
+		if (z>(float)Interface.getInstance().current_layer+0.9f) return;
 		glBindVertexArray(vao);
 
 		int prog = glGetInteger(GL_CURRENT_PROGRAM);

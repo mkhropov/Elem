@@ -345,8 +345,7 @@ public class Renderer {
 		}
 		glUseProgram(shaders[Renderer.SHADER_FADE]);
 		for (int i=0; i<gEntities.size(); i++){
-			if (gEntities.get(i).getP().z<=current_layer)
-				gEntities.get(i).draw();
+			gEntities.get(i).draw();
 		}
 		for (VeinPatch vp: Data.Veins.asList()) {
 			vp.draw(current_layer, 0);
