@@ -192,6 +192,7 @@ public class Model implements Initializable, Named{
 	}
 
 	public void draw(float x, float y, float z, float a, Texture gs) {
+		if (z>Interface.getInstance().current_layer) return;
 		glBindVertexArray(vao);
 
 		int prog = glGetInteger(GL_CURRENT_PROGRAM);
