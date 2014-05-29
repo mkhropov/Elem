@@ -162,7 +162,7 @@ public class Model implements Initializable, Named{
 			this.n.put(t_n.get(3*ind_n+1));
 			this.n.put(t_n.get(3*ind_n+2));
 		}
-		
+
 		this.v.rewind();
 		this.t.rewind();
 		this.n.rewind();
@@ -193,6 +193,7 @@ public class Model implements Initializable, Named{
 
 	public void draw(float x, float y, float z, float a, Texture gs) {
 		if (z>(float)Interface.getInstance().current_layer+0.9f) return;
+		if (z<Interface.getInstance().current_layer-Renderer.getInstance().fdepth) return;
 		glBindVertexArray(vao);
 
 		int prog = glGetInteger(GL_CURRENT_PROGRAM);
@@ -209,7 +210,7 @@ public class Model implements Initializable, Named{
 		int t_uniform = glGetUniformLocation(prog, "tex");
 		int m_uniform = glGetUniformLocation(prog, "M");
 		int vp_uniform = glGetUniformLocation(prog, "VP");
-		
+
 		int tex_size = glGetUniformLocation(prog, "size");
 		int tex_start = glGetUniformLocation(prog, "start");
 		glUniform2f(tex_size, gs.u_size, gs.v_size);
@@ -259,7 +260,7 @@ public class Model implements Initializable, Named{
 
 		glBindVertexArray(0);
 	}
-	
+
 	@Override
 	public String getName(){
 		return name;

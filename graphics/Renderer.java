@@ -31,7 +31,7 @@ public class Renderer {
 	private int xChunkSize, yChunkSize;
 	private ArrayList<GraphicalEntity> gEntities;
 	public ArrayList<FloatingText> ftArray; //FIXME public
-	
+
 	public static final int DISPLAY_WIDTH = 800;
 	public static final int DISPLAY_HEIGHT = 600;
 	public static final float ratio = (1.f*DISPLAY_HEIGHT)/DISPLAY_WIDTH;
@@ -48,7 +48,7 @@ public class Renderer {
 	public final static int VIEW_MODE_FULL=1;      //Show all blocks, debug only
 	public final static int VIEW_MODE_FOW=2;       //Show only known blocks
 	public final static int VIEW_MODE_FOW_OCD=3;   //Show only known blocks open to air
-	public final static int VIEW_MODE_NOBLOCK = 4;
+	public final static int VIEW_MODE_NOBLOCK = 128;
 	public final static int VIEW_MODE_FLAT=64; //Should top layer be flat
 
 	public int[] shaders;
