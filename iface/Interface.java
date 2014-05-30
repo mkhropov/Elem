@@ -14,6 +14,7 @@ import player.Player;
 import player.Zone;
 import world.Block;
 import world.World;
+import iface.widget.Widget;
 
 
 public class Interface {
@@ -25,6 +26,7 @@ public class Interface {
 	public Cursor cursor;
 	TrueTypeFont sansSerif;
 	TrueTypeFont serif;
+//	Widget frm;
 
 	public boolean debug = false;
 
@@ -178,6 +180,27 @@ public class Interface {
 		viewMode = Renderer.VIEW_MODE_FOW;
 		this.setCommandMode(COMMAND_MODE_SPAWN);
 		this.setBuildMaterial(Data.Materials.getId("marble"));
+
+/*
+		frm = new iface.widget.Frame();
+		Widget hbox = new iface.widget.HBox();
+		Widget tmp;
+		tmp = new iface.widget.Image("gabbro", 50, 50);
+		hbox.add(tmp);
+		tmp = new iface.widget.Label("Long fking string");
+		hbox.add(tmp);
+		tmp = new iface.widget.Image("gabbro", 50, 50);
+		hbox.add(tmp);
+//		tmp = new iface.widget.Padding(20, 0);
+//		hbox.add(tmp);
+		Widget frm2 = new iface.widget.Frame();
+		tmp = new iface.widget.Image("gabbro", 50, 50);
+		frm2.add(tmp);
+		hbox.add(frm2);
+		frm.add(hbox);
+		frm.crop();
+		frm.compile(200, 200, 300, 100);
+*/
 }
 
 	public void draw(){
@@ -214,6 +237,8 @@ public class Interface {
 
 		for (int i=0; i<MENU_COUNT; ++i)
 			menus[i].draw();
+
+//		frm.draw();
 
 		for (FloatingText ft: Renderer.getInstance().ftArray)
 			ft.draw();

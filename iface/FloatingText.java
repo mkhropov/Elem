@@ -69,5 +69,6 @@ public class FloatingText {
 		GL11.glDisable(GL11.GL_COLOR_MATERIAL);
 		//print the message
 		font.drawString(X-xsize+2, Y-ysize-5-height/2, s, textColor);
+		GL11.glColor3d(1., 1., 1.);
 	}
 }
