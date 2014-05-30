@@ -60,7 +60,7 @@ public class Pathfinder {
                 for (int k=0; k<zsize; ++k)
                     d[i][j][k] = -1.f;
     }
-	
+
 	public ArrayList<Block> spreadReach(Creature c, ArrayList<Block> start, Condition cond){
 		ArrayList<Block> res = new ArrayList<>();
         ArrayList<Block> near;

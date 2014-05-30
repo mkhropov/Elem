@@ -79,7 +79,7 @@ public class Order {
 				System.out.println(acodes[a.type]);
 		}
 	}
-	
+
 	public void process() {
 		if (taken || declined)
 			return;
@@ -108,7 +108,7 @@ public class Order {
 			return;
 		}
 	}
-	
+
 	public void unmarkAll(){
 		for (ItemReservation ir: reserved)
 			ir.release();
