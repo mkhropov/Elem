@@ -9,6 +9,8 @@ import item.ItemReservation;
 import item.ItemTemplate;
 import java.util.Stack;
 import java.util.ArrayList;
+import pathfind.Path;
+import pathfind.PathFailure;
 import world.Block;
 import world.World;
 
@@ -32,7 +34,7 @@ public class Order {
     public int type;
     public boolean declined;
 
-	public Stack<Action> path;
+	public Path path;
 
     public Order(Block b, int type){
         this.b = b;
@@ -43,9 +45,8 @@ public class Order {
 				(Interface.getInstance().getBuildForm());
 		this.d = Interface.getInstance().getDirection();
         this.declined = !isAccesible();
-		this.path = new Stack<>();
+		this.path = new Path(this);
 		this.reserved = new ArrayList<>();
-//		System.out.println("New order "+this+", "+this.declined+" @("+b.x+","+b.y+","+b.z+")");
 		if ((type == ORDER_DIG) || (type == ORDER_BUILD))
 			this.cube = new CommandCube(type, b.x, b.y, b.z);
 		this.N = 8;
@@ -76,6 +77,35 @@ public class Order {
 				System.out.println(acodes[a.type]+" to ("+a.b.x+", "+a.b.y+", "+a.b.z+")");
 			else
 				System.out.println(acodes[a.type]);
+		}
+	}
+	
+	public void process() {
+		if (taken || declined)
+			return;
+		path.clear();
+		switch (type) {
+		case (Order.ORDER_BUILD):
+			try {
+				path.queueBuild();
+				path.queueItems();
+				path.queueAssign();
+			} catch(PathFailure p) {
+				unmarkAll();
+				declined = true;
+			}
+			return;
+		case (Order.ORDER_DIG):
+			try {
+				path.queueDig();
+				path.queueAssign();
+			} catch(PathFailure p) {
+				unmarkAll();
+				declined = true;
+			}
+			return;
+		default:
+			return;
 		}
 	}
 	
