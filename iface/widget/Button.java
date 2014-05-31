@@ -7,6 +7,8 @@ public class Button extends Widget {
 
 	private static Texture activeIcon;
 	private static Texture inactiveIcon;
+	
+	private Texture curr;
 
 	private Runnable c;
 
@@ -28,7 +30,7 @@ public class Button extends Widget {
 		minX = 10;
 		minY = 10;
 		if (child.size() > 0) {
-			Widget w = childs.get(0);
+			Widget w = child.get(0);
 			w.crop();
 			minX += w.minX;
 			minY += w.minY;
@@ -36,9 +38,16 @@ public class Button extends Widget {
 	}
 
 	@Override
-	public boolean compile() {
-		// ??? XXX FIXME ???
-		return false;
+	public void compile(int X, int Y, int dX, int dY) {
+		this.X = X;
+		this.Y = Y;
+		this.dX = dX;
+		this.dY = dY;
+//		System.out.printf("Button %d %d %d %d\n", X, Y, dX, dY);
+		if (child.size() > 0) {
+			Widget w = child.get(0);
+			w.compile(X+5, Y+5, dX-10, dY-10);
+		}
 	}
 
 /* Buttons are clickable, so we stop the chain of requests */
@@ -59,10 +68,12 @@ public class Button extends Widget {
 
 	public void draw(){
 		if (active) {
-			activeIcon.bind();
+			curr = activeIcon;
 		} else {
-			inactiveIcon.bind();
+			curr = inactiveIcon;
 		}
+		
+		curr.bind();
 
 		GL11.glBegin(GL11.GL_QUADS);
 		GL11.glTexCoord2d(0., 0.);
