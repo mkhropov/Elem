@@ -2,12 +2,13 @@ package iface.widget;
 
 import graphics.Texture;
 import core.Data;
+import org.lwjgl.opengl.GL11;
 
 public class Button extends Widget {
 
 	private static Texture activeIcon;
 	private static Texture inactiveIcon;
-	
+
 	private Texture curr;
 
 	private Runnable c;
@@ -18,7 +19,7 @@ public class Button extends Widget {
 		super();
 		this.maxChild = 1;
 
-		this.active = false;
+		this.active = true;
 		this.c = c;
 		activeIcon = Data.Textures.get("IconActive");
 		inactiveIcon = Data.Textures.get("IconInactive");
@@ -43,7 +44,7 @@ public class Button extends Widget {
 		this.Y = Y;
 		this.dX = dX;
 		this.dY = dY;
-//		System.out.printf("Button %d %d %d %d\n", X, Y, dX, dY);
+		System.out.printf("Button %d %d %d %d\n", X, Y, dX, dY);
 		if (child.size() > 0) {
 			Widget w = child.get(0);
 			w.compile(X+5, Y+5, dX-10, dY-10);
@@ -53,12 +54,14 @@ public class Button extends Widget {
 /* Buttons are clickable, so we stop the chain of requests */
 	@Override
 	public Widget onPress(int x, int y) {
+		System.out.println("Button pressed at "+x+", "+y);
 		active = true;
 		return this;
 	}
 
 	@Override
 	public Widget onRelease(int x, int y) {
+		System.out.println("Button released at "+x+", "+y);
 		if (hover(x, y)) {
 			c.run();
 		}
@@ -72,7 +75,7 @@ public class Button extends Widget {
 		} else {
 			curr = inactiveIcon;
 		}
-		
+
 		curr.bind();
 
 		GL11.glBegin(GL11.GL_QUADS);
