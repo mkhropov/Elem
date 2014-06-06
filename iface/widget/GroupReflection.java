@@ -3,20 +3,49 @@ package iface.widget;
 import graphics.Texture;
 import core.Data;
 import org.lwjgl.opengl.GL11;
+import java.util.ArrayList;
 
-public class Image extends Widget {
+public class GroupReflection extends Widget {
 
-	public Texture image;
+	private Texture image;
+	private GroupButton activeButton;
+	private ArrayList<GroupButton> group;
 
 	private int w, h;
 	private int sX, sY;
 
-	public Image(String texture, int width, int height) {
+	public GroupReflection(GroupButton gb, int width, int height) {
 		super();
 
+		group = gb.group;
+		findActive();
 		w = width;
 		h = height;
-		image = Data.Textures.get(texture);
+	}
+
+	private Texture getTexture(GroupButton b) {
+		Widget w = b;
+		while (!(w instanceof Image) && w.child != null && w.child.size()>0) {
+			w = w.child.get(0);
+		}
+		if (w instanceof Image) {
+			return ((Image) w).image;
+		} else {
+			return Data.Textures.get("");
+		}
+	}
+
+	private void findActive() {
+		assert(group != null);
+		activeButton = null;
+		for (GroupButton b: group) {
+			if (b.active) {
+				activeButton = b;
+				break;
+			}
+		}
+		assert(activeButton != null);
+		image = getTexture(activeButton);
 	}
 
 	@Override
@@ -34,13 +63,14 @@ public class Image extends Widget {
 
 		sX = X + dX/2 - w/2;
 		sY = Y + dY/2 - h/2;
-		System.out.printf("Image %d %d %d %d %d %d\n", X, Y, dX, dY, sX, sY);
+//		System.out.printf("GReflect %d %d %d %d %d %d\n", X, Y, dX, dY, sX, sY);
 	}
 
 	public void draw(){
         if (!visible)
 			return;
-
+		if (!activeButton.active)
+			findActive();
 		image.bind();
 
 		GL11.glBegin(GL11.GL_QUADS);

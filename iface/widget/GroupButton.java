@@ -10,11 +10,11 @@ public class GroupButton extends Widget {
 	private static Texture activeIcon;
 	private static Texture inactiveIcon;
 
-	private ArrayList<GroupButton> group;
+	public ArrayList<GroupButton> group;
 
 	private Runnable c;
 
-	boolean active;
+	public boolean active;
 
 	public GroupButton() {
 		super();
