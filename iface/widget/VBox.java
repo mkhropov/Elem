@@ -33,6 +33,9 @@ public class HBox extends Widget {
 	}
 
 	public void draw() {
+        if (!visible)
+			return;
+
 		for (Widget w: child) {
 			w.draw();
 		}

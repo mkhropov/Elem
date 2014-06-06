@@ -43,6 +43,9 @@ public class Frame extends Widget {
 	}
 
 	public void draw(){
+		if (!visible)
+			return;
+
 		texture.bind();
 
 		GL11.glBegin(GL11.GL_QUADS);

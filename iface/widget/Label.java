@@ -51,6 +51,9 @@ public class Label extends Widget {
 	}
 
 	public void draw() {
+        if (!visible)
+            return;
+
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 		font.drawString(textX, textY, text, color);
 		GL11.glColor3f(1.f, 1.f, 1.f);

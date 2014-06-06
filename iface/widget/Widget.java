@@ -6,6 +6,8 @@ public class Widget {
 	int X, Y;
 	int dX, dY;
 
+	public boolean visible;
+
 	public int minX, minY;
 
 	ArrayList<Widget> child;
@@ -14,6 +16,7 @@ public class Widget {
 	public Widget parent;
 
 	public Widget() {
+		this.visible = true;
 		this.maxChild = 0;
 		this.child = new ArrayList<>();
 	}
@@ -36,7 +39,8 @@ public class Widget {
 	}
 
 	public boolean hover(int x, int y) {
-		return (X<=x && x<X+dX &&
+		return (visible &&
+				X<=x && x<X+dX &&
 				Y<=y && y<Y+dY);
 	}
 
@@ -45,7 +49,7 @@ public class Widget {
  *	one that can actually process the click
  */
 	public Widget onPress(int x, int y) {
-		System.out.println("Generic widget pressed at "+x+", "+y);
+//		System.out.println("Generic widget pressed at "+x+", "+y);
 		Widget res;
 		for (Widget w: child) {
 			if (w.hover(x, y)) {
@@ -59,7 +63,7 @@ public class Widget {
 	}
 
 	public Widget onRelease(int x, int y) {
-		System.out.println("Generic widget released at "+x+", "+y);
+//		System.out.println("Generic widget released at "+x+", "+y);
 		Widget res;
 		for (Widget w: child) {
 			if (w.hover(x, y)) {
@@ -73,5 +77,8 @@ public class Widget {
 	}
 
 	public void draw() {
+		if (!visible) {
+			return;
+		}
 	}
 }

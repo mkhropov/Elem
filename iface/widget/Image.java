@@ -38,6 +38,9 @@ public class Image extends Widget {
 	}
 
 	public void draw(){
+        if (!visible)
+			return;
+
 		image.bind();
 
 		GL11.glBegin(GL11.GL_QUADS);

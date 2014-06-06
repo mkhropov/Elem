@@ -68,6 +68,9 @@ public class ToggleButton extends Widget {
 	}
 
 	public void draw(){
+        if (!visible)
+			return;
+
 		if (active) {
 			activeIcon.bind();
 		} else {

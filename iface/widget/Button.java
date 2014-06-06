@@ -70,6 +70,9 @@ public class Button extends Widget {
 	}
 
 	public void draw(){
+        if (!visible)
+			return;
+
 		if (active) {
 			curr = activeIcon;
 		} else {
