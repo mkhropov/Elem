@@ -11,6 +11,7 @@ import org.lwjgl.opengl.GL20;
 import player.Zone;
 import world.Block;
 import world.World;
+import iface.widget.Widget;
 
 public class Input {
 	Interface iface;
@@ -36,9 +37,11 @@ public class Input {
 		int[] pos = iface.camera.resolvePixel(x, y, iface.current_layer);
 
 		boolean onMenu = false;
-		for (int i=0; i<Interface.MENU_COUNT; ++i)
-			if (iface.menus[i].hover(x, 600-y))
+		for (Widget w: Interface.menu) {
+			if (w.hover(x, 600-y)) {
 				onMenu = true;
+			}
+		}
 
 		iface.cursor.reposition(pos[0], pos[1], iface.current_layer, x, y);
 		if (onMenu)
@@ -47,65 +50,72 @@ public class Input {
 		endY = iface.cursor.y;
 
 		while (Mouse.next()){
-			if (!Mouse.getEventButtonState()) {
-				for (int i=0; i<Interface.MENU_COUNT; ++i){
-					iface.menus[i].click(x, 600-y, Mouse.getEventButton());
-				}
-			}
-			if (Mouse.getEventButton() == 0 && !(iface.cursor.state==Cursor.STATE_IFACE)) {
-				if (Mouse.getEventButtonState()) { //button pressed
-					startX = endX;
-					startY = endY;
-					draw = true;
-				} else { //button released
-					Zone z = null;
-					if (iface.getCommandMode()==Interface.COMMAND_MODE_ZONE) {
-						z = new Zone(Data.Zones.get(iface.getZoneType()));
+			if (Mouse.getEventButton() == 0)
+				if (iface.cursor.state==Cursor.STATE_IFACE) {
+					if (Mouse.getEventButtonState()) {
+						for (Widget w: Interface.menu) {
+							w.onPress(x, 600-y);
+						}
+					} else {
+						for (Widget w: Interface.menu) {
+							w.onRelease(x, 600-y);
+						}
 					}
-					draw = false;
-					int i, j;
-					i = startX;
-					do {
-						j = startY;
+				} else {
+					if (Mouse.getEventButtonState()) { //button pressed
+						startX = endX;
+						startY = endY;
+						draw = true;
+					} else { //button released
+						Zone z = null;
+						if (Interface.getCommandMode() == Interface.COMMAND_MODE_ZONE) {
+							z = new Zone(Data.Zones.get(Interface.getZoneType()));
+						}
+						draw = false;
+						int i, j;
+						i = startX;
 						do {
-							if (iface.canPlaceCommand(i, j, iface.current_layer)){
-								switch (iface.getCommandMode()){
-								case Interface.COMMAND_MODE_SPAWN:
-									iface.player.spawnCreature(
+							j = startY;
+							do {
+								if (iface.canPlaceCommand(i, j, iface.current_layer)){
+									switch (Interface.getCommandMode()){
+									case Interface.COMMAND_MODE_SPAWN:
+										iface.player.spawnCreature(
 											new Elem(World.getInstance().getBlock(i, j, iface.current_layer)));
-									break;
-								case Interface.COMMAND_MODE_DIG:
-									if (iface.getDigForm()==World.FORM_BLOCK){
-										iface.setDigForm(World.FORM_FLOOR);
-										iface.player.placeDigOrder(
+										break;
+									case Interface.COMMAND_MODE_DIG:
+										if (Interface.getDigForm()==World.FORM_BLOCK){
+											Interface.setDigForm(World.FORM_FLOOR);
+											iface.player.placeDigOrder(
 												World.getInstance().getBlock(i, j, iface.current_layer-1));
-										iface.setDigForm(World.FORM_BLOCK);
-									}
-									iface.player.placeDigOrder(
+											Interface.setDigForm(World.FORM_BLOCK);
+										}
+										iface.player.placeDigOrder(
 											World.getInstance().getBlock(i, j, iface.current_layer));
-									break;
-								case Interface.COMMAND_MODE_BUILD:
-									iface.player.placeBuildOrder(
+										break;
+									case Interface.COMMAND_MODE_BUILD:
+										iface.player.placeBuildOrder(
 											World.getInstance().getBlock(i, j, iface.current_layer),
-											iface.getBuildMaterial());
-									break;
-								case Interface.COMMAND_MODE_ZONE:
-									z.add(World.getInstance().getBlock(i, j, iface.current_layer));
-									break;
-								case Interface.COMMAND_MODE_CANCEL:
-									iface.player.cancelOrders(World.getInstance().getBlock(i, j, iface.current_layer));
-									break;
+											Interface.getBuildMaterial());
+										break;
+									case Interface.COMMAND_MODE_ZONE:
+										z.add(World.getInstance().getBlock(i, j, iface.current_layer));
+										break;
+									case Interface.COMMAND_MODE_CANCEL:
+										iface.player.cancelOrders(
+											World.getInstance().getBlock(i, j, iface.current_layer));
+										break;
+									}
 								}
-							}
-							j+=Math.signum(endY-startY);
-						} while(j != endY+Math.signum(endY - startY));
-						i+=Math.signum(endX-startX);
-					} while(i != endX+Math.signum(endX-startX));
-					if (iface.getCommandMode()==Interface.COMMAND_MODE_ZONE) {
-						iface.player.zones.add(z);
+								j+=Math.signum(endY-startY);
+							} while(j != endY+Math.signum(endY - startY));
+							i+=Math.signum(endX-startX);
+						} while(i != endX+Math.signum(endX-startX));
+						if (Interface.getCommandMode() == Interface.COMMAND_MODE_ZONE) {
+							iface.player.zones.add(z);
+						}
 					}
 				}
-			}
 		}
 
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
@@ -152,19 +162,19 @@ public class Input {
 					Renderer.getInstance().reset();
 					break;
                 case Keyboard.KEY_1:
-					iface.setCommandMode(Interface.COMMAND_MODE_SPAWN);
+					Interface.setCommandMode(Interface.COMMAND_MODE_SPAWN);
 					break;
                 case Keyboard.KEY_2:
-					iface.setCommandMode(Interface.COMMAND_MODE_DIG);
+					Interface.setCommandMode(Interface.COMMAND_MODE_DIG);
 					break;
 	            case Keyboard.KEY_3:
-					iface.setCommandMode(Interface.COMMAND_MODE_BUILD);
+					Interface.setCommandMode(Interface.COMMAND_MODE_BUILD);
 					break;
 	            case Keyboard.KEY_4:
-					iface.setCommandMode(Interface.COMMAND_MODE_ZONE);
+					Interface.setCommandMode(Interface.COMMAND_MODE_ZONE);
 					break;
 	            case Keyboard.KEY_5:
-					iface.setCommandMode(Interface.COMMAND_MODE_CANCEL);
+					Interface.setCommandMode(Interface.COMMAND_MODE_CANCEL);
 					break;
 				case Keyboard.KEY_H:
 					iface.viewMode |= Renderer.VIEW_MODE_NOBLOCK;
@@ -177,7 +187,7 @@ public class Input {
             }
 		} else {
 			// Key released
-			switch(Keyboard.getEventKey()){
+			switch (Keyboard.getEventKey()) {
 				case Keyboard.KEY_SPACE:
 					iface.viewMode = iface.viewMode & ~Renderer.VIEW_MODE_FLAT;
 					break;
@@ -197,7 +207,7 @@ public class Input {
 	public void draw(){
 		if (! draw)
 			return;
-		if (iface.getCommandMode()==Interface.COMMAND_MODE_ZONE) {
+		if (Interface.getCommandMode() == Interface.COMMAND_MODE_ZONE) {
 			model = Data.Models.get("floor");
 		} else {
 			model = Data.Models.get("cube");

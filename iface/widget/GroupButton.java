@@ -5,61 +5,42 @@ import core.Data;
 import org.lwjgl.opengl.GL11;
 import java.util.ArrayList;
 
-public class GroupButton extends Widget {
+public class GroupButton extends TogglableWidget {
 
 	private static Texture activeIcon;
 	private static Texture inactiveIcon;
 
 	public ArrayList<GroupButton> group;
+	private ValueSetter setter;
+	private int val;
 
 	private Runnable c;
 
-	public boolean active;
-
-	public GroupButton() {
+	public GroupButton(int val, ValueSetter setter) {
 		super();
 		this.maxChild = 1;
 
-		this.active = false;
+		this.setter = setter;
+		this.val = val;
 		this.group = new ArrayList<>(1);
 		group.add(this);
 		activeIcon = Data.Textures.get("IconActive");
 		inactiveIcon = Data.Textures.get("IconInactive");
+		setter.set(val);
+		setActive(true);
 	}
 
-	public GroupButton(Runnable c) {
+	public GroupButton(int val, GroupButton b) {
 		super();
 		this.maxChild = 1;
 
-		this.active = false;
-		this.c = c;
-		this.group = new ArrayList<>(1);
-		group.add(this);
-		activeIcon = Data.Textures.get("IconActive");
-		inactiveIcon = Data.Textures.get("IconInactive");
-	}
-
-	public GroupButton(GroupButton b) {
-		super();
-		this.maxChild = 1;
-
-		this.active = false;
+		this.setter = b.setter;
 		this.group = b.group;
+		this.val = val;
 		group.add(this);
 		activeIcon = Data.Textures.get("IconActive");
 		inactiveIcon = Data.Textures.get("IconInactive");
-	}
-
-	public GroupButton(Runnable c, GroupButton b) {
-		super();
-		this.maxChild = 1;
-
-		this.active = false;
-		this.c = c;
-		this.group = b.group;
-		group.add(this);
-		activeIcon = Data.Textures.get("IconActive");
-		inactiveIcon = Data.Textures.get("IconInactive");
+		setActive(false);
 	}
 
 	@Override
@@ -91,7 +72,7 @@ public class GroupButton extends Widget {
 /* Buttons are clickable, so we stop the chain of requests */
 	@Override
 	public Widget onPress(int x, int y) {
-		active = !active;
+//		setActive(!active);
 		return this;
 	}
 
@@ -99,16 +80,16 @@ public class GroupButton extends Widget {
 	public Widget onRelease(int x, int y) {
 		if (hover(x, y)) {
 			for (GroupButton b: group)
-				b.active = false;
-			active = true;
-			if (c != null) {
-				c.run();
+				b.setActive(false);
+			setActive(true);
+			if (setter != null) {
+				setter.set(val);
 			} else {
 				System.out.println("Empty command executed");
 			}
 		} else {
 			/* no actual click, return to last state */
-			active = !active;
+//			setActive(!active);
 		}
 		return this;
 	}

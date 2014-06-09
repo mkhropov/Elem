@@ -4,6 +4,7 @@ import core.Data;
 import graphics.Renderer;
 import java.awt.Font;
 import java.util.Iterator;
+import java.util.ArrayList;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
@@ -26,9 +27,11 @@ public class Interface {
 	public Cursor cursor;
 	TrueTypeFont sansSerif;
 	TrueTypeFont serif;
-//	Widget frm;
+	public static ArrayList<Widget> menu;
 
 	public boolean debug = false;
+
+	private static int commandMode;
 
 	public static final int COMMAND_MODE_SPAWN = 0;
 	public static final int COMMAND_MODE_DIG = 1;
@@ -36,18 +39,16 @@ public class Interface {
 	public static final int COMMAND_MODE_ZONE = 3;
 	public static final int COMMAND_MODE_CANCEL = 4;
 
-
-	public static final int MENU_TOOLBAR = 0;
-	public static final int MENU_DIG_FORM = 1;
-	public static final int MENU_BUILD_FORM = 2;
-	public static final int MENU_BUILD_MATERIAL = 3;
-	public static final int MENU_ZONE_TYPE = 4;
-	public static final int MENU_COUNT = 5;
-
-
-	public Menu[] menus;
+	private static int buildForm;
+	private static int buildMaterial;
+	private static int zoneType;
+	private static int digForm;
 
 	public int viewMode;
+
+	static {
+		menu = new ArrayList<>();
+	}
 
 	public void update(long deltaT){
 		input.poll(deltaT);
@@ -66,54 +67,44 @@ public class Interface {
 		player = p;
 	}
 
-	public void setCommandMode(int commandMode){
-		SelectorMenu t = (SelectorMenu)menus[MENU_TOOLBAR];
-		t.setState(commandMode);
+	public static void setCommandMode(int mode) {
+		commandMode = mode;
 	}
 
-	public int getCommandMode(){
-		SelectorMenu t = (SelectorMenu)menus[MENU_TOOLBAR];
-		return t.getState();
+	public static int getCommandMode() {
+		return commandMode;
 	}
 
-	public void setBuildMaterial(int material){
-		SelectorMenu t = (SelectorMenu)menus[MENU_BUILD_MATERIAL];
-		t.setState(material);
+	public static void setBuildMaterial(int material){
+		buildMaterial = material;
 	}
 
-	public int getBuildMaterial(){
-		SelectorMenu t = (SelectorMenu)menus[MENU_BUILD_MATERIAL];
-		return t.getState();
+	public static int getBuildMaterial(){
+		return buildMaterial;
 	}
 
-	public void setBuildForm(int form){
-		SelectorMenu t = (SelectorMenu)menus[MENU_BUILD_FORM];
-		t.setState(form);
+	public static void setBuildForm(int form){
+		buildForm = form;
 	}
 
-	public int getBuildForm(){
-		SelectorMenu t = (SelectorMenu)menus[MENU_BUILD_FORM];
-		return t.getState();
-	}
-	
-	public void setZoneType(int type){
-		SelectorMenu t = (SelectorMenu)menus[MENU_ZONE_TYPE];
-		t.setState(type);
+	public static int getBuildForm(){
+		return buildForm;
 	}
 
-	public int getZoneType(){
-		SelectorMenu t = (SelectorMenu)menus[MENU_ZONE_TYPE];
-		return t.getState();
+	public static void setZoneType(int type){
+		zoneType = type;
 	}
 
-	public void setDigForm(int form){
-		SelectorMenu t = (SelectorMenu)menus[MENU_DIG_FORM];
-		t.setState(form);
+	public static int getZoneType(){
+		return zoneType;
 	}
 
-	public int getDigForm(){
-		SelectorMenu t = (SelectorMenu)menus[MENU_DIG_FORM];
-		return t.getState();
+	public static void setDigForm(int form){
+		digForm = form;
+	}
+
+	public static int getDigForm(){
+		return digForm;
 	}
 
 	public int getDirection(){
@@ -126,11 +117,12 @@ public class Interface {
 		camera = new Camera(world.xsize/2.0f, world.ysize/2.0f, (float) current_layer);
 		input = new Input(this);
 		cursor = new Cursor();
-		menus = new Menu[MENU_COUNT];
 		Font awtFont = new Font("Times New Roman", Font.PLAIN, 12);
 		serif = new TrueTypeFont(awtFont, true);
 		awtFont = new Font("Helvetica", Font.BOLD, 12);
 		sansSerif = new TrueTypeFont(awtFont, true);
+
+/*
 		SelectorMenu t = new SelectorMenu(new Element());
 		t.addButton(new Button(235, 530, 60, 60, "IconSummon"), COMMAND_MODE_SPAWN);
 		Button bDig = new Button(305, 530, 60, 60, "IconDig");
@@ -175,36 +167,18 @@ public class Interface {
 		t.addButton(new Button(460, 480, 40, 40, ""), Data.Zones.getId("lumber"));
 		t.addButton(new Button(510, 480, 40, 40, ""), Data.Zones.getId("mason"));
 		t.addButton(new Button(560, 480, 40, 40, ""), Data.Zones.getId("jewel"));
-		menus[MENU_ZONE_TYPE] = t;
+		menus[MENU_ZONE_TYPE] = t;*/
 
 		viewMode = Renderer.VIEW_MODE_FOW;
-		this.setCommandMode(COMMAND_MODE_SPAWN);
-		this.setBuildMaterial(Data.Materials.getId("marble"));
+		setCommandMode(COMMAND_MODE_SPAWN);
+		setBuildMaterial(Data.Materials.getId("marble"));
 
-/*
-		frm = new iface.widget.Frame();
-		Widget hbox = new iface.widget.HBox();
-		Widget tmp;
-		tmp = new iface.widget.Image("gabbro", 50, 50);
-		hbox.add(tmp);
-		tmp = new iface.widget.Label("Long fking string");
-		hbox.add(tmp);
-		tmp = new iface.widget.Image("gabbro", 50, 50);
-		hbox.add(tmp);
-//		tmp = new iface.widget.Padding(20, 0);
-//		hbox.add(tmp);
-		Widget frm2 = new iface.widget.Frame();
-		tmp = new iface.widget.Image("gabbro", 50, 50);
-		frm2.add(tmp);
-		hbox.add(frm2);
-		frm.add(hbox);
-		frm.crop();
-		frm.compile(200, 200, 300, 100);
-*/
+		Toolbar t = new Toolbar(235, 530);
+		menu.add(t);
 }
 
 	public void draw(){
-		if (this.getCommandMode() == Interface.COMMAND_MODE_ZONE) {
+		if (getCommandMode() == Interface.COMMAND_MODE_ZONE) {
 			int hue_uniform =GL20.glGetUniformLocation(Renderer.getInstance().shaders[Renderer.SHADER_GHOST], "hue");;
 			for (int i = 0; i < player.zones.size(); ++i){
 				Zone z = player.zones.get(i);
@@ -235,10 +209,9 @@ public class Interface {
 		GL11.glEnable(GL11.GL_COLOR_MATERIAL);
 		GL11.glColor3d(1., 1., 1.);
 
-		for (int i=0; i<MENU_COUNT; ++i)
-			menus[i].draw();
-
-//		frm.draw();
+		for (Widget w: menu) {
+			w.draw();
+		}
 
 		for (FloatingText ft: Renderer.getInstance().ftArray)
 			ft.draw();
@@ -289,9 +262,9 @@ public class Interface {
 							((w.getForm(x, y, z) == World.FORM_FLOOR)
 							&& (getBuildMaterial() == w.getMaterialID(x, y, z))))
 						&& !player.blockAlreadyRequested(w.getBlock(x, y, z)));
-			case Interface.COMMAND_MODE_ZONE: 
+			case Interface.COMMAND_MODE_ZONE:
 				return (player. blockKnown(x, y, z)
-						&& w.isEmpty(x, y, z) && w.hasSolidFloor(x, y, z));				
+						&& w.isEmpty(x, y, z) && w.hasSolidFloor(x, y, z));
 			case Interface.COMMAND_MODE_CANCEL: return player.blockAlreadyRequested(w.getBlock(x, y, z));
 			default:
 					System.out.println("Interface.canPlaceCommand: weird request");

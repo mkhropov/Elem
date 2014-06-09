@@ -40,9 +40,9 @@ public class Order {
         this.b = b;
         this.taken = false;
         this.type = type;
-		this.m = Interface.getInstance().getBuildMaterial();
-		this.f = (type == ORDER_DIG)?(Interface.getInstance().getDigForm()):
-				(Interface.getInstance().getBuildForm());
+		this.m = Interface.getBuildMaterial();
+		this.f = (type == ORDER_DIG)?(Interface.getDigForm()):
+				(Interface.getBuildForm());
 		this.d = Interface.getInstance().getDirection();
         this.declined = !isAccesible();
 		this.path = new Path(this);

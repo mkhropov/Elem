@@ -10,7 +10,7 @@ public class Widget {
 
 	public int minX, minY;
 
-	ArrayList<Widget> child;
+	public ArrayList<Widget> child;
 	int maxChild;
 
 	public Widget parent;
@@ -74,6 +74,10 @@ public class Widget {
 			}
 		}
 		return null;
+	}
+
+	public void setVisible(boolean visible) {
+		this.visible = visible;
 	}
 
 	public void draw() {

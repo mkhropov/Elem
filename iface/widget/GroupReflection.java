@@ -18,7 +18,7 @@ public class GroupReflection extends Widget {
 		super();
 
 		group = gb.group;
-		findActive();
+//		findActive();
 		w = width;
 		h = height;
 	}
@@ -69,7 +69,7 @@ public class GroupReflection extends Widget {
 	public void draw(){
         if (!visible)
 			return;
-		if (!activeButton.active)
+		if (activeButton==null || !activeButton.active)
 			findActive();
 		image.bind();
 

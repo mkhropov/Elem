@@ -34,7 +34,7 @@ public class Image extends Widget {
 
 		sX = X + dX/2 - w/2;
 		sY = Y + dY/2 - h/2;
-		System.out.printf("Image %d %d %d %d %d %d\n", X, Y, dX, dY, sX, sY);
+//		System.out.printf("Image %d %d %d %d %d %d\n", X, Y, dX, dY, sX, sY);
 	}
 
 	public void draw(){

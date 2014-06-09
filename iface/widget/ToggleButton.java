@@ -4,14 +4,12 @@ import graphics.Texture;
 import core.Data;
 import org.lwjgl.opengl.GL11;
 
-public class ToggleButton extends Widget {
+public class ToggleButton extends TogglableWidget {
 
 	private static Texture activeIcon;
 	private static Texture inactiveIcon;
 
 	private Runnable c;
-
-	boolean active;
 
 	public ToggleButton(Runnable c) {
 		super();
@@ -52,7 +50,7 @@ public class ToggleButton extends Widget {
 /* Buttons are clickable, so we stop the chain of requests */
 	@Override
 	public Widget onPress(int x, int y) {
-		active = !active;
+		setActive(active);
 		return this;
 	}
 
@@ -62,7 +60,7 @@ public class ToggleButton extends Widget {
 			c.run();
 		} else {
 			/* no actual click, return to last state */
-			active = !active;
+			setActive(!active);
 		}
 		return this;
 	}
