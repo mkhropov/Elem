@@ -39,7 +39,7 @@ public class Widget {
 	}
 
 	public boolean hover(int x, int y) {
-		return (visible &&
+		return (getVisible() &&
 				X<=x && x<X+dX &&
 				Y<=y && y<Y+dY);
 	}
@@ -78,6 +78,16 @@ public class Widget {
 
 	public void setVisible(boolean visible) {
 		this.visible = visible;
+	}
+
+/* going up on hierarchy */
+	public boolean getVisible() {
+		Widget w = this;
+		while (w.visible && w.parent != null) {
+			w = w.parent;
+		}
+
+		return w.visible;
 	}
 
 	public void draw() {

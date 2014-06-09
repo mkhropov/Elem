@@ -7,6 +7,7 @@ public class Toolbar extends HBox {
 
 	private BuildMenu buildMenu;
 	private DigMenu digMenu;
+	private ZoneMenu zoneMenu;
 
 	public Toolbar(int X, int Y) {
 		super();
@@ -19,6 +20,8 @@ public class Toolbar extends HBox {
 //		digMenu.visible =
 //			(Interface.getCommandMode() == COMMAND_MODE_DIG);
 		Interface.menu.add(digMenu);
+		zoneMenu = new ZoneMenu(X+150, Y-50);
+		Interface.menu.add(zoneMenu);
 
 		GroupButton b;
 		Image i;
@@ -52,9 +55,10 @@ public class Toolbar extends HBox {
 		p = new Padding(10, 0);
 		add(p);
 		b = new GroupButton(COMMAND_MODE_ZONE, b);
+		b.addSlave(zoneMenu);
 		b.setActive(Interface.getCommandMode() == COMMAND_MODE_ZONE);
-		i = new Image("IconZone", 50, 50);
-		b.add(i);
+		gr = new GroupReflection((GroupButton)zoneMenu.child.get(0), 50, 50);
+		b.add(gr);
 		add(b);
 		p = new Padding(10, 0);
 		add(p);

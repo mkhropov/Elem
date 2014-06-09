@@ -25,7 +25,7 @@ public class TogglableWidget extends Widget {
 	public void setActive(boolean active) {
 		this.active = active;
 		for (Widget w: slave) {
-			w.visible = active;
+			w.setVisible(active);
 		}
 	}
 }
