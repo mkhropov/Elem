@@ -1,8 +1,5 @@
 package iface.widget;
 
-import graphics.Texture;
-import core.Data;
-import org.lwjgl.opengl.GL11;
 import java.util.ArrayList;
 
 public class TogglableWidget extends Widget {

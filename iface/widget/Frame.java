@@ -42,6 +42,7 @@ public class Frame extends Widget {
 
 	}
 
+	@Override
 	public void draw(){
 		if (!visible)
 			return;

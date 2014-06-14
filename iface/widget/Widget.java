@@ -91,8 +91,5 @@ public class Widget {
 	}
 
 	public void draw() {
-		if (!visible) {
-			return;
-		}
 	}
 }

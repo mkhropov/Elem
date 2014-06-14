@@ -37,6 +37,7 @@ public class Image extends Widget {
 //		System.out.printf("Image %d %d %d %d %d %d\n", X, Y, dX, dY, sX, sY);
 	}
 
+	@Override
 	public void draw(){
         if (!visible)
 			return;

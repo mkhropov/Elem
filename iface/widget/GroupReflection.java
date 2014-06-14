@@ -24,12 +24,12 @@ public class GroupReflection extends Widget {
 	}
 
 	private Texture getTexture(GroupButton b) {
-		Widget w = b;
-		while (!(w instanceof Image) && w.child != null && w.child.size()>0) {
-			w = w.child.get(0);
+		Widget W = b;
+		while (!(W instanceof Image) && W.child != null && W.child.size()>0) {
+			W = W.child.get(0);
 		}
-		if (w instanceof Image) {
-			return ((Image) w).image;
+		if (W instanceof Image) {
+			return ((Image) W).image;
 		} else {
 			return Data.Textures.get("");
 		}
@@ -66,6 +66,7 @@ public class GroupReflection extends Widget {
 //		System.out.printf("GReflect %d %d %d %d %d %d\n", X, Y, dX, dY, sX, sY);
 	}
 
+	@Override
 	public void draw(){
         if (!visible)
 			return;

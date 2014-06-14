@@ -34,11 +34,13 @@ public class Label extends Widget {
 		this(text, defaultFont);
 	}
 
+	@Override
 	public void crop() {
 		minX = font.getWidth(text) + 10;
 		minY = font.getHeight(text) + 10;
 	}
 
+	@Override
 	public void compile(int X, int Y, int dX, int dY) {
 		this.X = X;
 		this.Y = Y;
@@ -47,9 +49,10 @@ public class Label extends Widget {
 		/* assert (dX >= minX && dY >= minY); */
 		textX = X + dX/2 - minX/2 + 5;
 		textY = Y + dY/2 - minY/2 + 5;
-		System.out.printf("Label %d %d %d %d %d %d\n", X, Y, dX, dY, textX, textY);
+//		System.out.printf("Label %d %d %d %d %d %d\n", X, Y, dX, dY, textX, textY);
 	}
 
+	@Override
 	public void draw() {
         if (!visible)
             return;

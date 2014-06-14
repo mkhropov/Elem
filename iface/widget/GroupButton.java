@@ -94,6 +94,7 @@ public class GroupButton extends TogglableWidget {
 		return this;
 	}
 
+	@Override
 	public void draw(){
         if (!visible)
 			return;

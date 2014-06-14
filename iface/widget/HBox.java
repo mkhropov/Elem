@@ -1,7 +1,5 @@
 package iface.widget;
 
-import java.util.ArrayList;
-
 public class HBox extends Widget {
 
 	public HBox() {
@@ -9,6 +7,7 @@ public class HBox extends Widget {
 		this.maxChild = -1;
 	}
 
+	@Override
 	public void crop() {
 		minX = 0;
 		minY = 0;
@@ -19,6 +18,7 @@ public class HBox extends Widget {
 		}
 	}
 
+	@Override
 	public void compile(int X, int Y, int dX, int dY) {
 		this.X = X;
 		this.Y = Y;
@@ -32,6 +32,7 @@ public class HBox extends Widget {
 		}
 	}
 
+	@Override
 	public void draw() {
         if (!visible)
             return;

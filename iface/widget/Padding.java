@@ -1,9 +1,5 @@
 package iface.widget;
 
-import graphics.Texture;
-import core.Data;
-import org.lwjgl.opengl.GL11;
-
 public class Padding extends Widget {
 
 	private int w, h;
