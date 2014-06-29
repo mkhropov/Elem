@@ -175,6 +175,9 @@ public class Interface {
 
 		Toolbar t = new Toolbar(235, 530);
 		menu.add(t);
+		
+		StatsElem se = new StatsElem(0, 0, new creature.Elem(World.getInstance().getBlock(30, 10, 15)));
+		menu.add(se);
 }
 
 	public void draw(){
