@@ -3,35 +3,40 @@ package iface;
 import iface.widget.*;
 import creature.Elem;
 
-public class StatsElem extends VBox {
+public class StatsElem extends Frame {
 
 	public StatsElem(int X, int Y, Elem e) {
 		super();
 
-		Frame f;
+		VBox vb = new VBox();
+		this.add(vb);
 		Padding p;
 		HBox hb;
-		
-		f = new Frame();
+
+		Frame f = new Frame();
 		f.add(new Label("Void elemental"));
-		this.add(f);
-		
+		vb.add(f);
+
+		f = new Frame();
+		vb.add(f);
+		vb = new VBox();
+		f.add(vb);
 		hb = new HBox();
 		hb.add(new Label("X: "));
 		hb.add(new TrackingLabel(e.p, "x", 5));
-		this.add(hb);
-		
+		vb.add(hb);
+
 		hb = new HBox();
 		hb.add(new Label("Y: "));
 		hb.add(new TrackingLabel(e.p, "y", 5));
-		this.add(hb);
-		
+		vb.add(hb);
+
 		hb = new HBox();
 		hb.add(new Label("Z: "));
 		hb.add(new TrackingLabel(e.p, "z", 5));
-		this.add(hb);
-		
+		vb.add(hb);
+
 		crop();
-		compile(X, Y, 100, 100);
+		compile(X, Y, minX, minY);
 	}
 }
