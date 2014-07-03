@@ -21,7 +21,7 @@ public class Border {
 	static
 	{
 		framebufferID = glGenFramebuffersEXT();
-		bg = Data.Textures.get("IconN");//"frame_background");
+		bg = Data.Textures.get("IconActive");//"frame_background");
 		corner = Data.Textures.get("IconActive");//("frame_corner");
 		side = Data.Textures.get("IconActive");//("frame_side");
 	}
@@ -122,7 +122,7 @@ public class Border {
 /*
 		bg.bind();
 		GL11.glBegin(GL11.GL_QUADS);
-		drawQuad(w, h, x-w, y-h);
+		drawQuad(X+w, Y+h, X+x-w, Y+y-h);
 		GL11.glEnd();
 */
 		corner.bind();

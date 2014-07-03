@@ -5,6 +5,7 @@ import java.awt.Font;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.TrueTypeFont;
+import org.newdawn.slick.opengl.TextureImpl;
 import world.Entity;
 
 public class FloatingText {
@@ -68,7 +69,9 @@ public class FloatingText {
 		GL11.glEnd();
 		GL11.glDisable(GL11.GL_COLOR_MATERIAL);
 		//print the message
+        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+		TextureImpl.bindNone();
 		font.drawString(X-xsize+2, Y-ysize-5-height/2, s, textColor);
-		GL11.glColor3d(1., 1., 1.);
+		GL11.glPopAttrib();
 	}
 }

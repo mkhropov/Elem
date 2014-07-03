@@ -6,13 +6,10 @@ import org.lwjgl.opengl.GL11;
 
 public class Frame extends Widget {
 
-	private int texture;
-
 	public Frame() {
 		super();
 		this.maxChild = 1;
 
-//		texture = Data.Textures.get("IconInactive");
 	}
 
 	@Override
@@ -34,8 +31,7 @@ public class Frame extends Widget {
 		this.Y = Y;
 		this.dX = dX;
 		this.dY = dY;
-		this.texture = Border.generate(dX, dY);
-		System.out.printf("Frame %d %d %d %d %d\n", X, Y, dX, dY, texture);
+//		System.out.printf("Frame %d %d %d %d\n", X, Y, dX, dY);
 		if (child.size() > 0) {
 			Widget w = child.get(0);
 			w.compile(X+5, Y+5, dX-10, dY-10);
@@ -48,22 +44,7 @@ public class Frame extends Widget {
 		if (!visible)
 			return;
 
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
-
-		GL11.glBegin(GL11.GL_QUADS);
-		GL11.glTexCoord2d(0., 0.);
-		GL11.glVertex2d(X, Y);
-		GL11.glTexCoord2d(dX/512., 0.);
-		GL11.glVertex2d(X+dX, Y);
-		GL11.glTexCoord2d(dX/512., dY/512.);
-		GL11.glVertex2d(X+dX, Y+dY);
-		GL11.glTexCoord2d(0., dY/512.);
-		GL11.glVertex2d(X, Y+dY);
-		GL11.glEnd();
-
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
-
-//		Border.draw(X, Y, dX, dY);
+		Border.draw(X, Y, dX, dY);
 		if (child.size() > 0) {
 			child.get(0).draw();
 		}

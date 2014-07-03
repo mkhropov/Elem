@@ -3,6 +3,7 @@ package iface.widget;
 import java.awt.Font;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.Color;
+import org.newdawn.slick.opengl.TextureImpl;
 import org.lwjgl.opengl.GL11;
 import java.lang.reflect.Field;
 
@@ -77,8 +78,11 @@ public class TrackingLabel extends Widget {
 			System.out.println("Can't access field "+f.getName()+" from "+o);
 		}
 		
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+//		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+		TextureImpl.bindNone();
 		font.drawString(textX, textY, text, color);
-		GL11.glColor3f(1.f, 1.f, 1.f);
+		GL11.glPopAttrib();
+//		GL11.glColor3f(1.f, 1.f, 1.f);
 	}
 }

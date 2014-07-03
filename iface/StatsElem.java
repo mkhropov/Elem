@@ -17,10 +17,6 @@ public class StatsElem extends Frame {
 		f.add(new Label("Void elemental"));
 		vb.add(f);
 
-		f = new Frame();
-		vb.add(f);
-		vb = new VBox();
-		f.add(vb);
 		hb = new HBox();
 		hb.add(new Label("X: "));
 		hb.add(new TrackingLabel(e.p, "x", 5));
