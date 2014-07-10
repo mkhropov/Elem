@@ -4,6 +4,8 @@
 	"description" : "A basic workplace for making stone bricks. Scary stuff included.",
 	"needsZone" : "mason",
 	"createsZone" : "mason",
+	"model" : "workbench",
+	"texture" : "wood",
 	"buildResources" : ["<boulder>"],
 	"buildQuantities" : [40],
 	"workplaceProductivity" : 1000
