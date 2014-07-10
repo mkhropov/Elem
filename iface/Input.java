@@ -81,13 +81,24 @@ public class Input {
 							if (c != null && c.size() != 0) {
 								Widget tmp = null;
 								for (Widget w: Interface.menu)
-									if (w instanceof StatsElem) {
+									if (w instanceof StatsElem || w instanceof StatsBlock) {
 										tmp = w;
 										break;
 									}
 								if (tmp != null)
 									Interface.menu.remove(tmp);
 								Interface.menu.add(new StatsElem(0, 0, (Elem) c.get(0)));
+							} else {
+								Widget tmp = null;
+								for (Widget w: Interface.menu)
+									if (w instanceof StatsBlock || w instanceof StatsElem) {
+										tmp = w;
+										break;
+									}
+								if (tmp != null)
+									Interface.menu.remove(tmp);
+								Interface.menu.add(new StatsBlock(0, 0,
+									World.getInstance().getBlock(endX, endY,iface.current_layer)));
 							}
 						}
 						draw = false;
