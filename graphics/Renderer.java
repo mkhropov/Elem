@@ -351,9 +351,12 @@ public class Renderer {
 			vp.draw(current_layer, 0);
 		}
 		world.items.draw();
-		glUseProgram(shaders[SHADER_GHOST]);
-		Interface.getInstance().cursor.draw3d();
+		if (Interface.getCommandMode() != Interface.COMMAND_MODE_SELECT) {
+			glUseProgram(shaders[SHADER_GHOST]);
+			Interface.getInstance().cursor.draw3d();
+		}
 		glUseProgram(shaders[SHADER_NONE]);
+
 		//ATTENTION
 		//ftArray is drawn in Interface.draw()
 		Interface.getInstance().draw();

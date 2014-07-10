@@ -28,10 +28,17 @@ public class Toolbar extends HBox {
 		Padding p;
 		GroupReflection gr;
 
-		b = new GroupButton(COMMAND_MODE_SPAWN, new ValueSetter() {
+
+		b = new GroupButton(COMMAND_MODE_SELECT, new ValueSetter() {
 			@Override public void set(int val) {
 				Interface.setCommandMode(val);
 			}});
+		i = new Image("IconSelect", 50, 50);
+		b.add(i);
+		add(b);
+		p = new Padding(10, 0);
+		add(p);
+		b = new GroupButton(COMMAND_MODE_SPAWN, b);
 		i = new Image("IconSummon", 50, 50);
 		b.add(i);
 		add(b);

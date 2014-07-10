@@ -38,6 +38,7 @@ public class Interface {
 	public static final int COMMAND_MODE_BUILD = 2;
 	public static final int COMMAND_MODE_ZONE = 3;
 	public static final int COMMAND_MODE_CANCEL = 4;
+	public static final int COMMAND_MODE_SELECT = 5;
 
 	private static int buildForm;
 	private static int buildMaterial;
@@ -170,12 +171,12 @@ public class Interface {
 		menus[MENU_ZONE_TYPE] = t;*/
 
 		viewMode = Renderer.VIEW_MODE_FOW;
-		setCommandMode(COMMAND_MODE_SPAWN);
+		setCommandMode(COMMAND_MODE_SELECT);
 		setBuildMaterial(Data.Materials.getId("marble"));
 
 		Toolbar t = new Toolbar(235, 530);
 		menu.add(t);
-		
+
 		StatsElem se = new StatsElem(0, 0, new creature.Elem(World.getInstance().getBlock(30, 10, 15)));
 		menu.add(se);
 }
@@ -251,26 +252,29 @@ public class Interface {
 		if (!w.isIn(x,y,z))
 			return false;
 		switch (getCommandMode()) {
-			case Interface.COMMAND_MODE_SPAWN:
-				return (player. blockKnown(x, y, z)
-						&& w.isEmpty(x, y, z));
-			case Interface.COMMAND_MODE_DIG:
-				return (!player. blockKnown(x, y, z) ||
-						w.isFull(x, y, z) ||
-						(getDigForm() == World.FORM_BLOCK))
-						&& !player.blockAlreadyRequested(w.getBlock(x, y, z));
-			case Interface.COMMAND_MODE_BUILD:
-				return (player. blockKnown(x, y, z) &&
-						(w.isAir(x, y, z) ||
-							((w.getForm(x, y, z) == World.FORM_FLOOR)
-							&& (getBuildMaterial() == w.getMaterialID(x, y, z))))
-						&& !player.blockAlreadyRequested(w.getBlock(x, y, z)));
-			case Interface.COMMAND_MODE_ZONE:
-				return (player. blockKnown(x, y, z)
-						&& w.isEmpty(x, y, z) && w.hasSolidFloor(x, y, z));
-			case Interface.COMMAND_MODE_CANCEL: return player.blockAlreadyRequested(w.getBlock(x, y, z));
-			default:
-					System.out.println("Interface.canPlaceCommand: weird request");
+		case Interface.COMMAND_MODE_SPAWN:
+			return (player. blockKnown(x, y, z)
+					&& w.isEmpty(x, y, z));
+		case Interface.COMMAND_MODE_DIG:
+			return (!player. blockKnown(x, y, z) ||
+					w.isFull(x, y, z) ||
+					(getDigForm() == World.FORM_BLOCK))
+					&& !player.blockAlreadyRequested(w.getBlock(x, y, z));
+		case Interface.COMMAND_MODE_BUILD:
+			return (player. blockKnown(x, y, z) &&
+					(w.isAir(x, y, z) ||
+						((w.getForm(x, y, z) == World.FORM_FLOOR)
+						&& (getBuildMaterial() == w.getMaterialID(x, y, z))))
+					&& !player.blockAlreadyRequested(w.getBlock(x, y, z)));
+		case Interface.COMMAND_MODE_ZONE:
+			return (player. blockKnown(x, y, z)
+					&& w.isEmpty(x, y, z) && w.hasSolidFloor(x, y, z));
+		case Interface.COMMAND_MODE_CANCEL:
+			return player.blockAlreadyRequested(w.getBlock(x, y, z));
+		case Interface.COMMAND_MODE_SELECT:
+			return true;
+		default:
+			System.out.println("Interface.canPlaceCommand: weird request");
 			return false;
 		}
 	}
