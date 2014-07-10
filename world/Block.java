@@ -3,11 +3,14 @@ package world;
  * Block is a class describing utility for a minimal single 3D voxel
 */
 import java.util.ArrayList;
-import item.Item;
+import item.Container;
+import item.Inventory;
 
-public class Block {
+public class Block implements Container {
 	public int x, y, z; //in a chunk
 	public int m; //material code from Material
+
+	Inventory inv;
 
 	public static final int[][] nearInd = new int[][]
 		{{1, 0, 0}, {0, 1, 0}, {0, 0, 1}
@@ -46,5 +49,10 @@ public class Block {
 
 	public boolean isSame(Block b){
 		return (x==b.x && y==b.y && z==b.z);
+	}
+
+	public Inventory getInventory()
+	{
+		return World.getInstance().items.getInventory(this);
 	}
 }

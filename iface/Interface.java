@@ -178,8 +178,8 @@ public class Interface {
 		menu.add(t);
 
 		creature.Elem e = new creature.Elem(World.getInstance().getBlock(30, 10, 15));
-		e.inventory.addItem(core.Data.Items.get("cut emerald"), 15);
-		e.inventory.addItem(core.Data.Items.get("faceted emerald"), 1);
+		e.getInventory().addItem(core.Data.Items.get("cut emerald"), 15);
+		e.getInventory().addItem(core.Data.Items.get("faceted emerald"), 1);
 		StatsElem se = new StatsElem(0, 0, e);
 		menu.add(se);
 }

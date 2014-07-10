@@ -32,7 +32,7 @@ public class StatsElem extends Frame {
 		hb.add(new TrackingLabel(e.p, "z", 5));
 		vb.add(hb);
 
-		InventoryMenu im = new InventoryMenu(e.inventory);
+		InventoryMenu im = new InventoryMenu(e.getInventory());
 		vb.add(im);
 
 		crop();
