@@ -38,7 +38,7 @@ public class InventoryMenu extends Frame {
 
 		HBox hb;
 		if (inv.amount() == 0) {
-//			System.out.printf("Empty inventary, initiating with \"%s\"", emptyInvStr);
+//			System.out.printf("Empty inventory, initiating with \"%s\"", emptyInvStr);
 			hb = new HBox();
 			hb.add(new Label(emptyInvStr));
 			vb.add(hb);
@@ -52,5 +52,12 @@ public class InventoryMenu extends Frame {
 			vb.add(hb);
 			i++;
 		}
+	}
+
+	public void draw()
+	{
+		update();
+		recompile();
+		super.draw();
 	}
 }

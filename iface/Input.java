@@ -12,6 +12,9 @@ import player.Zone;
 import world.Block;
 import world.World;
 import iface.widget.Widget;
+import java.util.ArrayList;
+import creature.Creature;
+
 
 public class Input {
 	Interface iface;
@@ -65,11 +68,27 @@ public class Input {
 					if (Mouse.getEventButtonState()) { //button pressed
 						startX = endX;
 						startY = endY;
-						draw = true;
+						if (Interface.getCommandMode() != Interface.COMMAND_MODE_SELECT)
+							draw = true;
 					} else { //button released
 						Zone z = null;
 						if (Interface.getCommandMode() == Interface.COMMAND_MODE_ZONE) {
 							z = new Zone(Data.Zones.get(Interface.getZoneType()));
+						}
+						if (Interface.getCommandMode() == Interface.COMMAND_MODE_SELECT) {
+							ArrayList<Creature> c = World.getInstance().getCreature(endX, endY,
+								iface.current_layer);
+							if (c != null && c.size() != 0) {
+								Widget tmp = null;
+								for (Widget w: Interface.menu)
+									if (w instanceof StatsElem) {
+										tmp = w;
+										break;
+									}
+								if (tmp != null)
+									Interface.menu.remove(tmp);
+								Interface.menu.add(new StatsElem(0, 0, (Elem) c.get(0)));
+							}
 						}
 						draw = false;
 						int i, j;

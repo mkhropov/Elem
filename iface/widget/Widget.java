@@ -38,6 +38,15 @@ public class Widget {
 	public void compile(int X, int Y, int dX, int dY) {
 	}
 
+	public void recompile()
+	{
+		if (parent == null) {
+			crop();
+			compile(X, Y, minX, minY);
+		} else
+			parent.recompile();
+	}
+
 	public boolean hover(int x, int y) {
 		return (getVisible() &&
 				X<=x && x<X+dX &&

@@ -50,7 +50,7 @@ public class Label extends Widget {
 		/* assert (dX >= minX && dY >= minY); */
 		textX = X + dX/2 - minX/2 + 5;
 		textY = Y + dY/2 - minY/2;
-		System.out.printf("Label %d %d %d %d %d %d\n", X, Y, dX, dY, textX, textY);
+//		System.out.printf("Label %d %d %d %d %d %d\n", X, Y, dX, dY, textX, textY);
 	}
 
 	@Override
