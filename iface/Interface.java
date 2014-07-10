@@ -177,7 +177,10 @@ public class Interface {
 		Toolbar t = new Toolbar(235, 530);
 		menu.add(t);
 
-		StatsElem se = new StatsElem(0, 0, new creature.Elem(World.getInstance().getBlock(30, 10, 15)));
+		creature.Elem e = new creature.Elem(World.getInstance().getBlock(30, 10, 15));
+		e.inventory.addItem(core.Data.Items.get("cut emerald"), 15);
+		e.inventory.addItem(core.Data.Items.get("faceted emerald"), 1);
+		StatsElem se = new StatsElem(0, 0, e);
 		menu.add(se);
 }
 

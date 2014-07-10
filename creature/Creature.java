@@ -219,6 +219,7 @@ public class Creature extends Entity {
 	public Creature(){
 		this.capable = new boolean[]{false, false, false, false};
 		this.bubble = null;
+		this.inventory = new Inventory(20);
 	}
 
 	public boolean capableOf(Order o){
