@@ -1,7 +1,6 @@
 package iface;
 
 import iface.widget.*;
-import item.Item;
 import item.Inventory;
 
 public class InventoryMenu extends Frame {
@@ -9,7 +8,7 @@ public class InventoryMenu extends Frame {
 	static String emptyInvStr = "--- no items ---";
 
 	private Inventory inv;
-	private VBox vb;
+	private final VBox vb;
 
 	public InventoryMenu(Inventory I)//, String header)
 	{
@@ -27,12 +26,12 @@ public class InventoryMenu extends Frame {
 		update();
 	}
 
-	public void mapInventory(Inventory I)
+	public final void mapInventory(Inventory I)
 	{
 		this.inv = I;
 	}
 
-	public void update()
+	public final void update()
 	{
 		vb.child.clear();
 
@@ -54,6 +53,7 @@ public class InventoryMenu extends Frame {
 		}
 	}
 
+	@Override
 	public void draw()
 	{
 		update();

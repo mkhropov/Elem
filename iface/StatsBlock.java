@@ -6,8 +6,8 @@ import world.World;
 
 public class StatsBlock extends Frame {
 
-	private Block b;
-	private VBox vb;
+	private final Block b;
+	private final VBox vb;
 
 	public StatsBlock(int X, int Y, Block b)
 	{
@@ -20,10 +20,9 @@ public class StatsBlock extends Frame {
 		update();
 	}
 
-	public void update()
+	public final void update()
 	{
 		vb.child.clear();
-		HBox hb;
 
 		Frame f = new Frame();
 		f.add(new Label("Block"));
@@ -46,6 +45,7 @@ public class StatsBlock extends Frame {
 		}
 	}
 
+	@Override
 	public void draw()
 	{
 		update();

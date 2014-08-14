@@ -1,7 +1,6 @@
 package iface;
 
 import iface.widget.*;
-import static iface.Interface.*;
 import world.World;
 import core.Data;
 
