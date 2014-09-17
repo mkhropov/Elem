@@ -4,6 +4,8 @@ import world.Block;
 import world.World;
 
 public class MoveMethodWalk implements MoveMethod {
+	public MoveMethodWalk() {};
+
 @Override
     public boolean canStay(Block b)
 	{
