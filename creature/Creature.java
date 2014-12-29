@@ -39,12 +39,15 @@ public class Creature extends Entity implements Container {
 	Action act;
 	long action_t;
 
-	public Inventory getInventory()
-	{
+	public Block location() {
+		return World.getInstance().getBlock(np);
+	}
+
+	public Inventory getInventory() {
 		return inv;
 	}
 
-	public boolean start_action(Action action, boolean forced){
+	public boolean start_action(Action action, boolean forced) {
 		boolean res = true;
 		System.out.println("new action "+(int)action.type+" for "+this);
 		World w = World.getInstance();
@@ -84,7 +87,7 @@ public class Creature extends Entity implements Container {
 		return res;
 	}
 
-	public boolean exec_action(long dT){
+	public boolean exec_action(long dT) {
 		boolean res;
 		action_t += dT;
 		switch(act.type){

@@ -198,7 +198,7 @@ public class World {
 	public ArrayList<Creature> getCreature(Block b){
 		return getCreature(b.x, b.y, b.z);
 	}
-	
+
 	public void updateBlock(int x, int y, int z){
 		if(!isIn(x, y, z)) return;
 		Renderer.getInstance().updateBlock(x, y, z);
