@@ -16,6 +16,7 @@ import item.ItemTemplate;
 import java.util.Stack;
 import player.Order;
 import player.Player;
+import pathfind.MoveMethod;
 import stereometry.Point;
 import stereometry.Vector;
 import world.Block;
@@ -26,6 +27,8 @@ public class Creature extends Entity implements Container {
     Point np;
     double speed;
 	Vector mv;
+
+	MoveMethod mm;
 
 	public double digStrength;
 
@@ -240,12 +243,12 @@ public class Creature extends Entity implements Container {
 		return (x==(int)p.x && y==(int)p.y && z==(int)p.z);
 	}
 
-    public boolean canWalk(Block b){
-        return true;
+    public boolean canStay(Block b){
+        return mm.canStay(b);
     }
 
     public boolean canMove(Block b1, Block b2){
-        return true;
+        return mm.canMove(b1, b2);
     }
 
     public boolean canReach(Block v1, Block b2){
